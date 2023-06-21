@@ -88,8 +88,6 @@ export const useAppStore = defineStore('app', {
             return null;
         },
         async getUser() {
-            if (!this.loggedIn) return;
-
             this.setAuthSchema();
             const res = await AuthApi.getUser();
             this.user = res.data.User;
