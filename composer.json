@@ -1,19 +1,26 @@
 {
     "name": "enjin/platform-ui",
-    "description": "Platform UI is a first-party package that adds a management interface to the Enjin Platform.",
+    "description": "A package for adding a user interface to the Enjin Platform.",
     "keywords": [
-        "Enjin",
-        "Platform",
-        "platform-ui",
+        "enjin",
+        "platform",
+        "enjin platform",
+        "enjin platform package",
+        "ui",
+        "user interface",
+        "enjin platform ui",
+        "enjin platform interface",
+        "enjin platform user interface",
         "laravel"
     ],
     "homepage": "https://github.com/enjin/platform-ui",
-    "license": "MIT",
-    "authors": [{
-        "name": "Enjin",
-        "email": "support@enjin.io",
-        "role": "Developer"
-    }],
+    "license": "LGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Enjin",
+            "email": "support@enjin.io"
+        }
+    ],
     "require": {
         "php": "^8.1|^8.2",
         "spatie/laravel-csp": "^2.8",

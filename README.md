@@ -1,6 +1,8 @@
-# platform-ui
+# Platform User Interface
 
-The Platform User Interface is a lightweight package that allows any user with access to easily create, manage, and view: collections, tokens, and beams.
+This package is an extension of [platform-core](https://github.com/enjin/platform-core) for adding a user interface.
+
+[![License: LGPL 3.0](https://img.shields.io/badge/license-LGPL_3.0-purple)](https://opensource.org/license/lgpl-3-0/)
 
 ## Installation
 
@@ -38,3 +40,7 @@ After installing the plugin within Laravel, you can access the frontend interfac
 ### Static Hosting Usage
 
 If you are hosting the frontend interface statically, you can access it by visiting the URL where you copied the build folder.
+
+## License
+
+The LGPL 3.0 License. Please see [License File](LICENSE) for more information.
