@@ -1,0 +1,15 @@
+# don't ever lint node_modules
+.eslintrc.js
+build
+node_modules
+resources/js/types/generated.d.ts
+resources/js/types/gql
+tests-js
+tailwind.config.js
+codegen.ts
+vite.config.js
+vite-rename-base-plugin.js
+custom-gql-loader.js
+public
+vendor
+storage

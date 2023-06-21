@@ -1,0 +1,64 @@
+{
+    "name": "enjin/platform-ui",
+    "description": "A package for adding a user interface to the Enjin Platform.",
+    "keywords": [
+        "enjin",
+        "platform",
+        "enjin platform",
+        "enjin platform package",
+        "ui",
+        "user interface",
+        "enjin platform ui",
+        "enjin platform interface",
+        "enjin platform user interface",
+        "laravel"
+    ],
+    "homepage": "https://github.com/enjin/platform-ui",
+    "license": "LGPL-3.0-only",
+    "authors": [
+        {
+            "name": "Enjin",
+            "email": "support@enjin.io"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2",
+        "spatie/laravel-csp": "^2.8",
+        "spatie/laravel-package-tools": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0",
+        "friendsofphp/php-cs-fixer": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Enjin\\PlatformUi\\": "src"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html ../../temp/coverage",
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Enjin\\PlatformUi\\PlatformUiServiceProvider"
+            ],
+            "aliases": {
+                "Package": "Enjin\\PlatformUi\\Facades\\Package"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

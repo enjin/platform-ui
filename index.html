@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html class="h-full bg-gray-50">
+    <head>
+        <meta charset="utf-8" />
+        <link href="/favicon.png" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Platform</title>
+    </head>
+    <body class="h-full">
+        <div id="app" class="h-full"></div>
+
+        <script>
+            var global = global || window;
+            window.require = () => {};
+        </script>
+
+        <script type="module" src="/resources/js/app.ts"></script>
+    </body>
+</html>
