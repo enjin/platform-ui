@@ -88,21 +88,30 @@ export const useAppStore = defineStore('app', {
             return null;
         },
         async getUser() {
+            if (!this.loggedIn) return;
+
             this.setAuthSchema();
             const res = await AuthApi.getUser();
             this.user = res.data.User;
         },
         async fetchCollectionIds(totalCount?: number) {
-            this.newCollection = false;
-            const oldSchema = this.schema;
-            this.setBaseSchema();
+            if (!this.loggedIn) return;
 
-            const res = await CollectionApi.getCollectionsIds(totalCount);
-            const collectionsData = res.data.GetCollections;
-            if (collectionsData.pageInfo.hasNextPage) {
-                await this.fetchCollectionIds(collectionsData.totalCount);
-            } else {
-                this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
+            const oldSchema = this.schema;
+            try {
+                this.newCollection = false;
+                this.setBaseSchema();
+
+                const res = await CollectionApi.getCollectionsIds(totalCount);
+                const collectionsData = res.data.GetCollections;
+                if (collectionsData.pageInfo.hasNextPage) {
+                    await this.fetchCollectionIds(collectionsData.totalCount);
+                } else {
+                    this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
+                }
+            } catch {
+                // do nothing
+            } finally {
                 this.schema = oldSchema;
             }
         },

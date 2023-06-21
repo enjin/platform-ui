@@ -96,6 +96,7 @@ const isValid = async () => {
 const register = async () => {
     if (!(await isValid())) return;
 
+    appStore.setAuthSchema();
     isLoading.value = true;
     try {
         const res = await AuthApi.register(email.value, password.value);
@@ -119,7 +120,6 @@ const register = async () => {
 };
 
 (async () => {
-    appStore.setAuthSchema();
     if (appStore.loggedIn) {
         redirectToLogin();
     }

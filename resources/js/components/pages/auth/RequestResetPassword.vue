@@ -76,6 +76,7 @@ const isValid = async () => {
 const requestReset = async () => {
     if (!(await isValid())) return;
 
+    appStore.setAuthSchema();
     isLoading.value = true;
     try {
         const res = await AuthApi.requestPasswordReset(email.value);
@@ -93,7 +94,6 @@ const requestReset = async () => {
 };
 
 (async () => {
-    appStore.setAuthSchema();
     if (appStore.loggedIn) {
         redirectToCollections();
     }

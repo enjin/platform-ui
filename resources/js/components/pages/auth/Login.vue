@@ -84,6 +84,7 @@ const isValid = async () => {
 const login = async () => {
     if (!(await isValid())) return;
 
+    useAppStore().setAuthSchema();
     isLoading.value = true;
     try {
         if (!(await appStore.login(email.value, password.value))) {
@@ -118,7 +119,6 @@ const checkVerified = () => {
 
 (async () => {
     checkVerified();
-    useAppStore().setAuthSchema();
     if (appStore.loggedIn) {
         redirectToCollections();
     }
