@@ -37,6 +37,7 @@ import ResetPassword from '~/graphql/mutation/auth/ResetPassword';
 import RequestPasswordReset from '~/graphql/mutation/auth/RequestPasswordReset';
 import CreateApiToken from '~/graphql/mutation/auth/CreateApiToken';
 import RevokeApiTokens from '~/graphql/mutation/auth/RevokeApiTokens';
+import UpdateUser from '~/graphql/mutation/auth/UpdateUser';
 
 import AddAccount from '~/graphql/mutation/fueltank/AddAccount';
 import RemoveAccount from '~/graphql/mutation/fueltank/RemoveAccount';
@@ -93,6 +94,7 @@ export default {
     RequestPasswordReset,
     CreateApiToken,
     RevokeApiTokens,
+    UpdateUser,
 
     AddAccount,
     RemoveAccount,
