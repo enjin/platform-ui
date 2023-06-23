@@ -15,7 +15,7 @@
     "devDependencies": {
         "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
         "@rushstack/eslint-patch": "^1.2.0",
-        "@vue/cli-plugin-typescript": "~4.5.11",
+        "@vue/cli-plugin-typescript": "~5.0.8",
         "@vue/compiler-sfc": "^3.2.47",
         "@vue/eslint-config-prettier": "^7.1.0",
         "autoprefixer": "^10.4.13",
