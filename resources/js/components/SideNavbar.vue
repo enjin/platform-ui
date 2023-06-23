@@ -21,7 +21,7 @@
                 <a
                     href="http://feedback.enjin.io"
                     target="_blank"
-                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-2 py-2 text-sm font-medium"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
                 >
                     Feedback
                 </a>
