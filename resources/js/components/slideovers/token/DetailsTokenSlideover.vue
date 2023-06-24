@@ -122,7 +122,7 @@ import { formatPriceFromENJ } from '~/util';
 import Royalty from '~/util/royalty';
 
 defineProps<{
-    item: {
+    item?: {
         tokenId: string;
         collectionId: string;
         owner: string;

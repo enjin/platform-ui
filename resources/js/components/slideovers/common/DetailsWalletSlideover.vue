@@ -49,7 +49,7 @@ import Address from '~/components/Address.vue';
 import { formatPriceFromENJ } from '~/util';
 
 defineProps<{
-    item: {
+    item?: {
         id: string;
         account: string;
         balances: {

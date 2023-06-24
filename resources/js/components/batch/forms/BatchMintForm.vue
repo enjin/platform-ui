@@ -234,7 +234,7 @@ const mintTypes = [
     },
 ];
 const formRef = ref();
-const account = ref(publicKeyToAddress(props.modelValue.account ?? '') ?? '');
+const account = ref(publicKeyToAddress(props.modelValue.account ?? appStore.user?.account) ?? '');
 const createTokenId: Ref<TokenIdType> = ref(
     parseFormatedTokenId(props.modelValue.createParams?.tokenId ?? {}) ?? {
         tokenId: '',

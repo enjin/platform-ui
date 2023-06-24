@@ -253,7 +253,7 @@ const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.ne
 
 const isLoading = ref(false);
 const collectionId = ref('');
-const recipient = ref('');
+const recipient = ref(appStore.user?.account);
 const tokenId = ref({
     tokenId: '',
     tokenType: TokenIdSelectType.Integer,
