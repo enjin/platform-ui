@@ -140,7 +140,6 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import Slideover from '~/components/Slideover.vue';
 import debounce from 'lodash/debounce';
-import { useAppStore } from '~/store';
 import { formatData, snackbarErrors } from '~/util';
 import CollapseFilter from '~/components/CollapseFilter.vue';
 import Btn from '~/components/Btn.vue';
@@ -344,7 +343,6 @@ const closeModalSlide = () => {
 };
 
 (async () => {
-    useAppStore().setBaseSchema();
     getTransactions();
 })();
 

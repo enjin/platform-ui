@@ -271,8 +271,4 @@ const createFueltank = async () => {
         isLoading.value = false;
     }
 };
-
-(async () => {
-    useAppStore().setFuelTanksSchema();
-})();
 </script>

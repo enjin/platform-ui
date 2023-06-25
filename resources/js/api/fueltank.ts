@@ -3,6 +3,10 @@ import mutations from './mutations';
 import queries from './queries';
 
 export class FuelTankApi {
+    static async sendPlatfromRequest(data: Record<string, unknown>) {
+        return ApiService.sendPlatfromRequest(data, '/fuel-tanks');
+    }
+
     static async getFuelTank(name: string, tankId: string) {
         const data = {
             query: queries.GetFuelTank,
@@ -12,7 +16,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async getFuelTanks(getFuelTanksData: Record<string, unknown>) {
@@ -26,7 +30,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async getAccounts(tankId: string, after: string | null = null) {
@@ -39,7 +43,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async addAccount(addAccountData: Record<string, unknown>) {
@@ -52,7 +56,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async removeAccount(removeAccountData: Record<string, unknown>) {
@@ -65,7 +69,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async batchAddAccount(batchAddAccountData: Record<string, unknown>) {
@@ -78,7 +82,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async batchRemoveAccount(batchRemoveAccountData: Record<string, unknown>) {
@@ -91,7 +95,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async createFuelTank(createFuelTankData: Record<string, unknown>) {
@@ -108,7 +112,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async destroyFuelTank(destroyFuelTankData: Record<string, unknown>) {
@@ -120,7 +124,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async mutateFuelTank(mutateFuelTankData: Record<string, unknown>) {
@@ -133,7 +137,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async dispatch(dispatchData: Record<string, unknown>, touch: boolean = false) {
@@ -148,7 +152,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async insertRuleSet(insertRuleSetData: Record<string, unknown>) {
@@ -162,7 +166,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async removeRuleSet(removeRuleSetData: Record<string, unknown>) {
@@ -175,7 +179,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async setConsumption(setConsumptionData: Record<string, unknown>) {
@@ -191,7 +195,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async scheduleMutateFreezeState(scheduleMutateFreezeStateData: Record<string, unknown>) {
@@ -205,7 +209,7 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 
     static async removeAccountRuleData(removeAccountRuleData: Record<string, unknown>) {
@@ -220,6 +224,6 @@ export class FuelTankApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return FuelTankApi.sendPlatfromRequest(data);
     }
 }

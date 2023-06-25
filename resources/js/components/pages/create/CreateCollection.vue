@@ -350,8 +350,4 @@ const createCollection = async () => {
         isLoading.value = false;
     }
 };
-
-(async () => {
-    useAppStore().setBaseSchema();
-})();
 </script>

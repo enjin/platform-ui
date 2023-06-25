@@ -203,7 +203,6 @@ const connectWebSocket = () => {
 };
 
 (async () => {
-    appStore.setBaseSchema();
     if (props.item?.id) {
         transaction.value = props.item;
     } else {

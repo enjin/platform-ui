@@ -120,7 +120,6 @@ const createApiToken = async () => {
         if (!tokenName.value)
             return snackbar.error({ title: 'Token name required', text: 'Please enter a token name.' });
         try {
-            appStore.setAuthSchema();
             await appStore.createApiToken(tokenName.value);
             enableTokenCreate.value = false;
             tokenName.value = '';
@@ -145,7 +144,6 @@ const updateWalletAccount = async () => {
             return snackbar.error({ title: 'Invalid account', text: 'Please enter a valid wallet account.' });
         }
         try {
-            appStore.setAuthSchema();
             const res = await AuthApi.updateUser({ account: walletAccount.value });
             enableAccountModify.value = false;
             if (res.data.UpdateUser) {
@@ -167,7 +165,6 @@ const updateWalletAccount = async () => {
 const revokeToken = async (name: string) => {
     if (!name) return;
     try {
-        appStore.setAuthSchema();
         await appStore.revokeToken(name);
         snackbar.info({ title: 'Token revoked', text: `Your token ${name} has been revoked.` });
     } catch (e: any) {
@@ -177,7 +174,6 @@ const revokeToken = async (name: string) => {
 };
 
 const logout = async () => {
-    appStore.setAuthSchema();
     await appStore.logout();
     router.push({ name: 'platform.auth.login' });
     snackbar.info({ title: 'Logged out' });
@@ -187,10 +183,6 @@ const resetSettings = () => {
     appStore.resetSettings();
     router.push({ name: 'platform.setup' });
 };
-
-(async () => {
-    appStore.setBaseSchema();
-})();
 
 watch(
     () => advancedMode.value,

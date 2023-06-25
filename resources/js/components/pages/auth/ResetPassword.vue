@@ -86,7 +86,7 @@ const isValid = async () => {
 
 const resetPassword = async () => {
     if (!(await isValid())) return;
-    appStore.setAuthSchema();
+
     isLoading.value = true;
     try {
         const res = await AuthApi.resetPassword(email.value, password.value, confirmPassword.value, props.token);

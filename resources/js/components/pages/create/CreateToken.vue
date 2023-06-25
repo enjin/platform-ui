@@ -375,8 +375,4 @@ const addAttributeItem = () => {
 const removeAttributeItem = (index: number) => {
     attributes.value.splice(index, 1);
 };
-
-(async () => {
-    useAppStore().setBaseSchema();
-})();
 </script>

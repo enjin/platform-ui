@@ -93,7 +93,6 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import Slideover from '~/components/Slideover.vue';
 import debounce from 'lodash/debounce';
-import { useAppStore } from '~/store';
 import { formatData, snackbarErrors } from '~/util';
 import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
@@ -219,10 +218,6 @@ const openTransactionSlide = async (transactionId: string) => {
         openModalSlide('DetailsTransactionSlideover', { transactionId });
     }, 600);
 };
-
-(async () => {
-    useAppStore().setBaseSchema();
-})();
 
 onMounted(() => {
     events.on('transaction', openTransactionSlide);

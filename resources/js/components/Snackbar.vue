@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, Ref } from 'vue';
+import { NotificationType } from '~/types/types.enums';
 import { events } from '~/util/snackbar';
 
 const MAX_NOTIFICATION = 10;
@@ -23,7 +24,8 @@ const notifications: Ref<
     {
         id: string;
         title: string;
-        description: string;
+        text: string;
+        type: NotificationType;
         event: string;
         timeout: number;
     }[]
@@ -44,6 +46,9 @@ const sendEvent = (id: string) => {
 };
 
 const add = ({ notification, timeout }) => {
+    if (notifications.value.find((item) => item.title === notification.title && item.title === 'Unauthorized')) {
+        return;
+    }
     notifications.value.push(notification);
     setTimeout(() => {
         close(notification.id);

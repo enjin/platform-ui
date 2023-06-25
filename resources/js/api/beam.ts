@@ -3,6 +3,10 @@ import mutations from './mutations';
 import queries from './queries';
 
 export class BeamApi {
+    static async sendPlatfromRequest(data: Record<string, unknown>) {
+        return ApiService.sendPlatfromRequest(data, '/beam');
+    }
+
     static async getBeam(getBeamData: Record<string, unknown>) {
         const data = {
             query: queries.GetBeam,
@@ -12,7 +16,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async getBeams(getBeamsData: Record<string, unknown>) {
@@ -25,7 +29,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async getClaims(getClaimsData: Record<string, unknown>) {
@@ -41,7 +45,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async getSingleUseCodes(getSingleUseCodesData: Record<string, unknown>) {
@@ -54,7 +58,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async createBeam(createBeamData: Record<string, unknown>) {
@@ -72,7 +76,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async deleteBeam(deleteBeamData: Record<string, unknown>) {
@@ -83,7 +87,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async expireSingleUseCodes(expireSingleUseCodesData: Record<string, unknown>) {
@@ -94,7 +98,7 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 
     static async updateBeam(updateBeamData: Record<string, unknown>) {
@@ -111,6 +115,6 @@ export class BeamApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return BeamApi.sendPlatfromRequest(data);
     }
 }
