@@ -31,9 +31,11 @@ export function initAuthGuard(router: Router) {
                 next();
             }
         } else {
-            if (requiresAuth && !validConfig) {
+            if (requiresAuth && (!validConfig || !isLoggedIn)) {
                 next({ name: 'platform.setup' });
-            } else if (to.name == 'platform.setup' && validConfig) {
+            } else if (to.name == 'platform.auth.login' && !isLoggedIn) {
+                next({ name: 'platform.setup' });
+            } else if (to.name == 'platform.setup' && validConfig && isLoggedIn) {
                 next({ name: 'platform.collections' });
             } else {
                 next();

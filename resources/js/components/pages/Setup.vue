@@ -8,7 +8,6 @@
         <div class="mt-8 mx-auto w-full sm:max-w-md">
             <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
                 <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="setupAccount">
-                    <input class="hidden" :value="tenant" name="tenant" />
                     <FormInput
                         v-model="hostname"
                         label="Hostname"
@@ -39,6 +38,7 @@ import Btn from '~/components/Btn.vue';
 import FormInput from '~/components/FormInput.vue';
 import * as yup from 'yup';
 import EnjinLogo from '~/components/EnjinLogo.vue';
+import snackbar from '~/util/snackbar';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -46,11 +46,9 @@ const appStore = useAppStore();
 const isLoading = ref(false);
 const hostname = ref('');
 const authorizationToken = ref('');
-const tenant = ref(appStore.isMultiTenant);
 const formRef = ref();
 
 const validation = yup.object().shape({
-    tenant: yup.boolean(),
     hostname: yup.string().required('Hostname is required'),
     authorization: yup.string().when('tenant', {
         is: false,
@@ -67,19 +65,28 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
+const parseHostname = (hostname: string) => {
+    try {
+        const url = new URL(hostname);
+        return url.hostname;
+    } catch {
+        return hostname;
+    }
+};
+
 const setupAccount = async () => {
     try {
         if (!(await isValid())) return;
 
         isLoading.value = true;
-        if (!(await appStore.checkHostname(hostname.value))) return;
-
-        appStore.setHostname(hostname.value);
-        appStore.setAuthorizationToken(authorizationToken.value);
-        await appStore.init();
+        if (!(await appStore.checkHostname(parseHostname(hostname.value)))) return;
+        await appStore.setupAccount({
+            hostname: parseHostname(hostname.value),
+            authorization_token: authorizationToken.value,
+        });
         redirectToCollections();
-    } catch (e) {
-        console.error(e);
+    } catch (e: any) {
+        snackbar.error({ title: e.message || e });
     } finally {
         isLoading.value = false;
     }

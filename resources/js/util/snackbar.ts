@@ -28,10 +28,7 @@ export default {
         });
         if (save) {
             useNotificationsStore().addNotification({
-                id:
-                    params.text.toLowerCase() === 'unauthorized'
-                        ? params.text.toLowerCase()
-                        : Math.random().toString(36).substring(2, 9),
+                id: Math.random().toString(36).substring(2, 9),
                 type: params.type,
                 text: params.text.length > 0 ? params.text : params.title,
                 date: new Date().toISOString(),
