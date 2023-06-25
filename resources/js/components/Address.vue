@@ -1,31 +1,36 @@
 <template>
-    <dd class="mt-1 text-sm text-gray-900 break-words" v-if="address">
+    <dd class="mt-1 text-sm text-gray-900 break-words" v-if="addressSwitch">
         <span class="break-words">
-            {{ address }}
+            {{ displayAddress }}
         </span>
         <ArrowsRightLeftIcon
-            v-if="useAppStore().advanced"
+            v-if="useAppStore().advanced && !props.short"
             class="inline-block w-4 h-4 ml-1 cursor-pointer hover:text-primary"
             @click="switchAddress = !switchAddress"
         />
-        <CopyTextIcon :text="address" />
+        <CopyTextIcon :text="addressSwitch" />
     </dd>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { addressToPublicKey, publicKeyToAddress } from '~/util/address';
+import { addressShortHex, addressToPublicKey, publicKeyToAddress } from '~/util/address';
 import CopyTextIcon from './CopyTextIcon.vue';
 import { ArrowsRightLeftIcon } from '@heroicons/vue/24/outline';
 import { useAppStore } from '~/store';
 
 const props = defineProps<{
     address: string;
+    short?: boolean;
 }>();
 
 const switchAddress = ref(false);
 
-const address = computed(() => {
+const addressSwitch = computed(() => {
     return !switchAddress.value ? publicKeyToAddress(props.address) : addressToPublicKey(props.address);
+});
+
+const displayAddress = computed(() => {
+    return props.short ? addressShortHex(addressSwitch.value) : addressToPublicKey(addressSwitch.value);
 });
 </script>

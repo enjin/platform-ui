@@ -134,6 +134,7 @@ export const useAppStore = defineStore('app', {
         },
         clearLogin() {
             this.user = null;
+            this.authorization_token = '';
             this.loggedIn = false;
         },
         async createApiToken(name: string) {
