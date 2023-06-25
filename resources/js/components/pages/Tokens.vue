@@ -122,7 +122,6 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import Slideover from '~/components/Slideover.vue';
 import debounce from 'lodash/debounce';
-import { useAppStore } from '~/store';
 import { formatTokens, snackbarErrors } from '~/util';
 import { TokenIdSelectType } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
@@ -306,10 +305,6 @@ const openTransactionSlide = async (transactionId: string) => {
         openModalSlide('DetailsTransactionSlideover', { transactionId });
     }, 600);
 };
-
-(async () => {
-    useAppStore().setBaseSchema();
-})();
 
 onMounted(() => {
     getTokens();

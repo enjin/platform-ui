@@ -322,7 +322,6 @@ const loadMoreItemsWithObserver = () => {
 };
 
 (async () => {
-    useAppStore().setFuelTanksSchema();
     await getAccounts();
 })();
 

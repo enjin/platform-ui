@@ -110,7 +110,6 @@ import LoadingContent from '~/components/LoadingContent.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';
 import debounce from 'lodash/debounce';
-import { useAppStore } from '~/store';
 import { events } from '~/util/snackbar';
 import NoItems from '~/components/NoItems.vue';
 import { FuelTankApi } from '~/api/fueltank';
@@ -244,7 +243,6 @@ const loadMoreItemsWithObserver = () => {
                 try {
                     if (!fueltanks.value.cursor || isPaginationLoading.value) return;
                     isPaginationLoading.value = true;
-                    useAppStore().setFuelTanksSchema();
                     const res = await FuelTankApi.getFuelTanks(
                         formatData({
                             ...getSearchInputs(),
@@ -295,7 +293,6 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 (async () => {
-    useAppStore().setFuelTanksSchema();
     await getFuelTanks();
 })();
 

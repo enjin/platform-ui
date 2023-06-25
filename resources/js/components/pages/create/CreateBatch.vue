@@ -16,7 +16,6 @@ import { ref, watch } from 'vue';
 import { BatchType } from '~/types/types.enums';
 import { useRouter } from 'vue-router';
 import RadioGroupButton from '~/components/RadioGroupButton.vue';
-import { useAppStore } from '~/store';
 
 const router = useRouter();
 
@@ -42,6 +41,5 @@ watch(
 
 (async () => {
     router.push({ name: batchRoutes[batchType.value] });
-    useAppStore().setBaseSchema();
 })();
 </script>

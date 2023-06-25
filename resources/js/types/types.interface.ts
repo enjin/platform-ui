@@ -3,7 +3,6 @@ import { BeamType, NotificationType, TokenCapType, TokenIdSelectType } from './t
 export interface AppState {
     hostname: string;
     authorization_token: string;
-    schema: string;
     advanced: boolean;
     config: {
         hostname: string;

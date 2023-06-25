@@ -248,7 +248,6 @@ const createBeam = async () => {
 };
 
 (async () => {
-    useAppStore().setBeamSchema();
     const endDate = new Date();
     end.value = new Date(endDate.setDate(endDate.getDate() + 3));
 })();

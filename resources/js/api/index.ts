@@ -55,12 +55,12 @@ export class ApiService {
         return resp.json();
     }
 
-    static async sendPlatfromRequest(data: Record<string, unknown>): Promise<any> {
+    static async sendPlatfromRequest(data: Record<string, unknown>, schema: string = ''): Promise<any> {
         const appStore = useAppStore();
 
         return new Promise((resolve, reject) => {
             ApiService.request({
-                url: `https://${appStore.config.hostname}/graphql${appStore.schema}`,
+                url: `https://${appStore.config.hostname}/graphql${schema}`,
                 data,
                 credentials: useAppStore().isMultiTenant ? 'include' : 'omit',
             }).then((res: any) => {

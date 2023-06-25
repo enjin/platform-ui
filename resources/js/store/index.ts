@@ -10,7 +10,6 @@ export const useAppStore = defineStore('app', {
     state: (): AppState => ({
         hostname: '',
         authorization_token: '',
-        schema: '',
         advanced: false,
         config: {
             hostname: '',
@@ -64,6 +63,14 @@ export const useAppStore = defineStore('app', {
 
             return false;
         },
+        async setupAccount({ hostname, authorization_token }: { hostname: string; authorization_token: string }) {
+            this.hostname = hostname;
+            this.config.hostname = hostname;
+            this.authorization_token = authorization_token;
+            this.config.authorization_token = authorization_token;
+            this.loggedIn = true;
+            await this.init();
+        },
         setConfig() {
             if (appConfig?.hostname?.length) this.config.hostname = appConfig.hostname;
             else if (window?.bootstrap?.hostname) this.config.hostname = window.bootstrap.hostname;
@@ -78,27 +85,28 @@ export const useAppStore = defineStore('app', {
             if (appConfig.channel.length) this.config.channel = appConfig.channel;
         },
         async checkHostname(hostname: string) {
-            if (hostname) {
-                const hostnameConfig = await ApiService.fetchHostname(hostname);
-                if (hostnameConfig) return hostnameConfig;
+            try {
+                if (hostname) {
+                    const hostnameConfig = await ApiService.fetchHostname(hostname);
+                    if (hostnameConfig) return hostnameConfig;
 
+                    throw 'Hostname is not valid';
+                }
+
+                return null;
+            } catch {
                 throw 'Hostname is not valid';
             }
-
-            return null;
         },
         async getUser() {
-            this.setAuthSchema();
             const res = await AuthApi.getUser();
             this.user = res.data.User;
         },
         async fetchCollectionIds(totalCount?: number) {
             if (!this.loggedIn) return;
 
-            const oldSchema = this.schema;
             try {
                 this.newCollection = false;
-                this.setBaseSchema();
 
                 const res = await CollectionApi.getCollectionsIds(totalCount);
                 const collectionsData = res.data.GetCollections;
@@ -109,8 +117,6 @@ export const useAppStore = defineStore('app', {
                 }
             } catch {
                 // do nothing
-            } finally {
-                this.schema = oldSchema;
             }
         },
         async login(email: string, password: string) {
@@ -128,7 +134,6 @@ export const useAppStore = defineStore('app', {
             return res.data.Login;
         },
         async logout() {
-            this.setAuthSchema();
             await AuthApi.logout();
             this.clearLogin();
         },
@@ -137,12 +142,10 @@ export const useAppStore = defineStore('app', {
             this.loggedIn = false;
         },
         async createApiToken(name: string) {
-            this.setAuthSchema();
             const res = await AuthApi.createApiToken(name);
             this.user.apiTokens.push(res.data.CreateApiToken);
         },
         async revokeToken(name: string) {
-            this.setAuthSchema();
             await AuthApi.revokeApiTokens([name]);
             this.user.apiTokens = this.user.apiTokens.filter((token) => token.name !== name);
         },
@@ -153,18 +156,6 @@ export const useAppStore = defineStore('app', {
         setAuthorizationToken(authorization_token: string) {
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
-        },
-        setBaseSchema() {
-            this.schema = '';
-        },
-        setBeamSchema() {
-            this.schema = '/beam';
-        },
-        setAuthSchema() {
-            this.schema = '/multi-tenant';
-        },
-        setFuelTanksSchema() {
-            this.schema = '/fuel-tanks';
         },
         resetSettings() {
             this.$reset();
@@ -195,7 +186,8 @@ export const useAppStore = defineStore('app', {
             if (this.isMultiTenant) {
                 return state.loggedIn && state.user?.apiTokens?.length > 0 && state.user?.account;
             }
-            return state.config.hostname.length > 0 && state.config.authorization_token.length > 0;
+
+            return state.loggedIn && state.config.hostname.length > 0 && state.config.authorization_token.length > 0;
         },
         isMultiTenant(state: AppState) {
             return state.config.tenant;

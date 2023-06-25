@@ -96,7 +96,6 @@ const isValid = async () => {
 const register = async () => {
     if (!(await isValid())) return;
 
-    appStore.setAuthSchema();
     isLoading.value = true;
     try {
         const res = await AuthApi.register(email.value, password.value);

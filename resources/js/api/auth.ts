@@ -3,6 +3,10 @@ import mutations from './mutations';
 import queries from './queries';
 
 export class AuthApi {
+    static async sendPlatfromRequest(data: Record<string, unknown>) {
+        return ApiService.sendPlatfromRequest(data, '/multi-tenant');
+    }
+
     static async login(email: string, password: string) {
         const data = {
             query: queries.Login,
@@ -12,7 +16,7 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async logout() {
@@ -20,7 +24,7 @@ export class AuthApi {
             query: queries.Logout,
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async getUser() {
@@ -28,7 +32,7 @@ export class AuthApi {
             query: queries.User,
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async register(email: string, password: string) {
@@ -40,7 +44,7 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async requestPasswordReset(email: string) {
@@ -51,7 +55,7 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async resetPassword(email: string, password: string, passwordConfirmation: string, token: string) {
@@ -65,7 +69,7 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async createApiToken(name: string) {
@@ -76,7 +80,7 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async revokeApiTokens(names: [string]) {
@@ -87,7 +91,7 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 
     static async updateUser({ email, account }: { email?: string; account?: string }) {
@@ -99,6 +103,6 @@ export class AuthApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return AuthApi.sendPlatfromRequest(data);
     }
 }

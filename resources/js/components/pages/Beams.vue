@@ -8,7 +8,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAppStore } from '~/store';
 import RadioGroupButton from '~/components/RadioGroupButton.vue';
 
 const router = useRouter();
@@ -39,7 +38,6 @@ watch(
 );
 
 (async () => {
-    useAppStore().setBeamSchema();
     await router.isReady();
     if (router.currentRoute.value.name === 'platform.beams') {
         router.push({ name: beamRoutes[beamType.value] });
