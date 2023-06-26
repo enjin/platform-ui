@@ -45,11 +45,28 @@
                     </div>
                 </div>
                 <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                    <div class="flex justify-between">
+                    <div class="">
                         <h1 class="text-xl md:text-2xl">
                             Wallet Account
                             <span v-if="!appStore.hasValidConfig && !walletAccount" class="text-red-500">&nbsp;*</span>
                         </h1>
+                        <p class="mt-1 text-sm text-gray-500 max-w-3xl">
+                            The platform depends on there being a funded wallet daemon account setup and connected to
+                            the platform and blockchain so it can receive transactions from the platform, sign them on
+                            your behalf and then broadcast them to the network. You can get the latest version of the
+                            wallet daemon from this repository:
+                            <a href="https://github.com/enjin/wallet-daemon" target="_blank" class="text-primary">
+                                https://github.com/enjin/wallet-daemon</a
+                            >
+                            and an overview can be found here:
+                            <a
+                                href="https://docs.enjin.io/enjin-platform/wallet-daemon"
+                                target="_blank"
+                                class="text-primary"
+                            >
+                                https://docs.enjin.io/enjin-platform/wallet-daemon</a
+                            >
+                        </p>
                     </div>
                     <div class="flex items-end space-x-4">
                         <FormInput

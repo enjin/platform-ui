@@ -46,9 +46,16 @@ export const useAppStore = defineStore('app', {
                 const hostnameConfig = await this.checkHostname(this.config.hostname);
                 this.config.network = hostnameConfig.network;
                 this.config.packages = Object.entries(hostnameConfig.packages).map(([key, value]: any[]) => {
+                    let link =
+                        hostnameConfig.url +
+                        '/graphiql/' +
+                        (key === 'enjin/platform-core' ? '' : key.replace('enjin/platform-', ''));
+                    if (key === 'enjin/platform-ui') link = '';
+
                     return {
                         name: key.replace('enjin/', ''),
                         version: value.version,
+                        link,
                     };
                 });
 

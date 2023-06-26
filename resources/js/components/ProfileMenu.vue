@@ -49,7 +49,10 @@
                             class="truncate text-sm font-medium text-gray-900"
                         >
                             <Tooltip :text="packg.version">
-                                <span class="cursor-pointer">
+                                <a v-if="packg.link" :href="packg.link" target="_blank" class="cursor-pointer">
+                                    {{ packg.name }}
+                                </a>
+                                <span v-else class="cursor-pointer">
                                     {{ packg.name }}
                                 </span>
                             </Tooltip>

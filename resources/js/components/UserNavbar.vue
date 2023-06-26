@@ -20,7 +20,7 @@
                         <span class="text-lg font-semibold ml-2">Platform</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4" v-if="appStore.hasValidConfig">
+                <div class="flex items-center space-x-4" v-if="appStore.loggedIn">
                     <InformationCircleIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="openHelp" />
                     <NotificationsList />
                     <ProfileMenu />
