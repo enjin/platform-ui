@@ -61,7 +61,10 @@
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Result
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 truncate"
+                                    >
                                         Transaction ID
                                     </th>
                                 </tr>
