@@ -22,8 +22,7 @@
                                     label="Max Token Count"
                                     description="The maximum number of individual tokens that can be created and exist for this collection."
                                     type="number"
-                                    :min="1"
-                                    required
+                                    :disabled="isInfiniteSupply"
                                 />
                                 <FormInput
                                     v-model="maxTokenSupply"
@@ -31,8 +30,13 @@
                                     label="Max Token Supply"
                                     description="Absolute maximum supply for each token in this collection. Set to 1 for all tokens to be unique NFTs with a max supply of 1, all tokens that have a supply of more than 1 should be treated as fungible tokens (FTs)."
                                     type="number"
-                                    :min="1"
-                                    required
+                                    :disabled="isInfiniteSupply"
+                                />
+                                <FormCheckbox
+                                    v-model="isInfiniteSupply"
+                                    name="infiniteSupply"
+                                    label="Infinite Supply"
+                                    description="Set whether the tokens in this collection will have an infinite supply. This would indicate the tokens in this collection are fungible tokens (FTs)."
                                 />
                                 <FormCheckbox
                                     v-model="forceSingleMint"
@@ -219,15 +223,16 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
 import { CollectionApi } from '~/api/collection';
 import ReadMoreButton from '~/components/ReadMoreButton.vue';
-import { addressNotRequiredSchema, booleanNotRequiredSchema, numberRequiredSchema } from '~/util/schemas';
+import { addressNotRequiredSchema, booleanNotRequiredSchema, numberNotRequiredSchema } from '~/util/schemas';
 import { TokenIdType } from '~/types/types.interface';
 
 const router = useRouter();
 const appStore = useAppStore();
 
 const isLoading = ref(false);
-const maxTokenCount = ref(1);
-const maxTokenSupply = ref(1);
+const maxTokenCount = ref();
+const maxTokenSupply = ref();
+const isInfiniteSupply = ref(false);
 const forceSingleMint = ref(false);
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
@@ -257,8 +262,8 @@ const explicitRoyaltyCurrencies: Ref<
 ]);
 
 const validation = yup.object({
-    maxTokenCount: numberRequiredSchema.min(1).typeError('Max token count must be a number'),
-    maxTokenSupply: numberRequiredSchema.min(1).typeError('Max token supply must be a number'),
+    maxTokenCount: numberNotRequiredSchema.typeError('Max token count must be a number'),
+    maxTokenSupply: numberNotRequiredSchema.typeError('Max token supply must be a number'),
     forceSingleMint: booleanNotRequiredSchema,
     beneficiaryAddress: addressNotRequiredSchema,
     beneficiaryPercentage: yup.number().when('beneficiaryAddress', {
@@ -307,8 +312,8 @@ const createCollection = async () => {
         const res = await CollectionApi.createCollection(
             formatData({
                 mintPolicy: {
-                    maxTokenCount: maxTokenCount.value,
-                    maxTokenSupply: maxTokenSupply.value,
+                    maxTokenCount: isInfiniteSupply.value ? null : maxTokenCount.value,
+                    maxTokenSupply: isInfiniteSupply.value ? null : maxTokenSupply.value,
                     forceSingleMint: forceSingleMint.value,
                 },
                 marketPolicy: beneficiaryAddress.value
