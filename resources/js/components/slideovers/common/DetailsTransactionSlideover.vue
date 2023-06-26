@@ -160,6 +160,7 @@ const isAddressKey = (key) => ['who', 'operator', 'account', 'owner'].includes(k
 
 const getTransaction = async () => {
     try {
+        if (!props.item?.transactionId) return;
         isLoading.value = true;
         const res = await TransactionApi.getTransaction(props.item.transactionId);
         const transactionData = res.data.GetTransaction;
@@ -191,7 +192,7 @@ const connectWebSocket = () => {
         const payload = {
             event: 'pusher:subscribe',
             data: {
-                channel: appStore.config.channel,
+                channel: appStore.user?.account,
             },
         };
         webSocket.value.send(JSON.stringify(payload));
