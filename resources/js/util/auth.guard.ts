@@ -13,10 +13,10 @@ export function initAuthGuard(router: Router) {
         const requiresToken = to.matched.some((record) => record.meta.requiresToken);
 
         if (isMultiTenant) {
-            if (!appStore.hostname && to.name != 'platform.setup') {
+            if (!appStore.config.hostname && to.name != 'platform.setup') {
                 next({ name: 'platform.setup' });
                 return;
-            } else if (to.name == 'platform.setup' && appStore.hostname) {
+            } else if (to.name == 'platform.setup' && appStore.config.hostname) {
                 next({ name: 'platform.auth.login' });
                 return;
             }
