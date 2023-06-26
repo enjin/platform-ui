@@ -22,7 +22,13 @@
                                     label="Max Token Count"
                                     description="The maximum number of individual tokens that can be created and exist for this collection."
                                     type="number"
-                                    :disabled="isInfiniteSupply"
+                                    :disabled="isInfiniteCount"
+                                />
+                                <FormCheckbox
+                                    v-model="isInfiniteCount"
+                                    name="infiniteCount"
+                                    label="Infinite Count"
+                                    description="Use this option if you would like the collection to support an infinite amount of tokens."
                                 />
                                 <FormInput
                                     v-model="maxTokenSupply"
@@ -36,7 +42,7 @@
                                     v-model="isInfiniteSupply"
                                     name="infiniteSupply"
                                     label="Infinite Supply"
-                                    description="Set whether the tokens in this collection will have an infinite supply. This would indicate the tokens in this collection are fungible tokens (FTs)."
+                                    description="With this option selected tokens in this collection will have an infinite supply."
                                 />
                                 <FormCheckbox
                                     v-model="forceSingleMint"
@@ -232,7 +238,8 @@ const appStore = useAppStore();
 const isLoading = ref(false);
 const maxTokenCount = ref();
 const maxTokenSupply = ref();
-const isInfiniteSupply = ref(false);
+const isInfiniteSupply = ref(true);
+const isInfiniteCount = ref(true);
 const forceSingleMint = ref(false);
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
@@ -312,7 +319,7 @@ const createCollection = async () => {
         const res = await CollectionApi.createCollection(
             formatData({
                 mintPolicy: {
-                    maxTokenCount: isInfiniteSupply.value ? null : maxTokenCount.value,
+                    maxTokenCount: isInfiniteCount.value ? null : maxTokenCount.value,
                     maxTokenSupply: isInfiniteSupply.value ? null : maxTokenSupply.value,
                     forceSingleMint: forceSingleMint.value,
                 },
