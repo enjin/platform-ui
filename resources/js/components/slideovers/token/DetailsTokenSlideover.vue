@@ -35,7 +35,7 @@
                         <div class="space-y-2">
                             <dt class="text-base font-medium text-gray-500">Supply</dt>
                             <dd class="mt-1 text-sm text-gray-900">
-                                {{ item.supply }}
+                                {{ item.supply == '-1' ? '0' : item.supply }}
                             </dd>
                         </div>
 
