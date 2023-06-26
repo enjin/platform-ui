@@ -31,7 +31,7 @@
                             type="number"
                             name="amount"
                             label="Amount"
-                            description="The amount to transfer."
+                            description="The amount to burn."
                             required
                         />
                         <FormCheckbox
