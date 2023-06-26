@@ -5,7 +5,7 @@
         :validation-schema="validation"
         @submit="mutateToken"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Approve Token</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Mutate Token</h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="divide-y divide-gray-200 px-4 sm:px-6">
