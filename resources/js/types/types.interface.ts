@@ -9,7 +9,7 @@ export interface AppState {
         authorization_token: string;
         route: string;
         network: string;
-        packages: { name: string; version: string }[];
+        packages: { name: string; version: string, link?: string }[];
         tenant: boolean;
         webSocket: string;
         channel: string;
