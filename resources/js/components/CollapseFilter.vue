@@ -1,7 +1,7 @@
 <template>
-    <Popover theme="dark" @open:popper="open = true" @close:popper="open = false">
+    <Popover ref="popperRef" theme="dark" @open:popper="open = true" @close:popper="open = false">
         <template #activator>
-            <Btn :class="open ? 'ring-1 ring-primary' : 'text-opacity-90'">
+            <Btn ref="btnOpenerRef" :class="open ? 'ring-1 ring-primary' : 'text-opacity-90'">
                 <span class="text-sm text-gray-900 hover:text-opacity-100 font-normal">{{ label }}</span>
                 <span class="ml-2 w-2 text-sm text-gray-500 font-normal">{{ localModelValue.length }}</span>
                 <ChevronDownIcon
@@ -22,7 +22,7 @@
                         @submit="addItem"
                     />
                     <FormSelect
-                        v-else-if="type === 'select'"
+                        v-else-if="type === 'select' && options"
                         class="flex-1 !mt-0"
                         :name="name"
                         :placeholder="placeholder"
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Btn from '~/components/Btn.vue';
 import Chip from '~/components/Chip.vue';
 import FormInput from '~/components/FormInput.vue';
@@ -74,6 +74,8 @@ const props = withDefaults(
 const emit = defineEmits(['update:modelValue', 'change']);
 
 const filter = ref('');
+const btnOpenerRef = ref();
+const popperRef = ref();
 const open = ref(false);
 
 const addItem = () => {
@@ -96,5 +98,13 @@ const localModelValue = computed({
         emit('change');
         emit('update:modelValue', value);
     },
+});
+
+onMounted(() => {
+    popperRef.value.$parent.$parent.$el.addEventListener('scroll', () => {
+        if (btnOpenerRef.value && open.value) {
+            btnOpenerRef.value.$el.click();
+        }
+    });
 });
 </script>
