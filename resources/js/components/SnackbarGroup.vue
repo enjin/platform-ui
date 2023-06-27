@@ -44,7 +44,7 @@
                                             <p class="text-sm font-medium text-gray-900">
                                                 {{ notification.title }}
                                             </p>
-                                            <p class="mt-1 text-sm text-gray-500 break-all" v-if="notification.text">
+                                            <p class="mt-1 text-sm text-gray-500 break-words" v-if="notification.text">
                                                 {{ notification.text }}
                                             </p>
                                         </div>

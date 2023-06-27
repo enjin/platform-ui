@@ -25,7 +25,7 @@
                         >
                             <div :class="[notificationColor(item.type), 'mr-2 w-0.5 flex-shrink-0']"></div>
                             <div class="flex flex-col flex-1 py-2 flex-shrink-0">
-                                <p class="text-sm text-gray-900 break-all">{{ item.text }}</p>
+                                <p class="text-sm text-gray-900 break-words">{{ item.text }}</p>
                                 <p class="text-xs mt-1 text-gray-500">
                                     {{ formatDate(item.date) }}
                                 </p>
