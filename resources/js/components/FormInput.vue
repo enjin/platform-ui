@@ -39,6 +39,7 @@
                         :placeholder="placeholder"
                         @input="emit('inputChange', $event)"
                         @keyup.enter="emit('submit')"
+                        @focusout="hasFocus && emit('submit')"
                     />
                     <slot name="input" />
                     <slot name="addon" />
@@ -71,6 +72,7 @@ const props = withDefaults(
         inputClass?: string;
         readmore?: string;
         haveShadow?: boolean;
+        hasFocus?: boolean;
     }>(),
     {
         label: undefined,
@@ -86,6 +88,7 @@ const props = withDefaults(
         inputClass: '',
         readmore: undefined,
         haveShadow: true,
+        hasFocus: false,
     }
 );
 
