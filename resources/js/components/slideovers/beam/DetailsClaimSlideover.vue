@@ -23,7 +23,7 @@
 
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Code</dt>
-                        <dd class="mt-1 text-sm text-gray-900 break-all">
+                        <dd class="mt-1 text-sm text-gray-900 break-words">
                             {{ item.code }}
                             <CopyTextIcon :text="item.code" />
                         </dd>

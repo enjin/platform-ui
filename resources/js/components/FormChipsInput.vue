@@ -26,6 +26,7 @@
                         class="flex-1 !mt-0"
                         input-class="!p-0 !ring-0 !shadow-none !transition-none"
                         name="inputChips"
+                        has-focus
                         :placeholder="placeholder"
                         :have-shadow="false"
                         @submit="addItem"
