@@ -236,13 +236,13 @@ const mintTypes = [
 const formRef = ref();
 const account = ref(publicKeyToAddress(props.modelValue.account ?? appStore.user?.account) ?? '');
 const createTokenId: Ref<TokenIdType> = ref(
-    parseFormatedTokenId(props.modelValue.createParams?.tokenId ?? {}) ?? {
+    parseFormatedTokenId(props.modelValue.createParams?.tokenId ?? null) ?? {
         tokenId: '',
         tokenType: TokenIdSelectType.Integer,
     }
 );
 const mintTokenId: Ref<TokenIdType> = ref(
-    parseFormatedTokenId(props.modelValue.mintParams?.tokenId ?? {}) ?? {
+    parseFormatedTokenId(props.modelValue.mintParams?.tokenId ?? null) ?? {
         tokenId: '',
         tokenType: TokenIdSelectType.Integer,
     }
@@ -299,7 +299,7 @@ const createValidation = yup.object({
         then: () => numberRequiredSchema.min(0.01).typeError('Unit price must be a number'),
         otherwise: () => numberNotRequiredSchema,
     }),
-    initialSupply: yup.number().typeError('Initial Supply must be a number').default(1).min(1),
+    initialSupply: yup.number().typeError('Initial supply must be a number').default(1).min(1),
     capType: yup.string().when('mintType', {
         is: 'create',
         then: () => stringRequiredSchema,
@@ -307,7 +307,7 @@ const createValidation = yup.object({
     }),
     capAmount: yup.number().when('capType', {
         is: TokenCapType.SUPPLY,
-        then: () => numberRequiredSchema.typeError('Amount must be number'),
+        then: () => numberRequiredSchema.typeError('Cap amount must be number'),
         otherwise: () => numberNotRequiredSchema,
     }),
     beneficiaryAddress: yup.string().when('mintType', {
@@ -337,10 +337,10 @@ const hasChanged = computed(() =>
                 ? {
                       tokenId: formatToken(createTokenId.value),
                       unitPrice: formatPriceToENJ(createUnitPrice.value) ?? null,
-                      initialSupply: initialSupply.value,
+                      initialSupply: parseInt(initialSupply.value.toString()),
                       cap: {
                           type: capType.value,
-                          amount: capAmount.value,
+                          amount: parseInt(capAmount.value?.toString() ?? '0'),
                       },
                       behavior: {
                           hasRoyalty:
@@ -360,7 +360,7 @@ const hasChanged = computed(() =>
             mintType.value === 'mint'
                 ? {
                       tokenId: formatToken(mintTokenId.value),
-                      amount: mintAmount.value,
+                      amount: parseInt(mintAmount.value.toString()),
                       unitPrice: formatPriceToENJ(mintUnitPrice.value) ?? null,
                   }
                 : null,

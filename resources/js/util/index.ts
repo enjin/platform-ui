@@ -56,9 +56,11 @@ export const formatToken = (tokenData: TokenIdType) => {
     };
 };
 
-export const parseFormatedTokenId = (tokenData: {
-    [key: string]: { [key: string]: string | number } & (string | number);
-}): TokenIdType | null => {
+export const parseFormatedTokenId = (
+    tokenData: {
+        [key: string]: { [key: string]: string | number } & (string | number);
+    } | null
+): TokenIdType | null => {
     if (!tokenData) return null;
 
     if (tokenData?.erc1155) {

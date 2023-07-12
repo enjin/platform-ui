@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex gap-2 md:px-6 lg:px-8 py-2 mb-2 items-end">
+                    <div class="flex gap-2 sm:px-6 lg:px-8 py-2 mb-2 items-end">
                         <RouterLink :to="{ name: 'platform.create.batch.mint' }">
                             <Btn primary> Batch </Btn>
                         </RouterLink>

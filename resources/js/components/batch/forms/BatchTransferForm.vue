@@ -149,13 +149,13 @@ const transferTypes = [
 const formRef = ref();
 const account = ref(publicKeyToAddress(props.modelValue.account ?? '') ?? '');
 const simpleTokenId = ref(
-    parseFormatedTokenId(props.modelValue.simpleParams?.tokenId ?? {}) ?? {
+    parseFormatedTokenId(props.modelValue.simpleParams?.tokenId ?? null) ?? {
         tokenId: '',
         tokenType: TokenIdSelectType.Integer,
     }
 );
 const operatorTokenId = ref(
-    parseFormatedTokenId(props.modelValue.operatorParams?.tokenId ?? {}) ?? {
+    parseFormatedTokenId(props.modelValue.operatorParams?.tokenId ?? null) ?? {
         tokenId: '',
         tokenType: TokenIdSelectType.Integer,
     }
