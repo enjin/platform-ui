@@ -126,15 +126,15 @@ const attributes = ref(
 const createValidation = yup.object({
     tokenIds: integerOrRangeSchema,
     tokenQuantityPerClaim: yup.number().typeError('Token quantity per claim must be a number'),
-    claimQuantity: yup.number(),
+    claimQuantity: yup.number().typeError('Claim quantity must be a number'),
     beamType: yup.string(),
 });
 
 const hasChanged = computed(() =>
     formatData({
         tokenIds: tokenIds.value,
-        tokenQuantityPerClaim: tokenQuantityPerClaim.value,
-        claimQuantity: claimQuantity.value,
+        tokenQuantityPerClaim: parseInt(tokenQuantityPerClaim.value.toString()),
+        claimQuantity: parseInt(claimQuantity.value.toString()),
         type: beamType.value,
         attributes: attributes.value.filter((a) => a.key !== '' && a.value !== ''),
     })

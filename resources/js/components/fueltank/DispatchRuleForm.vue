@@ -178,7 +178,7 @@ const formRef = ref();
 const whitelistedCallers = ref(formatWhitelistedCallers(props.modelValue.whitelistedCallers) ?? [{ caller: '' }]);
 const collectionId = ref(props.modelValue.requireToken?.collectionId ?? '');
 const tokenId = ref(
-    parseFormatedTokenId(props.modelValue.requireToken?.tokenId) ?? {
+    parseFormatedTokenId(props.modelValue.requireToken?.tokenId ?? null) ?? {
         tokenId: '',
         tokenType: TokenIdSelectType.Integer,
     }
