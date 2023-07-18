@@ -3,6 +3,6 @@
     "authorization_token": "",
     "route": "",
     "tenant": false,
-    "websocket": "",
-    "channel": ""
+    "websocket": "wss://stgplatform.enjinsandbox.com:443/app/websocket",
+    "channel": "rf814qiDop7ZycWETd5EHRktz7Zcoe7s5BHLYFjkqvXFha1rd"
 }

@@ -24,8 +24,8 @@ export const useAppStore = defineStore('app', {
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
             { name: 'Tokens', to: { name: 'platform.tokens' }, pos: 2 },
-            { name: 'Transactions', to: { name: 'platform.transactions' }, pos: 5 },
-            { name: 'Wallets', to: { name: 'platform.wallets' }, pos: 6 },
+            { name: 'Transactions', to: { name: 'platform.transactions' }, pos: 6 },
+            { name: 'Wallets', to: { name: 'platform.wallets' }, pos: 7 },
         ],
         collections: [],
         loggedIn: false,
@@ -61,6 +61,7 @@ export const useAppStore = defineStore('app', {
 
                 if (this.hasBeamPackage) this.addBeamNavigation();
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
+                if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
                 this.fetchCollectionIds();
 
                 return true;
@@ -182,6 +183,13 @@ export const useAppStore = defineStore('app', {
                 { name: 'Fuel Tanks', to: { name: 'platform.fuel-tanks' }, pos: 4 },
             ].sort((a, b) => a.pos - b.pos);
         },
+        addMarketplaceNavigation() {
+            if (this.navigations.find((nav) => nav.name === 'Marketplace')) return;
+            this.navigations = [
+                ...this.navigations,
+                { name: 'Marketplace', to: { name: 'platform.marketplace' }, pos: 5 },
+            ].sort((a, b) => a.pos - b.pos);
+        },
         setAdvancedMode(advanced: boolean) {
             this.advanced = advanced;
         },
@@ -205,6 +213,9 @@ export const useAppStore = defineStore('app', {
         },
         hasFuelTanksPackage(state: AppState) {
             return state.config.packages.find((p) => p.name === 'platform-fuel-tanks');
+        },
+        hasMarketplacePackage(state: AppState) {
+            return state.config.packages.find((p) => p.name === 'platform-marketplace');
         },
     },
 });

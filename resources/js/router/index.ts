@@ -87,6 +87,36 @@ const routes = [
         },
     },
     {
+        path: '/marketplace',
+        name: 'platform.marketplace',
+        component: () => import('../components/pages/Marketplace.vue'),
+        meta: {
+            requiresAuth: true,
+            requiresToken: true,
+        },
+        children: [
+            {
+                path: '',
+                redirect: { name: 'platform.marketplace.bids' },
+            },
+            {
+                path: 'bids',
+                name: 'platform.marketplace.bids',
+                component: () => import('../components/marketplace/BidsList.vue'),
+            },
+            {
+                path: 'listings',
+                name: 'platform.marketplace.listings',
+                component: () => import('../components/marketplace/ListingsList.vue'),
+            },
+            {
+                path: 'sales',
+                name: 'platform.marketplace.sales',
+                component: () => import('../components/marketplace/SalesList.vue'),
+            },
+        ],
+    },
+    {
         path: '/create/collection',
         name: 'platform.create.collection',
         component: () => import('../components/pages/create/CreateCollection.vue'),
