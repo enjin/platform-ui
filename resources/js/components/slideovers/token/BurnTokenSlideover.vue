@@ -111,9 +111,9 @@ const props = withDefaults(
 const isLoading = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '',
 });
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const amount = ref();
 const keepAlive = ref(false);
 const removeTokenStorage = ref(false);
@@ -140,7 +140,7 @@ const burnToken = async () => {
         const res = await TokenApi.burnToken(
             formatData({
                 tokenId: formatToken(tokenId.value),
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 amount: amount.value,
                 keepAlive: keepAlive.value,
                 removeTokenStorage: removeTokenStorage.value,

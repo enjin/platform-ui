@@ -147,7 +147,7 @@ const props = withDefaults(
 
 const isLoading = ref(false);
 const actionType = ref('add');
-const tankId = ref(props.item.tankId);
+const tankId = ref(props.item?.tankId);
 const idempotencyKey = ref('');
 const ruleSetId = ref('');
 const formRef = ref();
@@ -224,7 +224,7 @@ const insertRule = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.insertRuleSet(
             formatData({
-                tankId: addressToPublicKey(tankId.value),
+                tankId: addressToPublicKey(tankId.value ?? ''),
                 ruleSetId: ruleSetId.value,
                 dispatchRules: dispatchRules.value.map((d) => d.values),
                 idempotencyKey: idempotencyKey.value,

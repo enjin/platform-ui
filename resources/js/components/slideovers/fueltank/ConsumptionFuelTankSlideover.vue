@@ -99,7 +99,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const tankId = ref(props.item.tankId);
+const tankId = ref(props.item?.tankId);
 const idempotencyKey = ref('');
 const ruleSetId = ref();
 const userId = ref('');
@@ -124,7 +124,7 @@ const setConsumption = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.setConsumption(
             formatData({
-                tankId: addressToPublicKey(tankId.value),
+                tankId: addressToPublicKey(tankId.value ?? ''),
                 ruleSetId: ruleSetId.value,
                 userId: userId.value,
                 totalConsumed: totalConsumed.value,

@@ -73,7 +73,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const formRef = ref();
@@ -92,7 +92,7 @@ const destroyCollection = async () => {
         isLoading.value = true;
         const res = await CollectionApi.destroyCollection(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })

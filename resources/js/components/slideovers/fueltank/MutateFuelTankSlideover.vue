@@ -175,10 +175,10 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const tankId = ref(props.item.tankId);
-const providesDeposit = ref(props.item.providesDeposit ?? false);
-const reservesExistentialDeposit = ref(props.item.reservesExistentialDeposit ?? false);
-const reservesAccountCreationDeposit = ref(props.item.reservesAccountCreationDeposit ?? false);
+const tankId = ref(props.item?.tankId);
+const providesDeposit = ref(props.item?.providesDeposit ?? false);
+const reservesExistentialDeposit = ref(props.item?.reservesExistentialDeposit ?? false);
+const reservesAccountCreationDeposit = ref(props.item?.reservesAccountCreationDeposit ?? false);
 const whitelistedCallers = ref([{ caller: '' }]);
 const collectionId = ref('');
 const tokenId = ref({
@@ -233,7 +233,7 @@ const mutateFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.mutateFuelTank(
             formatData({
-                tankId: addressToPublicKey(tankId.value),
+                tankId: addressToPublicKey(tankId.value ?? ''),
                 mutation: {
                     providesDeposit: providesDeposit.value,
                     reservesExistentialDeposit: reservesExistentialDeposit.value,

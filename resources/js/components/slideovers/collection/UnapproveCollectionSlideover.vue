@@ -86,7 +86,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const operator = ref('');
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
@@ -107,7 +107,7 @@ const unapproveCollection = async () => {
         isLoading.value = true;
         const res = await CollectionApi.unapproveCollection(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 operator: addressToPublicKey(operator.value),
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,

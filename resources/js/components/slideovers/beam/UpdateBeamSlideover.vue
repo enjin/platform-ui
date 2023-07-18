@@ -104,12 +104,12 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const code = ref(props.item.code);
-const name = ref(props.item.name);
-const description = ref(props.item.description);
-const image = ref(props.item.image);
-const start = ref(new Date(props.item.start));
-const end = ref(new Date(props.item.end));
+const code = ref(props.item?.code);
+const name = ref(props.item?.name);
+const description = ref(props.item?.description);
+const image = ref(props.item?.image);
+const start = ref(new Date(props.item?.start || new Date()));
+const end = ref(new Date(props.item?.end || new Date()));
 const flags = ref([]);
 const formRef = ref();
 
@@ -131,19 +131,19 @@ const validation = yup.object({
 const checkChanges = () => {
     return {
         code: code.value,
-        name: name.value !== props.item.name ? name.value : null,
-        description: description.value !== props.item.description ? description.value : null,
-        image: image.value !== props.item.image ? image.value : null,
+        name: name.value !== props.item?.name ? name.value : null,
+        description: description.value !== props.item?.description ? description.value : null,
+        image: image.value !== props.item?.image ? image.value : null,
         start:
-            new Date(start.value).toString() !== new Date(props.item.start).toString()
+            new Date(start.value).toString() !== new Date(props.item?.start ?? '').toString()
                 ? new Date(start.value).toString()
                 : null,
         end:
-            new Date(end.value).toString() !== new Date(props.item.end).toString()
+            new Date(end.value).toString() !== new Date(props.item?.end ?? '').toString()
                 ? new Date(end.value).toString()
                 : null,
         flags:
-            flags.value !== props.item.flags
+            flags.value !== props.item?.flags
                 ? flags.value.map((f) => {
                       return {
                           flag: f,

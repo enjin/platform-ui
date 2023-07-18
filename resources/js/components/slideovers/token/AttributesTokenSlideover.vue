@@ -131,15 +131,15 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const key = ref('');
 const value = ref('');
-const attributeCount = ref(props.item.attributes.length);
+const attributeCount = ref(props.item?.attributes.length);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '',
 });
 const formRef = ref();
 
@@ -173,7 +173,7 @@ const formAction = () => {
     }
 };
 
-const itemAttributesKeys = props.item.attributes.map((a: { key: string; value: string }) => a.key);
+const itemAttributesKeys = props.item?.attributes.map((a: { key: string; value: string }) => a.key) ?? [];
 
 const validation = yup.object({
     collectionId: yup.number().typeError('Collection ID must be a number').required(),
@@ -206,7 +206,7 @@ const setAttribute = async () => {
         isLoading.value = true;
         const res = await TokenApi.setTokenAttribute(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 tokenId: formatToken(tokenId.value),
                 key: key.value,
                 value: value.value,
@@ -244,7 +244,7 @@ const removeAttribute = async () => {
         isLoading.value = true;
         const res = await TokenApi.removeTokenAttribute(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 tokenId: formatToken(tokenId.value),
                 key: key.value,
                 idempotencyKey: idempotencyKey.value,
@@ -281,7 +281,7 @@ const removeAllAttributes = async () => {
         isLoading.value = true;
         const res = await TokenApi.removeAllAttributes(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 tokenId: formatToken(tokenId.value),
                 attributeCount: attributeCount.value,
                 idempotencyKey: idempotencyKey.value,

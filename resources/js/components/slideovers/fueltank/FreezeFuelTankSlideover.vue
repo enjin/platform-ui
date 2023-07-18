@@ -87,7 +87,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const tankId = ref(props.item.tankId);
+const tankId = ref(props.item?.tankId);
 const isFrozen = ref(false);
 const ruleSetId = ref();
 const idempotencyKey = ref('');
@@ -108,7 +108,7 @@ const freezeFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.scheduleMutateFreezeState(
             formatData({
-                tankId: addressToPublicKey(tankId.value),
+                tankId: addressToPublicKey(tankId.value ?? ''),
                 isFrozen: isFrozen.value,
                 ruleSetId: ruleSetId.value,
                 idempotencyKey: idempotencyKey.value,
