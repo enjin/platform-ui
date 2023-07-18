@@ -53,4 +53,72 @@ export class MarketplaceApi {
 
         return MarketplaceApi.sendPlatfromRequest(data);
     }
+
+    static async createListing(createListingData: Record<string, unknown>) {
+        const data = {
+            query: mutations.CreateListing,
+            variables: {
+                account: createListingData.account,
+                makeAssetId: createListingData.makeAssetId,
+                takeAssetId: createListingData.takeAssetId,
+                amount: createListingData.amount,
+                price: createListingData.price,
+                salt: createListingData.salt,
+                auctionData: createListingData.auctionData,
+                idempotencyKey: createListingData.idempotencyKey,
+            },
+        };
+
+        return MarketplaceApi.sendPlatfromRequest(data);
+    }
+
+    static async cancelListing(cancelListingData: Record<string, unknown>) {
+        const data = {
+            query: mutations.CancelListing,
+            variables: {
+                listingId: cancelListingData.listingId,
+                idempotencyKey: cancelListingData.idempotencyKey,
+            },
+        };
+
+        return MarketplaceApi.sendPlatfromRequest(data);
+    }
+
+    static async fillListing(fillListingData: Record<string, unknown>) {
+        const data = {
+            query: mutations.FillListing,
+            variables: {
+                listingId: fillListingData.listingId,
+                amount: fillListingData.amount,
+                idempotencyKey: fillListingData.idempotencyKey,
+            },
+        };
+
+        return MarketplaceApi.sendPlatfromRequest(data);
+    }
+
+    static async finalizeAuction(finalizeAuctionData: Record<string, unknown>) {
+        const data = {
+            query: mutations.FinalizeAuction,
+            variables: {
+                listingId: finalizeAuctionData.listingId,
+                idempotencyKey: finalizeAuctionData.idempotencyKey,
+            },
+        };
+
+        return MarketplaceApi.sendPlatfromRequest(data);
+    }
+
+    static async placeBid(placeBidData: Record<string, unknown>) {
+        const data = {
+            query: mutations.PlaceBid,
+            variables: {
+                listingId: placeBidData.listingId,
+                price: placeBidData.price,
+                idempotencyKey: placeBidData.idempotencyKey,
+            },
+        };
+
+        return MarketplaceApi.sendPlatfromRequest(data);
+    }
 }
