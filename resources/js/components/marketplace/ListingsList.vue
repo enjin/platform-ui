@@ -4,19 +4,26 @@
     >
         <div class="mt-4 flow-root">
             <div class="sm:-mx-6 lg:-mx-8 transition-all">
-                <div class="gap-4 min-w-0 mb-2 py-2 sm:px-6 lg:px-8 transition-all">
-                    <h1 class="block text-sm font-medium leading-6 text-gray-900">Filters</h1>
-                    <div class="flex flex-wrap gap-4 mt-2">
-                        <CollapseFilter
-                            v-for="searchInput in searchInputs"
-                            :key="searchInput.name"
-                            v-model="searchInput.value"
-                            :label="searchInput.label"
-                            :name="searchInput.name"
-                            :placeholder="searchInput.placeholder"
-                            :type="searchInput.type"
-                            @change="searchChange"
-                        />
+                <div class="flex lg:flex-row flex-col-reverse justify-between">
+                    <div class="gap-4 min-w-0 mb-2 py-2 sm:px-6 lg:px-8 transition-all">
+                        <h1 class="block text-sm font-medium leading-6 text-gray-900">Filters</h1>
+                        <div class="flex flex-wrap gap-4 mt-2">
+                            <CollapseFilter
+                                v-for="searchInput in searchInputs"
+                                :key="searchInput.name"
+                                v-model="searchInput.value"
+                                :label="searchInput.label"
+                                :name="searchInput.name"
+                                :placeholder="searchInput.placeholder"
+                                :type="searchInput.type"
+                                @change="searchChange"
+                            />
+                        </div>
+                    </div>
+                    <div class="flex gap-2 sm:px-6 lg:px-8 py-2 mb-2 items-end">
+                        <RouterLink :to="{ name: 'platform.create.listing' }">
+                            <Btn primary> Create Listing </Btn>
+                        </RouterLink>
                     </div>
                 </div>
                 <LoadingContent
@@ -30,6 +37,9 @@
                                     scope="col"
                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3 truncate"
                                 >
+                                    ID
+                                </th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Listing ID
                                 </th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -52,27 +62,42 @@
                         </thead>
                         <tbody class="bg-white">
                             <tr
-                                v-for="(beam, idx) in listings.items"
-                                :key="beam.id"
+                                v-for="(listing, idx) in listings.items"
+                                :key="listing.id"
                                 :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
                             >
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
-                                    <span class="cursor-pointer" @click="openModalSlide('DetailsClaimSlideover', beam)">
-                                        {{ `#${beam.id}` }}
+                                    <span
+                                        class="cursor-pointer"
+                                        @click="openModalSlide('DetailsListingSlideover', listing)"
+                                    >
+                                        {{ `#${listing.id}` }}
                                     </span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ shortCode(beam.code) }}
+                                    {{ shortString(listing.listingId) }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ beam.quantity }}
+                                    {{ listing.price > 100 ? formatPriceFromENJ(listing.price) : listing.price }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ addressShortHex(listing.seller) }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ listing.sales }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ listing.bids }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ listing.state.__typename }}
                                 </td>
                                 <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
                                     <DropdownMenu
                                         :actions="actions"
-                                        @clicked="($event) => openModalSlide($event, beam)"
+                                        @clicked="($event) => openModalSlide($event, listing)"
                                     />
                                 </td>
                             </tr>
@@ -94,14 +119,15 @@ import { DTOMarketplaceFactory as DTOFactory } from '~/factory/marketplace';
 import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import debounce from 'lodash/debounce';
-import { shortCode } from '~/util/address';
-import { formatData, snackbarErrors } from '~/util';
+import { addressShortHex } from '~/util/address';
+import { formatData, formatPriceFromENJ, shortString, snackbarErrors } from '~/util';
 import DropdownMenu from '~/components/DropdownMenu.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';
 import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
 import { MarketplaceApi } from '~/api/marketplace';
+import Btn from '../Btn.vue';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -119,15 +145,8 @@ const slideComponent = ref();
 const searchInputs = ref([
     {
         name: 'ids',
-        label: 'Bid IDs',
-        placeholder: 'Search by bid ID',
-        value: [],
-        type: 'text',
-    },
-    {
-        name: 'listingIds',
-        label: 'Listing IDs',
-        placeholder: 'Search by listing ID',
+        label: 'IDs',
+        placeholder: 'Search by ID',
         value: [],
         type: 'text',
     },
@@ -135,6 +154,13 @@ const searchInputs = ref([
         name: 'account',
         label: 'Account',
         placeholder: 'Search by account',
+        value: [],
+        type: 'text',
+    },
+    {
+        name: 'listingIds',
+        label: 'Listing IDs',
+        placeholder: 'Search by listing ID',
         value: [],
         type: 'text',
     },
@@ -150,7 +176,27 @@ const actions = [
     {
         key: 'details',
         name: 'Details',
-        component: 'DetailsBidSlideover',
+        component: 'DetailsListingSlideover',
+    },
+    {
+        key: 'cancel',
+        name: 'Cancel',
+        component: 'CancelListingSlideover',
+    },
+    {
+        key: 'fill',
+        name: 'Fill',
+        component: 'FillListingSlideover',
+    },
+    {
+        key: 'finalize',
+        name: 'Finalize Auction',
+        component: 'FinalizeAuctionSlideover',
+    },
+    {
+        key: 'bid',
+        name: 'Place Bid',
+        component: 'PlaceBidSlideover',
     },
 ];
 
@@ -234,7 +280,7 @@ const loadMoreItemsWithObserver = () => {
 };
 
 const openModalSlide = (componentName: string, collection) => {
-    let componentPath = 'beam';
+    let componentPath = 'marketplace';
     if (componentName.toLowerCase().includes('transaction')) componentPath = 'common';
     slideComponent.value = { componentName, componentPath, ...collection };
     modalSlide.value = true;

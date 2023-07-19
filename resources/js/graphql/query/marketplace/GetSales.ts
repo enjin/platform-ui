@@ -16,6 +16,9 @@ export default `query GetSales($ids: [BigInt!], $accounts: [String!], $listingId
               publicKey
             }
           }
+          listing {
+            listingId
+          }
         }
         cursor
       }

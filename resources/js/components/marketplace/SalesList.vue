@@ -30,7 +30,7 @@
                                     scope="col"
                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3 truncate"
                                 >
-                                    Bid ID
+                                    Sale ID
                                 </th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Price
@@ -46,27 +46,30 @@
                         </thead>
                         <tbody class="bg-white">
                             <tr
-                                v-for="(beam, idx) in sales.items"
-                                :key="beam.id"
+                                v-for="(sale, idx) in sales.items"
+                                :key="sale.id"
                                 :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
                             >
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
-                                    <span class="cursor-pointer" @click="openModalSlide('DetailsClaimSlideover', beam)">
-                                        {{ `#${beam.id}` }}
+                                    <span class="cursor-pointer" @click="openModalSlide('DetailsSaleSlideover', sale)">
+                                        {{ `#${sale.id}` }}
                                     </span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ shortCode(beam.code) }}
+                                    {{ sale.price > 100 ? formatPriceFromENJ(sale.price) : sale.price }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ beam.quantity }}
+                                    {{ addressShortHex(sale.bidder) }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ shortString(sale.listing.listingId) }}
                                 </td>
                                 <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
                                     <DropdownMenu
                                         :actions="actions"
-                                        @clicked="($event) => openModalSlide($event, beam)"
+                                        @clicked="($event) => openModalSlide($event, sale)"
                                     />
                                 </td>
                             </tr>
@@ -88,8 +91,8 @@ import { DTOMarketplaceFactory as DTOFactory } from '~/factory/marketplace';
 import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import debounce from 'lodash/debounce';
-import { shortCode } from '~/util/address';
-import { formatData, snackbarErrors } from '~/util';
+import { addressShortHex } from '~/util/address';
+import { formatData, formatPriceFromENJ, shortString, snackbarErrors } from '~/util';
 import DropdownMenu from '~/components/DropdownMenu.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';
@@ -113,7 +116,7 @@ const slideComponent = ref();
 const searchInputs = ref([
     {
         name: 'ids',
-        label: 'Bid IDs',
+        label: 'IDs',
         placeholder: 'Search by bid ID',
         value: [],
         type: 'text',
@@ -144,7 +147,7 @@ const actions = [
     {
         key: 'details',
         name: 'Details',
-        component: 'DetailsBidSlideover',
+        component: 'DetailsSaleSlideover',
     },
 ];
 
@@ -228,7 +231,7 @@ const loadMoreItemsWithObserver = () => {
 };
 
 const openModalSlide = (componentName: string, collection) => {
-    let componentPath = 'beam';
+    let componentPath = 'marketplace';
     if (componentName.toLowerCase().includes('transaction')) componentPath = 'common';
     slideComponent.value = { componentName, componentPath, ...collection };
     modalSlide.value = true;

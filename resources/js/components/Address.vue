@@ -31,6 +31,6 @@ const addressSwitch = computed(() => {
 });
 
 const displayAddress = computed(() => {
-    return props.short ? addressShortHex(addressSwitch.value) : addressToPublicKey(addressSwitch.value);
+    return props.short ? addressShortHex(addressSwitch.value) : addressSwitch.value;
 });
 </script>

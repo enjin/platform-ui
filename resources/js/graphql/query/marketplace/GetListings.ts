@@ -23,7 +23,6 @@ export default `query GetListings($ids: [BigInt!], $listingIds: [String!], $acco
           amount
           price
           minTakeValue
-          feeSide
           creationBlock
           deposit
           salt

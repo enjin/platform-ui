@@ -10,6 +10,8 @@ export class DTOMarketplaceFactory {
         return {
             ...listing,
             seller: listing.seller.account.publicKey,
+            sales: listing.sales.totalCount,
+            bids: listing.bids.totalCount,
         };
     }
 

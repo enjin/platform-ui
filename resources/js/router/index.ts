@@ -153,6 +153,15 @@ const routes = [
         },
     },
     {
+        path: '/create/listing',
+        name: 'platform.create.listing',
+        component: () => import('../components/pages/create/CreateListing.vue'),
+        meta: {
+            requiresAuth: true,
+            requiresToken: true,
+        },
+    },
+    {
         path: '/create/batch',
         name: 'platform.create.batch',
         component: () => import('../components/pages/create/CreateBatch.vue'),
