@@ -16,7 +16,9 @@
 
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Price</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.price }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ formatPriceFromENJ(item.price) }} {{ currencySymbol }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
@@ -35,7 +37,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import Address from '~/components/Address.vue';
+import { useAppStore } from '~/store';
+import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 
 defineProps<{
     item?: {
@@ -48,4 +53,8 @@ defineProps<{
         };
     };
 }>();
+
+const appStore = useAppStore();
+
+const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
 </script>

@@ -79,6 +79,7 @@
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ listing.price > 100 ? formatPriceFromENJ(listing.price) : listing.price }}
+                                    {{ currencySymbol }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ addressShortHex(listing.seller) }}
@@ -120,7 +121,7 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import debounce from 'lodash/debounce';
 import { addressShortHex } from '~/util/address';
-import { formatData, formatPriceFromENJ, shortString, snackbarErrors } from '~/util';
+import { currencySymbolByNetwork, formatData, formatPriceFromENJ, shortString, snackbarErrors } from '~/util';
 import DropdownMenu from '~/components/DropdownMenu.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';
@@ -128,6 +129,7 @@ import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
 import { MarketplaceApi } from '~/api/marketplace';
 import Btn from '../Btn.vue';
+import { useAppStore } from '~/store';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -171,6 +173,10 @@ const enablePagination = computed(() => !isLoading.value);
 const searchChanged = computed(() => {
     return searchInputs.value.reduce((total, input) => total + input.value.length, 0);
 });
+
+const appStore = useAppStore();
+
+const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
 
 const actions = [
     {
