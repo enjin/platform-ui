@@ -71,7 +71,7 @@ const parseHostname = (hostname: string) => {
 
         return url;
     } catch {
-        return null;
+        return { hostname: hostname, protocol: 'https:', port: '' };
     }
 };
 
