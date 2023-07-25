@@ -68,9 +68,10 @@ const isValid = async () => {
 const parseHostname = (hostname: string) => {
     try {
         const url = new URL(hostname);
-        return url.hostname;
+
+        return url;
     } catch {
-        return hostname;
+        return null;
     }
 };
 
@@ -79,9 +80,21 @@ const setupAccount = async () => {
         if (!(await isValid())) return;
 
         isLoading.value = true;
-        if (!(await appStore.checkHostname(parseHostname(hostname.value)))) return;
+        const hostnameParse = parseHostname(hostname.value);
+
+        if (!hostnameParse) {
+            throw new Error('Invalid hostname');
+        }
+        if (window.location.protocol === 'https:' && hostnameParse?.protocol === 'http:') {
+            throw new Error('You must use an https hostname');
+        }
+        const fullHostname = hostnameParse.hostname + (hostnameParse.port ? `:${hostnameParse.port}` : '');
+
+        if (!(await appStore.checkHostname(fullHostname, hostnameParse.protocol))) return;
+
         await appStore.setupAccount({
-            hostname: parseHostname(hostname.value),
+            hostname: fullHostname,
+            protocol: hostnameParse.protocol,
             authorization_token: authorizationToken.value,
         });
         redirectToCollections();
