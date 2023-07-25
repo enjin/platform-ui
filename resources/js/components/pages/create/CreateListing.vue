@@ -33,11 +33,11 @@
                                         </p>
                                     </div>
                                     <div class="grid grid-cols-2 gap-4">
-                                        <FormInput
-                                            class="col-span-1"
+                                        <FormSelect
                                             v-model="makeCollectionId"
                                             name="makeCollectionId"
-                                            placeholder="Collection ID"
+                                            placeholder="Select a collection ID"
+                                            :options="collectionIds"
                                         />
                                         <TokenIdInput
                                             class="col-span-1"
@@ -48,7 +48,14 @@
                                     </div>
                                 </div>
 
-                                <div class="space-y-2">
+                                <FormCheckbox
+                                    v-model="enableTakeCollectionId"
+                                    name="enableTakeCollection"
+                                    label="Enable offer"
+                                    description="Use this option to enable offering a different asset in exchange for the asset being sold."
+                                />
+
+                                <div v-if="enableTakeCollectionId" class="space-y-2 animate-fade-in">
                                     <div>
                                         <h3 class="text-sm leading-6 text-gray-900">
                                             Take Asset ID
@@ -115,6 +122,7 @@
                                 />
 
                                 <FormInput
+                                    v-if="appStore.advanced"
                                     v-model="idempotencyKey"
                                     name="idempotencyKey"
                                     label="Idempotency Key"
@@ -161,6 +169,8 @@ import {
     stringRequiredSchema,
 } from '~/util/schemas';
 import { MarketplaceApi } from '~/api/marketplace';
+import FormSelect from '~/components/FormSelect.vue';
+import FormCheckbox from '~/components/FormCheckbox.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -172,9 +182,10 @@ const price = ref('');
 const salt = ref('');
 const auctionDataStart = ref('');
 const auctionDataEnd = ref('');
-const takeCollectionId = ref('');
+const enableTakeCollectionId = ref(false);
+const takeCollectionId = ref('0');
 const takeTokenId = ref({
-    tokenId: '',
+    tokenId: '0',
     tokenType: TokenIdSelectType.Integer,
 });
 const makeCollectionId = ref('');
@@ -186,6 +197,7 @@ const idempotencyKey = ref('');
 const formRef = ref();
 
 const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
+const collectionIds = computed(() => appStore.collections);
 
 const validation = yup.object({
     account: addressRequiredSchema,
