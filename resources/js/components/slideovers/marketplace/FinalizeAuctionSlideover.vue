@@ -15,7 +15,6 @@
                             name="listingId"
                             label="Listing ID"
                             description="The listing ID."
-                            type="number"
                             disabled
                             required
                         />
