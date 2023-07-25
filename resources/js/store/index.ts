@@ -39,6 +39,7 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
+        wcSession: false,
     }),
     persist: {
         paths: ['url', 'authorization_token', 'loggedIn', 'advanced'],
@@ -169,6 +170,9 @@ export const useAppStore = defineStore('app', {
         setURL(url: string) {
             this.url = new URL(url);
             this.config.url = new URL(url);
+        },
+        setWCSession(wcSession: boolean) {
+            this.wcSession = wcSession;
         },
         setAuthorizationToken(authorization_token: string) {
             this.authorization_token = authorization_token;

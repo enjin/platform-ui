@@ -21,6 +21,11 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4" v-if="appStore.loggedIn">
+                    <WalletIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="connectWallet" />
+                    <Suspense>
+                        <WalletConnectButton></WalletConnectButton>
+                        <template #fallback><div class="text-gray-600">Loading</div></template>
+                    </Suspense>
                     <InformationCircleIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="openHelp" />
                     <NotificationsList />
                     <ProfileMenu />
@@ -45,13 +50,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { Disclosure, DisclosureButton } from '@headlessui/vue';
-import { Bars3Icon, InformationCircleIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { Bars3Icon, InformationCircleIcon, XMarkIcon, WalletIcon } from '@heroicons/vue/24/outline';
 import { useAppStore } from '~/store';
 import EnjinLogo from '~/components/EnjinLogo.vue';
 import ProfileMenu from '~/components/ProfileMenu.vue';
 import DisclosureMenu from '~/components/DisclosureMenu.vue';
 import NotificationsList from '~/components/NotificationsList.vue';
 import Handbook from '~/components/Handbook.vue';
+import WalletConnectButton from '~/components/WalletConnectButton.vue';
+import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
+import { getAppMetadata } from '@walletconnect/utils';
+import { SessionTypes } from '@walletconnect/types';
 
 const open = ref(false);
 const help = ref(false);
@@ -59,6 +68,42 @@ const help = ref(false);
 const appStore = useAppStore();
 
 const navigations = computed(() => appStore.navigations);
+
+const connectWallet = async () => {
+    const walletConnect = new WalletConnectModalSign({
+        projectId: 'a4b92f550ab3039f7e084a879882bc96',
+        metadata: getAppMetadata(),
+        modalOptions: {
+            themeMode: 'light',
+            explorerRecommendedWalletIds: ['bdc9433ffdaee55d31737d83b931caa1f17e30666f5b8e03eea794bac960eb4a'],
+            enableExplorer: true,
+            walletImages: {},
+            themeVariables: {
+                '--wcm-background-color': '#7567CE',
+                '--wcm-accent-color': '#7567CE',
+                '--wcm-accent-fill-color': '#FFFFFF',
+            },
+        },
+    });
+
+    let session: SessionTypes.Struct | undefined = await walletConnect.getSession();
+
+    if (!session) {
+        session = await walletConnect.connect({
+            requiredNamespaces: {
+                polkadot: {
+                    methods: ['polkadot_signTransaction'],
+                    chains: ['polkadot:99ded175d436bee7d751fa3f2f8c7a25'],
+                    events: [],
+                },
+            },
+        });
+
+        if (session.acknowledged) {
+            appStore.setWCSession(true);
+        }
+    }
+};
 
 const openHelp = () => {
     help.value = true;
