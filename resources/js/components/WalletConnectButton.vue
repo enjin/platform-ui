@@ -1,6 +1,6 @@
 <template>
     <div class="text-gray-600">
-        {{ appStore.wcSession ? 'Wallet Connected' : 'Wallet Disconnected' }}
+        {{ appStore.wcSession ? 'Wallet connected' : 'Connect wallet' }}
     </div>
 </template>
 
