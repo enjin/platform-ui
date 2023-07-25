@@ -125,12 +125,12 @@ const props = withDefaults(
 const isLoading = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '',
 });
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const beneficiaryAddress = ref(Royalty.getRoyaltyBeneficiary(props.item));
 const beneficiaryPercentage = ref(Royalty.getRoyaltyPercentage(props.item));
-const isCurrency = ref(props.item.isCurrency);
+const isCurrency = ref(props.item?.isCurrency ?? false);
 const listingForbidden = ref(false);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
@@ -160,7 +160,7 @@ const mutateToken = async () => {
         const res = await TokenApi.mutateToken(
             formatData({
                 tokenId: formatToken(tokenId.value),
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 hasRoyalty:
                     beneficiaryAddress.value !== ''
                         ? {

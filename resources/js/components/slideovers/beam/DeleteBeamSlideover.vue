@@ -58,7 +58,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const code = ref(props.item.code);
+const code = ref(props.item?.code);
 const formRef = ref();
 
 const validation = yup.object({
@@ -73,7 +73,7 @@ const deleteBeam = async () => {
         isLoading.value = true;
         const res = await BeamApi.deleteBeam(
             formatData({
-                code: props.item.code,
+                code: props.item?.code,
             })
         );
 

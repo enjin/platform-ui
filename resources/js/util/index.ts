@@ -130,3 +130,9 @@ export const currencySymbolByNetwork = (network: string) => {
 
     return 'ENJ';
 };
+
+export const shortString = (str: string, length = 10) => {
+    if (!str) return null;
+
+    return `${str.substring(0, length)}...`;
+};

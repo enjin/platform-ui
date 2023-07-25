@@ -121,9 +121,9 @@ const props = withDefaults(
 const isLoading = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '',
 });
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const operator = ref('');
 const amount = ref();
 const currentAmount = ref();
@@ -152,7 +152,7 @@ const approveToken = async () => {
         const res = await TokenApi.approveToken(
             formatData({
                 tokenId: formatToken(tokenId.value),
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 operator: addressToPublicKey(operator.value),
                 amount: amount.value,
                 currentAmount: currentAmount.value,

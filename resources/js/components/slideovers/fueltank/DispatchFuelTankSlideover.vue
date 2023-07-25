@@ -139,7 +139,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const tankId = ref(props.item.tankId);
+const tankId = ref(props.item?.tankId);
 const ruleSetId = ref('');
 const paysRemainingFee = ref(false);
 const call = ref('');
@@ -183,7 +183,7 @@ const dispatchFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.dispatch(
             formatData({
-                tankId: addressToPublicKey(tankId.value),
+                tankId: addressToPublicKey(tankId.value ?? ''),
                 ruleSetId: ruleSetId.value,
                 dispatch: {
                     call: call.value,

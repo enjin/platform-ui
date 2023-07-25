@@ -54,6 +54,12 @@ import RemoveRuleSet from '~/graphql/mutation/fueltank/RemoveRuleSet';
 import ScheduleMutateFreezeState from '~/graphql/mutation/fueltank/ScheduleMutateFreezeState';
 import SetConsumption from '~/graphql/mutation/fueltank/SetConsumption';
 
+import CreateListing from '~/graphql/mutation/marketplace/CreateListing';
+import CancelListing from '~/graphql/mutation/marketplace/CancelListing';
+import FillListing from '~/graphql/mutation/marketplace/FillListing';
+import PlaceBid from '~/graphql/mutation/marketplace/PlaceBid';
+import FinalizeAuction from '~/graphql/mutation/marketplace/FinalizeAuction';
+
 export default {
     CreateCollection,
     ApproveCollection,
@@ -110,4 +116,10 @@ export default {
     RemoveRuleSet,
     ScheduleMutateFreezeState,
     SetConsumption,
+
+    CreateListing,
+    CancelListing,
+    FillListing,
+    PlaceBid,
+    FinalizeAuction,
 };

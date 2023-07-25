@@ -59,7 +59,7 @@ const expireSingleUseCode = async () => {
         isLoading.value = true;
         const res = await BeamApi.expireSingleUseCodes(
             formatData({
-                codes: props.item.codes,
+                codes: props.item?.codes,
             })
         );
 

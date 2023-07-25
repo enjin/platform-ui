@@ -154,7 +154,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const newOwner = ref('');
 const idempotencyKey = ref('');
 const beneficiaryAddress = ref(Royalty.getRoyaltyBeneficiary(props.item));
@@ -206,7 +206,7 @@ const mutateCollection = async () => {
         isLoading.value = true;
         const res = await CollectionApi.mutateCollection(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 mutation: {
                     owner: addressToPublicKey(newOwner.value),
                     royalty: beneficiaryAddress.value

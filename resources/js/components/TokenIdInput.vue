@@ -11,7 +11,6 @@
         @input-change="emit('searchTokensChange', $event)"
         :tooltip="tooltip"
         :readmore="readmore"
-        input-class="!py-1.5"
     >
         <template #input>
             <TranslateTransition>

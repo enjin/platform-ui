@@ -49,7 +49,7 @@ const props = withDefaults(
 const qrCodeRef = ref();
 
 const copyLink = () => {
-    navigator.clipboard.writeText(props.item.qr.payload);
+    navigator.clipboard.writeText(props.item?.qr.payload ?? '');
     snackbar.info({ title: 'Link copied to clipboard!' });
 };
 

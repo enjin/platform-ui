@@ -3,27 +3,27 @@
         ref="formRef"
         class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
         :validation-schema="validation"
-        @submit="unapproveCollection"
+        @submit="fillListing"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Unapprove Collection</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Fill Listing</h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="divide-y divide-gray-200 px-4 sm:px-6">
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
-                            v-model="collectionId"
-                            name="collectionId"
-                            label="Collection ID"
-                            description="The collection that approval will be removed from."
-                            type="number"
+                            v-model="listingId"
+                            name="listingId"
+                            label="Listing ID"
+                            description="The listing ID."
                             disabled
                             required
                         />
                         <FormInput
-                            v-model="operator"
-                            name="operator"
-                            label="Operator"
-                            description="The account that collection approval will be removed from."
+                            v-model="amount"
+                            type="number"
+                            name="amount"
+                            label="Amount"
+                            description="The number of units being sold."
                             required
                         />
                         <FormInput
@@ -35,20 +35,13 @@
                             tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
                             readmore="Idempotency Key"
                         />
-                        <FormCheckbox
-                            v-if="useAppStore().advanced"
-                            v-model="skipValidation"
-                            name="skipValidation"
-                            label="Skip validation"
-                            description="Skip all validation rules, use with caution. Defaults to false."
-                        />
                     </div>
                 </div>
             </div>
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
-            <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" primary is-submit>Unapprove</Btn>
+            <Btn @click="closeSlide">Close</Btn>
+            <Btn :loading="isLoading" primary is-submit>Fill</Btn>
         </div>
     </Form>
 </template>
@@ -58,26 +51,20 @@ import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import { ref } from 'vue';
 import FormInput from '~/components/FormInput.vue';
-import FormCheckbox from '~/components/FormCheckbox.vue';
 import Btn from '~/components/Btn.vue';
-import { CollectionApi } from '~/api/collection';
 import snackbar from '~/util/snackbar';
-import { addressToPublicKey } from '~/util/address';
 import { formatData, snackbarErrors } from '~/util';
 import { useAppStore } from '~/store';
-import {
-    addressRequiredSchema,
-    booleanNotRequiredSchema,
-    collectionIdRequiredSchema,
-    stringNotRequiredSchema,
-} from '~/util/schemas';
+import { numberRequiredSchema, stringRequiredSchema } from '~/util/schemas';
+import { stringNotRequiredSchema } from '~/util/schemas';
+import { MarketplaceApi } from '~/api/marketplace';
 
 const emit = defineEmits(['close']);
 
 const props = withDefaults(
     defineProps<{
         item?: {
-            collectionId: number;
+            listingId: string;
         };
     }>(),
     {
@@ -86,40 +73,37 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item?.collectionId);
-const operator = ref('');
+const listingId = ref(props.item?.listingId);
+const amount = ref(0);
 const idempotencyKey = ref('');
-const skipValidation = ref(false);
 const formRef = ref();
 
 const validation = yup.object({
-    collectionId: collectionIdRequiredSchema,
-    operator: addressRequiredSchema,
+    listingId: stringRequiredSchema,
+    amount: numberRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
-    skipValidation: booleanNotRequiredSchema,
 });
 
-const unapproveCollection = async () => {
+const fillListing = async () => {
     await formRef.value?.validate();
     if (!formRef.value?.getMeta().valid) return;
 
     try {
         isLoading.value = true;
-        const res = await CollectionApi.unapproveCollection(
+        const res = await MarketplaceApi.fillListing(
             formatData({
-                collectionId: props.item?.collectionId,
-                operator: addressToPublicKey(operator.value),
+                listingId: listingId.value,
+                amount: amount.value,
                 idempotencyKey: idempotencyKey.value,
-                skipValidation: skipValidation.value,
             })
         );
 
-        const id = res.data?.UnapproveCollection?.id;
+        const id = res.data?.FillListing?.id;
 
         if (id) {
             snackbar.success({
-                title: 'Collection unapproved',
-                text: `Collection unapproved with transaction id ${id}`,
+                title: 'Listing filled',
+                text: `Listing filled with transaction id ${id}`,
                 event: id,
             });
             closeSlide();
@@ -127,8 +111,8 @@ const unapproveCollection = async () => {
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
-            title: 'Collection unapproval',
-            text: 'Collection unapproval failed',
+            title: 'Listing fill',
+            text: 'Listing fill failed',
         });
     } finally {
         isLoading.value = false;

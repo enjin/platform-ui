@@ -137,9 +137,9 @@ const props = withDefaults(
 const isLoading = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '',
 });
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const recipient = ref('');
 const source = ref('');
 const amount = ref();
@@ -174,7 +174,7 @@ const transferToken = async () => {
         isLoading.value = true;
         const res = await TokenApi.transferToken(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 recipient: recipient.value,
                 params: {
                     tokenId: formatToken(tokenId.value),

@@ -67,7 +67,7 @@ const retryTransaction = async () => {
         isLoading.value = true;
         const res = await TransactionApi.retryTransactions(
             formatData({
-                ids: props.item.ids,
+                ids: props.item?.ids,
             })
         );
 

@@ -98,7 +98,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
+const collectionId = ref(props.item?.collectionId);
 const operator = ref('');
 const expiration = ref();
 const idempotencyKey = ref('');
@@ -121,7 +121,7 @@ const approveCollection = async () => {
         isLoading.value = true;
         const res = await CollectionApi.approveCollection(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 operator: addressToPublicKey(operator.value),
                 expiration: expiration.value === 0 ? null : expiration.value,
                 idempotencyKey: idempotencyKey.value,

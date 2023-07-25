@@ -114,11 +114,11 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
-const freezeType = ref(props.item.freezeType);
+const collectionId = ref(props.item?.collectionId);
+const freezeType = ref(props.item?.freezeType ?? FreezeType.COLLECTION);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '',
 });
 const collectionAccount = ref('');
 const tokenAccount = ref('');
@@ -149,7 +149,7 @@ const freeze = async () => {
         isLoading.value = true;
         const res = await ApiService.freeze(
             formatData({
-                collectionId: props.item.collectionId,
+                collectionId: props.item?.collectionId,
                 freezeType: freezeType.value,
                 tokenId: formatToken(tokenId.value),
                 collectionAccount: collectionAccount.value,

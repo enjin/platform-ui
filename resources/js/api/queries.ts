@@ -19,6 +19,10 @@ import GetFuelTanks from '~/graphql/query/fueltank/GetFuelTanks';
 import GetFuelTank from '~/graphql/query/fueltank/GetFuelTank';
 import GetAccounts from '~/graphql/query/fueltank/GetAccounts';
 
+import GetListings from '~/graphql/query/marketplace/GetListings';
+import GetBids from '~/graphql/query/marketplace/GetBids';
+import GetSales from '~/graphql/query/marketplace/GetSales';
+
 export default {
     GetTransaction,
     GetCollections,
@@ -40,4 +44,8 @@ export default {
     GetFuelTanks,
     GetFuelTank,
     GetAccounts,
+
+    GetListings,
+    GetBids,
+    GetSales,
 };

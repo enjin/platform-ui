@@ -123,15 +123,15 @@ const appStore = useAppStore();
 const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
 
 const isLoading = ref(false);
-const collectionId = ref(props.item.collectionId);
-const recipient = ref(publicKeyToAddress(props.item.owner));
+const collectionId = ref(props.item?.collectionId);
+const recipient = ref(publicKeyToAddress(props.item?.owner ?? ''));
 const amount = ref();
 const unitPrice = ref();
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const tokenId: Ref<TokenIdType> = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item.tokenId,
+    tokenId: props.item?.tokenId ?? '', 
 });
 const formRef = ref();
 
