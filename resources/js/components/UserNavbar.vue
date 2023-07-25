@@ -24,7 +24,9 @@
                     <WalletIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="connectWallet" />
                     <Suspense>
                         <WalletConnectButton></WalletConnectButton>
-                        <template #fallback><div class="text-gray-600">Loading</div></template>
+                        <template #fallback>
+                            <LoadingCircle></LoadingCircle>
+                        </template>
                     </Suspense>
                     <InformationCircleIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="openHelp" />
                     <NotificationsList />
@@ -61,6 +63,7 @@ import WalletConnectButton from '~/components/WalletConnectButton.vue';
 import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
 import { getAppMetadata } from '@walletconnect/utils';
 import { SessionTypes } from '@walletconnect/types';
+import LoadingCircle from '~/components/LoadingCircle.vue';
 
 const open = ref(false);
 const help = ref(false);
@@ -70,22 +73,7 @@ const appStore = useAppStore();
 const navigations = computed(() => appStore.navigations);
 
 const connectWallet = async () => {
-    const walletConnect = new WalletConnectModalSign({
-        projectId: 'a4b92f550ab3039f7e084a879882bc96',
-        metadata: getAppMetadata(),
-        modalOptions: {
-            themeMode: 'light',
-            explorerRecommendedWalletIds: ['bdc9433ffdaee55d31737d83b931caa1f17e30666f5b8e03eea794bac960eb4a'],
-            enableExplorer: true,
-            walletImages: {},
-            themeVariables: {
-                '--wcm-background-color': '#7567CE',
-                '--wcm-accent-color': '#7567CE',
-                '--wcm-accent-fill-color': '#FFFFFF',
-            },
-        },
-    });
-
+    const walletConnect = appStore.getWeb3Modal();
     let session: SessionTypes.Struct | undefined = await walletConnect.getSession();
 
     if (!session) {

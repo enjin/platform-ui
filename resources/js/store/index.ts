@@ -5,6 +5,8 @@ import { ApiService } from '~/api';
 import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
+import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
+import { wcOptions } from '~/util';
 
 const parseConfigURL = (url: string): URL => {
     try {
@@ -207,6 +209,9 @@ export const useAppStore = defineStore('app', {
         },
         setCollections(collections: string[]) {
             this.collections = collections;
+        },
+        getWeb3Modal() {
+            return new WalletConnectModalSign(wcOptions);
         },
     },
     getters: {

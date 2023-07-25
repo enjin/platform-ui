@@ -1,6 +1,8 @@
 import { TokenIdSelectType } from '~/types/types.enums';
 import { TokenIdType } from '~/types/types.interface';
 import snackbar from '~/util/snackbar';
+import { getAppMetadata } from '@walletconnect/utils';
+import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
 
 export const formatData = (entries: any, type = 'object') => {
     const data: { [key: string]: any } = type === 'object' ? {} : [];
@@ -135,4 +137,21 @@ export const shortString = (str: string, length = 10) => {
     if (!str) return null;
 
     return `${str.substring(0, length)}...`;
+};
+
+export const wcProjectId = 'a4b92f550ab3039f7e084a879882bc96';
+export const wcOptions: WalletConnectModalSignOptions = {
+    projectId: wcProjectId,
+    metadata: getAppMetadata(),
+    modalOptions: {
+        themeMode: 'light',
+        explorerRecommendedWalletIds: ['bdc9433ffdaee55d31737d83b931caa1f17e30666f5b8e03eea794bac960eb4a'],
+        enableExplorer: true,
+        walletImages: {},
+        themeVariables: {
+            '--wcm-background-color': '#7567CE',
+            '--wcm-accent-color': '#7567CE',
+            '--wcm-accent-fill-color': '#FFFFFF',
+        },
+    },
 };
