@@ -15,12 +15,17 @@ class InstallPlatformUi extends Command
     public function handle()
     {
         $this->resetJSON();
+        
+        $tenant = $this->askForInput('Do you want to enable Multi tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
 
         $this->askForInput('Please enter your platform Hostname', 'HOSTNAME_VALUE', '', 'host');
-        $this->askForInput('Please enter an Authorization token', 'AUTHORIZATION_TOKEN_VALUE', '', 'token');
+
+        if ($tenant !=='true') {
+            $this->askForInput('Please enter an Authorization token', 'AUTHORIZATION_TOKEN_VALUE', '', 'token');
+        }
+        
         $route = $this->askForInput('Please enter a default route path', 'ROUTE_VALUE', '', 'route');
         $this->updateRoute($route);
-        $this->askForInput('Do you want to enable Multi tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', false, 'tenant');
         $this->askForInput('Please enter webSocket URL? (optional)', 'WEBSOCKET_URL_VALUE', '', 'wsurl');
         $this->askForInput('Please enter webSocket channel? (optional)', 'WEBSOCKET_CHANNEL_VALUE', '', 'wschannel');
 

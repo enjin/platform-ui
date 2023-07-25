@@ -6,10 +6,37 @@ import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 
+const parseConfigHostname = (hostname: string): string => {
+    try {
+        const url = new URL(hostname);
+
+        if (url.port.length) {
+            return `${url.hostname}:${url.port}`;
+        }
+
+        return url.hostname;
+    } catch {
+        return hostname;
+    }
+};
+
+const parseConfigProtocol = (hostname: string) => {
+    try {
+        const url = new URL(hostname);
+
+        if (url.protocol.length) return url.protocol;
+
+        return null;
+    } catch {
+        return 'https:';
+    }
+};
+
 export const useAppStore = defineStore('app', {
     state: (): AppState => ({
         hostname: '',
         authorization_token: '',
+        protocol: 'https',
         advanced: false,
         config: {
             hostname: '',
@@ -20,6 +47,7 @@ export const useAppStore = defineStore('app', {
             tenant: false,
             webSocket: '',
             channel: '',
+            protocol: '',
         },
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
@@ -33,7 +61,7 @@ export const useAppStore = defineStore('app', {
         user: null,
     }),
     persist: {
-        paths: ['hostname', 'authorization_token', 'loggedIn', 'advanced'],
+        paths: ['hostname', 'authorization_token', 'loggedIn', 'advanced', 'protocol'],
     },
     actions: {
         async init() {
@@ -42,8 +70,7 @@ export const useAppStore = defineStore('app', {
                 if (!this.config.hostname) return;
 
                 if (this.isMultiTenant && this.loggedIn) await this.getUser();
-
-                const hostnameConfig = await this.checkHostname(this.config.hostname);
+                const hostnameConfig = await this.checkHostname(this.config.hostname, this.config.protocol);
                 this.config.network = hostnameConfig.network;
                 this.config.packages = Object.entries(hostnameConfig.packages).map(([key, value]: any[]) => {
                     let link =
@@ -65,13 +92,24 @@ export const useAppStore = defineStore('app', {
 
                 return true;
             } catch (error: any) {
+                console.log(error);
                 snackbar.error({ title: error });
             }
 
             return false;
         },
-        async setupAccount({ hostname, authorization_token }: { hostname: string; authorization_token: string }) {
+        async setupAccount({
+            hostname,
+            authorization_token,
+            protocol,
+        }: {
+            hostname: string;
+            authorization_token: string;
+            protocol: string;
+        }) {
             this.hostname = hostname;
+            this.protocol = protocol;
+            this.config.protocol = protocol;
             this.config.hostname = hostname;
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
@@ -79,9 +117,13 @@ export const useAppStore = defineStore('app', {
             await this.init();
         },
         setConfig() {
-            if (appConfig?.hostname?.length) this.config.hostname = appConfig.hostname;
-            else if (window?.bootstrap?.hostname) this.config.hostname = window.bootstrap.hostname;
+            if (appConfig?.hostname?.length) this.config.hostname = parseConfigHostname(appConfig.hostname);
+            else if (window?.bootstrap?.hostname) this.config.hostname = parseConfigHostname(window.bootstrap.hostname);
             else this.config.hostname = this.hostname;
+
+            if (appConfig?.hostname?.length && parseConfigProtocol(appConfig.hostname))
+                this.config.protocol = parseConfigProtocol(appConfig.hostname) ?? '';
+            else this.config.protocol = this.protocol;
 
             if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
             else this.config.authorization_token = this.authorization_token;
@@ -91,10 +133,10 @@ export const useAppStore = defineStore('app', {
             if (appConfig.websocket.length) this.config.webSocket = appConfig.websocket;
             if (appConfig.channel.length) this.config.channel = appConfig.channel;
         },
-        async checkHostname(hostname: string) {
+        async checkHostname(hostname: string, protocol: string) {
             try {
                 if (hostname) {
-                    const hostnameConfig = await ApiService.fetchHostname(hostname);
+                    const hostnameConfig = await ApiService.fetchHostname(hostname, protocol);
                     if (hostnameConfig) return hostnameConfig;
 
                     throw 'Hostname is not valid';

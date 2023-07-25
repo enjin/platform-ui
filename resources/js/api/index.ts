@@ -60,7 +60,7 @@ export class ApiService {
 
         return new Promise((resolve, reject) => {
             ApiService.request({
-                url: `https://${appStore.config.hostname}/graphql${schema}`,
+                url: `${appStore.config.protocol}//${appStore.config.hostname}/graphql${schema}`,
                 data,
                 credentials: useAppStore().isMultiTenant ? 'include' : 'omit',
             }).then((res: any) => {
@@ -85,9 +85,9 @@ export class ApiService {
         });
     }
 
-    static async fetchHostname(hostname: string) {
+    static async fetchHostname(hostname: string, protocol: string) {
         return ApiService.request({
-            url: `https://${hostname}/.well-known/enjin-platform.json`,
+            url: `${protocol}//${hostname}/.well-known/enjin-platform.json`,
             method: HttpMethods.GET,
             credentials: undefined,
             mode: import.meta.env.PROD ? 'cors' : undefined,

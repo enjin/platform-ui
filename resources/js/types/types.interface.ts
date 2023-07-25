@@ -4,15 +4,17 @@ export interface AppState {
     hostname: string;
     authorization_token: string;
     advanced: boolean;
+    protocol: string;
     config: {
         hostname: string;
         authorization_token: string;
         route: string;
         network: string;
-        packages: { name: string; version: string, link?: string }[];
+        packages: { name: string; version: string; link?: string }[];
         tenant: boolean;
         webSocket: string;
         channel: string;
+        protocol: string;
     };
     navigations: any[];
     collections: string[];
