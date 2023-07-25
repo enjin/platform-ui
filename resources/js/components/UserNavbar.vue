@@ -60,10 +60,10 @@ import DisclosureMenu from '~/components/DisclosureMenu.vue';
 import NotificationsList from '~/components/NotificationsList.vue';
 import Handbook from '~/components/Handbook.vue';
 import WalletConnectButton from '~/components/WalletConnectButton.vue';
-import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
-import { getAppMetadata } from '@walletconnect/utils';
+import { getSdkError } from '@walletconnect/utils';
 import { SessionTypes } from '@walletconnect/types';
 import LoadingCircle from '~/components/LoadingCircle.vue';
+import { wcRequiredNamespaces } from '~/util';
 
 const open = ref(false);
 const help = ref(false);
@@ -78,18 +78,19 @@ const connectWallet = async () => {
 
     if (!session) {
         session = await walletConnect.connect({
-            requiredNamespaces: {
-                polkadot: {
-                    methods: ['polkadot_signTransaction'],
-                    chains: ['polkadot:99ded175d436bee7d751fa3f2f8c7a25'],
-                    events: [],
-                },
-            },
+            requiredNamespaces: wcRequiredNamespaces,
         });
 
         if (session.acknowledged) {
             appStore.setWCSession(true);
+            return;
         }
+
+        await walletConnect.disconnect({
+            topic: session.topic,
+            reason: getSdkError('USER_REJECTED'),
+        });
+        appStore.setWCSession(false);
     }
 };
 

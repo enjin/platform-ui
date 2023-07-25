@@ -140,6 +140,15 @@ export const shortString = (str: string, length = 10) => {
 };
 
 export const wcProjectId = 'a4b92f550ab3039f7e084a879882bc96';
+
+export const wcRequiredNamespaces = {
+    polkadot: {
+        methods: ['polkadot_signTransaction'],
+        chains: ['polkadot:99ded175d436bee7d751fa3f2f8c7a25'],
+        events: [],
+    },
+};
+
 export const wcOptions: WalletConnectModalSignOptions = {
     projectId: wcProjectId,
     metadata: getAppMetadata(),
