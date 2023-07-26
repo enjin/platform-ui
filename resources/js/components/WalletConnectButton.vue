@@ -128,9 +128,34 @@ const closeModal = () => {
 };
 
 const selectAccount = (account) => {
+    // I don't think we should select an account as the person can use multiple accounts to sign
+    // The account can be determined by the "signingWallet" in the transaction.
     appStore.setAccount(account);
     showAccountsModal.value = false;
 };
+
+function makeTransaction() {
+    // This is the call that comes from the platform transactions 'encodedCall'
+    const call = '0a03008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48a10f';
+    const era = '00'; // 00 is for immortal transactions
+    const nonce = 'c8'; // Thats the account nonce
+    const tip = '00'; // Tip should always be 00
+    const spec = 'c60b0000'; // The spec version of runtime
+    const txVersion = '08000000'; // The tx version of runtime
+    const genesis = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // The genesis block
+    const blockHash = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // For immortal transactions the blockhash needs to be the genesis
+
+    const extra = era + nonce + tip; // This is the extra data that needs to be added in the final extrinsic and in the signing payload
+    const addExtra = spec + txVersion + genesis + blockHash; // This is the extra data that needs to be added only in the signing payload
+    const payload = call + extra + addExtra; // This is the payload to sign
+
+    // Send the payload above to the wallet to sign
+    // The wallet will return a signature
+
+    // To build the final extrinsic we need to do this
+    const finalExtrinsic = 'size of the extrinsic in compact' + 'extra byte' + payload + 'signature' + extra + call;
+    // Send the above to the blockchain
+}
 
 (async () => {
     getSession();
