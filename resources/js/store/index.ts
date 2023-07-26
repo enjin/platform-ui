@@ -9,6 +9,7 @@ import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
 import { wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
 import { getSdkError } from '@walletconnect/utils';
+import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
 
 const parseConfigURL = (url: string): URL => {
     try {
@@ -43,11 +44,12 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
-        wallet: false,
         provider: '',
+        account: null,
+        accounts: null,
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'account'],
     },
     actions: {
         async init() {
@@ -176,9 +178,6 @@ export const useAppStore = defineStore('app', {
             this.url = new URL(url);
             this.config.url = new URL(url);
         },
-        setWallet(walletStatus: boolean) {
-            this.wallet = walletStatus;
-        },
         setAuthorizationToken(authorization_token: string) {
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
@@ -220,8 +219,8 @@ export const useAppStore = defineStore('app', {
             if (this.provider === 'wc') {
                 const walletConnect = this.getWeb3Modal();
                 const session = await walletConnect.getSession();
-                if (session && session.acknowledged) {
-                    this.wallet = true;
+                if (session && !session.acknowledged) {
+                    this.account = null;
                 }
             }
         },
@@ -242,7 +241,15 @@ export const useAppStore = defineStore('app', {
             });
 
             if (session.acknowledged) {
-                this.wallet = true;
+                const accounts = Object.values(session.namespaces)
+                    .map((namespace) => namespace.accounts)
+                    .flat()
+                    .map((account) => {
+                        return {
+                            address: account.split(':')[2],
+                        };
+                    });
+                this.accounts = accounts;
                 this.provider = 'wc';
 
                 return;
@@ -253,9 +260,17 @@ export const useAppStore = defineStore('app', {
                 reason: getSdkError('USER_REJECTED'),
             });
 
-            this.wallet = false;
+            this.account = null;
         },
-        async connectPolkadotJS() {},
+        async connectPolkadotJS() {
+            const pkjs = new PolkadotjsWallet();
+            if (pkjs.installed) {
+                await pkjs.enable('Platform');
+                const accounts = await pkjs.getAccounts();
+                this.accounts = accounts;
+                this.provider = 'polkadot.js';
+            }
+        },
         async disconnectWallet() {
             try {
                 if (this.provider === 'wc') {
@@ -267,14 +282,18 @@ export const useAppStore = defineStore('app', {
                             topic: session.topic,
                             reason: getSdkError('USER_DISCONNECTED'),
                         });
-                        this.wallet = false;
-                        this.provider = '';
                     }
                 }
+
+                this.account = null;
+                this.provider = '';
             } catch {
-                this.wallet = false;
+                this.account = null;
                 this.provider = '';
             }
+        },
+        setAccount(account: Wallet) {
+            this.account = account;
         },
     },
     getters: {

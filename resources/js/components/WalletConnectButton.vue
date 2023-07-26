@@ -38,6 +38,9 @@
                     </MenuItem>
                 </template>
                 <template v-else>
+                    <div class="px-4 py-2 text-sm text-center">
+                        <Address :address="walletSession.address" short />
+                    </div>
                     <MenuItem v-slot="{ active }">
                         <button
                             :class="[
@@ -53,6 +56,21 @@
             </MenuItems>
         </ScaleTransition>
     </Menu>
+    <Modal :is-open="showAccountsModal" :close="closeModal" width="max-w-lg">
+        <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center">
+            Select Account
+        </DialogTitle>
+        <div class="flex flex-col space-y-2 mt-4">
+            <div
+                v-for="account in appStore.accounts"
+                :key="account.address"
+                class="px-4 py-3 border border-gray-300 rounded-md text-sm cursor-pointer hover:bg-primary/20 transition-all"
+                @click="selectAccount(account)"
+            >
+                {{ publicKeyToAddress(account.address) }}
+            </div>
+        </div>
+    </Modal>
 </template>
 
 <script setup lang="ts">
@@ -60,20 +78,27 @@ import { WalletIcon } from '@heroicons/vue/24/outline';
 import { useAppStore } from '~/store';
 import LoadingCircle from './LoadingCircle.vue';
 import { computed, ref } from 'vue';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { DialogTitle, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import ScaleTransition from './ScaleTransition.vue';
 import snackbar from '~/util/snackbar';
+import Modal from './Modal.vue';
+import { publicKeyToAddress } from '~/util/address';
+import Address from './Address.vue';
 
 const appStore = useAppStore();
 
 const loading = ref(true);
+const showAccountsModal = ref(false);
 
-const walletSession = computed(() => appStore.wallet);
+const walletSession = computed(() => appStore.account);
 
-const connectWallet = async (provider) => {
+const connectWallet = async (provider: string) => {
     try {
         loading.value = true;
         await appStore.connectWallet(provider);
+        if (appStore.accounts) {
+            showAccountsModal.value = true;
+        }
     } catch {
         snackbar.error({ title: 'Failed to connect wallet' });
     } finally {
@@ -96,6 +121,15 @@ const disconnectWallet = async () => {
     loading.value = true;
     await appStore.disconnectWallet();
     loading.value = false;
+};
+
+const closeModal = () => {
+    showAccountsModal.value = false;
+};
+
+const selectAccount = (account) => {
+    appStore.setAccount(account);
+    showAccountsModal.value = false;
 };
 
 (async () => {

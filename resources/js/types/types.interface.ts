@@ -19,8 +19,9 @@ export interface AppState {
     loggedIn: boolean;
     newCollection: boolean;
     user: any;
-    wallet: boolean;
     provider: string;
+    account: any;
+    accounts: any;
 }
 
 export interface NotificationsState {
