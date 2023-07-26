@@ -154,7 +154,18 @@ function makeTransaction() {
     // The wallet will return a signature
 
     // To build the final extrinsic we need to do this
-    const finalExtrinsic = 'size of the extrinsic in compact' + 'extra byte' + payload + 'signature' + extra + call;
+
+    // extrinsicVersion = 4; // Come from extrinsic.version in metadata
+    // Signed transaction
+    // extraByte = extrinsicVersion | 128;
+    // extraByte = extraByte.toRadixString(16);
+    // signerType = '00' // MultiAddress?
+    // signatureType = '00';
+    // 00 = ed25519
+    // 01 = sr25519
+
+    const finalExtrinsic =
+        'size of the extrinsic in compact' + extaByte + signerType + signer + signatureType + signature + extra + call;
     // Send the above to the blockchain
 }
 
