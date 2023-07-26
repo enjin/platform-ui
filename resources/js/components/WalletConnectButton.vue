@@ -130,6 +130,7 @@ const closeModal = () => {
 const selectAccount = (account) => {
     // I don't think we should select an account as the person can use multiple accounts to sign
     // The account can be determined by the "signingWallet" in the transaction.
+    // Unless we are not using that, then we would need a way to select an account indeed
     appStore.setAccount(account);
     showAccountsModal.value = false;
 };
