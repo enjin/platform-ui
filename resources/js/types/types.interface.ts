@@ -19,7 +19,8 @@ export interface AppState {
     loggedIn: boolean;
     newCollection: boolean;
     user: any;
-    wcSession: boolean;
+    wallet: boolean;
+    provider: string;
 }
 
 export interface NotificationsState {

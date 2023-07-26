@@ -7,6 +7,8 @@ import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
 import { wcOptions } from '~/util';
+import { wcRequiredNamespaces } from '~/util';
+import { getSdkError } from '@walletconnect/utils';
 
 const parseConfigURL = (url: string): URL => {
     try {
@@ -41,10 +43,11 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
-        wcSession: false,
+        wallet: false,
+        provider: '',
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
     },
     actions: {
         async init() {
@@ -173,8 +176,8 @@ export const useAppStore = defineStore('app', {
             this.url = new URL(url);
             this.config.url = new URL(url);
         },
-        setWCSession(wcSession: boolean) {
-            this.wcSession = wcSession;
+        setWallet(walletStatus: boolean) {
+            this.wallet = walletStatus;
         },
         setAuthorizationToken(authorization_token: string) {
             this.authorization_token = authorization_token;
@@ -212,6 +215,66 @@ export const useAppStore = defineStore('app', {
         },
         getWeb3Modal() {
             return new WalletConnectModalSign(wcOptions);
+        },
+        async getSession() {
+            if (this.provider === 'wc') {
+                const walletConnect = this.getWeb3Modal();
+                const session = await walletConnect.getSession();
+                if (session && session.acknowledged) {
+                    this.wallet = true;
+                }
+            }
+        },
+        async connectWallet(provider) {
+            if (provider === 'wc') {
+                await this.connectWC();
+            }
+
+            if (provider === 'polkadot.js') {
+                await this.connectPolkadotJS();
+            }
+        },
+        async connectWC() {
+            const walletConnect = this.getWeb3Modal();
+
+            const session = await walletConnect.connect({
+                requiredNamespaces: wcRequiredNamespaces,
+            });
+
+            if (session.acknowledged) {
+                this.wallet = true;
+                this.provider = 'wc';
+
+                return;
+            }
+
+            await walletConnect.disconnect({
+                topic: session.topic,
+                reason: getSdkError('USER_REJECTED'),
+            });
+
+            this.wallet = false;
+        },
+        async connectPolkadotJS() {},
+        async disconnectWallet() {
+            try {
+                if (this.provider === 'wc') {
+                    const walletConnect = this.getWeb3Modal();
+                    const session = await walletConnect.getSession();
+
+                    if (session) {
+                        await walletConnect.disconnect({
+                            topic: session.topic,
+                            reason: getSdkError('USER_DISCONNECTED'),
+                        });
+                        this.wallet = false;
+                        this.provider = '';
+                    }
+                }
+            } catch {
+                this.wallet = false;
+                this.provider = '';
+            }
         },
     },
     getters: {
