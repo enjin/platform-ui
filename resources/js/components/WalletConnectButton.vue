@@ -84,8 +84,6 @@ import snackbar from '~/util/snackbar';
 import Modal from './Modal.vue';
 import { publicKeyToAddress } from '~/util/address';
 import Address from './Address.vue';
-import { hexToU8a } from '@polkadot/util';
-import { compact } from 'scale-ts';
 
 const appStore = useAppStore();
 
@@ -135,46 +133,47 @@ const selectAccount = (account) => {
     // Unless we are not using that, then we would need a way to select an account indeed
     appStore.setAccount(account);
     showAccountsModal.value = false;
+    appStore.signTransaction();
 };
 
-function makeTransaction() {
-    // This is the call that comes from the platform transactions 'encodedCall'
-    const call = '0a03008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48a10f';
-    const era = '00'; // 00 is for immortal transactions
-    const nonce = 'c8'; // Thats the account nonce
-    const tip = '00'; // Tip should always be 00
-    const spec = 'c60b0000'; // The spec version of runtime
-    const txVersion = '08000000'; // The tx version of runtime
-    const genesis = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // The genesis block
-    const blockHash = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // For immortal transactions the blockhash needs to be the genesis
+// function makeTransaction() {
+//     // This is the call that comes from the platform transactions 'encodedCall'
+//     const call = '0a03008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48a10f';
+//     const era = '00'; // 00 is for immortal transactions
+//     const nonce = 'c8'; // Thats the account nonce
+//     const tip = '00'; // Tip should always be 00
+//     const spec = 'c60b0000'; // The spec version of runtime
+//     const txVersion = '08000000'; // The tx version of runtime
+//     const genesis = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // The genesis block
+//     const blockHash = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // For immortal transactions the blockhash needs to be the genesis
 
-    const extra = era + nonce + tip; // This is the extra data that needs to be added in the final extrinsic and in the signing payload
-    const addExtra = spec + txVersion + genesis + blockHash; // This is the extra data that needs to be added only in the signing payload
-    const payload = call + extra + addExtra; // This is the payload to sign
+//     const extra = era + nonce + tip; // This is the extra data that needs to be added in the final extrinsic and in the signing payload
+//     const addExtra = spec + txVersion + genesis + blockHash; // This is the extra data that needs to be added only in the signing payload
+//     const payload = call + extra + addExtra; // This is the payload to sign
 
-    const bytes = hexToU8a(payload).byteLength;
-    const size = compact.enc(bytes); // This is the compact version of the payload length
+    // const bytes = hexToU8a(payload).byteLength;
+    // const size = compact.enc(bytes); // This is the compact version of the payload length
 
     // Send the payload above to the wallet to sign
     // The wallet will return a signature
 
-    // To build the final extrinsic we need to do this
+//     // To build the final extrinsic we need to do this
 
-    // extrinsicVersion = 4; // Come from extrinsic.version in metadata
-    // Signed transaction
-    // extraByte = extrinsicVersion | 128;
-    // extraByte = extraByte.toRadixString(16);
-    // signerType = '00' // MultiAddress?
-    // signatureType = '00';
-    // 00 = ed25519
-    // 01 = sr25519
+//     // extrinsicVersion = 4; // Come from extrinsic.version in metadata
+//     // Signed transaction
+//     // extraByte = extrinsicVersion | 128;
+//     // extraByte = extraByte.toRadixString(16);
+//     // signerType = '00' // MultiAddress?
+//     // signatureType = '00';
+//     // 00 = ed25519
+//     // 01 = sr25519
 
     // Error: Call to a member function increment() on null (Line 42 in /var/www/releases/76bbfc0db4eef154ef7054b0ab64ada66143fe43/vendor/enjin/platform-core/src/Services/Processor/Substrate/Events/Implementations/MultiTokens/Transferred.php)
 
-    const finalExtrinsic =
-        'size of the extrinsic in compact' + extaByte + signerType + signer + signatureType + signature + extra + call;
+    // const finalExtrinsic =
+    //     'size of the extrinsic in compact' + extaByte + signerType + signer + signatureType + signature + extra + call;
     // Send the above to the blockchain
-}
+// }
 
 (async () => {
     getSession();

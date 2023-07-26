@@ -10,6 +10,11 @@ import { wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
 import { getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
+import { addressToPublicKey } from '~/util/address';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { SubmittableExtrinsic } from '@polkadot/api/types';
+import { hexToU8a } from '@polkadot/util';
+import { compact } from 'scale-ts';
 
 const parseConfigURL = (url: string): URL => {
     try {
@@ -270,6 +275,71 @@ export const useAppStore = defineStore('app', {
                 this.accounts = accounts;
                 this.provider = 'polkadot.js';
             }
+        },
+        async signTransaction() {
+            // This is the call that comes from the platform transactions 'encodedCall'
+            const call = '0a03008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48a10f';
+            const era = '00'; // 00 is for immortal transactions
+            const nonce = 'c8'; // Thats the account nonce
+            const tip = '00'; // Tip should always be 00
+            const spec = 'c60b0000'; // The spec version of runtime
+            const txVersion = '08000000'; // The tx version of runtime
+            const genesis = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // The genesis block
+            const blockHash = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // For immortal transactions the blockhash needs to be the genesis
+
+            const extra = era + nonce + tip; // This is the extra data that needs to be added in the final extrinsic and in the signing payload
+            const addExtra = spec + txVersion + genesis + blockHash; // This is the extra data that needs to be added only in the signing payload
+            const payload = call + extra + addExtra; // This is the payload to sign
+
+            // Send the payload above to the wallet to sign
+            // The wallet will return a signature
+            const { signature } = await this.account.signer.signRaw({
+                type: 'bytes',
+                data: payload,
+                address: this.account.address,
+            });
+
+            // To build the final extrinsic we need to do this
+
+            const extrinsicVersion = 4; // Come from extrinsic.version in metadata
+            // Signed transaction
+            const extraByte = extrinsicVersion | 128;
+            const extraByteString = extraByte.toString(16);
+            const signerType = '00'; // MultiAddress?
+            const signatureType = '00';
+            // 00 = ed25519
+            // 01 = sr25519
+            const size = "0x098241189191c3c438118152273490ad1763716efb8119fb1315f07eab423491";
+
+            const finalExtrinsic =
+                size +
+                extraByteString +
+                signerType +
+                addressToPublicKey(this.account.address) +
+                signatureType +
+                signature +
+                extra +
+                call;
+
+            // const bytes = hexToU8a(finalExtrinsic).byteLength;
+            // const size = compact.enc(bytes);
+            // console.log(size);
+            // Send the above to the blockchain
+            await this.connectToAPI(finalExtrinsic as any);
+        },
+        async connectToAPI(extrinsic: string) {
+            const provider = new WsProvider('wss://rpc.matrix.canary.enjin.io');
+            const api = await ApiPromise.create({ provider });
+            
+
+            // Create the size of the extrinsic
+            // const bytes = hexToU8a(extrinsic).byteLength;
+            // const size = api.createType('Compact<u32>', bytes);
+            // console.log(size.hash.toHex());
+
+            // const tx = api.tx.customModule.customMethod(extrinsic);
+
+            // await tx.signAndSend(this.account.address);
         },
         async disconnectWallet() {
             try {
