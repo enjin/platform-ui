@@ -153,7 +153,7 @@ function makeTransaction() {
     const payload = call + extra + addExtra; // This is the payload to sign
 
     const bytes = hexToU8a(payload).byteLength;
-    const size = compact(bytes); // This is the compact version of the payload length
+    const size = compact.enc(bytes); // This is the compact version of the payload length
 
     // Send the payload above to the wallet to sign
     // The wallet will return a signature
