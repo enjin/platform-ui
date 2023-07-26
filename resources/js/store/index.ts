@@ -13,7 +13,7 @@ import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
 import { addressToPublicKey } from '~/util/address';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { hexToU8a } from '@polkadot/util';
+import { hexToU8a, u8aToHex } from '@polkadot/util';
 import { compact } from 'scale-ts';
 
 const parseConfigURL = (url: string): URL => {
@@ -290,6 +290,7 @@ export const useAppStore = defineStore('app', {
             const extra = era + nonce + tip; // This is the extra data that needs to be added in the final extrinsic and in the signing payload
             const addExtra = spec + txVersion + genesis + blockHash; // This is the extra data that needs to be added only in the signing payload
             const payload = call + extra + addExtra; // This is the payload to sign
+            console.log(payload);
 
             // Send the payload above to the wallet to sign
             // The wallet will return a signature
@@ -300,24 +301,21 @@ export const useAppStore = defineStore('app', {
             });
 
             // To build the final extrinsic we need to do this
-
             const extrinsicVersion = 4; // Come from extrinsic.version in metadata
             // Signed transaction
             const extraByte = extrinsicVersion | 128;
             const extraByteString = extraByte.toString(16);
             const signerType = '00'; // MultiAddress?
-            const signatureType = '00';
+            const signatureType = '01';
             // 00 = ed25519
             // 01 = sr25519
-            const size = "0x098241189191c3c438118152273490ad1763716efb8119fb1315f07eab423491";
 
             const finalExtrinsic =
-                size +
                 extraByteString +
                 signerType +
-                addressToPublicKey(this.account.address) +
+                addressToPublicKey(this.account.address).slice(2) +
                 signatureType +
-                signature +
+                signature.slice(2) +
                 extra +
                 call;
 
@@ -328,18 +326,17 @@ export const useAppStore = defineStore('app', {
             await this.connectToAPI(finalExtrinsic as any);
         },
         async connectToAPI(extrinsic: string) {
-            const provider = new WsProvider('wss://rpc.matrix.canary.enjin.io');
+            const provider = new WsProvider('wss://rpc.efinity.io');
             const api = await ApiPromise.create({ provider });
-            
 
             // Create the size of the extrinsic
-            // const bytes = hexToU8a(extrinsic).byteLength;
-            // const size = api.createType('Compact<u32>', bytes);
-            // console.log(size.hash.toHex());
+            const bytes = hexToU8a(extrinsic).byteLength;
+            const size = u8aToHex(api.createType('Compact<u32>', bytes).toU8a());
+            const signedTx = size + extrinsic;
+            console.log(signedTx);
 
-            // const tx = api.tx.customModule.customMethod(extrinsic);
-
-            // await tx.signAndSend(this.account.address);
+            const submit = await api.rpc.author.submitExtrinsic(signedTx);
+            console.log(submit);
         },
         async disconnectWallet() {
             try {
