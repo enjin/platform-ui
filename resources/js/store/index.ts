@@ -13,9 +13,10 @@ import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
 import { addressToPublicKey } from '~/util/address';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { hexToU8a, u8aToHex } from '@polkadot/util';
+import { hexToU8a, stringToHex, u8aToHex } from '@polkadot/util';
 import { compact } from 'scale-ts';
 import { SignerPayloadJSON } from '@polkadot/types/types';
+import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 
 const parseConfigURL = (url: string): URL => {
     try {
@@ -278,46 +279,41 @@ export const useAppStore = defineStore('app', {
             }
         },
         async signTransaction() {
+            const provider = new WsProvider('wss://rpc.efinity.io');
+            const api = await ApiPromise.create({ provider });
+            const [genesisHash, runtime, account] = await Promise.all([
+                api.rpc.chain.getBlockHash(0),
+                api.rpc.state.getRuntimeVersion(),
+                <AccountInfoWithTripleRefCount>(
+                    api.query.system.account('5D278Qv6qRviREhErNFAcxRkPmqx4mbNgqz7bq89osJpXUdP')
+                ),
+            ]);
+            console.info(account);
+
             // This is the call that comes from the platform transactions 'encodedCall'
             const call = '0a03008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48a10f';
             const era = '00'; // 00 is for immortal transactions
-            const nonce = 'c8'; // Thats the account nonce
-            const tip = '00'; // Tip should always be 00
-            const genesis = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // The genesis block
-            const blockHash = '99ded175d436bee7d751fa3f2f8c7a257ddc063a541f8daa5e6152604f66b2a0'; // For immortal transactions the blockhash needs to be the genesis
+            const genesis = genesisHash.toHex(); // The genesis block
+            const blockHash = genesisHash.toHex(); // For immortal transactions the blockhash needs to be the genesis
 
             const payloadToSign: SignerPayloadJSON = {
-                specVersion: '3014',
-                transactionVersion: '8',
+                specVersion: runtime.specVersion.toString(),
+                transactionVersion: runtime.transactionVersion.toString(),
                 address: '5D278Qv6qRviREhErNFAcxRkPmqx4mbNgqz7bq89osJpXUdP',
-                blockHash: '0x' + blockHash,
+                blockHash: blockHash,
                 blockNumber: '0x00',
                 era: '0x' + era,
-                genesisHash: '0x' + genesis,
+                genesisHash: genesis,
                 method: '0x' + call,
-                nonce: '0x' + nonce,
-                signedExtensions: [
-                    'CheckSpecVersion',
-                    'CheckTxVersion',
-                    'CheckGenesis',
-                    'CheckMortality',
-                    'CheckNonce',
-                    'CheckWeight',
-                    'ChargeTransactionPayment',
-                    'CheckFuelTank',
-                ],
-                tip: '0x' + tip,
+                nonce: account.nonce.toHex(),
+                signedExtensions: api.registry.signedExtensions,
+                tip: '0x00',
                 version: 4,
             };
 
-            // Send the payload above to the wallet to sign
-            // The wallet will return a signature
             console.log(payloadToSign);
             const { signature } = await this.account.signer.signPayload(payloadToSign);
             console.log(signature);
-
-            const provider = new WsProvider('wss://rpc.efinity.io');
-            const api = await ApiPromise.create({ provider });
 
             const extrinsic = api.registry.createType(
                 'Extrinsic',
@@ -332,12 +328,6 @@ export const useAppStore = defineStore('app', {
         async connectToAPI(extrinsic: string) {
             const provider = new WsProvider('wss://rpc.efinity.io');
             const api = await ApiPromise.create({ provider });
-
-            // Create the size of the extrinsic
-            // const bytes = hexToU8a(extrinsic).byteLength;
-            // const size = u8aToHex(api.createType('Compact<u32>', bytes).toU8a());
-            // const signedTx = size + extrinsic;
-            // console.log(signedTx);
 
             const submit = await api.rpc.author.submitExtrinsic(extrinsic);
             console.log(submit);
