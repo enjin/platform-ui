@@ -151,11 +151,11 @@ const selectAccount = (account) => {
 //     const addExtra = spec + txVersion + genesis + blockHash; // This is the extra data that needs to be added only in the signing payload
 //     const payload = call + extra + addExtra; // This is the payload to sign
 
-    // const bytes = hexToU8a(payload).byteLength;
-    // const size = compact.enc(bytes); // This is the compact version of the payload length
+// const bytes = hexToU8a(payload).byteLength;
+// const size = compact.enc(bytes); // This is the compact version of the payload length
 
-    // Send the payload above to the wallet to sign
-    // The wallet will return a signature
+// Send the payload above to the wallet to sign
+// The wallet will return a signature
 
 //     // To build the final extrinsic we need to do this
 
@@ -168,11 +168,11 @@ const selectAccount = (account) => {
 //     // 00 = ed25519
 //     // 01 = sr25519
 
-    // Error: Call to a member function increment() on null (Line 42 in /var/www/releases/76bbfc0db4eef154ef7054b0ab64ada66143fe43/vendor/enjin/platform-core/src/Services/Processor/Substrate/Events/Implementations/MultiTokens/Transferred.php)
+// Error: Call to a member function increment() on null (Line 42 in /var/www/releases/76bbfc0db4eef154ef7054b0ab64ada66143fe43/vendor/enjin/platform-core/src/Services/Processor/Substrate/Events/Implementations/MultiTokens/Transferred.php)
 
-    // const finalExtrinsic =
-    //     'size of the extrinsic in compact' + extaByte + signerType + signer + signatureType + signature + extra + call;
-    // Send the above to the blockchain
+// const finalExtrinsic =
+//     'size of the extrinsic in compact' + extaByte + signerType + signer + signatureType + signature + extra + call;
+// Send the above to the blockchain
 // }
 
 (async () => {
