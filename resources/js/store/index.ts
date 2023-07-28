@@ -300,7 +300,7 @@ export const useAppStore = defineStore('app', {
                 blockNumber: '0x00',
                 era: '0x' + era,
                 genesisHash: genesis,
-                method: '0x' + call,
+                method: call,
                 nonce: account.nonce.toHex(),
                 signedExtensions: api.registry.signedExtensions,
                 tip: '0x00',
