@@ -14,7 +14,12 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 
-const parseConfigURL = (url: string): URL => {
+const RPC_URLS = {
+    canary: 'wss://rpc.matrix.canary.enjin.io',
+    efinity: 'wss://rpc.efinity.io',
+};
+
+const parseConfigHostname = (hostname: string): string => {
     try {
         return new URL(url);
     } catch {
@@ -277,7 +282,7 @@ export const useAppStore = defineStore('app', {
             }
         },
         async signTransaction(transaction: any) {
-            const provider = new WsProvider('wss://rpc.efinity.io');
+            const provider = new WsProvider(RPC_URLS[this.config.network]);
             const api = await ApiPromise.create({ provider });
             const [genesisHash, runtime, account] = await Promise.all([
                 api.rpc.chain.getBlockHash(0),
@@ -317,7 +322,7 @@ export const useAppStore = defineStore('app', {
             extrinsic.addSignature(this.account.address, signature, payloadToSign);
 
             const submit = await api.rpc.author.submitExtrinsic(extrinsic.toHex());
-            console.log(submit);
+            console.log(submit.toHex());
         },
         async disconnectWallet() {
             try {
