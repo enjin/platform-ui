@@ -65,6 +65,12 @@
                                         scope="col"
                                         class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 truncate"
                                     >
+                                        Sign
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 truncate"
+                                    >
                                         Transaction ID
                                     </th>
                                 </tr>
@@ -109,6 +115,12 @@
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         <TransactionResultChip v-if="transaction.result" :text="transaction.result" />
                                     </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <SignTransaction
+                                            v-if="transaction.state === 'PENDING'"
+                                            :transaction="transaction"
+                                        />
+                                    </td>
                                     <td
                                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                     >
@@ -150,6 +162,7 @@ import TransactionResultChip from '~/components/TransactionResultChip.vue';
 import { TransactionResultType, TransactionState, TransactionMethods } from '~/types/types.enums';
 import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
+import SignTransaction from '../SignTransaction.vue';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);

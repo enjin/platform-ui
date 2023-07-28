@@ -10,11 +10,7 @@ import { wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
 import { getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
-import { addressToPublicKey } from '~/util/address';
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { hexToU8a, stringToHex, u8aToHex } from '@polkadot/util';
-import { compact } from 'scale-ts';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 
@@ -52,11 +48,12 @@ export const useAppStore = defineStore('app', {
         newCollection: false,
         user: null,
         provider: '',
+        wallet: false,
         account: null,
         accounts: null,
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'account'],
+        paths: ['hostname', 'authorization_token', 'loggedIn', 'advanced', 'protocol', 'provider'],
     },
     actions: {
         async init() {
@@ -227,8 +224,19 @@ export const useAppStore = defineStore('app', {
                 const walletConnect = this.getWeb3Modal();
                 const session = await walletConnect.getSession();
                 if (session && !session.acknowledged) {
-                    this.account = null;
+                    this.wallet = true;
                 }
+
+                return session;
+            } else if (this.provider === 'polkadot.js') {
+                const pkjs = new PolkadotjsWallet();
+
+                if (pkjs.installed) {
+                    await pkjs.enable('Platform');
+                    this.wallet = true;
+                }
+
+                return pkjs;
             }
         },
         async connectWallet(provider) {
@@ -247,17 +255,9 @@ export const useAppStore = defineStore('app', {
                 requiredNamespaces: wcRequiredNamespaces,
             });
 
-            if (session.acknowledged) {
-                const accounts = Object.values(session.namespaces)
-                    .map((namespace) => namespace.accounts)
-                    .flat()
-                    .map((account) => {
-                        return {
-                            address: account.split(':')[2],
-                        };
-                    });
-                this.accounts = accounts;
+            if (session && session.acknowledged) {
                 this.provider = 'wc';
+                this.wallet = true;
 
                 return;
             }
@@ -273,25 +273,21 @@ export const useAppStore = defineStore('app', {
             const pkjs = new PolkadotjsWallet();
             if (pkjs.installed) {
                 await pkjs.enable('Platform');
-                const accounts = await pkjs.getAccounts();
-                this.accounts = accounts;
                 this.provider = 'polkadot.js';
             }
         },
-        async signTransaction() {
+        async signTransaction(transaction: any) {
             const provider = new WsProvider('wss://rpc.efinity.io');
             const api = await ApiPromise.create({ provider });
             const [genesisHash, runtime, account] = await Promise.all([
                 api.rpc.chain.getBlockHash(0),
                 api.rpc.state.getRuntimeVersion(),
-                <AccountInfoWithTripleRefCount>(
-                    api.query.system.account('5D278Qv6qRviREhErNFAcxRkPmqx4mbNgqz7bq89osJpXUdP')
-                ),
+                // @ts-ignore
+                <AccountInfoWithTripleRefCount>api.query.system.account(this.account.address),
             ]);
-            console.info(account);
 
             // This is the call that comes from the platform transactions 'encodedCall'
-            const call = '0a03008eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48a10f';
+            const call = transaction.encodedData;
             const era = '00'; // 00 is for immortal transactions
             const genesis = genesisHash.toHex(); // The genesis block
             const blockHash = genesisHash.toHex(); // For immortal transactions the blockhash needs to be the genesis
@@ -299,7 +295,7 @@ export const useAppStore = defineStore('app', {
             const payloadToSign: SignerPayloadJSON = {
                 specVersion: runtime.specVersion.toString(),
                 transactionVersion: runtime.transactionVersion.toString(),
-                address: '5D278Qv6qRviREhErNFAcxRkPmqx4mbNgqz7bq89osJpXUdP',
+                address: this.account.address,
                 blockHash: blockHash,
                 blockNumber: '0x00',
                 era: '0x' + era,
@@ -311,25 +307,16 @@ export const useAppStore = defineStore('app', {
                 version: 4,
             };
 
-            console.log(payloadToSign);
             const { signature } = await this.account.signer.signPayload(payloadToSign);
-            console.log(signature);
 
             const extrinsic = api.registry.createType(
                 'Extrinsic',
                 { method: payloadToSign.method },
                 { version: payloadToSign.version }
             );
-            extrinsic.addSignature('5D278Qv6qRviREhErNFAcxRkPmqx4mbNgqz7bq89osJpXUdP', signature, payloadToSign);
-            console.log(extrinsic.toHex());
+            extrinsic.addSignature(this.account.address, signature, payloadToSign);
 
-            await this.connectToAPI(extrinsic.toHex() as any);
-        },
-        async connectToAPI(extrinsic: string) {
-            const provider = new WsProvider('wss://rpc.efinity.io');
-            const api = await ApiPromise.create({ provider });
-
-            const submit = await api.rpc.author.submitExtrinsic(extrinsic);
+            const submit = await api.rpc.author.submitExtrinsic(extrinsic.toHex());
             console.log(submit);
         },
         async disconnectWallet() {
@@ -355,6 +342,24 @@ export const useAppStore = defineStore('app', {
         },
         setAccount(account: Wallet) {
             this.account = account;
+        },
+        async getAccounts() {
+            if (this.provider === 'wc') {
+                const session = (await this.getSession()) as any;
+                const accounts = Object.values(session.namespaces)
+                    .map((namespace: any) => namespace.accounts)
+                    .flat()
+                    .map((account) => {
+                        return {
+                            address: account.split(':')[2],
+                        };
+                    });
+                this.accounts = accounts;
+            } else if (this.provider === 'polkadot.js') {
+                const session = (await this.getSession()) as any;
+                const accounts = await session.getAccounts();
+                this.accounts = accounts;
+            }
         },
     },
     getters: {

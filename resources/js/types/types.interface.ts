@@ -20,6 +20,7 @@ export interface AppState {
     newCollection: boolean;
     user: any;
     provider: string;
+    wallet: boolean;
     account: any;
     accounts: any;
 }
