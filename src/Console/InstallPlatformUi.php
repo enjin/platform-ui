@@ -18,7 +18,7 @@ class InstallPlatformUi extends Command
         
         $tenant = $this->askForInput('Do you want to enable Multi tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
 
-        $this->askForInput('Please enter your platform Hostname', 'HOSTNAME_VALUE', '', 'host');
+        $this->askForInput('Please enter your platform Hostname', 'URL_VALUE', '', 'host');
 
         if ($tenant !=='true') {
             $this->askForInput('Please enter an Authorization token', 'AUTHORIZATION_TOKEN_VALUE', '', 'token');

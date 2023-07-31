@@ -72,8 +72,6 @@ export const useAppStore = defineStore('app', {
 
                 await this.fetchCollectionIds();
 
-                console.log(this.config);
-
                 return true;
             } catch (error: any) {
                 console.log(error);
@@ -91,7 +89,7 @@ export const useAppStore = defineStore('app', {
         },
         setConfig() {
             if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);
-            // else if (window?.bootstrap?.hostname) this.config.url = parseConfigHostname(window.bootstrap.hostname);
+            else if (window?.bootstrap?.hostname) this.config.url = parseConfigURL(window.bootstrap.hostname);
             else this.config.url = this.url;
 
             if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
@@ -214,12 +212,6 @@ export const useAppStore = defineStore('app', {
             if (this.isMultiTenant) {
                 return state.loggedIn && state.user?.apiTokens?.length > 0 && state.user?.account;
             }
-
-            console.log(state.loggedIn);
-            console.log(state.config.url);
-            console.log(state.config.authorization_token);
-
-            console.log(state.loggedIn && state.config.url && state.config.authorization_token.length > 0);
 
             return state.loggedIn && state.config.url && state.config.authorization_token.length > 0;
         },
