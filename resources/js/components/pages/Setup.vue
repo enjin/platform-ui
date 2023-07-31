@@ -9,15 +9,15 @@
             <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
                 <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="setupAccount">
                     <FormInput
-                        v-model="hostname"
-                        label="Hostname"
-                        name="hostname"
+                        v-model="url"
+                        label="Enjin Platform URL"
+                        name="url"
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                     <FormInput
                         v-if="!appStore.isMultiTenant"
                         v-model="authorizationToken"
-                        label="Authroization token"
+                        label="Authorization Token"
                         name="authorization"
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         type="password"
@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 import { ref } from 'vue';
+import type { Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '~/store';
 import Btn from '~/components/Btn.vue';
@@ -44,15 +45,15 @@ const router = useRouter();
 const appStore = useAppStore();
 
 const isLoading = ref(false);
-const hostname = ref('');
+const url: Ref<URL | undefined> = ref();
 const authorizationToken = ref('');
 const formRef = ref();
 
 const validation = yup.object().shape({
-    hostname: yup.string().required('Hostname is required'),
+    url: yup.string().required('The URL is required'),
     authorization: yup.string().when('tenant', {
         is: false,
-        then: () => yup.string().required('Authorization token is required'),
+        then: () => yup.string().required('The authorization token is required'),
     }),
 });
 
@@ -65,36 +66,20 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
-const parseHostname = (hostname: string) => {
-    try {
-        const url = new URL(hostname);
-
-        return url;
-    } catch {
-        return { hostname: hostname, protocol: 'https:', port: '' };
-    }
-};
-
 const setupAccount = async () => {
     try {
         if (!(await isValid())) return;
-
         isLoading.value = true;
-        const hostnameParse = parseHostname(hostname.value);
 
-        if (!hostnameParse) {
-            throw new Error('Invalid hostname');
-        }
-        if (window.location.protocol === 'https:' && hostnameParse?.protocol === 'http:') {
+        if (window.location.protocol === 'https:' && url.value?.protocol === 'http:') {
             throw new Error('You must use an https hostname');
         }
-        const fullHostname = hostnameParse.hostname + (hostnameParse.port ? `:${hostnameParse.port}` : '');
 
-        if (!(await appStore.checkHostname(fullHostname, hostnameParse.protocol))) return;
+        const parsedUrl = new URL(url.value!);
+        if (!(await appStore.checkURL(parsedUrl))) return;
 
         await appStore.setupAccount({
-            hostname: fullHostname,
-            protocol: hostnameParse.protocol,
+            url: parsedUrl,
             authorization_token: authorizationToken.value,
         });
         redirectToCollections();
@@ -106,7 +91,7 @@ const setupAccount = async () => {
 };
 
 (async () => {
-    if (appStore.config.hostname && appStore.config.authorization_token) redirectToCollections();
-    hostname.value = appStore.config.hostname as string;
+    if (appStore.config.url && appStore.config.authorization_token) redirectToCollections();
+    url.value = appStore.config.url as URL;
 })();
 </script>

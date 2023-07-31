@@ -6,40 +6,21 @@ import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 
-const parseConfigHostname = (hostname: string): string => {
+const parseConfigURL = (hostname: string): URL => {
     try {
-        const url = new URL(hostname);
-
-        if (url.port.length) {
-            return `${url.hostname}:${url.port}`;
-        }
-
-        return url.hostname;
+        return new URL(hostname);
     } catch {
-        return hostname;
-    }
-};
-
-const parseConfigProtocol = (hostname: string) => {
-    try {
-        const url = new URL(hostname);
-
-        if (url.protocol.length) return url.protocol;
-
-        return null;
-    } catch {
-        return 'https:';
+        return new URL(hostname);
     }
 };
 
 export const useAppStore = defineStore('app', {
     state: (): AppState => ({
-        hostname: '',
+        url: undefined,
         authorization_token: '',
-        protocol: 'https',
         advanced: false,
         config: {
-            hostname: '',
+            url: undefined,
             authorization_token: '',
             route: '',
             network: '',
@@ -47,7 +28,6 @@ export const useAppStore = defineStore('app', {
             tenant: false,
             webSocket: '',
             channel: '',
-            protocol: '',
         },
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
@@ -61,20 +41,20 @@ export const useAppStore = defineStore('app', {
         user: null,
     }),
     persist: {
-        paths: ['hostname', 'authorization_token', 'loggedIn', 'advanced', 'protocol'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced'],
     },
     actions: {
         async init() {
             try {
                 this.setConfig();
-                if (!this.config.hostname) return;
+                if (!this.config.url) return;
 
                 if (this.isMultiTenant && this.loggedIn) await this.getUser();
-                const hostnameConfig = await this.checkHostname(this.config.hostname, this.config.protocol);
-                this.config.network = hostnameConfig.network;
-                this.config.packages = Object.entries(hostnameConfig.packages).map(([key, value]: any[]) => {
+                const urlConfig = await this.checkURL(this.config.url);
+                this.config.network = urlConfig.network;
+                this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
                     let link =
-                        hostnameConfig.url +
+                        urlConfig.url +
                         '/graphiql/' +
                         (key === 'enjin/platform-core' ? '' : key.replace('enjin/platform-', ''));
                     if (key === 'enjin/platform-ui') link = '';
@@ -89,7 +69,10 @@ export const useAppStore = defineStore('app', {
                 if (this.hasBeamPackage) this.addBeamNavigation();
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
-                this.fetchCollectionIds();
+
+                await this.fetchCollectionIds();
+
+                console.log(this.config);
 
                 return true;
             } catch (error: any) {
@@ -99,32 +82,17 @@ export const useAppStore = defineStore('app', {
 
             return false;
         },
-        async setupAccount({
-            hostname,
-            authorization_token,
-            protocol,
-        }: {
-            hostname: string;
-            authorization_token: string;
-            protocol: string;
-        }) {
-            this.hostname = hostname;
-            this.protocol = protocol;
-            this.config.protocol = protocol;
-            this.config.hostname = hostname;
+        async setupAccount({ url, authorization_token }: { url: URL; authorization_token: string }) {
+            this.url = url;
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
             this.loggedIn = true;
             await this.init();
         },
         setConfig() {
-            if (appConfig?.hostname?.length) this.config.hostname = parseConfigHostname(appConfig.hostname);
-            else if (window?.bootstrap?.hostname) this.config.hostname = parseConfigHostname(window.bootstrap.hostname);
-            else this.config.hostname = this.hostname;
-
-            if (appConfig?.hostname?.length && parseConfigProtocol(appConfig.hostname))
-                this.config.protocol = parseConfigProtocol(appConfig.hostname) ?? '';
-            else this.config.protocol = this.protocol;
+            if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);
+            // else if (window?.bootstrap?.hostname) this.config.url = parseConfigHostname(window.bootstrap.hostname);
+            else this.config.url = this.url;
 
             if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
             else this.config.authorization_token = this.authorization_token;
@@ -133,19 +101,21 @@ export const useAppStore = defineStore('app', {
 
             if (appConfig.websocket.length) this.config.webSocket = appConfig.websocket;
             if (appConfig.channel.length) this.config.channel = appConfig.channel;
-        },
-        async checkHostname(hostname: string, protocol: string) {
-            try {
-                if (hostname) {
-                    const hostnameConfig = await ApiService.fetchHostname(hostname, protocol);
-                    if (hostnameConfig) return hostnameConfig;
 
-                    throw 'Hostname is not valid';
+            console.log(this.config);
+        },
+        async checkURL(url: URL) {
+            try {
+                if (url) {
+                    const urlConfig = await ApiService.fetchURL(url);
+                    if (urlConfig) return urlConfig;
+
+                    throw 'The URL is not valid';
                 }
 
                 return null;
             } catch {
-                throw 'Hostname is not valid';
+                throw 'The URL is not valid';
             }
         },
         async getUser() {
@@ -200,9 +170,9 @@ export const useAppStore = defineStore('app', {
             await AuthApi.revokeApiTokens([name]);
             this.user.apiTokens = this.user.apiTokens.filter((token) => token.name !== name);
         },
-        setHostname(hostname: string) {
-            this.hostname = hostname;
-            this.config.hostname = hostname;
+        setURL(url: string) {
+            this.url = new URL(url);
+            this.config.url = new URL(url);
         },
         setAuthorizationToken(authorization_token: string) {
             this.authorization_token = authorization_token;
@@ -245,7 +215,13 @@ export const useAppStore = defineStore('app', {
                 return state.loggedIn && state.user?.apiTokens?.length > 0 && state.user?.account;
             }
 
-            return state.loggedIn && state.config.hostname.length > 0 && state.config.authorization_token.length > 0;
+            console.log(state.loggedIn);
+            console.log(state.config.url);
+            console.log(state.config.authorization_token);
+
+            console.log(state.loggedIn && state.config.url && state.config.authorization_token.length > 0);
+
+            return state.loggedIn && state.config.url && state.config.authorization_token.length > 0;
         },
         isMultiTenant(state: AppState) {
             return state.config.tenant;

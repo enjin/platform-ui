@@ -1,12 +1,11 @@
 import { BeamType, NotificationType, TokenCapType, TokenIdSelectType } from './types.enums';
 
 export interface AppState {
-    hostname: string;
+    url?: URL;
     authorization_token: string;
     advanced: boolean;
-    protocol: string;
     config: {
-        hostname: string;
+        url?: URL;
         authorization_token: string;
         route: string;
         network: string;
@@ -14,7 +13,6 @@ export interface AppState {
         tenant: boolean;
         webSocket: string;
         channel: string;
-        protocol: string;
     };
     navigations: any[];
     collections: string[];
