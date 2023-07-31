@@ -17,6 +17,9 @@ jobs:
                   cache: 'npm'
             - name: Install dependencies
               run: npm install
+            - name: Copy config.json
+              run: |
+                cp ./resources/js/config.json.example ./resources/js/config.json
             - name: Build static project
               run: npm run prod-laravel
             - name: Archive build artifacts
