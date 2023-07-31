@@ -6,11 +6,12 @@ import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 
-const parseConfigURL = (hostname: string): URL => {
+const parseConfigURL = (url: string): URL => {
+    console.log(url);
     try {
-        return new URL(hostname);
+        return new URL(url);
     } catch {
-        return new URL(hostname);
+        return new URL('https://' + url);
     }
 };
 
