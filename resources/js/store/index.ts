@@ -89,10 +89,9 @@ export const useAppStore = defineStore('app', {
         },
         setConfig() {
             if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);
-            else if (window?.bootstrap?.hostname) {
-                console.log(window.bootstrap.hostname);
-                this.config.url = parseConfigURL(window.bootstrap.hostname);
-            } else this.config.url = this.url;
+            else if (window?.bootstrap?.hostname)
+                this.config.url = parseConfigURL(window.location.protocol + '//' + window.bootstrap.hostname);
+            else this.config.url = this.url;
 
             if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
             else this.config.authorization_token = this.authorization_token;
