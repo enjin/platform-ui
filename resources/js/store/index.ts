@@ -7,7 +7,6 @@ import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 
 const parseConfigURL = (url: string): URL => {
-    console.log(url);
     try {
         return new URL(url);
     } catch {
@@ -90,8 +89,10 @@ export const useAppStore = defineStore('app', {
         },
         setConfig() {
             if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);
-            else if (window?.bootstrap?.hostname) this.config.url = parseConfigURL(window.bootstrap.hostname);
-            else this.config.url = this.url;
+            else if (window?.bootstrap?.hostname) {
+                console.log(window.bootstrap.hostname);
+                this.config.url = parseConfigURL(window.bootstrap.hostname);
+            } else this.config.url = this.url;
 
             if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
             else this.config.authorization_token = this.authorization_token;
@@ -100,8 +101,6 @@ export const useAppStore = defineStore('app', {
 
             if (appConfig.websocket.length) this.config.webSocket = appConfig.websocket;
             if (appConfig.channel.length) this.config.channel = appConfig.channel;
-
-            console.log(this.config);
         },
         async checkURL(url: URL) {
             try {

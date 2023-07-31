@@ -44,7 +44,7 @@ export class ApiService {
 
         if (resp.status === 401) {
             useAppStore().clearLogin();
-            snackbar.error({ title: 'Unauthorized', text: 'Session exipred, try to sign in again' });
+            snackbar.error({ title: 'Unauthorized', text: 'Session expired, try to sign in again' });
             throw [{ field: 'Error', message: 'Unauthorized' }];
         }
 
@@ -86,7 +86,6 @@ export class ApiService {
     }
 
     static async fetchURL(url: URL) {
-        console.log(url);
         return ApiService.request({
             url: `${url}.well-known/enjin-platform.json`,
             method: HttpMethods.GET,
