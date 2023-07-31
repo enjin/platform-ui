@@ -59,4 +59,20 @@ export class TransactionApi {
 
         return ApiService.sendPlatfromRequest(data);
     }
+
+    static async updateTransaction(updateTransactionData: Record<string, unknown>) {
+        const data = {
+            query: mutations.UpdateTransaction,
+            variables: {
+                id: updateTransactionData.id,
+                state: updateTransactionData.state,
+                transactionId: updateTransactionData.transactionId,
+                transactionHash: updateTransactionData.transactionHash,
+                signingAccount: updateTransactionData.signingAccount,
+                signedAtBlock: updateTransactionData.signedAtBlock,
+            },
+        };
+
+        return ApiService.sendPlatfromRequest(data);
+    }
 }

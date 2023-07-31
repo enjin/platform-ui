@@ -148,7 +148,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, Ref } from 'vue';
-import { TransactionApi } from '~/api/transaction';
 import { DTOTransactionFactory as DTOFactory } from '~/factory/transaction';
 import { addressShortHex } from '~/util/address';
 import LoadingCircle from '~/components/LoadingCircle.vue';
@@ -163,6 +162,7 @@ import { TransactionResultType, TransactionState, TransactionMethods } from '~/t
 import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
 import SignTransaction from '../SignTransaction.vue';
+import { TransactionApi } from '~/api/transaction';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);

@@ -6,24 +6,72 @@ import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
-import { wcOptions } from '~/util';
+import { formatData, snackbarErrors, wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
 import { getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
+import { TransactionApi } from '~/api/transaction';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
-    efinity: 'wss://rpc.efinity.io',
+    polkadot: 'wss://rpc.efinity.io',
 };
 
-const parseConfigHostname = (hostname: string): string => {
+const parseConfigURL = (url: string): URL => {
     try {
         return new URL(url);
     } catch {
         return new URL('https://' + url);
+    }
+};
+
+const updateTransaction = async ({
+    id,
+    transactionHash,
+    signingAccount,
+    signedAtBlock,
+}: {
+    id: string;
+    transactionHash: string;
+    signingAccount: string;
+    signedAtBlock: number;
+}) => {
+    try {
+        // isLoading.value = true;
+
+        const res = await TransactionApi.updateTransaction(
+            formatData({
+                id: id,
+                transactionHash: transactionHash,
+                state: 'BROADCAST',
+                signingAccount: signingAccount,
+                signedAtBlock: signedAtBlock,
+            })
+        );
+
+        const updated = res.data?.UpdateTransaction;
+        console.log(updated);
+
+        // if (id) {
+        //     snackbar.success({
+        //         title: 'Collection created',
+        //         text: `Collection created with transaction id ${id}`,
+        //         event: id,
+        //     });
+        //     appStore.newCollection = true;
+        //     router.push({ name: 'platform.collections' });
+        // }
+    } catch (e) {
+        if (snackbarErrors(e)) return;
+        snackbar.error({
+            title: 'Sign Transaction',
+            text: 'Signing transaction failed',
+        });
+    } finally {
+        // isLoading.value = false;
     }
 };
 
@@ -58,7 +106,7 @@ export const useAppStore = defineStore('app', {
         accounts: null,
     }),
     persist: {
-        paths: ['hostname', 'authorization_token', 'loggedIn', 'advanced', 'protocol', 'provider'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
     },
     actions: {
         async init() {
@@ -284,8 +332,9 @@ export const useAppStore = defineStore('app', {
         async signTransaction(transaction: any) {
             const provider = new WsProvider(RPC_URLS[this.config.network]);
             const api = await ApiPromise.create({ provider });
-            const [genesisHash, runtime, account] = await Promise.all([
+            const [genesisHash, currentBlock, runtime, account] = await Promise.all([
                 api.rpc.chain.getBlockHash(0),
+                api.rpc.chain.getBlock(),
                 api.rpc.state.getRuntimeVersion(),
                 // @ts-ignore
                 <AccountInfoWithTripleRefCount>api.query.system.account(this.account.address),
@@ -321,8 +370,15 @@ export const useAppStore = defineStore('app', {
             );
             extrinsic.addSignature(this.account.address, signature, payloadToSign);
 
-            const submit = await api.rpc.author.submitExtrinsic(extrinsic.toHex());
-            console.log(submit.toHex());
+            const transactionHash = await api.rpc.author.submitExtrinsic(extrinsic.toHex());
+            await updateTransaction({
+                id: transaction.id,
+                transactionHash: transactionHash.toHex(),
+                signingAccount: this.account.address,
+                signedAtBlock: currentBlock.block.header.number.toNumber(),
+            });
+
+            console.log(transactionHash.toHex());
         },
         async disconnectWallet() {
             try {

@@ -9,7 +9,7 @@
             <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
                 <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="setupAccount">
                     <FormInput
-                        v-model="url.origin"
+                        v-model="url"
                         label="Enjin Platform URL"
                         name="url"
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
