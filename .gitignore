@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/resources/js/config.json
 .env
 .env.backup
 .env.production
