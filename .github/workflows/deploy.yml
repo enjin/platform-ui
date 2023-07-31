@@ -1,9 +1,11 @@
-name: build app
+name: Build App
 on:
-    push:
-        branches:
-            - master
-            - release
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  push:
+    paths-ignore:
+      - '**.md'
 
 jobs:
     build:
