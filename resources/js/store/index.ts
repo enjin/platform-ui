@@ -14,6 +14,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 import { TransactionApi } from '~/api/transaction';
+import router from '~/router';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -40,8 +41,6 @@ const updateTransaction = async ({
     signedAtBlock: number;
 }) => {
     try {
-        // isLoading.value = true;
-
         const res = await TransactionApi.updateTransaction(
             formatData({
                 id: id,
@@ -53,25 +52,30 @@ const updateTransaction = async ({
         );
 
         const updated = res.data?.UpdateTransaction;
-        console.log(updated);
 
-        // if (id) {
-        //     snackbar.success({
-        //         title: 'Collection created',
-        //         text: `Collection created with transaction id ${id}`,
-        //         event: id,
-        //     });
-        //     appStore.newCollection = true;
-        //     router.push({ name: 'platform.collections' });
-        // }
+        if (updated) {
+            snackbar.success({
+                title: 'Transaction signed',
+                text: `The transaction was signed successfully`,
+                event: id,
+            });
+
+            // TODO: There is probably a better way to refresh it
+            setTimeout(() => router.go(0), 1000);
+
+            return;
+        }
+
+        snackbar.error({
+            title: 'Sign Transaction',
+            text: 'Signing transaction failed',
+        });
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
             title: 'Sign Transaction',
             text: 'Signing transaction failed',
         });
-    } finally {
-        // isLoading.value = false;
     }
 };
 
@@ -377,8 +381,6 @@ export const useAppStore = defineStore('app', {
                 signingAccount: this.account.address,
                 signedAtBlock: currentBlock.block.header.number.toNumber(),
             });
-
-            console.log(transactionHash.toHex());
         },
         async disconnectWallet() {
             try {

@@ -1,5 +1,5 @@
 <template>
-    <Btn primary @click="signTransaction()">
+    <Btn primary @click="signTransaction()" class="ml-3">
         <LoadingCircle v-if="isLoading" class="h-5 w-5 mx-1 ml-0.5 text-white" />
         <span v-else> Sign </span>
     </Btn>
@@ -53,7 +53,6 @@ const selectAccount = async (account) => {
         showAccountsModal.value = false;
         await useAppStore().signTransaction(props.transaction);
     } catch (e) {
-        console.log(e)
         snackbar.error({ title: 'Failed to sign transaction' });
     } finally {
         isLoading.value = false;

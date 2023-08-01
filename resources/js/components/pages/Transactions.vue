@@ -65,12 +65,6 @@
                                         scope="col"
                                         class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 truncate"
                                     >
-                                        Sign
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 truncate"
-                                    >
                                         Transaction ID
                                     </th>
                                 </tr>
@@ -111,15 +105,13 @@
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         {{ transaction.state }}
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        <TransactionResultChip v-if="transaction.result" :text="transaction.result" />
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         <SignTransaction
                                             v-if="transaction.state === 'PENDING'"
                                             :transaction="transaction"
                                         />
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <TransactionResultChip v-if="transaction.result" :text="transaction.result" />
                                     </td>
                                     <td
                                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
