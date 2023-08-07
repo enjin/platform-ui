@@ -105,10 +105,6 @@
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         {{ transaction.state }}
-                                        <SignTransaction
-                                            v-if="transaction.state === 'PENDING'"
-                                            :transaction="transaction"
-                                        />
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                         <TransactionResultChip v-if="transaction.result" :text="transaction.result" />
@@ -117,12 +113,23 @@
                                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                     >
                                         <Btn
-                                            v-if="transaction.transactionId"
+                                            v-if="
+                                                transaction.transactionId ||
+                                                transaction.state === TransactionState.BROADCAST
+                                            "
                                             primary
                                             @click="openModalSlide('DetailsTransactionSlideover', transaction)"
                                         >
-                                            {{ transaction.transactionId }}
+                                            <span v-if="transaction.transactionId">
+                                                {{ transaction.transactionId }}
+                                            </span>
+                                            <LoadingCircle v-else class="h-5 w-5 mx-5 text-white" />
                                         </Btn>
+                                        <SignTransaction
+                                            v-if="transaction.state === TransactionState.PENDING"
+                                            :transaction="transaction"
+                                            @success="onSuccess(transaction.id)"
+                                        />
                                     </td>
                                 </tr>
                             </tbody>
@@ -134,7 +141,7 @@
                 <div ref="paginatorRef"></div>
             </div>
         </div>
-        <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" />
+        <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" @update="updateTransaction" />
     </div>
 </template>
 
@@ -283,6 +290,36 @@ const getSearchInputs = () => {
     });
 
     return inputs;
+};
+
+const onSuccess = async (id) => {
+    const res = await getTransaction(id);
+
+    transactions.value.items.map((p) => {
+        if (p.id === id) {
+            p.state = res.state;
+            p.result = res.result;
+            p.transactionId = res.transactionId;
+        }
+        return p;
+    });
+};
+
+const getTransaction = async (id) => {
+    const res = await TransactionApi.getTransaction(id);
+
+    return res.data.GetTransaction;
+};
+
+const updateTransaction = (transaction) => {
+    transactions.value.items.map((p) => {
+        if (p.id === transaction.id) {
+            p.state = transaction.state;
+            p.result = transaction.result;
+            p.transactionId = transaction.transactionId;
+        }
+        return p;
+    });
 };
 
 const getTransactions = async () => {

@@ -36,6 +36,7 @@
         "@polkadot/api": "^10.9.1",
         "@polkadot/keyring": "^12.3.2",
         "@polkadot/types": "^10.9.1",
+        "@polkadot/ui-shared": "^3.5.1",
         "@polkadot/util": "^12.3.2",
         "@polkadot/util-crypto": "^10.4.2",
         "@tailwindcss/forms": "^0.5.3",

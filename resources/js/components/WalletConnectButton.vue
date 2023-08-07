@@ -53,7 +53,6 @@
             </MenuItems>
         </ScaleTransition>
     </Menu>
-   
 </template>
 
 <script setup lang="ts">
@@ -90,8 +89,7 @@ const getSession = async () => {
     try {
         loading.value = true;
         await appStore.getSession();
-    } catch (e){
-        console.log(e)
+    } catch (e) {
         snackbar.error({ title: 'Failed to get session' });
     } finally {
         loading.value = false;
@@ -103,7 +101,6 @@ const disconnectWallet = async () => {
     await appStore.disconnectWallet();
     loading.value = false;
 };
-
 
 (async () => {
     getSession();

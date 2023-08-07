@@ -14,7 +14,6 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 import { TransactionApi } from '~/api/transaction';
-import router from '~/router';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -57,19 +56,17 @@ const updateTransaction = async ({
             snackbar.success({
                 title: 'Transaction signed',
                 text: `The transaction was signed successfully`,
-                event: id,
             });
 
-            // TODO: There is probably a better way to refresh it
-            setTimeout(() => router.go(0), 1000);
-
-            return;
+            return true;
         }
 
         snackbar.error({
             title: 'Sign Transaction',
             text: 'Signing transaction failed',
         });
+
+        return false;
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
@@ -143,7 +140,6 @@ export const useAppStore = defineStore('app', {
 
                 return true;
             } catch (error: any) {
-                console.log(error);
                 snackbar.error({ title: error });
             }
 
@@ -330,6 +326,7 @@ export const useAppStore = defineStore('app', {
             const pkjs = new PolkadotjsWallet();
             if (pkjs.installed) {
                 await pkjs.enable('Platform');
+                this.wallet = true;
                 this.provider = 'polkadot.js';
             }
         },
@@ -375,7 +372,7 @@ export const useAppStore = defineStore('app', {
             extrinsic.addSignature(this.account.address, signature, payloadToSign);
 
             const transactionHash = await api.rpc.author.submitExtrinsic(extrinsic.toHex());
-            await updateTransaction({
+            return await updateTransaction({
                 id: transaction.id,
                 transactionHash: transactionHash.toHex(),
                 signingAccount: this.account.address,
@@ -397,9 +394,11 @@ export const useAppStore = defineStore('app', {
                 }
 
                 this.account = null;
+                this.wallet = false;
                 this.provider = '';
             } catch {
                 this.account = null;
+                this.wallet = false;
                 this.provider = '';
             }
         },
