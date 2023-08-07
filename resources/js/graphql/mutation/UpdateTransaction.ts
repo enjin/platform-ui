@@ -1,0 +1,1 @@
+export default `mutation UpdateTransaction($id: Int!, $state: TransactionState, $transactionId: String, $transactionHash: String, $signingAccount: String, $signedAtBlock: Int) { UpdateTransaction(id: $id, state: $state, transactionId: $transactionId, transactionHash: $transactionHash, signingAccount: $signingAccount, signedAtBlock: $signedAtBlock) }`;

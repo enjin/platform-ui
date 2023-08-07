@@ -21,6 +21,7 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4" v-if="appStore.loggedIn">
+                    <WalletConnectButton />
                     <InformationCircleIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="openHelp" />
                     <NotificationsList />
                     <ProfileMenu />
@@ -52,6 +53,7 @@ import ProfileMenu from '~/components/ProfileMenu.vue';
 import DisclosureMenu from '~/components/DisclosureMenu.vue';
 import NotificationsList from '~/components/NotificationsList.vue';
 import Handbook from '~/components/Handbook.vue';
+import WalletConnectButton from '~/components/WalletConnectButton.vue';
 
 const open = ref(false);
 const help = ref(false);

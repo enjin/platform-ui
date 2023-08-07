@@ -16,7 +16,12 @@
                         >
                             <DialogPanel class="pointer-events-auto w-screen max-w-xs md:max-w-lg transition-all">
                                 <div ref="initialFocusRef"></div>
-                                <component :is="component" @close="emit('close')" :item="item" />
+                                <component
+                                    :is="component"
+                                    :item="item"
+                                    @close="emit('close')"
+                                    @update="($event) => emit('update', $event)"
+                                />
                             </DialogPanel>
                         </TransitionChild>
                     </div>
@@ -30,7 +35,7 @@
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { defineAsyncComponent, shallowRef, watch } from 'vue';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'update']);
 
 const component = shallowRef();
 const initialFocusRef = shallowRef();

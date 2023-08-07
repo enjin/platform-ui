@@ -20,6 +20,7 @@ import SetTokenAttribute from '~/graphql/mutation/token/SetTokenAttribute';
 import RemoveAllAttributes from '~/graphql/mutation/RemoveAllAttributes';
 import Freeze from '~/graphql/mutation/Freeze';
 import Thaw from '~/graphql/mutation/Thaw';
+import UpdateTransaction from '~/graphql/mutation/UpdateTransaction';
 
 import BatchMint from '~/graphql/mutation/batch/BatchMint';
 import BatchTransfer from '~/graphql/mutation/batch/BatchTransfer';
@@ -83,6 +84,7 @@ export default {
     RemoveAllAttributes,
     Freeze,
     Thaw,
+    UpdateTransaction,
 
     BatchMint,
     BatchTransfer,

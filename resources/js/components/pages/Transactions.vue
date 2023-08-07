@@ -113,12 +113,23 @@
                                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                     >
                                         <Btn
-                                            v-if="transaction.transactionId"
+                                            v-if="
+                                                transaction.transactionId ||
+                                                transaction.state === TransactionState.BROADCAST
+                                            "
                                             primary
                                             @click="openModalSlide('DetailsTransactionSlideover', transaction)"
                                         >
-                                            {{ transaction.transactionId }}
+                                            <span v-if="transaction.transactionId">
+                                                {{ transaction.transactionId }}
+                                            </span>
+                                            <LoadingCircle v-else class="h-5 w-5 mx-5 text-white" />
                                         </Btn>
+                                        <SignTransaction
+                                            v-if="transaction.state === TransactionState.PENDING"
+                                            :transaction="transaction"
+                                            @success="onSuccess(transaction.id)"
+                                        />
                                     </td>
                                 </tr>
                             </tbody>
@@ -130,13 +141,12 @@
                 <div ref="paginatorRef"></div>
             </div>
         </div>
-        <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" />
+        <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" @update="updateTransaction" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, Ref } from 'vue';
-import { TransactionApi } from '~/api/transaction';
 import { DTOTransactionFactory as DTOFactory } from '~/factory/transaction';
 import { addressShortHex } from '~/util/address';
 import LoadingCircle from '~/components/LoadingCircle.vue';
@@ -150,6 +160,8 @@ import TransactionResultChip from '~/components/TransactionResultChip.vue';
 import { TransactionResultType, TransactionState, TransactionMethods } from '~/types/types.enums';
 import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
+import SignTransaction from '../SignTransaction.vue';
+import { TransactionApi } from '~/api/transaction';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -278,6 +290,36 @@ const getSearchInputs = () => {
     });
 
     return inputs;
+};
+
+const onSuccess = async (id) => {
+    const res = await getTransaction(id);
+
+    transactions.value.items.map((p) => {
+        if (p.id === id) {
+            p.state = res.state;
+            p.result = res.result;
+            p.transactionId = res.transactionId;
+        }
+        return p;
+    });
+};
+
+const getTransaction = async (id) => {
+    const res = await TransactionApi.getTransaction(id);
+
+    return res.data.GetTransaction;
+};
+
+const updateTransaction = (transaction) => {
+    transactions.value.items.map((p) => {
+        if (p.id === transaction.id) {
+            p.state = transaction.state;
+            p.result = transaction.result;
+            p.transactionId = transaction.transactionId;
+        }
+        return p;
+    });
 };
 
 const getTransactions = async () => {

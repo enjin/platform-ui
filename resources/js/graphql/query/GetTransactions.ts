@@ -28,6 +28,8 @@ export default `query GetTransactions($idempotencyKeys: [String], $ids: [BigInt!
           result
           state
           transactionId
+          encodedData
+          signedAtBlock
           events {
             edges {
               node {

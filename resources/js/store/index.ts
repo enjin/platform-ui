@@ -5,12 +5,74 @@ import { ApiService } from '~/api';
 import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
+import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
+import { formatData, snackbarErrors, wcOptions } from '~/util';
+import { wcRequiredNamespaces } from '~/util';
+import { getSdkError } from '@walletconnect/utils';
+import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { SignerPayloadJSON } from '@polkadot/types/types';
+import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
+import { TransactionApi } from '~/api/transaction';
+
+const RPC_URLS = {
+    canary: 'wss://rpc.matrix.canary.enjin.io',
+    polkadot: 'wss://rpc.efinity.io',
+};
 
 const parseConfigURL = (url: string): URL => {
     try {
         return new URL(url);
     } catch {
         return new URL('https://' + url);
+    }
+};
+
+const updateTransaction = async ({
+    id,
+    transactionHash,
+    signingAccount,
+    signedAtBlock,
+}: {
+    id: string;
+    transactionHash: string;
+    signingAccount: string;
+    signedAtBlock: number;
+}) => {
+    try {
+        const res = await TransactionApi.updateTransaction(
+            formatData({
+                id: id,
+                transactionHash: transactionHash,
+                state: 'BROADCAST',
+                signingAccount: signingAccount,
+                signedAtBlock: signedAtBlock,
+            })
+        );
+
+        const updated = res.data?.UpdateTransaction;
+
+        if (updated) {
+            snackbar.success({
+                title: 'Transaction signed',
+                text: `The transaction was signed successfully`,
+            });
+
+            return true;
+        }
+
+        snackbar.error({
+            title: 'Sign Transaction',
+            text: 'Signing transaction failed',
+        });
+
+        return false;
+    } catch (e) {
+        if (snackbarErrors(e)) return;
+        snackbar.error({
+            title: 'Sign Transaction',
+            text: 'Signing transaction failed',
+        });
     }
 };
 
@@ -39,9 +101,13 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
+        provider: '',
+        wallet: false,
+        account: null,
+        accounts: null,
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
     },
     actions: {
         async init() {
@@ -74,7 +140,6 @@ export const useAppStore = defineStore('app', {
 
                 return true;
             } catch (error: any) {
-                console.log(error);
                 snackbar.error({ title: error });
             }
 
@@ -203,6 +268,160 @@ export const useAppStore = defineStore('app', {
         },
         setCollections(collections: string[]) {
             this.collections = collections;
+        },
+        getWeb3Modal() {
+            return new WalletConnectModalSign(wcOptions);
+        },
+        async getSession() {
+            if (this.provider === 'wc') {
+                const walletConnect = this.getWeb3Modal();
+                const session = await walletConnect.getSession();
+                if (session && !session.acknowledged) {
+                    this.wallet = true;
+                }
+
+                return session;
+            } else if (this.provider === 'polkadot.js') {
+                const pkjs = new PolkadotjsWallet();
+
+                if (pkjs.installed) {
+                    await pkjs.enable('Platform');
+                    this.wallet = true;
+                }
+
+                return pkjs;
+            }
+        },
+        async connectWallet(provider) {
+            if (provider === 'wc') {
+                await this.connectWC();
+            }
+
+            if (provider === 'polkadot.js') {
+                await this.connectPolkadotJS();
+            }
+        },
+        async connectWC() {
+            const walletConnect = this.getWeb3Modal();
+
+            const session = await walletConnect.connect({
+                requiredNamespaces: wcRequiredNamespaces,
+            });
+
+            if (session && session.acknowledged) {
+                this.provider = 'wc';
+                this.wallet = true;
+
+                return;
+            }
+
+            await walletConnect.disconnect({
+                topic: session.topic,
+                reason: getSdkError('USER_REJECTED'),
+            });
+
+            this.account = null;
+        },
+        async connectPolkadotJS() {
+            const pkjs = new PolkadotjsWallet();
+            if (pkjs.installed) {
+                await pkjs.enable('Platform');
+                this.wallet = true;
+                this.provider = 'polkadot.js';
+            }
+        },
+        async signTransaction(transaction: any) {
+            const provider = new WsProvider(RPC_URLS[this.config.network]);
+            const api = await ApiPromise.create({ provider });
+            const [genesisHash, currentBlock, runtime, account] = await Promise.all([
+                api.rpc.chain.getBlockHash(0),
+                api.rpc.chain.getBlock(),
+                api.rpc.state.getRuntimeVersion(),
+                // @ts-ignore
+                <AccountInfoWithTripleRefCount>api.query.system.account(this.account.address),
+            ]);
+
+            // This is the call that comes from the platform transactions 'encodedCall'
+            const call = transaction.encodedData;
+            const era = '00'; // 00 is for immortal transactions
+            const genesis = genesisHash.toHex(); // The genesis block
+            const blockHash = genesisHash.toHex(); // For immortal transactions the blockhash needs to be the genesis
+
+            const payloadToSign: SignerPayloadJSON = {
+                specVersion: runtime.specVersion.toString(),
+                transactionVersion: runtime.transactionVersion.toString(),
+                address: this.account.address,
+                blockHash: blockHash,
+                blockNumber: '0x00',
+                era: '0x' + era,
+                genesisHash: genesis,
+                method: call,
+                nonce: account.nonce.toHex(),
+                signedExtensions: api.registry.signedExtensions,
+                tip: '0x00',
+                version: 4,
+            };
+
+            const { signature } = await this.account.signer.signPayload(payloadToSign);
+
+            const extrinsic = api.registry.createType(
+                'Extrinsic',
+                { method: payloadToSign.method },
+                { version: payloadToSign.version }
+            );
+            extrinsic.addSignature(this.account.address, signature, payloadToSign);
+
+            const transactionHash = await api.rpc.author.submitExtrinsic(extrinsic.toHex());
+            return await updateTransaction({
+                id: transaction.id,
+                transactionHash: transactionHash.toHex(),
+                signingAccount: this.account.address,
+                signedAtBlock: currentBlock.block.header.number.toNumber(),
+            });
+        },
+        async disconnectWallet() {
+            try {
+                if (this.provider === 'wc') {
+                    const walletConnect = this.getWeb3Modal();
+                    const session = await walletConnect.getSession();
+
+                    if (session) {
+                        await walletConnect.disconnect({
+                            topic: session.topic,
+                            reason: getSdkError('USER_DISCONNECTED'),
+                        });
+                    }
+                }
+
+                this.account = null;
+                this.wallet = false;
+                this.provider = '';
+            } catch {
+                this.account = null;
+                this.wallet = false;
+                this.provider = '';
+            }
+        },
+        setAccount(account: Wallet) {
+            this.account = account;
+        },
+        async getAccounts() {
+            if (this.provider === 'wc') {
+                const session = (await this.getSession()) as any;
+                const accounts = Object.values(session.namespaces)
+                    .map((namespace: any) => namespace.accounts)
+                    .flat()
+                    .map((account) => {
+                        return {
+                            address: account.split(':')[2],
+                        };
+                    });
+                this.accounts = accounts;
+            } else if (this.provider === 'polkadot.js') {
+                const session = (await this.getSession()) as any;
+                const accounts = await session.getAccounts();
+                this.accounts = accounts;
+            }
         },
     },
     getters: {

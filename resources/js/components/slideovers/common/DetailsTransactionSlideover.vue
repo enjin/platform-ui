@@ -1,12 +1,12 @@
 <template>
     <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">
-            Transaction Details for {{ item?.transactionId }}
+            Transaction Details for {{ item?.transactionId ?? item?.id }}
         </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="px-4 sm:px-6 divide-y divide-gray-200">
-                    <div v-if="!item?.id">
+                    <div>
                         <div v-if="!webSocketEvents && !transaction?.state">
                             <LoadingCircle :size="40" class="pt-10" />
                             <p class="text-center pt-2">Waiting for transaction...</p>
@@ -30,6 +30,9 @@
                             >
                                 Get More Transaction Details
                             </Btn>
+                            <div class="text-xs text-center mx-auto mt-4">
+                                Usually it takes few seconds to finilize the transaction
+                            </div>
                         </div>
                     </div>
 
@@ -145,6 +148,8 @@ const props = withDefaults(
     }
 );
 
+const emit = defineEmits(['update']);
+
 const appStore = useAppStore();
 
 const isLoading = ref(false);
@@ -160,11 +165,13 @@ const isAddressKey = (key) => ['who', 'operator', 'account', 'owner'].includes(k
 
 const getTransaction = async () => {
     try {
-        if (!props.item?.transactionId) return;
         isLoading.value = true;
-        const res = await TransactionApi.getTransaction(props.item.transactionId);
+        const res = await TransactionApi.getTransaction(props.item?.transactionId ?? props.item?.id ?? '');
         const transactionData = res.data.GetTransaction;
         transaction.value = transactionData;
+        if (transactionData.state === TransactionState.FINALIZED) {
+            emit('update', transactionData);
+        }
     } catch (error) {
         // Do notihing
     }
