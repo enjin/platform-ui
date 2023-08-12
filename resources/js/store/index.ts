@@ -113,7 +113,7 @@ export const useAppStore = defineStore('app', {
         async init() {
             try {
                 this.setConfig();
-                if (!this.config.url) return;
+                if (!this.config.url) return false;
 
                 if (this.isMultiTenant && this.loggedIn) await this.getUser();
                 const urlConfig = await this.checkURL(this.config.url);
@@ -150,7 +150,7 @@ export const useAppStore = defineStore('app', {
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
             this.loggedIn = true;
-            await this.init();
+            return await this.init();
         },
         setConfig() {
             if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);

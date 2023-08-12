@@ -80,10 +80,11 @@ const setupAccount = async () => {
         if (!(await appStore.checkURL(parsedUrl))) return;
 
         console.log('before setup');
-        await appStore.setupAccount({
+        const result = await appStore.setupAccount({
             url: parsedUrl,
             authorization_token: authorizationToken.value,
         });
+        console.log('result', result);
         console.log('before redirect');
 
         redirectToCollections();
