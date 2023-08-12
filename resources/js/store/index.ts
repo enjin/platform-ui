@@ -136,17 +136,11 @@ export const useAppStore = defineStore('app', {
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
-                console.log('before fetch');
-                await this.fetchCollectionIds();
-                console.log('after fetch');
-
-                return true;
+                return await this.fetchCollectionIds();
             } catch (error: any) {
-                console.log('snack error');
                 snackbar.error({ title: error });
             }
 
-            console.log('before false');
             return false;
         },
         async setupAccount({ url, authorization_token }: { url: URL; authorization_token: string }) {
@@ -204,12 +198,9 @@ export const useAppStore = defineStore('app', {
                     this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
                 }
             } catch {
-                // do nothing
-                console.log('inside catch');
                 return false;
             }
 
-            console.log('before return');
             return true;
         },
         async login(email: string, password: string) {

@@ -79,21 +79,18 @@ const setupAccount = async () => {
         const parsedUrl = new URL(url.value!);
         if (!(await appStore.checkURL(parsedUrl))) return;
 
-        console.log('before setup');
-        const result = await appStore.setupAccount({
-            url: parsedUrl,
-            authorization_token: authorizationToken.value,
-        });
-        console.log('result', result);
-        console.log('before redirect');
-
-        redirectToCollections();
+        if (
+            await appStore.setupAccount({
+                url: parsedUrl,
+                authorization_token: authorizationToken.value,
+            })
+        ) {
+            redirectToCollections();
+        }
     } catch (e: any) {
-        console.log('catch');
         snackbar.error({ title: e.message || e });
     }
 
-    console.log('after catch');
     isLoading.value = false;
 };
 

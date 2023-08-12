@@ -74,20 +74,16 @@ export class ApiService {
                                 message: error[key][0],
                             };
                         });
-                        console.log('rejected errors');
                         reject(errors);
                     } else {
-                        console.log('rejected');
                         reject({ field: 'Error', message });
                     }
                 }
 
                 if (res.field == 'Error') {
-                    console.log('has error');
                     reject(res);
                 }
-                console.log(res);
-                console.log('resolved');
+
                 resolve(res);
             });
         });
