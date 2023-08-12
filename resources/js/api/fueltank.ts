@@ -4,7 +4,7 @@ import queries from './queries';
 
 export class FuelTankApi {
     static async sendPlatfromRequest(data: Record<string, unknown>) {
-        return ApiService.sendPlatfromRequest(data, '/fuel-tanks');
+        return ApiService.sendPlatformRequest(data, '/fuel-tanks');
     }
 
     static async getFuelTank(name: string, tankId: string) {

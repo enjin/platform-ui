@@ -15,7 +15,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async approveToken(tokenData: Record<string, unknown>) {
@@ -33,7 +33,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async unapproveToken(tokenData: Record<string, unknown>) {
@@ -48,7 +48,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async burnToken(tokenData: Record<string, unknown>) {
@@ -67,7 +67,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async mutateToken(tokenData: Record<string, unknown>) {
@@ -88,7 +88,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async transferToken(tokenData: Record<string, unknown>) {
@@ -112,7 +112,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async createToken(tokenData: Record<string, unknown>) {
@@ -127,7 +127,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async mintToken(tokenData: Record<string, unknown>) {
@@ -142,7 +142,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async setTokenAttribute(setTokenAttributeData: Record<string, unknown>) {
@@ -158,7 +158,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async removeTokenAttribute(removeTokenAttributeData: Record<string, unknown>) {
@@ -173,7 +173,7 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async removeAllAttributes(removeAllAttributesData: Record<string, unknown>) {
@@ -188,6 +188,6 @@ export class TokenApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 }

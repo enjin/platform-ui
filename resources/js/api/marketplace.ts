@@ -4,7 +4,7 @@ import queries from './queries';
 
 export class MarketplaceApi {
     static async sendPlatfromRequest(data: Record<string, unknown>) {
-        return ApiService.sendPlatfromRequest(data, '/marketplace');
+        return ApiService.sendPlatformRequest(data, '/marketplace');
     }
 
     static async getListings(getListingsData: Record<string, unknown>) {

@@ -11,7 +11,7 @@ export class TransactionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async getTransactions(getTransactionsData: Record<string, unknown>) {
@@ -31,7 +31,7 @@ export class TransactionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async getWallet(walletData: Record<string, unknown>) {
@@ -45,7 +45,7 @@ export class TransactionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async retryTransactions(retryTransactionsData: Record<string, unknown>) {
@@ -57,7 +57,7 @@ export class TransactionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async updateTransaction(updateTransactionData: Record<string, unknown>) {
@@ -73,6 +73,6 @@ export class TransactionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 }

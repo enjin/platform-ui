@@ -4,7 +4,7 @@ import queries from './queries';
 
 export class BeamApi {
     static async sendPlatfromRequest(data: Record<string, unknown>) {
-        return ApiService.sendPlatfromRequest(data, '/beam');
+        return ApiService.sendPlatformRequest(data, '/beam');
     }
 
     static async getBeam(getBeamData: Record<string, unknown>) {

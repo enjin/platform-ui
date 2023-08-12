@@ -55,7 +55,7 @@ export class ApiService {
         return resp.json();
     }
 
-    static async sendPlatfromRequest(data: Record<string, unknown>, schema: string = ''): Promise<any> {
+    static async sendPlatformRequest(data: Record<string, unknown>, schema: string = ''): Promise<any> {
         const appStore = useAppStore();
 
         return new Promise((resolve, reject) => {
@@ -75,18 +75,23 @@ export class ApiService {
                                     message: error[key][0],
                                 };
                             });
+                            console.log('rejected errors');
                             reject(errors);
                         } else {
+                            console.log('rejected');
                             reject({ field: 'Error', message });
                         }
                     } else {
+                        console.log('resolved');
                         resolve(res);
                     }
                 })
                 .catch((err) => {
+                    console.log('catch 1');
                     throw err;
                 });
         }).catch((err) => {
+            console.log('catch 2');
             throw err;
         });
     }
@@ -114,7 +119,7 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async thaw(thawData: Record<string, unknown>) {
@@ -131,7 +136,7 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async batchMint(batchMintData: Record<string, unknown>) {
@@ -148,7 +153,7 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async batchTransfer(batchTransferData: Record<string, unknown>) {
@@ -165,7 +170,7 @@ export class ApiService {
                 }),
             },
         };
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async batchSetAttribute(batchSetAttributeData: Record<string, unknown>) {
@@ -180,6 +185,6 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 }

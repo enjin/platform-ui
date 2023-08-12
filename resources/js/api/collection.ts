@@ -12,7 +12,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async getCollectionsIds(first: number = 20) {
@@ -23,7 +23,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async getCollection(collectionId: string) {
@@ -34,7 +34,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async createCollection(collectionData: Record<string, unknown>) {
@@ -50,7 +50,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async approveCollection(collectionData: Record<string, unknown>) {
@@ -65,7 +65,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async unapproveCollection(collectionData: Record<string, unknown>) {
@@ -79,7 +79,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async destroyCollection(collectionData: Record<string, unknown>) {
@@ -92,7 +92,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async mutateCollection(collectionData: Record<string, unknown>) {
@@ -106,7 +106,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async setCollectionAttribute(setCollectionAttributeData: Record<string, unknown>) {
@@ -121,7 +121,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async removeCollectionAttribute(removeCollectionAttributeData: Record<string, unknown>) {
@@ -135,7 +135,7 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async removeAllAttributes(removeAllAttributesData: Record<string, unknown>) {
@@ -150,6 +150,6 @@ export class CollectionApi {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 }
