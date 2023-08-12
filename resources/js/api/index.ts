@@ -63,36 +63,29 @@ export class ApiService {
                 url: `${appStore.config.url}graphql${schema}`,
                 data,
                 credentials: useAppStore().isMultiTenant ? 'include' : 'omit',
-            })
-                .then((res: any) => {
-                    if (res.errors) {
-                        const message = res.errors[0].message;
-                        if (message === 'validation') {
-                            const error = res.errors[0].extensions?.validation;
-                            const errors = Object.keys(error).map((key) => {
-                                return {
-                                    field: key,
-                                    message: error[key][0],
-                                };
-                            });
-                            console.log('rejected errors');
-                            reject(errors);
-                        } else {
-                            console.log('rejected');
-                            reject({ field: 'Error', message });
-                        }
+            }).then((res: any) => {
+                if (res.errors) {
+                    const message = res.errors[0].message;
+                    if (message === 'validation') {
+                        const error = res.errors[0].extensions?.validation;
+                        const errors = Object.keys(error).map((key) => {
+                            return {
+                                field: key,
+                                message: error[key][0],
+                            };
+                        });
+                        console.log('rejected errors');
+                        reject(errors);
                     } else {
-                        console.log('resolved');
-                        resolve(res);
+                        console.log('rejected');
+                        reject({ field: 'Error', message });
                     }
-                })
-                .catch((err) => {
-                    console.log('catch 1');
-                    throw err;
-                });
-        }).catch((err) => {
-            console.log('catch 2');
-            throw err;
+                } else {
+                    console.log(res);
+                    console.log('resolved');
+                    resolve(res);
+                }
+            });
         });
     }
 
