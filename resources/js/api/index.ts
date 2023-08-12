@@ -82,6 +82,8 @@ export class ApiService {
                     resolve(res);
                 }
             });
+        }).catch((err) => {
+            throw err;
         });
     }
 
