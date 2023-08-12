@@ -158,7 +158,7 @@ const formAction = () => {
     }
 };
 
-const itemAttributesKeys = props.item?.attributes.map((a: { key: string; value: string }) => a.key) ?? []; 
+const itemAttributesKeys = props.item?.attributes.map((a: { key: string; value: string }) => a.key) ?? [];
 
 const validation = yup.object({
     collectionId: yup.number().typeError('Collection ID must be a number').required(),
