@@ -84,9 +84,11 @@ const setupAccount = async () => {
         });
         redirectToCollections();
     } catch (e: any) {
+        console.log('catch');
         snackbar.error({ title: e.message || e });
     }
 
+    console.log('after catch');
     isLoading.value = false;
 };
 
