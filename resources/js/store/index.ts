@@ -136,13 +136,17 @@ export const useAppStore = defineStore('app', {
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
+                console.log('before fetch');
                 await this.fetchCollectionIds();
+                console.log('after fetch');
 
                 return true;
             } catch (error: any) {
+                console.log('snack error');
                 snackbar.error({ title: error });
             }
 
+            console.log('before false');
             return false;
         },
         async setupAccount({ url, authorization_token }: { url: URL; authorization_token: string }) {
@@ -150,6 +154,7 @@ export const useAppStore = defineStore('app', {
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
             this.loggedIn = true;
+
             return await this.init();
         },
         setConfig() {
