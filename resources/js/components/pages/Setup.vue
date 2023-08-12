@@ -75,13 +75,17 @@ const setupAccount = async () => {
             throw new Error('You must use an https hostname');
         }
 
+        console.log('before trying');
         const parsedUrl = new URL(url.value!);
         if (!(await appStore.checkURL(parsedUrl))) return;
 
+        console.log('before setup');
         await appStore.setupAccount({
             url: parsedUrl,
             authorization_token: authorizationToken.value,
         });
+        console.log('before redirect');
+
         redirectToCollections();
     } catch (e: any) {
         console.log('catch');
