@@ -189,7 +189,7 @@ export const useAppStore = defineStore('app', {
             this.user = res.data.User;
         },
         async fetchCollectionIds(totalCount?: number) {
-            if (!this.loggedIn) return;
+            if (!this.loggedIn) return false;
 
             try {
                 this.newCollection = false;
@@ -203,7 +203,12 @@ export const useAppStore = defineStore('app', {
                 }
             } catch {
                 // do nothing
+                console.log('inside catch');
+                return false;
             }
+
+            console.log('before return';)
+            return true;
         },
         async login(email: string, password: string) {
             const res = await AuthApi.login(email, password);
