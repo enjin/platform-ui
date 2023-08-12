@@ -85,9 +85,9 @@ const setupAccount = async () => {
         redirectToCollections();
     } catch (e: any) {
         snackbar.error({ title: e.message || e });
-    } finally {
-        isLoading.value = false;
     }
+
+    isLoading.value = false;
 };
 
 (async () => {
