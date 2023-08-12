@@ -15,7 +15,7 @@
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                     <FormInput
-                        v-if="!appStore.isMultiTenant"
+                        v-if="!(appStore.config.authorization_token.length > 0)"
                         v-model="authorizationToken"
                         label="Authorization Token"
                         name="authorization"
