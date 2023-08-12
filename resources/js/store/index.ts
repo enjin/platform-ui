@@ -209,7 +209,7 @@ export const useAppStore = defineStore('app', {
                 return false;
             }
 
-            console.log('before return';)
+            console.log('before return');
             return true;
         },
         async login(email: string, password: string) {
