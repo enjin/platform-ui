@@ -188,9 +188,7 @@ export const useAppStore = defineStore('app', {
             try {
                 this.newCollection = false;
 
-                console.log('before collection api');
                 const res = await CollectionApi.getCollectionsIds(totalCount);
-                console.log('after collection api');
                 const collectionsData = res.data.GetCollections;
                 if (collectionsData.pageInfo.hasNextPage) {
                     await this.fetchCollectionIds(collectionsData.totalCount);
