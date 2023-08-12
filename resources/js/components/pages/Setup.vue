@@ -75,7 +75,6 @@ const setupAccount = async () => {
             throw new Error('You must use an https hostname');
         }
 
-        console.log('before trying');
         const parsedUrl = new URL(url.value!);
         if (!(await appStore.checkURL(parsedUrl))) return;
 
