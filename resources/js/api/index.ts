@@ -63,25 +63,29 @@ export class ApiService {
                 url: `${appStore.config.url}graphql${schema}`,
                 data,
                 credentials: useAppStore().isMultiTenant ? 'include' : 'omit',
-            }).then((res: any) => {
-                if (res.errors) {
-                    const message = res.errors[0].message;
-                    if (message === 'validation') {
-                        const error = res.errors[0].extensions?.validation;
-                        const errors = Object.keys(error).map((key) => {
-                            return {
-                                field: key,
-                                message: error[key][0],
-                            };
-                        });
-                        reject(errors);
+            })
+                .then((res: any) => {
+                    if (res.errors) {
+                        const message = res.errors[0].message;
+                        if (message === 'validation') {
+                            const error = res.errors[0].extensions?.validation;
+                            const errors = Object.keys(error).map((key) => {
+                                return {
+                                    field: key,
+                                    message: error[key][0],
+                                };
+                            });
+                            reject(errors);
+                        } else {
+                            reject({ field: 'Error', message });
+                        }
                     } else {
-                        reject({ field: 'Error', message });
+                        resolve(res);
                     }
-                } else {
-                    resolve(res);
-                }
-            });
+                })
+                .catch((err) => {
+                    throw err;
+                });
         }).catch((err) => {
             throw err;
         });
