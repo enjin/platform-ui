@@ -56,7 +56,8 @@
                                     </span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ bid.price > 100 ? formatPriceFromENJ(bid.price) : bid.price }} {{ currencySymbol }}
+                                    {{ bid.price > 100 ? formatPriceFromENJ(bid.price) : bid.price }}
+                                    {{ currencySymbol }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ addressShortHex(bid.bidder) }}

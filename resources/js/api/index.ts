@@ -45,17 +45,17 @@ export class ApiService {
         if (resp.status === 401) {
             useAppStore().clearLogin();
             snackbar.error({ title: 'Unauthorized', text: 'Session expired, try to sign in again' });
-            throw [{ field: 'Error', message: 'Unauthorized' }];
+            return { field: 'Error', message: 'Unauthorized' };
         }
 
         if (resp.status >= 400 && resp.status < 600) {
-            throw resp as unknown as Error;
+            return resp as unknown as Error;
         }
 
         return resp.json();
     }
 
-    static async sendPlatfromRequest(data: Record<string, unknown>, schema: string = ''): Promise<any> {
+    static async sendPlatformRequest(data: Record<string, unknown>, schema: string = ''): Promise<any> {
         const appStore = useAppStore();
 
         return new Promise((resolve, reject) => {
@@ -78,9 +78,13 @@ export class ApiService {
                     } else {
                         reject({ field: 'Error', message });
                     }
-                } else {
-                    resolve(res);
                 }
+
+                if (res.field == 'Error') {
+                    reject(res);
+                }
+
+                resolve(res);
             });
         });
     }
@@ -108,7 +112,7 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async thaw(thawData: Record<string, unknown>) {
@@ -125,7 +129,7 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async batchMint(batchMintData: Record<string, unknown>) {
@@ -142,7 +146,7 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async batchTransfer(batchTransferData: Record<string, unknown>) {
@@ -159,7 +163,7 @@ export class ApiService {
                 }),
             },
         };
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 
     static async batchSetAttribute(batchSetAttributeData: Record<string, unknown>) {
@@ -174,6 +178,6 @@ export class ApiService {
             },
         };
 
-        return ApiService.sendPlatfromRequest(data);
+        return ApiService.sendPlatformRequest(data);
     }
 }

@@ -113,7 +113,7 @@ export const useAppStore = defineStore('app', {
         async init() {
             try {
                 this.setConfig();
-                if (!this.config.url) return;
+                if (!this.config.url) return false;
 
                 if (this.isMultiTenant && this.loggedIn) await this.getUser();
                 const urlConfig = await this.checkURL(this.config.url);
@@ -136,9 +136,7 @@ export const useAppStore = defineStore('app', {
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
-                await this.fetchCollectionIds();
-
-                return true;
+                return await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
             }
@@ -150,7 +148,8 @@ export const useAppStore = defineStore('app', {
             this.authorization_token = authorization_token;
             this.config.authorization_token = authorization_token;
             this.loggedIn = true;
-            await this.init();
+
+            return await this.init();
         },
         setConfig() {
             if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);
@@ -184,7 +183,7 @@ export const useAppStore = defineStore('app', {
             this.user = res.data.User;
         },
         async fetchCollectionIds(totalCount?: number) {
-            if (!this.loggedIn) return;
+            if (!this.loggedIn) return false;
 
             try {
                 this.newCollection = false;
@@ -197,8 +196,10 @@ export const useAppStore = defineStore('app', {
                     this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
                 }
             } catch {
-                // do nothing
+                return false;
             }
+
+            return true;
         },
         async login(email: string, password: string) {
             const res = await AuthApi.login(email, password);

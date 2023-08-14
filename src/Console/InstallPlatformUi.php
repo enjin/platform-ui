@@ -16,7 +16,7 @@ class InstallPlatformUi extends Command
     {
         $this->resetJSON();
         
-        $tenant = $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
+        $tenant = $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', false, 'tenant');
 
         $this->askForInput('Please enter your Enjin Platform URL', 'URL_VALUE', '', 'host');
 
@@ -58,7 +58,7 @@ class InstallPlatformUi extends Command
     {
         if (!is_null($optionValue = $this->option($option))) {
             if ($option === 'tenant') {
-                $optionValue = Str::lower($optionValue) === 'yes' ? 'true' : 'false';
+                $optionValue = Str::lower($optionValue) === 'yes';
             }
             $this->updateConfig($key, $optionValue);
 
@@ -79,7 +79,7 @@ class InstallPlatformUi extends Command
         }
 
         if ($option === 'tenant') {
-            $value = Str::lower($value) === 'yes' ? 'true' : 'false';
+            $value = Str::lower($value) === 'yes';
         }
 
         $this->updateConfig($key, $value);
@@ -95,7 +95,7 @@ class InstallPlatformUi extends Command
         file_put_contents(
             $this->BASE_DIR . 'resources/js/config.json',
             str_replace(
-                $key,
+                is_bool($value) ? "$key" : $key,
                 $value,
                 $appConfig
             )

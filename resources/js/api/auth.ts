@@ -4,7 +4,7 @@ import queries from './queries';
 
 export class AuthApi {
     static async sendPlatfromRequest(data: Record<string, unknown>) {
-        return ApiService.sendPlatfromRequest(data, '/multi-tenant');
+        return ApiService.sendPlatformRequest(data, '/multi-tenant');
     }
 
     static async login(email: string, password: string) {
