@@ -60,40 +60,7 @@
                             readmore="Idempotency Key"
                         />
                         <template v-if="actionType === 'add'">
-                            <Btn class="!flex" @click="addItem" primary>Add Dispatch Rule</Btn>
-                            <div class="flex flex-col space-y-4">
-                                <CardToModal
-                                    v-for="(item, idx) in dispatchRules"
-                                    :key="idx"
-                                    class="animate-fade-in"
-                                    :title="`Dispatch Rule ${idx + 1}`"
-                                >
-                                    <template #icon>
-                                        <CheckCircleIcon
-                                            v-if="item.valid"
-                                            class="ml-2 my-auto h-5 w-5 text-green-400"
-                                            aria-hidden="true"
-                                        />
-                                        <XCircleIcon
-                                            v-else
-                                            class="ml-2 my-auto h-5 w-5 text-red-400"
-                                            aria-hidden="true"
-                                        />
-                                    </template>
-                                    <template #actions>
-                                        <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
-                                    </template>
-
-                                    <template v-slot="{ close }">
-                                        <DispatchRuleForm
-                                            v-model="item.values"
-                                            @validation="setValidation(idx, $event)"
-                                            typeContent="modal"
-                                            @close="close"
-                                        />
-                                    </template>
-                                </CardToModal>
-                            </div>
+                            <DispatchRuleForm v-model="dispatchRule" is-modal :can-save="false" />
                         </template>
                     </div>
                 </div>
@@ -118,10 +85,7 @@ import snackbar from '~/util/snackbar';
 import { formatData, snackbarErrors } from '~/util';
 import RadioGroupButton from '~/components/RadioGroupButton.vue';
 import { FuelTankApi } from '~/api/fueltank';
-import CardToModal from '~/components/CardToModal.vue';
 import DispatchRuleForm from '~/components/fueltank/DispatchRuleForm.vue';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
-import { XMarkIcon } from '@heroicons/vue/20/solid';
 import { RuleType } from '~/types/types.enums';
 import FormSelect from '~/components/FormSelect.vue';
 import { addressToPublicKey } from '~/util/address';
@@ -151,7 +115,7 @@ const tankId = ref(props.item?.tankId);
 const idempotencyKey = ref('');
 const ruleSetId = ref('');
 const formRef = ref();
-const dispatchRules: Ref<{ valid: boolean; values: DispatchRulesValuesInterface }[]> = ref([]);
+const dispatchRule: Ref<DispatchRulesValuesInterface> = ref({});
 const userId = ref('');
 const rule = ref('');
 
@@ -171,21 +135,6 @@ const actions = ref([
         value: 'removeUserRule',
     },
 ]);
-
-const addItem = () => {
-    dispatchRules.value.push({
-        valid: false,
-        values: {},
-    });
-};
-
-const removeItem = (index: number) => {
-    dispatchRules.value.splice(index, 1);
-};
-
-const setValidation = (index: number, isValid: boolean) => {
-    dispatchRules.value[index].valid = isValid;
-};
 
 const validation = yup.object({
     tankId: stringRequiredSchema,
@@ -226,7 +175,7 @@ const insertRule = async () => {
             formatData({
                 tankId: addressToPublicKey(tankId.value ?? ''),
                 ruleSetId: ruleSetId.value,
-                dispatchRules: dispatchRules.value.map((d) => d.values),
+                dispatchRules: dispatchRule.value,
                 idempotencyKey: idempotencyKey.value,
             })
         );

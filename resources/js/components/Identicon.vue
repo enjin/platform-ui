@@ -13,16 +13,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { polkadotIcon } from '@polkadot/ui-shared';
-import { ref, h } from 'vue';
 
-const props = defineProps({
-    address: {
-        type: String,
-        required: true,
-    },
-});
+const props = defineProps<{
+    address: string;
+}>();
 
 const circles = polkadotIcon(props.address, {
     isAlternative: false,
