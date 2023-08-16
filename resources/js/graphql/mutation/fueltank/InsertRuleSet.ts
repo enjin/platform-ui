@@ -1,4 +1,4 @@
-export default `mutation InsertRuleSet($tankId: String!, $ruleSetId: BigInt!, $dispatchRules: [DispatchRuleInputType!], $idempotencyKey: String) {
+export default `mutation InsertRuleSet($tankId: String!, $ruleSetId: BigInt!, $dispatchRules: DispatchRuleInputType!, $idempotencyKey: String) {
     InsertRuleSet(
       tankId: $tankId
       ruleSetId: $ruleSetId

@@ -1,7 +1,7 @@
 <template>
     <Form ref="formRef" class="space-y-6" :validation-schema="validation">
-        <div class="bg-white px-4 py-5 sm:p-6 rounded-b-lg" :class="{ '!p-2': typeContent == 'modal' }">
-            <div :class="`md:grid md:grid-cols-${typeContent == 'modal' ? '1' : '3'} md:gap-6`">
+        <div class="bg-white px-4 py-5 sm:p-6 rounded-lg" :class="{ '!p-0 sm:p-0': isModal }">
+            <div :class="`md:grid md:grid-cols-${isModal ? '1' : '3'} md:gap-6`">
                 <div class="md:col-span-1">
                     <h3 class="text-base font-semibold leading-6 text-gray-900">Dispatch Rule</h3>
                     <p class="mt-1 text-sm text-gray-500">The fuel tank dispatch rules.</p>
@@ -44,7 +44,7 @@
                                     The wallet account must have a specific token in their wallet to use the fuel tank.
                                 </p>
                             </div>
-                            <div :class="`grid grid-cols-${typeContent === 'modal' ? '1' : '2'} gap-4`">
+                            <div :class="`grid grid-cols-${isModal ? '1' : '2'} gap-4`">
                                 <FormInput
                                     class="col-span-1"
                                     v-model="collectionId"
@@ -138,7 +138,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="flex flex-col" v-if="typeContent === 'modal'">
+                        <div v-if="canSave" class="flex flex-col">
                             <Btn primary @click="emit('close')"> Save </Btn>
                         </div>
                     </div>
@@ -167,10 +167,12 @@ const emit = defineEmits(['update:modelValue', 'validation', 'close']);
 const props = withDefaults(
     defineProps<{
         modelValue: DispatchRulesValuesInterface;
-        typeContent?: 'form' | 'modal';
+        isModal?: boolean;
+        canSave?: boolean;
     }>(),
     {
-        typeContent: 'form',
+        canSave: true,
+        isModal: false,
     }
 );
 

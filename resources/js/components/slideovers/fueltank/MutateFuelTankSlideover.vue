@@ -80,36 +80,6 @@
                             />
                             <TokenIdInput class="flex-1" v-model="tokenId" placeholder="Token ID" />
                         </div>
-                        <Btn class="!flex" @click="addItem" primary>Add Dispatch Rule</Btn>
-                        <div class="flex flex-col space-y-4" v-if="dispatchRules.length">
-                            <CardToModal
-                                v-for="(item, idx) in dispatchRules"
-                                :key="idx"
-                                class="animate-fade-in"
-                                :title="`Dispatch Rule ${idx + 1}`"
-                            >
-                                <template #icon>
-                                    <CheckCircleIcon
-                                        v-if="item.valid"
-                                        class="ml-2 my-auto h-5 w-5 text-green-400"
-                                        aria-hidden="true"
-                                    />
-                                    <XCircleIcon v-else class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" />
-                                </template>
-                                <template #actions>
-                                    <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
-                                </template>
-
-                                <template v-slot="{ close }">
-                                    <DispatchRuleForm
-                                        v-model="item.values"
-                                        @validation="setValidation(idx, $event)"
-                                        typeContent="modal"
-                                        @close="close"
-                                    />
-                                </template>
-                            </CardToModal>
-                        </div>
                         <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
@@ -133,7 +103,7 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
-import { Ref, computed, ref } from 'vue';
+import { computed, ref } from 'vue';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import Btn from '~/components/Btn.vue';
@@ -142,13 +112,9 @@ import { formatData, formatToken, snackbarErrors } from '~/util';
 import { FuelTankApi } from '~/api/fueltank';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { TokenIdSelectType } from '~/types/types.enums';
-import CardToModal from '~/components/CardToModal.vue';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
-import { XMarkIcon } from '@heroicons/vue/20/solid';
-import DispatchRuleForm from '~/components/fueltank/DispatchRuleForm.vue';
 import FormList from '~/components/FormList.vue';
 import { addressToPublicKey } from '~/util/address';
-import { DispatchRulesValuesInterface, TokenIdType } from '~/types/types.interface';
+import { TokenIdType } from '~/types/types.interface';
 import { useAppStore } from '~/store';
 import FormSelect from '~/components/FormSelect.vue';
 
@@ -166,7 +132,6 @@ const props = withDefaults(
             whitelistedCallers: { caller: string }[];
             collectionId: string;
             tokenId: TokenIdType;
-            dispatchRules: any[];
         };
     }>(),
     {
@@ -185,22 +150,10 @@ const tokenId = ref({
     tokenId: '',
     tokenType: TokenIdSelectType.Integer,
 });
-const dispatchRules: Ref<{ valid: boolean; values: DispatchRulesValuesInterface }[]> = ref([]);
 const idempotencyKey = ref('');
 const formRef = ref();
 
 const collectionIds = computed(() => appStore.collections);
-
-const addItem = () => {
-    dispatchRules.value.push({
-        valid: false,
-        values: {},
-    });
-};
-
-const removeItem = (index: number) => {
-    dispatchRules.value.splice(index, 1);
-};
 
 const addCaller = () => {
     whitelistedCallers.value.push({ caller: '' });
@@ -208,10 +161,6 @@ const addCaller = () => {
 
 const removeCaller = (index: number) => {
     whitelistedCallers.value.splice(index, 1);
-};
-
-const setValidation = (index: number, isValid: boolean) => {
-    dispatchRules.value[index].valid = isValid;
 };
 
 const validation = yup.object({
@@ -247,7 +196,6 @@ const mutateFuelTank = async () => {
                               }
                             : null,
                     },
-                    dispatchRules: dispatchRules.value.map((item: any) => item.values),
                 },
                 idempotencyKey: idempotencyKey.value,
             })
