@@ -159,7 +159,7 @@ export const useAppStore = defineStore('app', {
             if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
             else this.config.authorization_token = this.authorization_token;
 
-            if (appConfig?.tenant) this.config.tenant = appConfig.tenant;
+            if (appConfig?.tenant) this.config.tenant = appConfig.tenant === 'true';
 
             if (appConfig.websocket.length) this.config.webSocket = appConfig.websocket;
             if (appConfig.channel.length) this.config.channel = appConfig.channel;

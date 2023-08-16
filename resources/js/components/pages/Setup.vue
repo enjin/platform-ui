@@ -15,7 +15,7 @@
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                     <FormInput
-                        v-if="!(appStore.config.authorization_token.length > 0)"
+                        v-if="!appStore.isMultiTenant"
                         v-model="authorizationToken"
                         label="Authorization Token"
                         name="authorization"
@@ -32,7 +32,6 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 import { ref } from 'vue';
-import type { Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '~/store';
 import Btn from '~/components/Btn.vue';
@@ -45,7 +44,7 @@ const router = useRouter();
 const appStore = useAppStore();
 
 const isLoading = ref(false);
-const url: Ref<URL | undefined> = ref();
+const url = ref();
 const authorizationToken = ref('');
 const formRef = ref();
 
