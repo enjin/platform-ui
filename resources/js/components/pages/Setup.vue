@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { Form } from 'vee-validate';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '~/store';
 import Btn from '~/components/Btn.vue';
@@ -74,7 +74,7 @@ const setupAccount = async () => {
             throw new Error('You must use an https hostname');
         }
 
-        const parsedUrl = new URL(url.value!);
+        const parsedUrl = new URL(url.value);
         if (!(await appStore.checkURL(parsedUrl))) return;
 
         if (
@@ -93,7 +93,14 @@ const setupAccount = async () => {
 };
 
 (async () => {
-    if (appStore.config.url && appStore.config.authorization_token) redirectToCollections();
+    if (appStore.hasValidConfig) redirectToCollections();
     url.value = appStore.config.url as URL;
 })();
+
+watch(
+    () => appStore.hasValidConfig,
+    () => {
+        if (appStore.hasValidConfig) router.push({ name: 'platform.collections' });
+    }
+);
 </script>

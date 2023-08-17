@@ -7,7 +7,6 @@ export function initAuthGuard(router: Router) {
 
         const validConfig = appStore.hasValidConfig;
         const isMultiTenant = appStore.isMultiTenant;
-        const isLoggedIn = appStore.loggedIn;
 
         const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
         const requiresToken = to.matched.some((record) => record.meta.requiresToken);
@@ -21,21 +20,21 @@ export function initAuthGuard(router: Router) {
                 return;
             }
 
-            if (requiresAuth && !isLoggedIn) {
+            if (requiresAuth && !validConfig) {
                 next({ name: 'platform.auth.login' });
             } else if (requiresToken && appStore.user && !validConfig) {
                 next({ name: 'platform.user.settings' });
-            } else if (to.name == 'platform.auth.login' && isLoggedIn) {
+            } else if (to.name == 'platform.auth.login' && validConfig) {
                 next({ name: 'platform.collections' });
             } else {
                 next();
             }
         } else {
-            if (requiresAuth && (!validConfig || !isLoggedIn)) {
+            if (requiresAuth && !validConfig) {
                 next({ name: 'platform.setup' });
-            } else if (to.name == 'platform.auth.login' && !isLoggedIn) {
+            } else if (to.name == 'platform.auth.login' && !validConfig) {
                 next({ name: 'platform.setup' });
-            } else if (to.name == 'platform.setup' && validConfig && isLoggedIn) {
+            } else if (to.name == 'platform.setup' && validConfig) {
                 next({ name: 'platform.collections' });
             } else {
                 next();

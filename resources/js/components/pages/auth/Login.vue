@@ -91,9 +91,10 @@ const login = async () => {
             isLoading.value = false;
             return;
         }
-        snackbar.success({ title: 'Logged in successfully', save: false });
-        await appStore.init();
-        redirectToCollections();
+        if (await appStore.init()) {
+            snackbar.success({ title: 'Logged in successfully', save: false });
+            redirectToCollections();
+        }
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
@@ -118,7 +119,7 @@ const checkVerified = () => {
 
 (async () => {
     checkVerified();
-    if (appStore.loggedIn) {
+    if (appStore.hasValidConfig) {
         redirectToCollections();
     }
 })();
