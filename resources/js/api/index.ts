@@ -59,10 +59,14 @@ export class ApiService {
         const appStore = useAppStore();
 
         return new Promise((resolve, reject) => {
+            if (!appStore.config.url) {
+                reject({ field: 'Error', message: 'No URL provided' });
+            }
+
             ApiService.request({
                 url: `${appStore.config.url}graphql${schema}`,
                 data,
-                credentials: useAppStore().isMultiTenant ? 'include' : 'omit',
+                credentials: appStore.isMultiTenant ? 'include' : 'omit',
             }).then((res: any) => {
                 if (res.errors) {
                     const message = res.errors[0].message;

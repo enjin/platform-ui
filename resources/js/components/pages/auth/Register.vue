@@ -119,7 +119,7 @@ const register = async () => {
 };
 
 (async () => {
-    if (appStore.loggedIn) {
+    if (appStore.hasValidConfig) {
         redirectToLogin();
     }
 })();

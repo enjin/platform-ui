@@ -16,17 +16,19 @@ class InstallPlatformUi extends Command
     {
         $this->resetJSON();
         
-        $tenant = $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', false, 'tenant');
+        $tenant = $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
 
         $this->askForInput('Please enter your Enjin Platform URL', 'URL_VALUE', '', 'host');
 
         if ($tenant !=='true') {
             $this->askForInput('Please enter the authorization token', 'AUTHORIZATION_TOKEN_VALUE', '', 'token');
+        } else {
+            $this->updateConfig('AUTHORIZATION_TOKEN_VALUE', '');
         }
         
         $route = $this->askForInput('Please enter the default route path', 'ROUTE_VALUE', '', 'route');
         $this->updateRoute($route);
-        $this->askForInput('Please enter WebSocket URL? (optional)', 'WEBSOCKET_URL_VALUE', '', 'wsurl');
+        $this->askForInput('Please enter WebSocket URL? (optional)', 'WEBSOCKET_VALUE', '', 'wsurl');
         $this->askForInput('Please enter WebSocket channel? (optional)', 'WEBSOCKET_CHANNEL_VALUE', '', 'wschannel');
 
         $this->comment('Installing Platform UI dependencies...');
@@ -58,7 +60,7 @@ class InstallPlatformUi extends Command
     {
         if (!is_null($optionValue = $this->option($option))) {
             if ($option === 'tenant') {
-                $optionValue = Str::lower($optionValue) === 'yes';
+                $optionValue = Str::lower($optionValue) === 'yes' ? 'true' : 'false';
             }
             $this->updateConfig($key, $optionValue);
 
@@ -79,7 +81,7 @@ class InstallPlatformUi extends Command
         }
 
         if ($option === 'tenant') {
-            $value = Str::lower($value) === 'yes';
+            $value = Str::lower($value) === 'yes' ? 'true' : 'false';
         }
 
         $this->updateConfig($key, $value);
@@ -95,7 +97,7 @@ class InstallPlatformUi extends Command
         file_put_contents(
             $this->BASE_DIR . 'resources/js/config.json',
             str_replace(
-                is_bool($value) ? "$key" : $key,
+                $key,
                 $value,
                 $appConfig
             )

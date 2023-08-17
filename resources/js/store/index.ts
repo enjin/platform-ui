@@ -21,11 +21,7 @@ const RPC_URLS = {
 };
 
 const parseConfigURL = (url: string): URL => {
-    try {
-        return new URL(url);
-    } catch {
-        return new URL('https://' + url);
-    }
+    return new URL(url);
 };
 
 const updateTransaction = async ({
@@ -115,7 +111,6 @@ export const useAppStore = defineStore('app', {
                 this.setConfig();
                 if (!this.config.url) return false;
 
-                if (this.isMultiTenant && this.loggedIn) await this.getUser();
                 const urlConfig = await this.checkURL(this.config.url);
                 this.config.network = urlConfig.network;
                 this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
@@ -131,14 +126,17 @@ export const useAppStore = defineStore('app', {
                         link,
                     };
                 });
-
                 if (this.hasBeamPackage) this.addBeamNavigation();
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
+                this.loggedIn = true;
+                if (this.isMultiTenant && this.loggedIn) await this.getUser();
+
                 return await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
+                this.clearLogin();
             }
 
             return false;
@@ -146,23 +144,34 @@ export const useAppStore = defineStore('app', {
         async setupAccount({ url, authorization_token }: { url: URL; authorization_token: string }) {
             this.url = url;
             this.authorization_token = authorization_token;
-            this.config.authorization_token = authorization_token;
-            this.loggedIn = true;
 
             return await this.init();
         },
         setConfig() {
-            if (appConfig?.url) this.config.url = parseConfigURL(appConfig.url);
-            else if (window?.bootstrap?.hostname) this.config.url = parseConfigURL(window.location.origin);
-            else this.config.url = this.url;
+            if (appConfig?.tenant) {
+                this.config.tenant = appConfig.tenant === 'true';
+            }
 
-            if (appConfig?.authorization_token?.length) this.config.authorization_token = appConfig.authorization_token;
-            else this.config.authorization_token = this.authorization_token;
+            if (appConfig?.url) {
+                this.config.url = parseConfigURL(appConfig.url);
+            } else if (window?.bootstrap?.hostname) {
+                this.config.url = parseConfigURL(window.location.origin);
+            } else {
+                this.config.url = this.url;
+            }
 
-            if (appConfig?.tenant) this.config.tenant = appConfig.tenant;
+            if (!this.config.tenant && appConfig?.authorization_token?.length) {
+                this.config.authorization_token = appConfig.authorization_token;
+            } else if (!this.config.tenant) {
+                this.config.authorization_token = this.authorization_token;
+            }
 
-            if (appConfig.websocket.length) this.config.webSocket = appConfig.websocket;
-            if (appConfig.channel.length) this.config.channel = appConfig.channel;
+            if (appConfig.websocket.length) {
+                this.config.webSocket = appConfig.websocket;
+            }
+            if (appConfig.channel.length) {
+                this.config.channel = appConfig.channel;
+            }
         },
         async checkURL(url: URL) {
             try {
@@ -431,7 +440,7 @@ export const useAppStore = defineStore('app', {
                 return state.loggedIn && state.user?.apiTokens?.length > 0 && state.user?.account;
             }
 
-            return state.loggedIn && state.config.url && state.config.authorization_token.length > 0;
+            return state.loggedIn && state.config.url;
         },
         isMultiTenant(state: AppState) {
             return state.config.tenant;

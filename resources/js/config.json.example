@@ -3,6 +3,6 @@
     "authorization_token": "AUTHORIZATION_TOKEN_VALUE",
     "route": "ROUTE_VALUE",
     "tenant": "MULTI_TENANCY_VALUE",
-    "websocket": "WEBSOCKET_URL_VALUE",
+    "websocket": "WEBSOCKET_VALUE",
     "channel": "WEBSOCKET_CHANNEL_VALUE"
 }
