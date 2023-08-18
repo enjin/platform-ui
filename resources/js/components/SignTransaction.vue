@@ -5,9 +5,10 @@
     </Btn>
     <Modal :is-open="showAccountsModal" :close="closeModal" width="max-w-lg">
         <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center">
-            Select an account to sign
+            Select an account to sign the transaction
         </DialogTitle>
         <div class="flex flex-col space-y-2 mt-4">
+            <div>Transaction fee: {{ feeCost }}</div>
             <div
                 v-for="account in useAppStore().accounts"
                 :key="account.address"
@@ -32,6 +33,7 @@ import Btn from './Btn.vue';
 import Modal from './Modal.vue';
 import { addressShortHex } from '~/util/address';
 import { useAppStore } from '~/store';
+import { useTransactionStore } from '~/store/transaction';
 import { ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
@@ -45,10 +47,25 @@ const emit = defineEmits(['success']);
 
 const isLoading = ref(false);
 const showAccountsModal = ref(false);
+const feeCost = ref(0);
+
+const appStore = useAppStore();
+const transactionStore = useTransactionStore();
 
 const signTransaction = async () => {
-    useAppStore().getAccounts();
-    showAccountsModal.value = true;
+    try {
+        if (!appStore.provider) {
+            snackbar.error({ title: 'Please connect your wallet to sign' });
+            return;
+        }
+        appStore.getAccounts();
+        await transactionStore.init();
+        feeCost.value = await transactionStore.getTransactionCost(props.transaction);
+        showAccountsModal.value = true;
+    } catch (e) {
+        console.log(e)
+        snackbar.error({ title: 'Failed to sign transaction' });
+    }
 };
 
 const closeModal = () => {
@@ -58,9 +75,9 @@ const closeModal = () => {
 const selectAccount = async (account) => {
     try {
         isLoading.value = true;
-        useAppStore().setAccount(account);
+        appStore.setAccount(account);
         showAccountsModal.value = false;
-        const res = await useAppStore().signTransaction(props.transaction);
+        const res = await transactionStore.signTransaction(props.transaction);
         if (res) {
             emit('success');
         }

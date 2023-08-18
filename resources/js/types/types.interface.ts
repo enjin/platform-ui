@@ -25,6 +25,10 @@ export interface AppState {
     accounts: any;
 }
 
+export interface TransactionState {
+    api: any;
+}
+
 export interface NotificationsState {
     notifications: NotificationInfo[];
 }

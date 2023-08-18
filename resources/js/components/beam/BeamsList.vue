@@ -169,7 +169,7 @@ import Slideover from '~/components/Slideover.vue';
 import debounce from 'lodash/debounce';
 import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
-import { CodeType } from '~/types/types.enums';
+import { CodeType, TransactionState } from '~/types/types.enums';
 import { shortCode } from '~/util/address';
 import NoItems from '~/components/NoItems.vue';
 import Btn from '~/components/Btn.vue';
@@ -421,7 +421,7 @@ const openTransactionSlide = async (transactionId: string) => {
     if (modalSlide.value) closeModalSlide();
 
     setTimeout(() => {
-        openModalSlide('DetailsTransactionSlideover', { transactionId });
+        openModalSlide('DetailsTransactionSlideover', { id: transactionId, state: TransactionState.PENDING });
     }, 600);
 };
 
