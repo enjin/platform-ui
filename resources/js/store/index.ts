@@ -10,10 +10,6 @@ import { wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
 import { getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
-import { ApiPromise, WsProvider } from '@polkadot/api';
-import { SignerPayloadJSON } from '@polkadot/types/types';
-import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
-
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -78,6 +74,10 @@ export const useAppStore = defineStore('app', {
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
                 if (this.isMultiTenant && this.loggedIn) await this.getUser();
+
+                if (!this.isMultiTenant && this.config.url && this.config.authorization_token) {
+                    this.loggedIn = true;
+                }
 
                 return await this.fetchCollectionIds();
             } catch (error: any) {
@@ -287,7 +287,7 @@ export const useAppStore = defineStore('app', {
                 this.provider = 'polkadot.js';
             }
         },
-       
+
         async disconnectWallet() {
             try {
                 if (this.provider === 'wc') {

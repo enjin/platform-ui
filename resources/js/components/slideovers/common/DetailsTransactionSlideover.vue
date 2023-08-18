@@ -172,6 +172,11 @@ const isAddressKey = (key) => ['who', 'operator', 'account', 'owner'].includes(k
 
 const getTransaction = async () => {
     try {
+        if (props.item?.state === TransactionState.FINALIZED) {
+            transaction.value = props.item;
+            return;
+        }
+
         isLoading.value = true;
         const res = await TransactionApi.getTransaction(props.item?.id ?? '');
         transaction.value = DTOTransactionFactory.forTransaction(res);
@@ -179,7 +184,6 @@ const getTransaction = async () => {
             emit('update', transaction.value);
         }
     } catch (error) {
-        console.log(error);
         // Do notihing
     }
     isLoading.value = false;

@@ -6,6 +6,8 @@ import { TransactionApi } from '~/api/transaction';
 import { formatData, snackbarErrors } from '~/util';
 import snackbar from '~/util/snackbar';
 import { SignerPayloadJSON } from '@polkadot/types/types';
+import { markRaw } from 'vue';
+import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -18,19 +20,20 @@ export const useTransactionStore = defineStore('transaction', {
     }),
     actions: {
         async init() {
+            if (this.api) {
+                return;
+            }
+
             const provider = new WsProvider(RPC_URLS[useAppStore().config.network]);
             const api = await ApiPromise.create({ provider });
-            console.log(api)
+            this.api = markRaw(api);
         },
-        async getExtrinsicData(transaction: any, address: string) {
-            console.log('here');
-            console.log(address);
+        async getExtrinsicData(transaction: any, address: string, api: any) {
             const [genesisHash, currentBlock, runtime, account] = await Promise.all([
-                this.api.rpc.chain.getBlockHash(0),
-                this.api.rpc.chain.getBlock(),
-                this.api.rpc.state.getRuntimeVersion(),
-                // @ts-ignore
-                <AccountInfoWithTripleRefCount>this.api.query.system.account(address),
+                api.rpc.chain.getBlockHash(0),
+                api.rpc.chain.getBlock(),
+                api.rpc.state.getRuntimeVersion(),
+                <AccountInfoWithTripleRefCount>api.query.system.account(address),
             ]);
 
             // This is the call that comes from the platform transactions 'encodedCall'
@@ -49,12 +52,12 @@ export const useTransactionStore = defineStore('transaction', {
                 genesisHash: genesis,
                 method: call,
                 nonce: account.nonce.toHex(),
-                signedExtensions: this.api.registry.signedExtensions,
+                signedExtensions: api.registry.signedExtensions,
                 tip: '0x00',
                 version: 4,
             };
 
-            const extrinsic = this.api.registry.createType(
+            const extrinsic = api.registry.createType(
                 'Extrinsic',
                 { method: payloadToSign.method },
                 { version: payloadToSign.version }
@@ -67,20 +70,19 @@ export const useTransactionStore = defineStore('transaction', {
             };
         },
         async getTransactionCost(transaction: any) {
-            const { extrinsic } = await this.getExtrinsicData(transaction, useAppStore().accounts[0].address);
-            console.log('here 1');
+            const { extrinsic } = await this.getExtrinsicData(transaction, useAppStore().accounts[0].address, this.api);
 
             const paymentInfo = await this.api.tx[extrinsic.method.section]
                 [extrinsic.method.method](...extrinsic.method.args)
                 .paymentInfo(useAppStore().accounts[0].address);
 
-            console.log('here 2');
             return paymentInfo.partialFee.toHuman();
         },
         async signTransaction(transaction: any) {
             const { extrinsic, payloadToSign, currentBlock } = await this.getExtrinsicData(
                 transaction,
-                useAppStore().account.address
+                useAppStore().account.address,
+                this.api
             );
 
             const { signature } = await useAppStore().account.signer.signPayload(payloadToSign);
