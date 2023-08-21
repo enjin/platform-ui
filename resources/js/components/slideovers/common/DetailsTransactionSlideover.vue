@@ -1,39 +1,44 @@
 <template>
     <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">
-            Transaction Details for {{ item?.transactionId ?? item?.id }}
+            Transaction Details for {{ transaction?.transactionId ?? transaction?.id }}
         </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="px-4 sm:px-6 divide-y divide-gray-200">
                     <div>
-                        <div v-if="!webSocketEvents && !transaction?.state">
-                            <LoadingCircle :size="40" class="pt-10" />
-                            <p class="text-center pt-2">Waiting for transaction...</p>
-                        </div>
-                        <div
-                            v-else-if="webSocketEvents || transaction.state !== TransactionState.FINALIZED"
-                            class="py-4"
-                        >
-                            <div class="space-y-2 pt-2 pb-2" v-for="(event, idx) in webSocketEvents" :key="idx">
-                                <dt class="text-base font-medium text-gray-500">{{ event.title }}</dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ event.value }}</dd>
+                        <template v-if="transaction?.state === TransactionState.PENDING">
+                            <div class="flex justify-center py-4">
+                                <SignTransaction :transaction="transaction" @success="signedTransaction" />
                             </div>
+                        </template>
 
-                            <Btn
-                                v-if="transaction?.state !== TransactionState.FINALIZED"
-                                class="!mx-auto !flex"
-                                primary
-                                :loading="isLoading"
-                                :disabled="isLoading"
-                                @click="getTransaction"
-                            >
-                                Get More Transaction Details
-                            </Btn>
-                            <div class="text-xs text-center mx-auto mt-4">
-                                Usually it takes few seconds to finilize the transaction
+                        <template v-if="transaction?.state !== TransactionState.FINALIZED">
+                            <div v-if="!webSocketEvents && webSocket">
+                                <LoadingCircle :size="40" class="pt-10" />
+                                <p class="text-center py-4">Waiting for the transaction details...</p>
                             </div>
-                        </div>
+                            <div v-else-if="webSocketEvents" class="py-4">
+                                <div class="space-y-2 pt-2 pb-2" v-for="(event, idx) in webSocketEvents" :key="idx">
+                                    <dt class="text-base font-medium text-gray-500">{{ event.title }}</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ event.value }}</dd>
+                                </div>
+
+                                <Btn
+                                    v-if="transaction?.state !== TransactionState.FINALIZED"
+                                    class="!mx-auto !flex"
+                                    primary
+                                    :loading="isLoading"
+                                    :disabled="isLoading"
+                                    @click="getTransaction"
+                                >
+                                    Get More Transaction Details
+                                </Btn>
+                                <div class="text-xs text-center mx-auto mt-4" v-if="!webSocketEvents.length">
+                                    Usually it takes few seconds to finilize the transaction
+                                </div>
+                            </div>
+                        </template>
                     </div>
 
                     <div v-if="transaction" class="animate-fade-in" as="div">
@@ -69,8 +74,8 @@
                             </dd>
                         </div>
 
-                        <h3 class="text-xl font-semibold pt-4 text-gray-900" v-if="events.length">Events</h3>
-                        <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="events.length">
+                        <h3 class="text-xl font-semibold pt-4 text-gray-900" v-if="events?.length">Events</h3>
+                        <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="events?.length">
                             <div class="" v-for="event in events" :key="event">
                                 <div class="space-y-2 pt-4 pb-3">
                                     <dt class="text-base font-medium text-gray-500">Event ID</dt>
@@ -91,7 +96,7 @@
                             </div>
                         </div>
 
-                        <template v-if="useAppStore().advanced && advancedEvents.length">
+                        <template v-if="useAppStore().advanced && advancedEvents?.length">
                             <h3 class="text-xl font-semibold pt-4 text-gray-900">Advanced Events</h3>
                             <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="advancedEvents.length">
                                 <div class="" v-for="event in advancedEvents" :key="event">
@@ -122,13 +127,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { TransactionApi } from '~/api/transaction';
 import Address from '~/components/Address.vue';
 import Btn from '~/components/Btn.vue';
 import CopyTextIcon from '~/components/CopyTextIcon.vue';
 import LoadingCircle from '~/components/LoadingCircle.vue';
+import SignTransaction from '~/components/SignTransaction.vue';
 import TransactionResultChip from '~/components/TransactionResultChip.vue';
+import { DTOTransactionFactory } from '~/factory/transaction';
 import { useAppStore } from '~/store';
 import { TransactionState } from '~/types/types.enums';
 
@@ -165,12 +172,16 @@ const isAddressKey = (key) => ['who', 'operator', 'account', 'owner'].includes(k
 
 const getTransaction = async () => {
     try {
+        if (props.item?.state === TransactionState.FINALIZED) {
+            transaction.value = props.item;
+            return;
+        }
+
         isLoading.value = true;
-        const res = await TransactionApi.getTransaction(props.item?.transactionId ?? props.item?.id ?? '');
-        const transactionData = res.data.GetTransaction;
-        transaction.value = transactionData;
-        if (transactionData.state === TransactionState.FINALIZED) {
-            emit('update', transactionData);
+        const res = await TransactionApi.getTransaction(props.item?.id ?? '');
+        transaction.value = DTOTransactionFactory.forTransaction(res);
+        if (transaction.value.state === TransactionState.FINALIZED) {
+            emit('update', transaction.value);
         }
     } catch (error) {
         // Do notihing
@@ -187,7 +198,6 @@ const parseWSMessage = (e) => {
                 value,
             };
         });
-        webSocket.value.close();
     }
 };
 
@@ -199,7 +209,7 @@ const connectWebSocket = () => {
         const payload = {
             event: 'pusher:subscribe',
             data: {
-                channel: appStore.user?.account,
+                channel: 'platform',
             },
         };
         webSocket.value.send(JSON.stringify(payload));
@@ -210,17 +220,32 @@ const connectWebSocket = () => {
     };
 };
 
+const closeWebSocket = () => {
+    webSocket.value?.close();
+};
+
+const signedTransaction = () => {
+    transaction.value.state = TransactionState.BROADCAST;
+};
+
 (async () => {
-    if (props.item?.id) {
-        transaction.value = props.item;
-    } else {
-        connectWebSocket();
-        setTimeout(() => {
-            if (!webSocketEvents.value) {
-                if (webSocket.value) webSocket.value.close();
-                getTransaction();
-            }
-        }, 25000);
-    }
+    await getTransaction();
+    setTimeout(() => {
+        if (!webSocketEvents.value) {
+            if (webSocket.value) webSocket.value.close();
+            getTransaction();
+        }
+    }, 25000);
 })();
+
+watch(
+    () => transaction.value?.state,
+    () => {
+        if (transaction.value.state === TransactionState.BROADCAST) {
+            connectWebSocket();
+        } else if (transaction.value.state === TransactionState.FINALIZED) {
+            closeWebSocket();
+        }
+    }
+);
 </script>

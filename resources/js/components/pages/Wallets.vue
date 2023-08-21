@@ -97,6 +97,7 @@ import { formatData, snackbarErrors } from '~/util';
 import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
 import NoItems from '~/components/NoItems.vue';
+import { TransactionState } from '~/types/types.enums';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -215,7 +216,7 @@ const openTransactionSlide = async (transactionId: string) => {
     if (modalSlide.value) closeModalSlide();
 
     setTimeout(() => {
-        openModalSlide('DetailsTransactionSlideover', { transactionId });
+        openModalSlide('DetailsTransactionSlideover', { id: transactionId, state: TransactionState.PENDING });
     }, 600);
 };
 

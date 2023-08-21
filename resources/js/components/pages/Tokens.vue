@@ -123,7 +123,7 @@ import LoadingContent from '~/components/LoadingContent.vue';
 import Slideover from '~/components/Slideover.vue';
 import debounce from 'lodash/debounce';
 import { formatTokens, snackbarErrors } from '~/util';
-import { TokenIdSelectType } from '~/types/types.enums';
+import { TokenIdSelectType, TransactionState } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
@@ -302,7 +302,7 @@ const openTransactionSlide = async (transactionId: string) => {
     if (modalSlide.value) closeModalSlide();
 
     setTimeout(() => {
-        openModalSlide('DetailsTransactionSlideover', { transactionId });
+        openModalSlide('DetailsTransactionSlideover', { id: transactionId, state: TransactionState.PENDING });
     }, 600);
 };
 

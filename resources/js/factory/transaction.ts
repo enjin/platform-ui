@@ -25,9 +25,6 @@ export class DTOTransactionFactory {
     public static forTransaction(transactionData: any): any {
         const transaction = transactionData.data.GetTransaction;
 
-        return {
-            items: [DTOTransactionFactory.buildTransaction(transaction)],
-            cursor: null,
-        };
+        return DTOTransactionFactory.buildTransaction(transaction);
     }
 }

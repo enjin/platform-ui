@@ -115,6 +115,7 @@ import NoItems from '~/components/NoItems.vue';
 import { FuelTankApi } from '~/api/fueltank';
 import { formatData } from '~/util';
 import Btn from '../Btn.vue';
+import { TransactionState } from '~/types/types.enums';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -288,7 +289,7 @@ const openTransactionSlide = async (transactionId: string) => {
     if (modalSlide.value) closeModalSlide();
 
     setTimeout(() => {
-        openModalSlide('DetailsTransactionSlideover', { transactionId });
+        openModalSlide('DetailsTransactionSlideover', { id: transactionId, state: TransactionState.PENDING });
     }, 600);
 };
 

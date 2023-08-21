@@ -1,20 +1,29 @@
 export default `query GetTransaction($id: BigInt!) {
     GetTransaction(id: $id) {
         id
-        method
+        wallet {
+          account {
+            publicKey
+          }
+        }
         transactionHash
+        method
         result
         state
         transactionId
+        encodedData
+        signedAtBlock
         events {
-            edges {
+          edges {
             node {
-                params {
+              moduleId
+              eventId
+              params {
                 type
                 value
-                }
+              }
             }
-            }
+          }
         }
     }
 }`;

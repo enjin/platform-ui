@@ -301,8 +301,11 @@ const onSuccess = async (id) => {
             p.result = res.result;
             p.transactionId = res.transactionId;
         }
+
         return p;
     });
+
+    openModalSlide('DetailsTransactionSlideover', res);
 };
 
 const getTransaction = async (id) => {

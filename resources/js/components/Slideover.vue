@@ -22,6 +22,10 @@
                                     @close="emit('close')"
                                     @update="($event) => emit('update', $event)"
                                 />
+                                <XMarkIcon
+                                    class="absolute top-0 right-0 w-6 h-6 mt-4 mr-6 text-black cursor-pointer hover:text-gray-500 transition-all"
+                                    @click="emit('close')"
+                                />
                             </DialogPanel>
                         </TransitionChild>
                     </div>
@@ -33,6 +37,7 @@
 
 <script setup lang="ts">
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import { XMarkIcon } from '@heroicons/vue/20/solid';
 import { defineAsyncComponent, shallowRef, watch } from 'vue';
 
 const emit = defineEmits(['close', 'update']);
@@ -53,7 +58,7 @@ const props = withDefaults(
 
 const loadComponent = () => {
     component.value = defineAsyncComponent({
-        loader: () => import(`~/components/slideovers/${props.item.componentPath}/${props.item.componentName}.vue`),
+        loader: () => import(`~/components/slideovers/${props.item?.componentPath}/${props.item?.componentName}.vue`),
         timeout: 3000,
         suspensible: false,
     });
