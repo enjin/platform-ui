@@ -93,7 +93,7 @@ const requestReset = async () => {
 };
 
 (async () => {
-    if (appStore.hasValidConfig) {
+    if (appStore.loggedIn) {
         redirectToCollections();
     }
 })();
