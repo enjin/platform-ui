@@ -106,7 +106,7 @@ const resetPassword = async () => {
 
 (async () => {
     email.value = route.query.email as string;
-    if (appStore.hasValidConfig) {
+    if (appStore.loggedIn) {
         redirectToCollections();
     }
 })();

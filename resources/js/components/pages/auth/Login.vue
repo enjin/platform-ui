@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { Form } from 'vee-validate';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '~/store';
 import Btn from '~/components/Btn.vue';
@@ -119,8 +119,15 @@ const checkVerified = () => {
 
 (async () => {
     checkVerified();
-    if (appStore.hasValidConfig) {
+    if (appStore.loggedIn) {
         redirectToCollections();
     }
 })();
+
+watch(
+    () => appStore.hasValidConfig,
+    () => {
+        if (appStore.hasValidConfig) router.push({ name: 'platform.collections' });
+    }
+);
 </script>
