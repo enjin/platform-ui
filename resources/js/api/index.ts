@@ -45,11 +45,11 @@ export class ApiService {
         if (resp.status === 401) {
             useAppStore().clearLogin();
             snackbar.error({ title: 'Unauthorized', text: 'Session expired, try to sign in again' });
-            return { field: 'Error', message: 'Unauthorized' };
+            throw { field: 'Error', message: 'Unauthorized' };
         }
 
         if (resp.status >= 400 && resp.status < 600) {
-            return resp as unknown as Error;
+            throw resp as unknown as Error;
         }
 
         return resp.json();
