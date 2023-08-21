@@ -54,7 +54,7 @@ export const dateRequiredSchema = yup.date().required();
 
 export const numberRequiredSchema = yup.number().required();
 
-export const numberNotRequiredSchema = yup.number().nullable();
+export const numberNotRequiredSchema = yup.number().nullable().notRequired();
 
 export const booleanRequiredSchema = yup.boolean().required();
 

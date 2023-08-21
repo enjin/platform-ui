@@ -5,7 +5,7 @@ export class DTOFuelTankFactory {
         return {
             ...fueltank,
             owner: publicKeyToAddress(fueltank.owner.account.publicKey),
-            tankId: publicKeyToAddress(fueltank.tankId.publicKey),
+            tankId: fueltank.tankId.publicKey,
         };
     }
 

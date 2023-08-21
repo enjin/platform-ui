@@ -61,7 +61,7 @@ const props = withDefaults(
         description?: string;
         type?: string;
         min?: number;
-        modelValue?: number | string;
+        modelValue?: number | string | null;
         disabled?: boolean;
         prefix?: string;
         name: string;
