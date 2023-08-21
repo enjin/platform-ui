@@ -53,6 +53,9 @@ export const useAppStore = defineStore('app', {
             try {
                 this.setConfig();
                 if (!this.config.url) return false;
+                if (!this.isMultiTenant && !this.config.authorization_token.length) {
+                    return false;
+                }
 
                 const urlConfig = await this.checkURL(this.config.url);
                 this.config.network = urlConfig.network;
@@ -73,11 +76,8 @@ export const useAppStore = defineStore('app', {
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
+                this.loggedIn = true;
                 if (this.isMultiTenant && this.loggedIn) await this.getUser();
-
-                if (!this.isMultiTenant && this.config.url && this.config.authorization_token) {
-                    this.loggedIn = true;
-                }
 
                 return await this.fetchCollectionIds();
             } catch (error: any) {
