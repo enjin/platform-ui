@@ -119,7 +119,7 @@ const checkVerified = () => {
 
 (async () => {
     checkVerified();
-    if (appStore.hasValidConfig) {
+    if (appStore.loggedIn) {
         redirectToCollections();
     }
 })();
