@@ -50,6 +50,9 @@
                             description="The dispatch rule options."
                             required
                         />
+                        <template v-if="actionType === 'add'">
+                            <DispatchRuleForm v-model="dispatchRule" is-modal :can-save="false" />
+                        </template>
                         <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
@@ -59,9 +62,6 @@
                             tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
                             readmore="Idempotency Key"
                         />
-                        <template v-if="actionType === 'add'">
-                            <DispatchRuleForm v-model="dispatchRule" is-modal :can-save="false" />
-                        </template>
                     </div>
                 </div>
             </div>

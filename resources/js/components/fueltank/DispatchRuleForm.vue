@@ -87,9 +87,9 @@
 
                         <FormInput
                             v-model="maxFuelBurnPerTransaction"
-                            name="claimQuantity"
-                            label="Claim Quantity"
-                            description="The total amount of times each token ID can be claimed. This is mainly relevant for fungible tokens, where you can specify that there are a certain amount of claims for a token ID, e.g. 10 individual claims to receive 1 token with ID 123 per claim."
+                            name="maxFuelBurnPerTransaction"
+                            label="Max Fuel Burn Per Transaction"
+                            description="The maximum amount of fuel can be used per transaction."
                             type="number"
                         />
 
@@ -138,9 +138,6 @@
                                 />
                             </div>
                         </div>
-                        <div v-if="canSave" class="flex flex-col">
-                            <Btn primary @click="emit('close')"> Save </Btn>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -156,7 +153,6 @@ import FormInput from '~/components/FormInput.vue';
 import { formatData, formatToken, parseFormatedTokenId } from '~/util';
 import { TokenIdSelectType } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
-import Btn from '../Btn.vue';
 import FormList from '../FormList.vue';
 import { formatWhitelistedCallers, formatWhitelistedCollections } from '~/util';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
@@ -168,10 +164,8 @@ const props = withDefaults(
     defineProps<{
         modelValue: DispatchRulesValuesInterface;
         isModal?: boolean;
-        canSave?: boolean;
     }>(),
     {
-        canSave: true,
         isModal: false,
     }
 );
@@ -188,11 +182,11 @@ const tokenId = ref(
 const whitelistedCollections = ref(
     formatWhitelistedCollections(props.modelValue.whitelistedCollections) ?? [{ collection: '' }]
 );
-const maxFuelBurnPerTransaction = ref(props.modelValue.maxFuelBurnPerTransaction ?? '');
-const userFuelAmount = ref(props.modelValue.userFuelBudget?.amount ?? '');
-const userFuelresetPeriod = ref(props.modelValue.userFuelBudget?.resetPeriod ?? '');
-const tankFuelAmount = ref(props.modelValue.tankFuelBudget?.amount ?? '');
-const tankFuelresetPeriod = ref(props.modelValue.tankFuelBudget?.resetPeriod ?? '');
+const maxFuelBurnPerTransaction = ref(props.modelValue.maxFuelBurnPerTransaction ?? null);
+const userFuelAmount = ref(props.modelValue.userFuelBudget?.amount ?? null);
+const userFuelresetPeriod = ref(props.modelValue.userFuelBudget?.resetPeriod ?? null);
+const tankFuelAmount = ref(props.modelValue.tankFuelBudget?.amount ?? null);
+const tankFuelresetPeriod = ref(props.modelValue.tankFuelBudget?.resetPeriod ?? null);
 
 const validForm = computed(() => formRef.value.getMeta().valid);
 
@@ -205,7 +199,7 @@ const validation = yup.object({
     collectionId: stringNotRequiredSchema,
     tokenId: stringNotRequiredSchema,
     whitelistedCollections: stringNotRequiredSchema,
-    maxFuelBurnPerTransaction: numberNotRequiredSchema,
+    maxFuelBurnPerTransaction: numberNotRequiredSchema.typeError('Max Fuel Burn Per Transaction must be a number'),
     userFuelAmount: numberNotRequiredSchema.typeError('User Fuel Amount must be a number'),
     userFuelresetPeriod: numberNotRequiredSchema.typeError('User Fuel Reset Period must be a number'),
     tankFuelAmount: numberNotRequiredSchema.typeError('Tank Fuel Amount must be a number'),
