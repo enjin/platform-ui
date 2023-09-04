@@ -77,12 +77,14 @@ const setupAccount = async () => {
         const parsedUrl = new URL(url.value);
         if (!(await appStore.checkURL(parsedUrl))) return;
 
-        if (
-            await appStore.setupAccount({
-                url: parsedUrl,
-                authorization_token: authorizationToken.value,
-            })
-        ) {
+        await appStore.setupAccount({
+            url: parsedUrl,
+            authorization_token: authorizationToken.value,
+        });
+
+        if (appStore.isMultiTenant) {
+            router.push({ name: 'platform.auth.login' });
+        } else {
             redirectToCollections();
         }
     } catch (e: any) {
@@ -93,7 +95,7 @@ const setupAccount = async () => {
 };
 
 (async () => {
-    if (appStore.hasValidConfig) redirectToCollections();
+    if (appStore.loggedIn) redirectToCollections();
     url.value = appStore.config.url as URL;
 })();
 

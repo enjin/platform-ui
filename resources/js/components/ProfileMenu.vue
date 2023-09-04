@@ -12,7 +12,7 @@
             </div>
             <ScaleTransition>
                 <MenuItems
-                    v-if="appStore.hasValidConfig"
+                    v-if="appStore.loggedIn"
                     class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
                 >
                     <div class="px-4 py-2" v-if="appStore.user">
@@ -29,10 +29,10 @@
                             :address="appStore.user?.account"
                         />
                     </div>
-                    <div class="px-4 py-2" v-if="appStore.config.hostname">
-                        <p class="text-sm text-gray-500">Hostname</p>
+                    <div class="px-4 py-2" v-if="appStore.config.url">
+                        <p class="text-sm text-gray-500">URL</p>
                         <p class="truncate text-sm font-medium text-gray-900">
-                            {{ appStore.config.hostname }}
+                            {{ appStore.config.url }}
                         </p>
                     </div>
                     <div class="px-4 py-2" v-if="appStore.config.network">

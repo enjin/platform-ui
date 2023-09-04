@@ -125,9 +125,9 @@ const checkVerified = () => {
 })();
 
 watch(
-    () => appStore.hasValidConfig,
+    () => appStore.loggedIn,
     () => {
-        if (appStore.hasValidConfig) router.push({ name: 'platform.collections' });
+        if (appStore.loggedIn) router.push({ name: 'platform.collections' });
     }
 );
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex flex-row">
-        <SideNavbar v-if="appStore.loggedIn" />
+        <SideNavbar v-if="appStore.hasValidConfig" />
         <SnackbarGroup />
 
         <div class="flex flex-col w-full overflow-hidden">
