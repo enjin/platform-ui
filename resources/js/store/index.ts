@@ -29,6 +29,7 @@ export const useAppStore = defineStore('app', {
             tenant: false,
             webSocket: '',
             channel: '',
+            daemon: '',
         },
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
@@ -77,7 +78,7 @@ export const useAppStore = defineStore('app', {
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
                 this.loggedIn = true;
-                if (this.isMultiTenant && this.loggedIn) await this.getUser();
+                if (this.loggedIn) await this.getUser();
 
                 return await this.fetchCollectionIds();
             } catch (error: any) {
@@ -101,8 +102,8 @@ export const useAppStore = defineStore('app', {
 
             if (appConfig?.url) {
                 this.config.url = parseConfigURL(appConfig.url);
-            } else if (window?.bootstrap?.hostname) {
-                this.config.url = parseConfigURL(window.location.origin);
+            } else if (window?.bootstrap?.url) {
+                this.config.url = parseConfigURL(window?.bootstrap?.url);
             } else {
                 this.config.url = this.url;
             }
@@ -118,6 +119,10 @@ export const useAppStore = defineStore('app', {
             }
             if (appConfig.channel.length) {
                 this.config.channel = appConfig.channel;
+            }
+
+            if (window.bootstrap.daemon) {
+                this.config.daemon = window.bootstrap.daemon;
             }
         },
         async checkURL(url: URL) {

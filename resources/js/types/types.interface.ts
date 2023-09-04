@@ -13,6 +13,7 @@ export interface AppState {
         tenant: boolean;
         webSocket: string;
         channel: string;
+        daemon: string;
     };
     navigations: any[];
     collections: string[];

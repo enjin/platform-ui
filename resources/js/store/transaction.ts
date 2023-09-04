@@ -81,8 +81,11 @@ export const useTransactionStore = defineStore('transaction', {
         },
         async signTransaction(transaction: any) {
             const appStore = useAppStore();
-            if (appStore.user?.account) {
-                if (publicKeyToAddress(appStore.account.address) !== publicKeyToAddress(appStore.user.account)) {
+            if (appStore.user?.account || appStore.config.daemon) {
+                if (
+                    publicKeyToAddress(appStore.account.address) !==
+                    publicKeyToAddress(appStore.user?.account ?? appStore.config.daemon)
+                ) {
                     snackbar.error({
                         title: 'Sign Transaction',
                         text: 'Signing account must be the same as wallet daemon account',
