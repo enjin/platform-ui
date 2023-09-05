@@ -77,7 +77,6 @@ export const useAppStore = defineStore('app', {
                 if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
-                this.loggedIn = true;
                 if (this.loggedIn) await this.getUser();
 
                 return await this.fetchCollectionIds();
@@ -91,7 +90,9 @@ export const useAppStore = defineStore('app', {
         async setupAccount({ url, authorization_token }: { url: URL; authorization_token: string }) {
             this.url = url;
             this.authorization_token = authorization_token;
-            this.loggedIn = true;
+            if (!this.isMultiTenant) {
+                this.loggedIn = true;
+            }
 
             return await this.init();
         },
@@ -163,6 +164,7 @@ export const useAppStore = defineStore('app', {
             return true;
         },
         async login(email: string, password: string) {
+            this.loggedIn = true;
             const res = await AuthApi.login(email, password);
             if (!res.data.Login) throw [{ field: 'Login error', message: 'Invalid credentials' }];
 

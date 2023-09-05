@@ -2,7 +2,7 @@
     <DisclosurePanel
         class="fixed bg-white left-0 right-0 md:hidden divide-y divide-gray-200 shadow-md"
         v-slot="{ close }"
-        v-if="appStore.hasValidConfig"
+        v-if="appStore.loggedIn"
     >
         <div class="space-y-1 py-2 px-4">
             <RouterLink

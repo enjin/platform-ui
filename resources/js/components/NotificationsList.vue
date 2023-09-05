@@ -13,7 +13,7 @@
             <ScaleTransition>
                 <MenuItems
                     class="absolute right-0 z-10 mt-2 w-72 sm:w-80 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
-                    v-if="appStore.hasValidConfig"
+                    v-if="appStore.loggedIn"
                 >
                     <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
                         <MenuItem

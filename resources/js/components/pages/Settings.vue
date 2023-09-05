@@ -48,7 +48,7 @@
                     <div class="">
                         <h1 class="text-xl md:text-2xl">
                             Wallet Account
-                            <span v-if="!appStore.hasValidConfig && !walletAccount" class="text-red-500">&nbsp;*</span>
+                            <span v-if="!appStore.loggedIn && !walletAccount" class="text-red-500">&nbsp;*</span>
                         </h1>
                         <p class="mt-1 text-sm text-gray-500 max-w-3xl">
                             The platform depends on there being a funded wallet daemon account setup and connected to
