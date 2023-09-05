@@ -14,7 +14,7 @@
     <script>
         global = globalThis
         window.__dynamic_base__ = '/vendor/platform-ui/build';
-        window.bootstrap = { hostname: window.location.hostname }
+        window.bootstrap = { url: window.location.origin, daemon: "{{ Enjin\Platform\Support\Account::daemon()['public_key'] }}" }
     </script>
 
 	@vite('resources/js/app.ts', 'vendor/platform-ui/build')

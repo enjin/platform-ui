@@ -8,6 +8,7 @@ import snackbar from '~/util/snackbar';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { markRaw } from 'vue';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
+import { publicKeyToAddress } from '~/util/address';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -79,22 +80,37 @@ export const useTransactionStore = defineStore('transaction', {
             return paymentInfo.partialFee.toHuman();
         },
         async signTransaction(transaction: any) {
+            const appStore = useAppStore();
+            if (appStore.user?.account || appStore.config.daemon) {
+                if (
+                    publicKeyToAddress(appStore.account.address) !==
+                    publicKeyToAddress(appStore.user?.account ?? appStore.config.daemon)
+                ) {
+                    snackbar.error({
+                        title: 'Sign Transaction',
+                        text: 'Signing account must be the same as wallet daemon account',
+                    });
+
+                    return;
+                }
+            }
+
             const { extrinsic, payloadToSign, currentBlock } = await this.getExtrinsicData(
                 transaction,
-                useAppStore().account.address,
+                appStore.account.address,
                 this.api
             );
 
-            const { signature } = await useAppStore().account.signer.signPayload(payloadToSign);
+            const { signature } = await appStore.account.signer.signPayload(payloadToSign);
 
-            extrinsic.addSignature(useAppStore().account.address, signature, payloadToSign);
+            extrinsic.addSignature(appStore.account.address, signature, payloadToSign);
 
             const transactionHash = await this.api.rpc.author.submitExtrinsic(extrinsic.toHex());
 
             return await this.updateTransaction({
                 id: transaction.id,
                 transactionHash: transactionHash.toHex(),
-                signingAccount: useAppStore().account.address,
+                signingAccount: appStore.account.address,
                 signedAtBlock: currentBlock.block.header.number.toNumber(),
             });
         },
