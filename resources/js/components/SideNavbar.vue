@@ -19,14 +19,14 @@
             </div>
             <div class="mt-auto px-2 flex flex-col space-y-2">
                 <a
-                    href="http://docs.enjin.io"
+                    href="https://docs.enjin.io"
                     target="_blank"
                     class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
                 >
                     Documentation
                 </a>
                 <a
-                    href="http://feedback.enjin.io"
+                    href="https://feedback.enjin.io"
                     target="_blank"
                     class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
                 >
