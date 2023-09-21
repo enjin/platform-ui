@@ -8,6 +8,7 @@ import renameBase from './vite-rename-base-plugin';
 
 const path = require('path');
 
+// @ts-ignore
 export default defineConfig({
     define: {
         'process.env': process.env,
