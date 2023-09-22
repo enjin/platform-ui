@@ -2,15 +2,15 @@ import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { u8aToHex, isHex, hexToU8a } from '@polkadot/util';
 import { useAppStore } from '~/store';
 
-const CANARY_NETWORK_ID = 9030;
-const ENJIN_NETWORK_ID = 1110;
+const CANARY_MATRIXCHAIN_ID = 9030;
+const ENJIN_MATRIXCHAIN_ID = 1110;
 
 function getNetworkId(network: string): number {
     switch (network) {
         case 'canary':
-            return CANARY_NETWORK_ID;
+            return CANARY_MATRIXCHAIN_ID;
         default:
-            return ENJIN_NETWORK_ID;
+            return ENJIN_MATRIXCHAIN_ID;
     }
 }
 
