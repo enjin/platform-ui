@@ -12,7 +12,7 @@ import { publicKeyToAddress } from '~/util/address';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
-    polkadot: 'wss://rpc.efinity.io',
+    polkadot: 'wss://rpc.matrix.blockchain.enjin.io',
 };
 
 export const useTransactionStore = defineStore('transaction', {
