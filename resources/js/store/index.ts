@@ -177,6 +177,7 @@ export const useAppStore = defineStore('app', {
             return res.data.Login;
         },
         async logout() {
+            this.loggedIn = false;
             await AuthApi.logout();
             this.clearLogin();
         },
