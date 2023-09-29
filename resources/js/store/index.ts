@@ -122,7 +122,7 @@ export const useAppStore = defineStore('app', {
                 this.config.channel = appConfig.channel;
             }
 
-            if (window.bootstrap.daemon) {
+            if (window.bootstrap?.daemon) {
                 this.config.daemon = window.bootstrap.daemon;
             }
         },
@@ -164,7 +164,6 @@ export const useAppStore = defineStore('app', {
             return true;
         },
         async login(email: string, password: string) {
-            this.loggedIn = true;
             const res = await AuthApi.login(email, password);
             if (!res.data.Login) throw [{ field: 'Login error', message: 'Invalid credentials' }];
 
@@ -173,12 +172,12 @@ export const useAppStore = defineStore('app', {
                 await this.logout();
                 throw [{ field: 'Login error', message: 'Please verify your email address' }];
             }
-
             this.loggedIn = res.data.Login;
 
             return res.data.Login;
         },
         async logout() {
+            this.loggedIn = false;
             await AuthApi.logout();
             this.clearLogin();
         },

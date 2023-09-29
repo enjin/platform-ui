@@ -1,105 +1,111 @@
 <template>
     <div class="px-4 pb-2 sm:px-6 lg:px-8 overflow-y-auto transition-all">
         <div class="mt-4 flow-root">
-            <div class="space-y-6">
-                <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                    <div class="flex justify-between">
-                        <h1 class="text-xl md:text-2xl">
-                            My API Tokens
-                            <span v-if="enableTokenCreate && !tokens.length" class="text-red-500">&nbsp;*</span>
-                        </h1>
-                    </div>
-                    <div class="flex items-end space-x-4">
-                        <FormInput
-                            v-if="enableTokenCreate"
-                            class="sm:w-[300px] flex-1 sm:flex-none"
-                            v-model="tokenName"
-                            name="tokenName"
-                            placeholder="Enter token name"
-                        />
-                        <Btn primary class="py-2.5" @click="createApiToken">
-                            <KeyIcon class="w-4 h-4 mr-2 flex-shrink-0" />
-                            <span class="truncate"> Create New API Token </span>
-                        </Btn>
-                    </div>
-                    <div
-                        class="bg-white p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center"
-                        v-for="token in tokens"
-                        :key="token.name"
-                    >
-                        <div class="flex items-center">
-                            <KeyIcon class="w-5 h-5 mr-4 text-green-500" />
-                            <span class="text-gray-900 mr-4">{{ token.name }}</span>
-                            <span class="text-gray-400 text-sm mt-1">
-                                {{
-                                    token.plainTextToken?.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0) ??
-                                    '*******'
-                                }}
-                                <CopyTextIcon
-                                    v-if="token.plainTextToken"
-                                    :text="token.plainTextToken.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0)"
-                                />
-                            </span>
+            <LoadingCircle class="mt-40" :size="44" v-if="loading" />
+            <template v-else>
+                <div class="space-y-6">
+                    <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
+                        <div class="flex justify-between">
+                            <h1 class="text-xl md:text-2xl">
+                                My API Tokens
+                                <span v-if="enableTokenCreate && !tokens.length" class="text-red-500">&nbsp;*</span>
+                            </h1>
                         </div>
-                        <Btn error @click="revokeToken(token.name)">Revoke</Btn>
+                        <div class="flex items-end space-x-4">
+                            <FormInput
+                                v-if="enableTokenCreate"
+                                class="sm:w-[300px] flex-1 sm:flex-none"
+                                v-model="tokenName"
+                                name="tokenName"
+                                placeholder="Enter token name"
+                            />
+                            <Btn primary class="py-2.5" @click="createApiToken">
+                                <KeyIcon class="w-4 h-4 mr-2 flex-shrink-0" />
+                                <span class="truncate"> Create New API Token </span>
+                            </Btn>
+                        </div>
+                        <div
+                            class="bg-white p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center"
+                            v-for="token in tokens"
+                            :key="token.name"
+                        >
+                            <div class="flex items-center">
+                                <KeyIcon class="w-5 h-5 mr-4 text-green-500" />
+                                <span class="text-gray-900 mr-4">{{ token.name }}</span>
+                                <span class="text-gray-400 text-sm mt-1">
+                                    {{
+                                        token.plainTextToken?.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0) ??
+                                        '*******'
+                                    }}
+                                    <CopyTextIcon
+                                        v-if="token.plainTextToken"
+                                        :text="
+                                            token.plainTextToken.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0)
+                                        "
+                                    />
+                                </span>
+                            </div>
+                            <Btn error @click="revokeToken(token.name)">Revoke</Btn>
+                        </div>
                     </div>
-                </div>
-                <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                    <div class="">
-                        <h1 class="text-xl md:text-2xl">
-                            Wallet Account
-                            <span v-if="!appStore.loggedIn && !walletAccount" class="text-red-500">&nbsp;*</span>
-                        </h1>
-                        <p class="mt-1 text-sm text-gray-500 max-w-3xl">
-                            The platform depends on there being a funded wallet daemon account setup and connected to
-                            the platform and blockchain so it can receive transactions from the platform, sign them on
-                            your behalf and then broadcast them to the network. You can get the latest version of the
-                            wallet daemon from this repository:
-                            <a href="https://github.com/enjin/wallet-daemon" target="_blank" class="text-primary">
-                                https://github.com/enjin/wallet-daemon</a
-                            >
-                            and an overview can be found here:
-                            <a
-                                href="https://docs.enjin.io/enjin-platform/wallet-daemon"
-                                target="_blank"
-                                class="text-primary"
-                            >
-                                https://docs.enjin.io/enjin-platform/wallet-daemon</a
-                            >
-                        </p>
+                    <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
+                        <div class="">
+                            <h1 class="text-xl md:text-2xl">
+                                Wallet Account
+                                <span v-if="!appStore.loggedIn && !walletAccount" class="text-red-500">&nbsp;*</span>
+                            </h1>
+                            <p class="mt-1 text-sm text-gray-500 max-w-3xl">
+                                The platform depends on there being a funded wallet daemon account setup and connected
+                                to the platform and blockchain so it can receive transactions from the platform, sign
+                                them on your behalf and then broadcast them to the network. You can get the latest
+                                version of the wallet daemon from this repository:
+                                <a href="https://github.com/enjin/wallet-daemon" target="_blank" class="text-primary">
+                                    https://github.com/enjin/wallet-daemon</a
+                                >
+                                and an overview can be found here:
+                                <a
+                                    href="https://docs.enjin.io/enjin-platform/wallet-daemon"
+                                    target="_blank"
+                                    class="text-primary"
+                                >
+                                    https://docs.enjin.io/enjin-platform/wallet-daemon</a
+                                >
+                            </p>
+                        </div>
+                        <div class="flex items-end space-x-4">
+                            <FormInput
+                                v-model="walletAccount"
+                                class="sm:w-[300px] flex-1 sm:flex-none"
+                                :class="!enableAccountModify ? 'text-gray-400' : ''"
+                                name="tokenName"
+                                placeholder="Enter wallet account"
+                                :disabled="!enableAccountModify"
+                            />
+                            <Btn primary class="py-2.5" @click="updateWalletAccount">
+                                <PencilIcon class="w-4 h-4 mr-2" />
+                                <span class="truncate">
+                                    {{ enableAccountModify ? 'Update' : 'Edit' }}
+                                </span>
+                            </Btn>
+                        </div>
                     </div>
-                    <div class="flex items-end space-x-4">
-                        <FormInput
-                            v-model="walletAccount"
-                            class="sm:w-[300px] flex-1 sm:flex-none"
-                            :class="!enableAccountModify ? 'text-gray-400' : ''"
-                            name="tokenName"
-                            placeholder="Enter wallet account"
-                            :disabled="!enableAccountModify"
+
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex justify-between">
+                            <h1 class="text-xl md:text-2xl">Settings</h1>
+                        </div>
+                        <FormCheckbox
+                            v-model="advancedMode"
+                            name="advancedMode"
+                            label="Advanced Mode"
+                            description="Enable advanced mode."
+                            readmore="Advanced mode"
                         />
-                        <Btn primary class="py-2.5" @click="updateWalletAccount">
-                            <PencilIcon class="w-4 h-4 mr-2" />
-                            <span class="truncate">
-                                {{ enableAccountModify ? 'Update' : 'Edit' }}
-                            </span>
-                        </Btn>
+                        <Btn v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
+                        <Btn v-else class="mr-auto" error @click="resetSettings"> Reset Settings </Btn>
                     </div>
                 </div>
-                <div class="flex flex-col space-y-4">
-                    <div class="flex justify-between">
-                        <h1 class="text-xl md:text-2xl">Settings</h1>
-                    </div>
-                    <FormCheckbox
-                        v-model="advancedMode"
-                        name="advancedMode"
-                        label="Advanced Mode"
-                        description="Enable advanced mode."
-                        readmore="Advanced mode"
-                    />
-                    <Btn v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
-                    <Btn v-else class="mr-auto" error @click="resetSettings"> Reset Settings </Btn>
-                </div>
-            </div>
+            </template>
         </div>
     </div>
 </template>
@@ -118,6 +124,7 @@ import CopyTextIcon from '../CopyTextIcon.vue';
 import { PencilIcon } from '@heroicons/vue/20/solid';
 import { AuthApi } from '~/api/auth';
 import { addressToPublicKey, isValidAddress, publicKeyToAddress } from '~/util/address';
+import LoadingCircle from '../LoadingCircle.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -127,6 +134,7 @@ const tokenName = ref();
 const walletAccount = ref(publicKeyToAddress(appStore.user?.account));
 const enableTokenCreate = ref(false);
 const enableAccountModify = ref(false);
+const loading = ref(true);
 
 const tokens = computed(() => appStore.user?.apiTokens);
 
@@ -221,8 +229,17 @@ watch(
             walletAccount.value = publicKeyToAddress(appStore.user?.account);
         }
 
-        if (!appStore.user.apiTokens.length) {
+        if (!appStore.user?.apiTokens.length) {
             enableTokenCreate.value = true;
+        }
+    }
+);
+
+watch(
+    () => appStore.user,
+    (userVal) => {
+        if (userVal) {
+            loading.value = false;
         }
     }
 );
