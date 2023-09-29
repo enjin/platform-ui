@@ -221,7 +221,7 @@ watch(
             walletAccount.value = publicKeyToAddress(appStore.user?.account);
         }
 
-        if (!appStore.user.apiTokens.length) {
+        if (!appStore.user?.apiTokens.length) {
             enableTokenCreate.value = true;
         }
     }

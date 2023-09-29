@@ -122,7 +122,7 @@ export const useAppStore = defineStore('app', {
                 this.config.channel = appConfig.channel;
             }
 
-            if (window.bootstrap.daemon) {
+            if (window.bootstrap?.daemon) {
                 this.config.daemon = window.bootstrap.daemon;
             }
         },
@@ -172,7 +172,6 @@ export const useAppStore = defineStore('app', {
                 await this.logout();
                 throw [{ field: 'Login error', message: 'Please verify your email address' }];
             }
-
             this.loggedIn = res.data.Login;
 
             return res.data.Login;
