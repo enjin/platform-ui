@@ -38,6 +38,21 @@
                                     Usually it takes few seconds to finilize the transaction
                                 </div>
                             </div>
+                            <div v-else-if="!webSocket" class="py-4">
+                                <Btn
+                                    v-if="transaction?.state !== TransactionState.FINALIZED"
+                                    class="!mx-auto !flex"
+                                    primary
+                                    :loading="isLoading"
+                                    :disabled="isLoading"
+                                    @click="getTransaction"
+                                >
+                                    Get More Transaction Details
+                                </Btn>
+                                <div class="text-xs text-center mx-auto mt-4">
+                                    Usually it takes few seconds to finilize the transaction
+                                </div>
+                            </div>
                         </template>
                     </div>
 

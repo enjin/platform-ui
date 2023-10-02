@@ -55,7 +55,7 @@ import snackbar from '~/util/snackbar';
 
 const appStore = useAppStore();
 
-const loading = ref(true);
+const loading = ref(false);
 const showAccountsModal = ref(false);
 
 const walletSession = computed(() => appStore.wallet);
@@ -74,24 +74,9 @@ const connectWallet = async (provider: string) => {
     }
 };
 
-const getSession = async () => {
-    try {
-        loading.value = true;
-        await appStore.getSession();
-    } catch (e) {
-        snackbar.error({ title: 'Failed to get session' });
-    } finally {
-        loading.value = false;
-    }
-};
-
 const disconnectWallet = async () => {
     loading.value = true;
     await appStore.disconnectWallet();
     loading.value = false;
 };
-
-(async () => {
-    getSession();
-})();
 </script>
