@@ -78,6 +78,7 @@ export const useAppStore = defineStore('app', {
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
                 if (this.loggedIn) await this.getUser();
+                await this.getSession();
 
                 return await this.fetchCollectionIds();
             } catch (error: any) {
