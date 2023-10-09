@@ -134,7 +134,7 @@ const tokenName = ref();
 const walletAccount = ref(publicKeyToAddress(appStore.user?.account));
 const enableTokenCreate = ref(false);
 const enableAccountModify = ref(false);
-const loading = ref(true);
+const loading = ref(appStore.user ? false : true);
 
 const tokens = computed(() => appStore.user?.apiTokens);
 

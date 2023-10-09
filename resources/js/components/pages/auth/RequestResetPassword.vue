@@ -50,7 +50,6 @@ import * as yup from 'yup';
 import EnjinLogo from '~/components/EnjinLogo.vue';
 import { AuthApi } from '~/api/auth';
 import snackbar from '~/util/snackbar';
-import { snackbarErrors } from '~/util';
 import { ArrowLeftIcon } from '@heroicons/vue/20/solid';
 
 const router = useRouter();
@@ -77,19 +76,12 @@ const requestReset = async () => {
     if (!(await isValid())) return;
 
     isLoading.value = true;
-    try {
-        const res = await AuthApi.requestPasswordReset(email.value);
-        if (res.data.RequestPasswordReset === true) {
-            snackbar.success({ title: 'Password reset link sent', save: false });
-        } else {
-            snackbar.error({ title: 'Error sending password reset link' });
-        }
-    } catch (e) {
-        if (snackbarErrors(e)) return;
-        snackbar.error({ title: 'Error sending password reset link' });
-    } finally {
-        isLoading.value = false;
-    }
+    await AuthApi.requestPasswordReset(email.value);
+    snackbar.success({
+        title: "If an account with this email exists, you'll receive an email shortly with information on resetting your password.",
+        save: false,
+    });
+    isLoading.value = false;
 };
 
 (async () => {
