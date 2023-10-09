@@ -20,6 +20,17 @@
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
                             ]"
+                            @click="connectWallet('wc')"
+                        >
+                            Enjin Wallet
+                        </button>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                        <button
+                            :class="[
+                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                'block px-4 py-2 text-sm w-full text-center transition-all',
+                            ]"
                             @click="connectWallet('polkadot.js')"
                         >
                             Polkadot.JS

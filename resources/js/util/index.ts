@@ -139,7 +139,7 @@ export const shortString = (str: string, length = 10) => {
     return `${str.substring(0, length)}...`;
 };
 
-export const wcProjectId = 'a4b92f550ab3039f7e084a879882bc96';
+const wcProjectId = 'a4b92f550ab3039f7e084a879882bc96';
 
 export const wcRequiredNamespaces = {
     polkadot: {
