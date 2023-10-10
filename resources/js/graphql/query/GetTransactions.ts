@@ -27,6 +27,8 @@ export default `query GetTransactions($idempotencyKeys: [String], $ids: [BigInt!
           method
           result
           state
+          fee
+          deposit
           transactionId
           encodedData
           signedAtBlock

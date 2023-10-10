@@ -10,6 +10,8 @@ export default `query GetTransaction($id: BigInt!) {
         method
         result
         state
+        fee
+        deposit
         transactionId
         encodedData
         signedAtBlock

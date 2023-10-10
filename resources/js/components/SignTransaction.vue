@@ -8,11 +8,11 @@
             Select an account to sign the transaction
         </DialogTitle>
         <div class="flex flex-col space-y-2 mt-4 relative">
-            <div class="inline-flex space-x-2">
+            <div class="inline-flex space-x-2 mb-2">
                 <span> Transaction fee: </span>
                 <LoadingCircle v-if="loadingApi" :size="20" class="my-auto text-primary" />
                 <span v-else class="font-bold animate-fade-in">
-                    {{ feeCost }}
+                    {{ `${feeCost} ENJ` }}
                 </span>
             </div>
             <div v-if="loadingApi" class="py-20 animate-fade-in">
@@ -52,6 +52,7 @@ import { ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
 import Identicon from './Identicon.vue';
+import { formatPriceFromENJ } from '~/util';
 
 const props = defineProps<{
     transaction: any;
@@ -78,7 +79,7 @@ const signTransaction = async () => {
         loadingApi.value = true;
         appStore.getAccounts();
         await transactionStore.init();
-        feeCost.value = await transactionStore.getTransactionCost(props.transaction);
+        feeCost.value = formatPriceFromENJ(props.transaction.fee)?.toFixed(5);
         loadingApi.value = false;
     } catch (e) {
         snackbar.error({ title: 'Failed to sign transaction' });
