@@ -240,7 +240,7 @@ export const useAppStore = defineStore('app', {
             if (this.provider === 'wc') {
                 const walletConnect = this.getWeb3Modal();
                 const session = await walletConnect.getSession();
-                if (session && !session.acknowledged) {
+                if (session && session.acknowledged) {
                     this.wallet = true;
                 }
 

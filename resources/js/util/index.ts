@@ -154,7 +154,7 @@ export const wcOptions: WalletConnectModalSignOptions = {
     metadata: getAppMetadata(),
     modalOptions: {
         themeMode: 'light',
-        explorerRecommendedWalletIds: ['bdc9433ffdaee55d31737d83b931caa1f17e30666f5b8e03eea794bac960eb4a'],
+        explorerRecommendedWalletIds: ['210cd0946d2b026755635b95761c0570e817ade3f3052a0c6d273dba7ba47aff'],
         enableExplorer: true,
         walletImages: {},
         themeVariables: {
