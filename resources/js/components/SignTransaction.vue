@@ -33,7 +33,7 @@
                         </span>
                     </div>
                 </div>
-                <div v-if="!useAppStore().accounts.length" class="text-center">
+                <div v-if="!useAppStore().accounts?.length" class="text-center">
                     <span class="text-sm text-gray-500"> No accounts found. Please connect your wallet. </span>
                 </div>
             </div>
@@ -94,7 +94,7 @@ const closeModal = () => {
 const selectAccount = async (account) => {
     try {
         isLoading.value = true;
-        appStore.setAccount(account);
+        await appStore.setAccount(account);
         showAccountsModal.value = false;
         const res = await transactionStore.signTransaction(props.transaction);
         if (res) {

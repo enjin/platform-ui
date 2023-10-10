@@ -8,11 +8,20 @@ import { CollectionApi } from '~/api/collection';
 import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
 import { wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
-import { getSdkError } from '@walletconnect/utils';
+import { getAppMetadata, getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
+import SignClient from '@walletconnect/sign-client';
+import { HexString } from '@polkadot/util/types';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
+};
+
+const initWC2Client = async () => {
+    return SignClient.init({
+        projectId: 'a4b92f550ab3039f7e084a879882bc96',
+        metadata: getAppMetadata(),
+    });
 };
 
 export const useAppStore = defineStore('app', {
@@ -318,7 +327,28 @@ export const useAppStore = defineStore('app', {
                 this.provider = '';
             }
         },
-        setAccount(account: Wallet) {
+        async setAccount(account: Wallet) {
+            if (this.provider === 'wc') {
+                const signClient = await initWC2Client();
+                const session = await this.getSession();
+                account.signer = {
+                    signPayload: async (payload: any) => {
+                        const result = await signClient!.request<{ signature: HexString }>({
+                            chainId: 'polkadot:3af4ff48ec76d2efc8476730f423ac07',
+                            topic: session?.topic,
+                            request: {
+                                method: 'polkadot_signTransaction',
+                                params: {
+                                    address: payload.address,
+                                    transactionPayload: payload,
+                                },
+                            },
+                        });
+
+                        return result;
+                    },
+                };
+            }
             this.account = account;
         },
         async getAccounts() {
