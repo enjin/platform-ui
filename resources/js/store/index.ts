@@ -12,6 +12,8 @@ import { getAppMetadata, getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
 import SignClient from '@walletconnect/sign-client';
 import { HexString } from '@polkadot/util/types';
+import { wcNamespaces, wcProjectId } from '~/util/constants';
+import { addressToPublicKey } from '~/util/address';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -19,7 +21,7 @@ const parseConfigURL = (url: string): URL => {
 
 const initWC2Client = async () => {
     return SignClient.init({
-        projectId: 'a4b92f550ab3039f7e084a879882bc96',
+        projectId: wcProjectId,
         metadata: getAppMetadata(),
     });
 };
@@ -245,7 +247,7 @@ export const useAppStore = defineStore('app', {
         getWeb3Modal() {
             return new WalletConnectModalSign(wcOptions);
         },
-        async getSession() {
+        async getSession(): Promise<any> {
             if (this.provider === 'wc') {
                 const walletConnect = this.getWeb3Modal();
                 const session = await walletConnect.getSession();
@@ -276,9 +278,8 @@ export const useAppStore = defineStore('app', {
         },
         async connectWC() {
             const walletConnect = this.getWeb3Modal();
-
             const session = await walletConnect.connect({
-                requiredNamespaces: wcRequiredNamespaces,
+                requiredNamespaces: wcRequiredNamespaces(this.config.network),
             });
 
             if (session && session.acknowledged) {
@@ -334,7 +335,7 @@ export const useAppStore = defineStore('app', {
                 account.signer = {
                     signPayload: async (payload: any) => {
                         const result = await signClient!.request<{ signature: HexString }>({
-                            chainId: 'polkadot:3af4ff48ec76d2efc8476730f423ac07',
+                            chainId: wcNamespaces[this.config.network],
                             topic: session?.topic,
                             request: {
                                 method: 'polkadot_signTransaction',
@@ -354,6 +355,9 @@ export const useAppStore = defineStore('app', {
         async getAccounts() {
             if (this.provider === 'wc') {
                 const session = (await this.getSession()) as any;
+                if (!session) {
+                    return;
+                }
                 const accounts = Object.values(session.namespaces)
                     .map((namespace: any) => namespace.accounts)
                     .flat()

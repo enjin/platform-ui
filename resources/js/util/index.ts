@@ -3,6 +3,7 @@ import { TokenIdType } from '~/types/types.interface';
 import snackbar from '~/util/snackbar';
 import { getAppMetadata } from '@walletconnect/utils';
 import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
+import { wcNamespaces, wcProjectId } from './constants';
 
 export const formatData = (entries: any, type = 'object') => {
     const data: { [key: string]: any } = type === 'object' ? {} : [];
@@ -139,14 +140,14 @@ export const shortString = (str: string, length = 10) => {
     return `${str.substring(0, length)}...`;
 };
 
-const wcProjectId = 'a4b92f550ab3039f7e084a879882bc96';
-
-export const wcRequiredNamespaces = {
-    polkadot: {
-        methods: ['polkadot_signTransaction'],
-        chains: ['polkadot:3af4ff48ec76d2efc8476730f423ac07', 'polkadot:a37725fd8943d2a524cb7ecc65da438f'],
-        events: [],
-    },
+export const wcRequiredNamespaces = (network: string) => {
+    return {
+        polkadot: {
+            methods: ['polkadot_signTransaction'],
+            chains: [wcNamespaces[network]],
+            events: [],
+        },
+    };
 };
 
 export const wcOptions: WalletConnectModalSignOptions = {
