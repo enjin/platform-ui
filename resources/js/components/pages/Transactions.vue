@@ -114,7 +114,8 @@
                                     >
                                         <Btn
                                             v-if="
-                                                transaction.transactionId ||
+                                                (transaction.state !== TransactionState.PENDING &&
+                                                    transaction.transactionId) ||
                                                 transaction.state === TransactionState.BROADCAST
                                             "
                                             primary
