@@ -21,7 +21,7 @@
             </div>
             <div v-else-if="!loadingApi && !signing" class="flex flex-col space-y-2 animate-fade-in">
                 <div
-                    v-for="account in useAppStore().accounts"
+                    v-for="account in connectionStore.accounts"
                     :key="account.address"
                     class="px-4 py-3 border border-gray-300 rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4"
                     @click="selectAccount(account)"
@@ -34,7 +34,7 @@
                         </span>
                     </div>
                 </div>
-                <div v-if="!useAppStore().accounts?.length" class="text-center">
+                <div v-if="!connectionStore.accounts?.length" class="text-center">
                     <span class="text-sm text-gray-500"> No accounts found. Please connect your wallet. </span>
                 </div>
             </div>
@@ -51,13 +51,13 @@ import { DialogTitle } from '@headlessui/vue';
 import Btn from './Btn.vue';
 import Modal from './Modal.vue';
 import { addressShortHex } from '~/util/address';
-import { useAppStore } from '~/store';
 import { useTransactionStore } from '~/store/transaction';
 import { ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
 import Identicon from './Identicon.vue';
 import { formatPriceFromENJ } from '~/util';
+import { useConnectionStore } from '~/store/connection';
 
 const props = defineProps<{
     transaction: any;
@@ -71,19 +71,19 @@ const feeCost = ref();
 const loadingApi = ref(false);
 const signing = ref(false);
 
-const appStore = useAppStore();
 const transactionStore = useTransactionStore();
+const connectionStore = useConnectionStore();
 
 const signTransaction = async () => {
     try {
-        if (!appStore.provider) {
+        if (!connectionStore.provider) {
             snackbar.error({ title: 'Please connect your wallet to sign' });
 
             return;
         }
         showAccountsModal.value = true;
         loadingApi.value = true;
-        appStore.getAccounts();
+        connectionStore.getAccounts();
         await transactionStore.init();
         feeCost.value = formatPriceFromENJ(props.transaction.fee)?.toFixed(5);
         loadingApi.value = false;
@@ -100,7 +100,7 @@ const closeModal = () => {
 const selectAccount = async (account) => {
     try {
         isLoading.value = true;
-        await appStore.setAccount(account);
+        await connectionStore.setAccount(account);
         signing.value = true;
         const res = await transactionStore.signTransaction(props.transaction);
         if (res) {

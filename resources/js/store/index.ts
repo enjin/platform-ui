@@ -5,14 +5,7 @@ import { ApiService } from '~/api';
 import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
-import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
-import { wcOptions } from '~/util';
-import { wcRequiredNamespaces } from '~/util';
-import { getAppMetadata, getSdkError } from '@walletconnect/utils';
-import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
-import SignClient from '@walletconnect/sign-client';
-import { HexString } from '@polkadot/util/types';
-import { wcNamespaces, wcProjectId } from '~/util/constants';
+import { useConnectionStore } from './connection';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -44,12 +37,6 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
-        provider: '',
-        wallet: false,
-        walletClient: null,
-        walletSession: null,
-        account: null,
-        accounts: null,
     }),
     persist: {
         paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
@@ -83,7 +70,7 @@ export const useAppStore = defineStore('app', {
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
                 if (this.loggedIn) await this.getUser();
-                await this.getSession();
+                await useConnectionStore().getSession();
 
                 return await this.fetchCollectionIds();
             } catch (error: any) {
@@ -239,145 +226,6 @@ export const useAppStore = defineStore('app', {
         },
         setCollections(collections: string[]) {
             this.collections = collections;
-        },
-        getWeb3Modal() {
-            return new WalletConnectModalSign(wcOptions);
-        },
-        async getSession(): Promise<any> {
-            if (this.provider === 'wc') {
-                const walletConnect = this.getWeb3Modal();
-                this.walletSession = await walletConnect.getSession();
-                if (this.walletSession?.acknowledged) {
-                    this.wallet = true;
-                }
-            } else if (this.provider === 'polkadot.js') {
-                const pkjs = new PolkadotjsWallet();
-                this.walletSession = pkjs;
-
-                if (this.walletSession.installed) {
-                    await this.walletSession.enable('Platform');
-                    this.wallet = true;
-                }
-            }
-            return this.walletSession;
-        },
-        async connectWallet(provider) {
-            if (provider === 'wc') {
-                await this.connectWC();
-            }
-
-            if (provider === 'polkadot.js') {
-                await this.connectPolkadotJS();
-            }
-        },
-        async connectWC() {
-            const walletConnect = this.getWeb3Modal();
-            await this.initWalletClient();
-
-            this.walletSession = await walletConnect.connect({
-                requiredNamespaces: wcRequiredNamespaces(this.config.network),
-            });
-
-            if (this.walletSession && this.walletSession.acknowledged) {
-                this.provider = 'wc';
-                this.wallet = true;
-                await this.initWalletClient();
-
-                return;
-            }
-
-            await walletConnect.disconnect({
-                topic: this.walletSession.topic,
-                reason: getSdkError('USER_REJECTED'),
-            });
-
-            this.account = null;
-        },
-        async connectPolkadotJS() {
-            const pkjs = new PolkadotjsWallet();
-            if (pkjs.installed) {
-                await pkjs.enable('Platform');
-                this.wallet = true;
-                this.provider = 'polkadot.js';
-                this.walletSession = pkjs;
-            }
-        },
-        async initWalletClient() {
-            this.walletClient = await SignClient.init({
-                projectId: wcProjectId,
-                metadata: getAppMetadata(),
-            });
-
-            if (this.walletClient) {
-                this.walletClient.on('session_delete', () => {
-                    this.disconnectWallet();
-                });
-                this.walletClient.on('session_expire', () => {
-                    this.disconnectWallet();
-                });
-            }
-        },
-        async disconnectWallet() {
-            try {
-                if (this.provider === 'wc') {
-                    if (this.walletClient) {
-                        this.walletClient.disconnect({
-                            topic: this.walletSession.topic,
-                            reason: getSdkError('USER_DISCONNECTED'),
-                        });
-                    }
-                }
-            } catch {
-                // do nothing
-            } finally {
-                this.account = null;
-                this.wallet = false;
-                this.provider = '';
-                this.walletClient = null;
-                this.walletSession = null;
-            }
-        },
-        async setAccount(account: Wallet) {
-            if (this.provider === 'wc') {
-                account.signer = {
-                    signPayload: async (payload: any) => {
-                        const result = await (this.walletClient! as SignClient).request<{ signature: HexString }>({
-                            chainId: wcNamespaces[this.config.network],
-                            topic: this.walletSession?.topic,
-                            request: {
-                                method: 'polkadot_signTransaction',
-                                params: {
-                                    address: payload.address,
-                                    transactionPayload: payload,
-                                },
-                            },
-                        });
-
-                        return result;
-                    },
-                };
-            }
-            this.account = account;
-        },
-        async getAccounts() {
-            if (this.provider === 'wc') {
-                if (!this.walletSession) {
-                    return;
-                }
-
-                const accounts = Object.values(this.walletSession.namespaces)
-                    .map((namespace: any) => namespace.accounts)
-                    .flat()
-                    .map((account) => {
-                        return {
-                            address: account.split(':')[2],
-                        };
-                    });
-                this.accounts = accounts;
-            } else if (this.provider === 'polkadot.js') {
-                const accounts = await this.walletSession.getAccounts();
-                this.accounts = accounts;
-            }
         },
     },
     getters: {

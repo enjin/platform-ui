@@ -9,6 +9,7 @@ import { SignerPayloadJSON } from '@polkadot/types/types';
 import { markRaw } from 'vue';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 import { publicKeyToAddress } from '~/util/address';
+import { useConnectionStore } from './connection';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -71,11 +72,15 @@ export const useTransactionStore = defineStore('transaction', {
             };
         },
         async getTransactionCost(transaction: any) {
-            const { extrinsic } = await this.getExtrinsicData(transaction, useAppStore().accounts[0].address, this.api);
+            const { extrinsic } = await this.getExtrinsicData(
+                transaction,
+                useConnectionStore().accounts[0].address,
+                this.api
+            );
 
             const paymentInfo = await this.api.tx[extrinsic.method.section]
                 [extrinsic.method.method](...extrinsic.method.args)
-                .paymentInfo(useAppStore().accounts[0].address);
+                .paymentInfo(useConnectionStore().accounts[0].address);
 
             return paymentInfo.partialFee.toHuman();
         },
@@ -83,7 +88,7 @@ export const useTransactionStore = defineStore('transaction', {
             const appStore = useAppStore();
             if (appStore.user?.account || appStore.config.daemon) {
                 if (
-                    publicKeyToAddress(appStore.account.address) !==
+                    publicKeyToAddress(useConnectionStore().account.address) !==
                     publicKeyToAddress(appStore.user?.account ?? appStore.config.daemon)
                 ) {
                     snackbar.error({
@@ -97,20 +102,20 @@ export const useTransactionStore = defineStore('transaction', {
 
             const { extrinsic, payloadToSign, currentBlock } = await this.getExtrinsicData(
                 transaction,
-                appStore.account.address,
+                useConnectionStore().account.address,
                 this.api
             );
 
-            const { signature } = await appStore.account.signer.signPayload(payloadToSign);
+            const { signature } = await useConnectionStore().account.signer.signPayload(payloadToSign);
 
-            extrinsic.addSignature(appStore.account.address, signature, payloadToSign);
+            extrinsic.addSignature(useConnectionStore().account.address, signature, payloadToSign);
 
             const transactionHash = await this.api.rpc.author.submitExtrinsic(extrinsic.toHex());
 
             return await this.updateTransaction({
                 id: transaction.id,
                 transactionHash: transactionHash.toHex(),
-                signingAccount: appStore.account.address,
+                signingAccount: useConnectionStore().account.address,
                 signedAtBlock: currentBlock.block.header.number.toNumber(),
             });
         },

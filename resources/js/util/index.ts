@@ -2,8 +2,8 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import { TokenIdType } from '~/types/types.interface';
 import snackbar from '~/util/snackbar';
 import { getAppMetadata } from '@walletconnect/utils';
-import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
 import { wcNamespaces, wcProjectId } from './constants';
+import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
 
 export const formatData = (entries: any, type = 'object') => {
     const data: { [key: string]: any } = type === 'object' ? {} : [];
@@ -150,6 +150,7 @@ export const wcRequiredNamespaces = (network: string) => {
     };
 };
 
+
 export const wcOptions: WalletConnectModalSignOptions = {
     projectId: wcProjectId,
     metadata: getAppMetadata(),
@@ -157,7 +158,10 @@ export const wcOptions: WalletConnectModalSignOptions = {
         themeMode: 'light',
         explorerRecommendedWalletIds: ['210cd0946d2b026755635b95761c0570e817ade3f3052a0c6d273dba7ba47aff'],
         enableExplorer: true,
-        walletImages: {},
+        walletImages: {
+            enjin: 'https://nft.io/images/enjin-wallet-long.svg',
+        },
+
         themeVariables: {
             '--wcm-background-color': '#7567CE',
             '--wcm-accent-color': '#7567CE',
