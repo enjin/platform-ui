@@ -13,7 +13,6 @@ import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
 import SignClient from '@walletconnect/sign-client';
 import { HexString } from '@polkadot/util/types';
 import { wcNamespaces, wcProjectId } from '~/util/constants';
-import { addressToPublicKey } from '~/util/address';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -94,7 +93,9 @@ export const useAppStore = defineStore('app', {
                 return await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
-                this.clearLogin();
+                if (this.config.tenant) {
+                    this.clearLogin();
+                }
             }
 
             return false;
@@ -366,6 +367,7 @@ export const useAppStore = defineStore('app', {
                             address: account.split(':')[2],
                         };
                     });
+                console.log(accounts[0].address);
                 this.accounts = accounts;
             } else if (this.provider === 'polkadot.js') {
                 const session = (await this.getSession()) as any;
