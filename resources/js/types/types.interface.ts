@@ -22,6 +22,8 @@ export interface AppState {
     user: any;
     provider: string;
     wallet: boolean;
+    walletClient?: any;
+    walletSession: any;
     account: any;
     accounts: any;
 }
