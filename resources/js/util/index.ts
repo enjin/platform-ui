@@ -2,6 +2,7 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import { TokenIdType } from '~/types/types.interface';
 import snackbar from '~/util/snackbar';
 import { getAppMetadata } from '@walletconnect/utils';
+import { wcNamespaces, wcProjectId } from './constants';
 import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
 
 export const formatData = (entries: any, type = 'object') => {
@@ -139,24 +140,28 @@ export const shortString = (str: string, length = 10) => {
     return `${str.substring(0, length)}...`;
 };
 
-export const wcProjectId = 'a4b92f550ab3039f7e084a879882bc96';
-
-export const wcRequiredNamespaces = {
-    polkadot: {
-        methods: ['polkadot_signTransaction'],
-        chains: ['polkadot:3af4ff48ec76d2efc8476730f423ac07'],
-        events: [],
-    },
+export const wcRequiredNamespaces = (network: string) => {
+    return {
+        polkadot: {
+            methods: ['polkadot_signTransaction'],
+            chains: [wcNamespaces[network]],
+            events: [],
+        },
+    };
 };
+
 
 export const wcOptions: WalletConnectModalSignOptions = {
     projectId: wcProjectId,
     metadata: getAppMetadata(),
     modalOptions: {
         themeMode: 'light',
-        explorerRecommendedWalletIds: ['bdc9433ffdaee55d31737d83b931caa1f17e30666f5b8e03eea794bac960eb4a'],
+        explorerRecommendedWalletIds: ['210cd0946d2b026755635b95761c0570e817ade3f3052a0c6d273dba7ba47aff'],
         enableExplorer: true,
-        walletImages: {},
+        walletImages: {
+            enjin: 'https://nft.io/images/enjin-wallet-long.svg',
+        },
+
         themeVariables: {
             '--wcm-background-color': '#7567CE',
             '--wcm-accent-color': '#7567CE',

@@ -13,7 +13,12 @@
                             </div>
                         </template>
 
-                        <template v-if="transaction?.state !== TransactionState.FINALIZED">
+                        <template
+                            v-if="
+                                transaction?.state !== TransactionState.FINALIZED &&
+                                transaction?.state !== TransactionState.PENDING
+                            "
+                        >
                             <div v-if="!webSocketEvents && webSocket">
                                 <LoadingCircle :size="40" class="pt-10" />
                                 <p class="text-center py-4">Waiting for the transaction details...</p>

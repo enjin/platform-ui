@@ -5,11 +5,7 @@ import { ApiService } from '~/api';
 import snackbar from '~/util/snackbar';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
-import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
-import { wcOptions } from '~/util';
-import { wcRequiredNamespaces } from '~/util';
-import { getSdkError } from '@walletconnect/utils';
-import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
+import { useConnectionStore } from './connection';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -41,10 +37,6 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
-        provider: '',
-        wallet: false,
-        account: null,
-        accounts: null,
     }),
     persist: {
         paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
@@ -78,12 +70,14 @@ export const useAppStore = defineStore('app', {
                 if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
                 if (this.loggedIn) await this.getUser();
-                await this.getSession();
+                await useConnectionStore().getSession();
 
                 return await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
-                this.clearLogin();
+                if (this.config.tenant) {
+                    this.clearLogin();
+                }
             }
 
             return false;
@@ -232,112 +226,6 @@ export const useAppStore = defineStore('app', {
         },
         setCollections(collections: string[]) {
             this.collections = collections;
-        },
-        getWeb3Modal() {
-            return new WalletConnectModalSign(wcOptions);
-        },
-        async getSession() {
-            if (this.provider === 'wc') {
-                const walletConnect = this.getWeb3Modal();
-                const session = await walletConnect.getSession();
-                if (session && !session.acknowledged) {
-                    this.wallet = true;
-                }
-
-                return session;
-            } else if (this.provider === 'polkadot.js') {
-                const pkjs = new PolkadotjsWallet();
-
-                if (pkjs.installed) {
-                    await pkjs.enable('Platform');
-                    this.wallet = true;
-                }
-
-                return pkjs;
-            }
-        },
-        async connectWallet(provider) {
-            if (provider === 'wc') {
-                await this.connectWC();
-            }
-
-            if (provider === 'polkadot.js') {
-                await this.connectPolkadotJS();
-            }
-        },
-        async connectWC() {
-            const walletConnect = this.getWeb3Modal();
-
-            const session = await walletConnect.connect({
-                requiredNamespaces: wcRequiredNamespaces,
-            });
-
-            if (session && session.acknowledged) {
-                this.provider = 'wc';
-                this.wallet = true;
-
-                return;
-            }
-
-            await walletConnect.disconnect({
-                topic: session.topic,
-                reason: getSdkError('USER_REJECTED'),
-            });
-
-            this.account = null;
-        },
-        async connectPolkadotJS() {
-            const pkjs = new PolkadotjsWallet();
-            if (pkjs.installed) {
-                await pkjs.enable('Platform');
-                this.wallet = true;
-                this.provider = 'polkadot.js';
-            }
-        },
-
-        async disconnectWallet() {
-            try {
-                if (this.provider === 'wc') {
-                    const walletConnect = this.getWeb3Modal();
-                    const session = await walletConnect.getSession();
-
-                    if (session) {
-                        await walletConnect.disconnect({
-                            topic: session.topic,
-                            reason: getSdkError('USER_DISCONNECTED'),
-                        });
-                    }
-                }
-
-                this.account = null;
-                this.wallet = false;
-                this.provider = '';
-            } catch {
-                this.account = null;
-                this.wallet = false;
-                this.provider = '';
-            }
-        },
-        setAccount(account: Wallet) {
-            this.account = account;
-        },
-        async getAccounts() {
-            if (this.provider === 'wc') {
-                const session = (await this.getSession()) as any;
-                const accounts = Object.values(session.namespaces)
-                    .map((namespace: any) => namespace.accounts)
-                    .flat()
-                    .map((account) => {
-                        return {
-                            address: account.split(':')[2],
-                        };
-                    });
-                this.accounts = accounts;
-            } else if (this.provider === 'polkadot.js') {
-                const session = (await this.getSession()) as any;
-                const accounts = await session.getAccounts();
-                this.accounts = accounts;
-            }
         },
     },
     getters: {

@@ -1,4 +1,5 @@
 import { BeamType, NotificationType, TokenCapType, TokenIdSelectType } from './types.enums';
+import type SignClient from '@walletconnect/sign-client';
 
 export interface AppState {
     url?: URL;
@@ -20,8 +21,13 @@ export interface AppState {
     loggedIn: boolean;
     newCollection: boolean;
     user: any;
+}
+
+export interface ConnectionState {
     provider: string;
     wallet: boolean;
+    walletClient?: SignClient | null;
+    walletSession: any;
     account: any;
     accounts: any;
 }

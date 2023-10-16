@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <svg :height="44" viewBox="0 0 64 64" :width="44">
+        <svg :height="44" viewBox="0 0 64 64" :width="40">
             <circle
                 v-for="(circle, index) in circles"
                 :key="index"

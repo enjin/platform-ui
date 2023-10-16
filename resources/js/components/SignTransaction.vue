@@ -5,22 +5,23 @@
     </Btn>
     <Modal :is-open="showAccountsModal" :close="closeModal" width="max-w-lg">
         <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center">
-            Select an account to sign the transaction
+            <span v-if="!signing">Select an account to sign the transaction</span>
+            <span v-else>Signing</span>
         </DialogTitle>
         <div class="flex flex-col space-y-2 mt-4 relative">
-            <div class="inline-flex space-x-2">
+            <div class="inline-flex space-x-2 mb-2">
                 <span> Transaction fee: </span>
                 <LoadingCircle v-if="loadingApi" :size="20" class="my-auto text-primary" />
                 <span v-else class="font-bold animate-fade-in">
-                    {{ feeCost }}
+                    {{ `${feeCost} ENJ` }}
                 </span>
             </div>
             <div v-if="loadingApi" class="py-20 animate-fade-in">
                 <LoadingCircle class="my-auto text-primary" :size="42" />
             </div>
-            <div v-else class="flex flex-col space-y-2 animate-fade-in">
+            <div v-else-if="!loadingApi && !signing" class="flex flex-col space-y-2 animate-fade-in">
                 <div
-                    v-for="account in useAppStore().accounts"
+                    v-for="account in connectionStore.accounts"
                     :key="account.address"
                     class="px-4 py-3 border border-gray-300 rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4"
                     @click="selectAccount(account)"
@@ -33,9 +34,13 @@
                         </span>
                     </div>
                 </div>
-                <div v-if="!useAppStore().accounts.length" class="text-center">
+                <div v-if="!connectionStore.accounts?.length" class="text-center">
                     <span class="text-sm text-gray-500"> No accounts found. Please connect your wallet. </span>
                 </div>
+            </div>
+            <div v-else class="py-20">
+                <LoadingCircle class="my-auto text-primary" :size="42" />
+                <p class="text-center text-lg mt-2">Please sign your transaction in your wallet</p>
             </div>
         </div>
     </Modal>
@@ -46,12 +51,13 @@ import { DialogTitle } from '@headlessui/vue';
 import Btn from './Btn.vue';
 import Modal from './Modal.vue';
 import { addressShortHex } from '~/util/address';
-import { useAppStore } from '~/store';
 import { useTransactionStore } from '~/store/transaction';
 import { ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
 import Identicon from './Identicon.vue';
+import { formatPriceFromENJ } from '~/util';
+import { useConnectionStore } from '~/store/connection';
 
 const props = defineProps<{
     transaction: any;
@@ -63,22 +69,23 @@ const isLoading = ref(false);
 const showAccountsModal = ref(false);
 const feeCost = ref();
 const loadingApi = ref(false);
+const signing = ref(false);
 
-const appStore = useAppStore();
 const transactionStore = useTransactionStore();
+const connectionStore = useConnectionStore();
 
 const signTransaction = async () => {
     try {
-        if (!appStore.provider) {
+        if (!connectionStore.provider) {
             snackbar.error({ title: 'Please connect your wallet to sign' });
 
             return;
         }
         showAccountsModal.value = true;
         loadingApi.value = true;
-        appStore.getAccounts();
+        connectionStore.getAccounts();
         await transactionStore.init();
-        feeCost.value = await transactionStore.getTransactionCost(props.transaction);
+        feeCost.value = formatPriceFromENJ(props.transaction.fee)?.toFixed(5);
         loadingApi.value = false;
     } catch (e) {
         snackbar.error({ title: 'Failed to sign transaction' });
@@ -93,8 +100,8 @@ const closeModal = () => {
 const selectAccount = async (account) => {
     try {
         isLoading.value = true;
-        appStore.setAccount(account);
-        showAccountsModal.value = false;
+        await connectionStore.setAccount(account);
+        signing.value = true;
         const res = await transactionStore.signTransaction(props.transaction);
         if (res) {
             emit('success');
@@ -103,6 +110,8 @@ const selectAccount = async (account) => {
         snackbar.error({ title: 'Failed to sign transaction' });
     } finally {
         isLoading.value = false;
+        showAccountsModal.value = false;
+        signing.value = false;
     }
 };
 </script>

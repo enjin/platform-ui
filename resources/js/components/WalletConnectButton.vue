@@ -20,6 +20,17 @@
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
                             ]"
+                            @click="connectWallet('wc')"
+                        >
+                            Enjin Wallet
+                        </button>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                        <button
+                            :class="[
+                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                'block px-4 py-2 text-sm w-full text-center transition-all',
+                            ]"
                             @click="connectWallet('polkadot.js')"
                         >
                             Polkadot.JS
@@ -46,25 +57,25 @@
 
 <script setup lang="ts">
 import { WalletIcon } from '@heroicons/vue/24/outline';
-import { useAppStore } from '~/store';
 import LoadingCircle from './LoadingCircle.vue';
 import { computed, ref } from 'vue';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import ScaleTransition from './ScaleTransition.vue';
 import snackbar from '~/util/snackbar';
+import { useConnectionStore } from '~/store/connection';
 
-const appStore = useAppStore();
+const connectionStore = useConnectionStore();
 
 const loading = ref(false);
 const showAccountsModal = ref(false);
 
-const walletSession = computed(() => appStore.wallet);
+const walletSession = computed(() => connectionStore.wallet);
 
 const connectWallet = async (provider: string) => {
     try {
         loading.value = true;
-        await appStore.connectWallet(provider);
-        if (appStore.accounts) {
+        await connectionStore.connectWallet(provider);
+        if (connectionStore.accounts) {
             showAccountsModal.value = true;
         }
     } catch {
@@ -76,7 +87,7 @@ const connectWallet = async (provider: string) => {
 
 const disconnectWallet = async () => {
     loading.value = true;
-    await appStore.disconnectWallet();
+    await connectionStore.disconnectWallet();
     loading.value = false;
 };
 </script>

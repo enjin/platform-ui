@@ -23,7 +23,7 @@ export function initAuthGuard(router: Router) {
 
             if (requiresAuth && !isLoggedIn) {
                 next({ name: 'platform.auth.login' });
-            } else if (requiresToken && appStore.user && !isLoggedIn) {
+            } else if (requiresToken && appStore.user && !validConfig) {
                 next({ name: 'platform.user.settings' });
             } else if (to.name == 'platform.auth.login' && isLoggedIn) {
                 next({ name: 'platform.collections' });
