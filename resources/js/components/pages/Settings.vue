@@ -35,11 +35,17 @@
                                 placeholder="Enter wallet account"
                                 :disabled="!enableAccountModify"
                             />
-                            <Btn v-if="appStore.isMultiTenant" primary class="py-2.5" @click="updateWalletAccount">
-                                <PencilIcon class="w-4 h-4 mr-2" />
-                                <span class="truncate">
-                                    {{ enableAccountModify ? 'Update' : 'Edit' }}
+                            <Btn
+                                v-if="appStore.isMultiTenant"
+                                primary
+                                class="py-2.5 disabled:!bg-primary"
+                                @click="updateWalletAccount"
+                                :disabled="updating"
+                            >
+                                <span v-if="!updating" class="truncate">
+                                    {{ enableAccountModify ? 'Update' : 'Update Account' }}
                                 </span>
+                                <LoadingCircle v-else class="w-4 h-4 text-white" />
                             </Btn>
                         </div>
                     </div>
@@ -135,7 +141,6 @@ import snackbar from '~/util/snackbar';
 import FormInput from '../FormInput.vue';
 import { shortString, snackbarErrors } from '~/util';
 import CopyTextIcon from '../CopyTextIcon.vue';
-import { PencilIcon } from '@heroicons/vue/20/solid';
 import { AuthApi } from '~/api/auth';
 import { addressToPublicKey, isValidAddress, publicKeyToAddress } from '~/util/address';
 import LoadingCircle from '../LoadingCircle.vue';
@@ -150,6 +155,7 @@ const enableTokenCreate = ref(false);
 const enableAccountModify = ref(false);
 const loading = ref(appStore.user ? false : true);
 const creating = ref(false);
+const updating = ref(false);
 
 const tokens = computed(() => appStore.user?.apiTokens);
 
@@ -187,6 +193,7 @@ const updateWalletAccount = async () => {
             return snackbar.error({ title: 'Invalid account', text: 'Please enter a valid wallet account.' });
         }
         try {
+            updating.value = true;
             const res = await AuthApi.updateUser({ account: walletAccount.value });
             enableAccountModify.value = false;
             if (res.data.UpdateUser) {
@@ -201,6 +208,8 @@ const updateWalletAccount = async () => {
         } catch (e: any) {
             if (snackbarErrors(e)) return;
             snackbar.error({ title: 'Account wallet update failed', text: e.message });
+        } finally {
+            updating.value = false;
         }
     }
 };
