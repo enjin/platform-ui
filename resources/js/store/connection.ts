@@ -9,6 +9,7 @@ import { HexString } from '@polkadot/util/types';
 import { wcNamespaces, wcProjectId } from '~/util/constants';
 import { useAppStore } from '.';
 import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
+import snackbar from '~/util/snackbar';
 
 export const useConnectionStore = defineStore('connection', {
     state: (): ConnectionState => ({
@@ -86,6 +87,9 @@ export const useConnectionStore = defineStore('connection', {
                 this.wallet = true;
                 this.provider = 'polkadot.js';
                 this.walletSession = pkjs;
+                snackbar.success({ title: 'Polkadot.js extension connected', save: false });
+            } else {
+                snackbar.error({ title: 'Polkadot.js extension is not installed' });
             }
         },
 

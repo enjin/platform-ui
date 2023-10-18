@@ -3,6 +3,14 @@
         <div class="mt-4 flow-root">
             <LoadingCircle class="mt-40" :size="44" v-if="loading" />
             <template v-else>
+                <div
+                    v-if="!appStore.hasValidConfig && appStore.isMultiTenant"
+                    class="flex flex-col mb-6 space-y-2 w-full md:w-1/2 transition-all"
+                >
+                    <p class="col-span-2">Please complete these steps in order to use the platform:</p>
+                    <div v-if="walletAccount" class="bg-red-500 p-2 text-white rounded-md">Add a wallet account</div>
+                    <div v-if="tokens.length" class="bg-red-500 p-2 text-white rounded-md">Create an API token</div>
+                </div>
                 <div class="flex flex-col space-y-8">
                     <div class="">
                         <h1 class="text-xl md:text-2xl">
@@ -73,7 +81,7 @@
                             >
                                 <div v-if="!creating" class="flex items-center">
                                     <KeyIcon class="w-4 h-4 mr-2 flex-shrink-0" />
-                                    <span class="truncate"> Create New API Token </span>
+                                    <span class="truncate"> Create API Token </span>
                                 </div>
                                 <LoadingCircle v-else class="w-4 h-4 text-white" />
                             </Btn>
