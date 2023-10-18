@@ -1,12 +1,12 @@
 <template>
     <transition-group
         enter-active-class="transform ease-out duration-300 transition"
-        enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"
-        enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
-        leave-active-class="transition ease-in duration-500"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-        move-class="transition duration-500"
+        enter-from-class="-translate-y-2 opacity-0 "
+        enter-to-class="translate-y-0 opacity-100"
+        leave-active-class="transform transition ease-in duration-300"
+        leave-from-class="translate-y-0 opacity-100"
+        leave-to-class="-translate-y-2 opacity-0"
+        move-class="transition-all duration-300"
     >
         <slot :notifications="sortedNotifications" :close="close" />
     </transition-group>

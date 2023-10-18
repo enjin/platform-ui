@@ -5,7 +5,7 @@
         class="inline-flex justify-center rounded-md py-2 px-3 text-sm font-semibold shadow-sm transition-all truncate"
         :class="{
             'text-white bg-primary hover:bg-primary-light': primary,
-            'text-white bg-red-600 hover:bg-red-500': error,
+            'text-white bg-red-500 hover:bg-red-600': error,
             'text-gray-900 bg-white hover:bg-gray-50 ring-1 ring-inset ring-gray-300': basic && !error && !primary,
             'px-5': loading,
             '!bg-gray-400': disabled,

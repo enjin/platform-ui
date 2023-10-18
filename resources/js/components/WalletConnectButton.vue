@@ -6,7 +6,7 @@
             >
                 <WalletIcon class="h-6 w-6" />
                 <LoadingCircle v-if="loading" class="!text-white" />
-                <span v-else>{{ walletSession ? 'Wallet connected' : 'Connect wallet' }}</span>
+                <span v-else class="hidden sm:block">{{ walletSession ? 'Wallet connected' : 'Connect wallet' }}</span>
             </MenuButton>
         </div>
         <ScaleTransition>
@@ -79,7 +79,7 @@ const connectWallet = async (provider: string) => {
             showAccountsModal.value = true;
         }
     } catch {
-        snackbar.error({ title: 'Failed to connect wallet' });
+        snackbar.error({ title: 'Failed to connect the wallet' });
     } finally {
         loading.value = false;
     }
