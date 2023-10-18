@@ -9,7 +9,7 @@
                 >
                     <p class="col-span-2">Please complete these steps in order to use the platform:</p>
                     <div v-if="walletAccount" class="bg-red-500 p-2 text-white rounded-md">Add a wallet account</div>
-                    <div v-if="tokens.length" class="bg-red-500 p-2 text-white rounded-md">Create an API token</div>
+                    <div v-if="tokens?.length" class="bg-red-500 p-2 text-white rounded-md">Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div class="">
