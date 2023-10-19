@@ -9,8 +9,8 @@
                 >
                     <p class="font-bold">Initialization Guide</p>
                     <p>Please complete these steps in order to use the platform:</p>
-                    <div v-if="!walletAccount">1. Add a wallet account</div>
-                    <div v-if="!tokens?.length">{{ walletAccount ? '1.' : '2.' }} Create an API token</div>
+                    <div v-if="!appStore.user?.account">1. Add a wallet account</div>
+                    <div v-if="!tokens?.length">{{ appStore.user?.account ? '1.' : '2.' }} Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div class="">
