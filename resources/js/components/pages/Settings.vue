@@ -245,6 +245,15 @@ const resetSettings = () => {
     router.push({ name: 'platform.setup' });
 };
 
+(() => {
+    if (appStore.user?.account) {
+        walletAccount.value = publicKeyToAddress(appStore.user.account);
+        enableAccountModify.value = false;
+    } else if (!appStore.isMultiTenant) {
+        enableAccountModify.value = false;
+    }
+})();
+
 watch(
     () => advancedMode.value,
     () => {
