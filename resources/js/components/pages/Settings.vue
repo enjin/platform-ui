@@ -161,7 +161,7 @@ const advancedMode = ref(appStore.advanced);
 const tokenName = ref();
 const walletAccount = ref(publicKeyToAddress(appStore.user?.account));
 const enableTokenCreate = ref(false);
-const enableAccountModify = ref(false);
+const enableAccountModify = ref(true);
 const loading = ref(appStore.user ? false : true);
 const creating = ref(false);
 const updating = ref(false);
@@ -259,9 +259,8 @@ watch(
 watch(
     () => appStore.user?.account,
     (newAccount) => {
-        if (!newAccount) {
-            enableAccountModify.value = true;
-        } else {
+        if (newAccount) {
+            enableAccountModify.value = false;
             walletAccount.value = publicKeyToAddress(appStore.user?.account);
         }
 
