@@ -5,15 +5,12 @@
             <template v-else>
                 <div
                     v-if="!appStore.hasValidConfig && appStore.isMultiTenant"
-                    class="flex flex-col mb-6 space-y-2 w-full md:w-1/2 transition-all"
+                    class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
                 >
-                    <p class="col-span-2">Please complete these steps in order to use the platform:</p>
-                    <div v-if="!walletAccount" class="bg-primary-light p-2 text-white rounded-md">
-                        1. Add a wallet account
-                    </div>
-                    <div v-if="!tokens?.length" class="bg-primary-light p-2 text-white rounded-md">
-                        {{ walletAccount ? '1.' : '2.' }} Create an API token
-                    </div>
+                    <p class="font-bold">Initialization Guide</p>
+                    <p>Please complete these steps in order to use the platform:</p>
+                    <div v-if="!walletAccount">1. Add a wallet account</div>
+                    <div v-if="!tokens?.length">{{ walletAccount ? '1.' : '2.' }} Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div class="">
