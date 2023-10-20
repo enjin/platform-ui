@@ -5,15 +5,12 @@
             <template v-else>
                 <div
                     v-if="!appStore.hasValidConfig && appStore.isMultiTenant"
-                    class="flex flex-col mb-6 space-y-2 w-full md:w-1/2 transition-all"
+                    class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
                 >
-                    <p class="col-span-2">Please complete these steps in order to use the platform:</p>
-                    <div v-if="!walletAccount" class="bg-primary-light p-2 text-white rounded-md">
-                        1. Add a wallet account
-                    </div>
-                    <div v-if="!tokens?.length" class="bg-primary-light p-2 text-white rounded-md">
-                        {{ walletAccount ? '1.' : '2.' }} Create an API token
-                    </div>
+                    <p class="font-bold">Initialization Guide</p>
+                    <p>Please complete these steps in order to use the platform:</p>
+                    <div v-if="!appStore.user?.account">1. Add a wallet account</div>
+                    <div v-if="!tokens?.length">{{ appStore.user?.account ? '1.' : '2.' }} Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div class="">
@@ -164,7 +161,7 @@ const advancedMode = ref(appStore.advanced);
 const tokenName = ref();
 const walletAccount = ref(publicKeyToAddress(appStore.user?.account));
 const enableTokenCreate = ref(false);
-const enableAccountModify = ref(false);
+const enableAccountModify = ref(true);
 const loading = ref(appStore.user ? false : true);
 const creating = ref(false);
 const updating = ref(false);
@@ -248,6 +245,15 @@ const resetSettings = () => {
     router.push({ name: 'platform.setup' });
 };
 
+(() => {
+    if (appStore.user?.account) {
+        walletAccount.value = publicKeyToAddress(appStore.user.account);
+        enableAccountModify.value = false;
+    } else if (!appStore.isMultiTenant) {
+        enableAccountModify.value = false;
+    }
+})();
+
 watch(
     () => advancedMode.value,
     () => {
@@ -262,9 +268,8 @@ watch(
 watch(
     () => appStore.user?.account,
     (newAccount) => {
-        if (!newAccount) {
-            enableAccountModify.value = true;
-        } else {
+        if (newAccount) {
+            enableAccountModify.value = false;
             walletAccount.value = publicKeyToAddress(appStore.user?.account);
         }
 

@@ -12,12 +12,14 @@
                             <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
                         </DisclosureButton>
 
-                        <EnjinLogo class="h-8 w-auto" />
-                        <span class="text-lg font-semibold ml-2">Platform</span>
+                        <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
+                        <EnjinLogo v-else class="h-8 w-auto" />
+                        <span class="text-lg font-semibold ml-2">{{ pageTitle() }}</span>
                     </div>
-                    <div class="hidden md:flex items-center" v-if="appStore.isMultiTenant && !appStore.hasValidConfig">
-                        <EnjinLogo class="h-8 w-auto" />
-                        <span class="text-lg font-semibold ml-2">Platform</span>
+                    <div v-if="appStore.isMultiTenant && !appStore.hasValidConfig" class="hidden md:flex items-center">
+                        <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
+                        <EnjinLogo v-else class="h-8 w-auto" />
+                        <span class="text-lg font-semibold ml-2">{{ pageTitle() }}</span>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4" v-if="appStore.loggedIn">
@@ -54,6 +56,7 @@ import DisclosureMenu from '~/components/DisclosureMenu.vue';
 import NotificationsList from '~/components/NotificationsList.vue';
 import Handbook from '~/components/Handbook.vue';
 import WalletConnectButton from '~/components/WalletConnectButton.vue';
+import CanaryEnjinLogo from './CanaryEnjinLogo.vue';
 
 const open = ref(false);
 const help = ref(false);
@@ -61,6 +64,20 @@ const help = ref(false);
 const appStore = useAppStore();
 
 const navigations = computed(() => appStore.navigations);
+const canaryHost = computed(
+    () =>
+        window.location.origin.includes('canary') ||
+        window.location.origin.includes('staging') ||
+        useAppStore().config.network === 'canary'
+);
+
+const pageTitle = () => {
+    if (canaryHost.value) {
+        return 'Canary Platform';
+    } else {
+        return 'Platform';
+    }
+};
 
 const openHelp = () => {
     help.value = true;

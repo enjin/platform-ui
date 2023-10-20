@@ -1,9 +1,10 @@
 <template>
     <div class="w-64 flex-col hidden md:flex animate-slide-in">
-        <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 pb-4">
+        <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-4 pb-4">
             <div class="flex flex-shrink-0 items-center px-4">
-                <EnjinLogo class="h-8 w-auto" />
-                <span class="text-lg font-semibold ml-2">Platform</span>
+                <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
+                <EnjinLogo v-else class="h-8 w-auto" />
+                <span class="text-lg font-semibold ml-2">{{ pageTitle() }}</span>
             </div>
             <div class="mt-5 flex flex-grow flex-col">
                 <nav class="flex-1 bg-white" aria-label="Sidebar">
@@ -41,8 +42,32 @@
 import { computed } from 'vue';
 import { useAppStore } from '~/store';
 import EnjinLogo from '~/components/EnjinLogo.vue';
+import CanaryEnjinLogo from '~/components/CanaryEnjinLogo.vue';
 
 const navigations = computed(() => useAppStore().navigations);
+
+const canaryHost = computed(
+    () =>
+        window.location.origin.includes('canary') ||
+        window.location.origin.includes('staging') ||
+        useAppStore().config.network === 'canary'
+);
+
+(() => {
+    if (!canaryHost.value) {
+        document.title = 'Canary Enjin Platform';
+    } else {
+        document.title = 'Enjin Platform';
+    }
+})();
+
+const pageTitle = () => {
+    if (canaryHost.value) {
+        return 'Canary Platform';
+    } else {
+        return 'Platform';
+    }
+};
 </script>
 
 <style lang="scss" scoped>
