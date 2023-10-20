@@ -150,7 +150,6 @@ export const wcRequiredNamespaces = (network: string) => {
     };
 };
 
-
 export const wcOptions: WalletConnectModalSignOptions = {
     projectId: wcProjectId,
     metadata: getAppMetadata(),
