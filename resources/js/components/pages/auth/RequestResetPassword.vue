@@ -76,7 +76,11 @@ const requestReset = async () => {
     if (!(await isValid())) return;
 
     isLoading.value = true;
-    await AuthApi.requestPasswordReset(email.value);
+    try {
+        await AuthApi.requestPasswordReset(email.value);
+    } catch {
+        // do nothing
+    }
     snackbar.success({
         title: "If an account with this email exists, you'll receive an email shortly with information on resetting your password.",
         save: false,
