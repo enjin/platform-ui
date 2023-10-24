@@ -46,20 +46,7 @@ import CanaryEnjinLogo from '~/components/CanaryEnjinLogo.vue';
 
 const navigations = computed(() => useAppStore().navigations);
 
-const canaryHost = computed(
-    () =>
-        window.location.origin.includes('canary') ||
-        window.location.origin.includes('staging') ||
-        useAppStore().config.network === 'canary'
-);
-
-(() => {
-    if (!canaryHost.value) {
-        document.title = 'Canary Enjin Platform';
-    } else {
-        document.title = 'Enjin Platform';
-    }
-})();
+const canaryHost = computed(() => useAppStore().config.network === 'canary');
 
 const pageTitle = () => {
     if (canaryHost.value) {

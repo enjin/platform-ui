@@ -64,12 +64,7 @@ const help = ref(false);
 const appStore = useAppStore();
 
 const navigations = computed(() => appStore.navigations);
-const canaryHost = computed(
-    () =>
-        window.location.origin.includes('canary') ||
-        window.location.origin.includes('staging') ||
-        useAppStore().config.network === 'canary'
-);
+const canaryHost = computed(() => useAppStore().config.network === 'canary');
 
 const pageTitle = () => {
     if (canaryHost.value) {
