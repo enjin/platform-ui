@@ -120,6 +120,10 @@ export const useAppStore = defineStore('app', {
             if (window.bootstrap?.daemon) {
                 this.config.daemon = window.bootstrap.daemon;
             }
+
+            if (window.bootstrap?.name) {
+                document.title = window.bootstrap.name;
+            }
         },
         async checkURL(url: URL) {
             try {

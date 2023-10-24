@@ -9,5 +9,6 @@ interface Window {
     bootstrap: {
         url: string;
         daemon: string;
+        name: string;
     };
 }

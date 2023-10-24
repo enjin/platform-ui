@@ -33,7 +33,11 @@ const router = useRouter();
 const canaryHost = computed(() => appStore.config.network === 'canary');
 
 (() => {
-    if (!canaryHost.value) {
+    if (window.bootstrap.name) {
+        return;
+    }
+
+    if (canaryHost.value) {
         document.title = 'Canary Enjin Platform';
     } else {
         document.title = 'Enjin Platform';
