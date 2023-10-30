@@ -33,7 +33,7 @@ const router = useRouter();
 const canaryHost = computed(() => appStore.config.network === 'canary');
 
 (() => {
-    if (window.bootstrap.name) {
+    if (window.bootstrap?.name) {
         return;
     }
 

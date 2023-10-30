@@ -287,4 +287,12 @@ watch(
         }
     }
 );
+
+(() => {
+    setTimeout(() => {
+        if (loading.value) {
+            loading.value = false;
+        }
+    }, 2000);
+})();
 </script>

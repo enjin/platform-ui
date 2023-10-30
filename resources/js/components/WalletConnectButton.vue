@@ -74,6 +74,8 @@ const walletName = computed(() => {
     } else if (connectionStore.provider === 'polkadot.js') {
         return 'Polkadot.JS';
     }
+
+    return '';
 });
 
 const walletSession = computed(() => connectionStore.wallet);

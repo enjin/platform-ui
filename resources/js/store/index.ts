@@ -135,7 +135,7 @@ export const useAppStore = defineStore('app', {
                 document.title = window.bootstrap.name;
             }
 
-            if (window.bootstrap.network) {
+            if (window.bootstrap?.network) {
                 this.config.network = window.bootstrap.network;
             }
         },
