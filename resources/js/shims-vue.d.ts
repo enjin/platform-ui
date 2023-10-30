@@ -7,6 +7,7 @@ declare module '*.vue' {
 
 interface Window {
     bootstrap: {
+        network: string;
         url: string;
         daemon: string;
         name: string;

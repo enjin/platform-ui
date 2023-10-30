@@ -134,6 +134,10 @@ export const useAppStore = defineStore('app', {
             if (window.bootstrap?.name) {
                 document.title = window.bootstrap.name;
             }
+
+            if (window.bootstrap.network) {
+                this.config.network = window.bootstrap.network;
+            }
         },
         async checkURL(url: URL) {
             try {
