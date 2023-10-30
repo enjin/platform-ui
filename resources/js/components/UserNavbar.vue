@@ -67,6 +67,10 @@ const navigations = computed(() => appStore.navigations);
 const canaryHost = computed(() => useAppStore().config.network === 'canary');
 
 const pageTitle = () => {
+    if (window.bootstrap.name) {
+        return window.bootstrap.name;
+    }
+
     if (canaryHost.value) {
         return 'Canary Platform';
     } else {
