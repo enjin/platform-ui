@@ -65,11 +65,21 @@ export const useAppStore = defineStore('app', {
                         link,
                     };
                 });
-                if (this.hasBeamPackage) this.addBeamNavigation();
-                if (this.hasFuelTanksPackage) this.addFuelTanksNavigation();
-                if (this.hasMarketplacePackage) this.addMarketplaceNavigation();
 
-                if (this.loggedIn) await this.getUser();
+                if (this.hasBeamPackage) {
+                    this.addBeamNavigation();
+                }
+                if (this.hasFuelTanksPackage) {
+                    this.addFuelTanksNavigation();
+                }
+                if (this.hasMarketplacePackage) {
+                    this.addMarketplaceNavigation();
+                }
+
+                if (this.loggedIn && this.hasMultiTenantPackage) {
+                    await this.getUser();
+                }
+
                 await useConnectionStore().getSession();
 
                 return await this.fetchCollectionIds();
@@ -251,6 +261,9 @@ export const useAppStore = defineStore('app', {
         },
         hasMarketplacePackage(state: AppState) {
             return state.config.packages.find((p) => p.name === 'platform-marketplace');
+        },
+        hasMultiTenantPackage(state: AppState) {
+            return state.config.packages.find((p) => p.name === 'platform-multi-tenant');
         },
     },
 });
