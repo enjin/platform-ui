@@ -20,7 +20,7 @@ import ScaleTransition from '~/components/ScaleTransition.vue';
 import SideNavbar from '~/components/SideNavbar.vue';
 import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const appStore = useAppStore();
@@ -28,6 +28,20 @@ const router = useRouter();
 
 (async () => {
     await appStore.init();
+})();
+
+const canaryHost = computed(() => appStore.config.network === 'canary');
+
+(() => {
+    if (window.bootstrap?.name) {
+        return;
+    }
+
+    if (canaryHost.value) {
+        document.title = 'Canary Enjin Platform';
+    } else {
+        document.title = 'Enjin Platform';
+    }
 })();
 
 watch(

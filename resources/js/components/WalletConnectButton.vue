@@ -6,7 +6,7 @@
             >
                 <WalletIcon class="h-6 w-6" />
                 <LoadingCircle v-if="loading" class="!text-white" />
-                <span v-else class="hidden sm:block">{{ walletSession ? 'Wallet connected' : 'Connect wallet' }}</span>
+                <span v-else class="hidden sm:block">{{ walletSession ? walletName : 'Connect wallet' }}</span>
             </MenuButton>
         </div>
         <ScaleTransition>
@@ -68,6 +68,15 @@ const connectionStore = useConnectionStore();
 
 const loading = ref(false);
 const showAccountsModal = ref(false);
+const walletName = computed(() => {
+    if (connectionStore.provider === 'wc') {
+        return 'Enjin Wallet';
+    } else if (connectionStore.provider === 'polkadot.js') {
+        return 'Polkadot.JS';
+    }
+
+    return '';
+});
 
 const walletSession = computed(() => connectionStore.wallet);
 
