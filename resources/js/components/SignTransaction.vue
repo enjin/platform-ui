@@ -9,11 +9,19 @@
             <span v-else>Signing</span>
         </DialogTitle>
         <div class="flex flex-col space-y-2 mt-4 relative">
-            <div class="inline-flex space-x-2 mb-2">
+            <div v-if="signing">
+                <span>
+                    <span> Address: </span>
+                    <span class="font-bold">
+                        {{ addressShortHex(connectionStore.account.address) }}
+                    </span>
+                </span>
+            </div>
+            <div class="inline-flex space-x-1 mb-2">
                 <span> Transaction fee: </span>
                 <LoadingCircle v-if="loadingApi" :size="20" class="my-auto text-primary" />
                 <span v-else class="font-bold animate-fade-in">
-                    {{ `${feeCost} ENJ` }}
+                    {{ `${feeCost} ${currencySymbolByNetwork(useAppStore().config.network)}` }}
                 </span>
             </div>
             <div v-if="loadingApi" class="py-20 animate-fade-in">
@@ -40,7 +48,7 @@
             </div>
             <div v-else class="py-20">
                 <LoadingCircle class="my-auto text-primary" :size="42" />
-                <p class="text-center text-lg mt-2">Please sign your transaction in your wallet</p>
+                <p class="text-center text-lg mt-2">Please sign the transaction in your wallet</p>
             </div>
         </div>
     </Modal>
@@ -56,8 +64,9 @@ import { ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
 import Identicon from './Identicon.vue';
-import { formatPriceFromENJ } from '~/util';
+import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 import { useConnectionStore } from '~/store/connection';
+import { useAppStore } from '~/store';
 
 const props = defineProps<{
     transaction: any;
