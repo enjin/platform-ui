@@ -28,8 +28,7 @@
                         :placeholder="placeholder"
                         v-model="filter"
                         :options="options"
-                    >
-                    </FormSelect>
+                    />
                     <Btn @click="addItem" class="!py-1 !px-2 !flex" primary>
                         <PlusIcon class="w-6 h-6 m-auto" />
                     </Btn>
