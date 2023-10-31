@@ -130,7 +130,7 @@ const tokenId = ref({
     tokenId: props.item?.tokenId ?? '',
 });
 const collectionAccount = ref('');
-const freezeState = ref(FreezeStateType.PERMANENT);
+const freezeState = ref(FreezeStateType.TEMPORARY);
 const tokenAccount = ref('');
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
