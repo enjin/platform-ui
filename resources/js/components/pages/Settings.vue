@@ -159,7 +159,7 @@ const appStore = useAppStore();
 
 const advancedMode = ref(appStore.advanced);
 const tokenName = ref();
-const walletAccount = ref(publicKeyToAddress(appStore.user?.account));
+const walletAccount = ref(publicKeyToAddress(appStore.user?.account ?? appStore.config.daemon));
 const enableTokenCreate = ref(false);
 const enableAccountModify = ref(true);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
