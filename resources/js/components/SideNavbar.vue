@@ -4,7 +4,7 @@
             <div class="flex flex-shrink-0 items-center px-4">
                 <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
                 <EnjinLogo v-else class="h-8 w-auto" />
-                <span class="text-lg font-semibold ml-2">{{ pageTitle() }}</span>
+                <span class="text-lg font-semibold ml-2 truncate">{{ pageTitle() }}</span>
             </div>
             <div class="mt-5 flex flex-grow flex-col">
                 <nav class="flex-1 bg-white" aria-label="Sidebar">

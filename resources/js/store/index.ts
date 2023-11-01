@@ -45,7 +45,10 @@ export const useAppStore = defineStore('app', {
         async init() {
             try {
                 this.setConfig();
-                if (!this.config.url) return false;
+
+                if (!this.config.url) {
+                    return false;
+                }
                 if (!this.isMultiTenant && !this.config.authorization_token.length) {
                     return false;
                 }
