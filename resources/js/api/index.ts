@@ -109,6 +109,7 @@ export class ApiService {
                 collectionId: freezeData.collectionId,
                 freezeType: freezeData.freezeType,
                 tokenId: freezeData.tokenId,
+                freezeState: freezeData.freezeState,
                 collectionAccount: freezeData.collectionAccount,
                 tokenAccount: freezeData.tokenAccount,
                 idempotencyKey: freezeData.idempotencyKey,

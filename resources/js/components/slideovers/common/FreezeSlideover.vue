@@ -27,6 +27,14 @@
                             disabled
                             required
                         />
+                        <FormSelect
+                            v-model="freezeState"
+                            label="Freeze State"
+                            name="freezeState"
+                            description="Freeze state to set."
+                            :options="freezeStates"
+                            required
+                        />
                         <TokenIdInput
                             v-if="freezeType === FreezeType.TOKEN"
                             v-model="tokenId"
@@ -87,7 +95,7 @@ import FormCheckbox from '~/components/FormCheckbox.vue';
 import Btn from '~/components/Btn.vue';
 import { ApiService } from '~/api';
 import snackbar from '~/util/snackbar';
-import { FreezeType, TokenIdSelectType } from '~/types/types.enums';
+import { FreezeType, FreezeStateType, TokenIdSelectType } from '~/types/types.enums';
 import { formatData, formatToken, snackbarErrors } from '~/util';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { useAppStore } from '~/store';
@@ -97,6 +105,7 @@ import {
     stringNotRequiredSchema,
     stringRequiredSchema,
 } from '~/util/schemas';
+import FormSelect from '~/components/FormSelect.vue';
 
 const emit = defineEmits(['close']);
 
@@ -121,10 +130,13 @@ const tokenId = ref({
     tokenId: props.item?.tokenId ?? '',
 });
 const collectionAccount = ref('');
+const freezeState = ref(FreezeStateType.TEMPORARY);
 const tokenAccount = ref('');
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const formRef = ref();
+
+const freezeStates = Object.values(FreezeStateType);
 
 const validation = yup.object({
     collectionId: collectionIdRequiredSchema,
@@ -134,6 +146,7 @@ const validation = yup.object({
         then: () => stringRequiredSchema,
         otherwise: () => stringNotRequiredSchema,
     }),
+    freezeState: stringRequiredSchema.oneOf(freezeStates),
     collectionAccount: stringNotRequiredSchema,
     tokenAccount: stringNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
@@ -153,6 +166,7 @@ const freeze = async () => {
                 freezeType: freezeType.value,
                 tokenId: formatToken(tokenId.value),
                 collectionAccount: collectionAccount.value,
+                freezeState: freezeState.value,
                 tokenAccount: tokenAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,

@@ -34,6 +34,12 @@ export enum TokenCapType {
     INFINITE = 'INFINITE',
 }
 
+export enum FreezeStateType {
+    PERMANENT = 'PERMANENT',
+    TEMPORARY = 'TEMPORARY',
+    NEVER = 'NEVER',
+}
+
 export enum TokenIdSelectType {
     Integer = 'integer',
     StringId = 'stringId',
