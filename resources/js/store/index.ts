@@ -79,7 +79,7 @@ export const useAppStore = defineStore('app', {
                     this.addMarketplaceNavigation();
                 }
 
-                if (this.loggedIn && this.hasMultiTenantPackage) {
+                if (this.loggedIn && this.hasMultiTenantPackage && !this.user) {
                     await this.getUser();
                 }
 
