@@ -93,7 +93,9 @@ const login = async () => {
         }
         if (await appStore.init()) {
             snackbar.success({ title: 'Logged in successfully', save: false });
-            redirectToCollections();
+            if (appStore.hasValidConfig) {
+                redirectToCollections();
+            }
         }
     } catch (e) {
         if (snackbarErrors(e)) return;

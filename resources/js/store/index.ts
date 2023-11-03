@@ -45,7 +45,10 @@ export const useAppStore = defineStore('app', {
         async init() {
             try {
                 this.setConfig();
-                if (!this.config.url) return false;
+
+                if (!this.config.url) {
+                    return false;
+                }
                 if (!this.isMultiTenant && !this.config.authorization_token.length) {
                     return false;
                 }
@@ -76,7 +79,7 @@ export const useAppStore = defineStore('app', {
                     this.addMarketplaceNavigation();
                 }
 
-                if (this.loggedIn && this.hasMultiTenantPackage) {
+                if (this.loggedIn && this.hasMultiTenantPackage && !this.user) {
                     await this.getUser();
                 }
 

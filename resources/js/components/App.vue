@@ -21,10 +21,11 @@ import SideNavbar from '~/components/SideNavbar.vue';
 import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
 import { computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const appStore = useAppStore();
 const router = useRouter();
+const route = useRoute();
 
 (async () => {
     await appStore.init();
@@ -48,6 +49,15 @@ watch(
     () => appStore.loggedIn,
     () => {
         if (!appStore.loggedIn) router.push({ name: 'platform.auth.login' });
+    }
+);
+
+watch(
+    () => appStore.user,
+    () => {
+        if (appStore.isMultiTenant && !appStore.hasValidConfig && route.meta.requiresToken) {
+            router.push({ name: 'platform.user.settings' });
+        }
     }
 );
 </script>
