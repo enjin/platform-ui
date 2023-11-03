@@ -105,6 +105,7 @@
                                     name="userFuelAmount"
                                     placeholder="Amount"
                                     type="number"
+                                    :prefix="currencySymbol"
                                 />
                                 <FormInput
                                     class="col-span-1"
@@ -128,6 +129,7 @@
                                     name="tankFuelAmount"
                                     placeholder="Amount"
                                     type="number"
+                                    :prefix="currencySymbol"
                                 />
                                 <FormInput
                                     class="col-span-1"
@@ -150,13 +152,14 @@ import { ref, computed, watch } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
-import { formatData, formatToken, parseFormatedTokenId } from '~/util';
+import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, parseFormatedTokenId } from '~/util';
 import { TokenIdSelectType } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import FormList from '../FormList.vue';
 import { formatWhitelistedCallers, formatWhitelistedCollections } from '~/util';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
 import { numberNotRequiredSchema, stringNotRequiredSchema } from '~/util/schemas';
+import { useAppStore } from '~/store';
 
 const emit = defineEmits(['update:modelValue', 'validation', 'close']);
 
@@ -189,6 +192,7 @@ const tankFuelAmount = ref(props.modelValue.tankFuelBudget?.amount ?? null);
 const tankFuelresetPeriod = ref(props.modelValue.tankFuelBudget?.resetPeriod ?? null);
 
 const validForm = computed(() => formRef.value.getMeta().valid);
+const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
 
 const validation = yup.object({
     whitelistedCallers: yup.array().of(
@@ -232,11 +236,11 @@ const hasChanged = computed(() =>
         whitelistedCollections: whitelistedCollections.value.map((item: any) => item.collection),
         maxFuelBurnPerTransaction: maxFuelBurnPerTransaction.value,
         userFuelBudget: {
-            amount: userFuelAmount.value,
+            amount: formatPriceToENJ(userFuelAmount.value),
             resetPeriod: userFuelresetPeriod.value,
         },
         tankFuelBudget: {
-            amount: tankFuelAmount.value,
+            amount: formatPriceToENJ(tankFuelAmount.value),
             resetPeriod: tankFuelresetPeriod.value,
         },
     })
