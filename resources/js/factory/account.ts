@@ -4,7 +4,6 @@ export class DTOAccountFactory {
     public static buildAccount(account: any): any {
         return {
             ...account,
-            owner: publicKeyToAddress(account.owner.account.publicKey),
             account: publicKeyToAddress(account.account.publicKey),
         };
     }

@@ -76,6 +76,12 @@
                                         scope="col"
                                         class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
                                     >
+                                        ID
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                    >
                                         Account
                                     </th>
                                 </tr>
@@ -87,7 +93,10 @@
                                     :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
                                 >
                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        {{ account.owner }}
+                                        {{ account.id }}
+                                    </td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        {{ account.account }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -170,7 +179,8 @@ const actions = ref([
 const isPaginationLoading = ref(false);
 const accounts: Ref<{
     items: {
-        owner: string;
+        id: string;
+        account: string;
     }[];
     cursor: string | null;
 }> = ref({
@@ -289,6 +299,7 @@ const getAccounts = async () => {
         const res = await FuelTankApi.getAccounts(addressToPublicKey(tankId.value) ?? '');
         accounts.value = DTOFactory.forAccounts(res);
     } catch (e) {
+        console.log(e);
         // Do nothing
     } finally {
         isLoading.value = false;
