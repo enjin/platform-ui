@@ -8,7 +8,6 @@ import snackbar from '~/util/snackbar';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { markRaw } from 'vue';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
-import { publicKeyToAddress } from '~/util/address';
 import { useConnectionStore } from './connection';
 
 const RPC_URLS = {
@@ -85,21 +84,6 @@ export const useTransactionStore = defineStore('transaction', {
             return paymentInfo.partialFee.toHuman();
         },
         async signTransaction(transaction: any) {
-            const appStore = useAppStore();
-            if (appStore.user?.account || appStore.config.daemon) {
-                if (
-                    publicKeyToAddress(useConnectionStore().account.address) !==
-                    publicKeyToAddress(appStore.user?.account ?? appStore.config.daemon)
-                ) {
-                    snackbar.error({
-                        title: 'Sign Transaction',
-                        text: 'Signing account must be the same as wallet daemon account',
-                    });
-
-                    return;
-                }
-            }
-
             const { extrinsic, payloadToSign, currentBlock } = await this.getExtrinsicData(
                 transaction,
                 useConnectionStore().account.address,
