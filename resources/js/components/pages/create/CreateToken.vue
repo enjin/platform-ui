@@ -227,7 +227,7 @@ import snackbar from '~/util/snackbar';
 import { useRouter } from 'vue-router';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
-import { addressToPublicKey, publicKeyToAddress } from '~/util/address';
+import { addressToPublicKey } from '~/util/address';
 import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, snackbarErrors } from '~/util';
 import { TokenCapType, TokenIdSelectType } from '~/types/types.enums';
 import FormList from '~/components/FormList.vue';
@@ -253,7 +253,7 @@ const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.ne
 
 const isLoading = ref(false);
 const collectionId = ref('');
-const recipient = ref(publicKeyToAddress(appStore.user?.account));
+const recipient = ref();
 const tokenId = ref({
     tokenId: '',
     tokenType: TokenIdSelectType.Integer,

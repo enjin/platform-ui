@@ -6,6 +6,5 @@ export default `query User {
       apiTokens {
         name
       }
-      account
     }
   }`;

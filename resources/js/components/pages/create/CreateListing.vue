@@ -176,7 +176,7 @@ const router = useRouter();
 const appStore = useAppStore();
 
 const isLoading = ref(false);
-const account = ref(appStore.user?.account);
+const account = ref();
 const amount = ref('');
 const price = ref('');
 const salt = ref('');

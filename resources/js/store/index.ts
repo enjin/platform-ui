@@ -247,7 +247,7 @@ export const useAppStore = defineStore('app', {
     getters: {
         hasValidConfig(state: AppState) {
             if (this.isMultiTenant) {
-                return state.loggedIn && state.user?.apiTokens?.length > 0 && state.user?.account;
+                return state.loggedIn && state.user?.apiTokens?.length > 0;
             }
 
             return state.loggedIn && state.config.url;
