@@ -4,13 +4,12 @@
             <LoadingCircle class="mt-40" :size="44" v-if="loading" />
             <template v-else>
                 <div
-                    v-if="!appStore.hasValidConfig && appStore.isMultiTenant"
+                    v-if="!appStore.hasValidConfig && appStore.isMultiTenant && !tokens?.length"
                     class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
                 >
                     <p class="font-bold">Initialization Guide</p>
                     <p>Please complete these steps in order to use the platform:</p>
-                    <div v-if="!appStore.user?.account">1. Add a wallet account</div>
-                    <div v-if="!tokens?.length">{{ appStore.user?.account ? '1.' : '2.' }} Create an API token</div>
+                    <div>Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
@@ -172,19 +171,13 @@ watch(
 );
 
 watch(
-    () => appStore.user?.account,
-    () => {
-        if (!appStore.user?.apiTokens?.length) {
-            enableTokenCreate.value = true;
-        }
-    }
-);
-
-watch(
     () => appStore.user,
     (userVal) => {
         if (userVal) {
             loading.value = false;
+            if (!appStore.user?.apiTokens?.length) {
+                enableTokenCreate.value = true;
+            }
         }
     }
 );
