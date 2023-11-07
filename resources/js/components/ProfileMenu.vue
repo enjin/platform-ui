@@ -21,14 +21,6 @@
                             {{ appStore.user.email }}
                         </p>
                     </div>
-                    <div class="px-4 py-2" v-if="appStore.user">
-                        <p class="text-sm text-gray-500">Account</p>
-                        <Address
-                            class="truncate text-sm font-medium text-gray-900"
-                            short
-                            :address="appStore.user?.account"
-                        />
-                    </div>
                     <div class="px-4 py-2" v-if="appStore.config.url">
                         <p class="text-sm text-gray-500">URL</p>
                         <p class="truncate text-sm font-medium text-gray-900">
@@ -84,7 +76,6 @@ import { useAppStore } from '~/store';
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline';
 import { useRouter } from 'vue-router';
 import Tooltip from './Tooltip.vue';
-import Address from './Address.vue';
 
 const appStore = useAppStore();
 const router = useRouter();

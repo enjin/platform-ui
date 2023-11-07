@@ -4,61 +4,14 @@
             <LoadingCircle class="mt-40" :size="44" v-if="loading" />
             <template v-else>
                 <div
-                    v-if="!appStore.hasValidConfig && appStore.isMultiTenant"
+                    v-if="!appStore.hasValidConfig && appStore.isMultiTenant && !tokens?.length"
                     class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
                 >
                     <p class="font-bold">Initialization Guide</p>
                     <p>Please complete these steps in order to use the platform:</p>
-                    <div v-if="!appStore.user?.account">1. Add a wallet account</div>
-                    <div v-if="!tokens?.length">{{ appStore.user?.account ? '1.' : '2.' }} Create an API token</div>
+                    <div>Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
-                    <div class="">
-                        <h1 class="text-xl md:text-2xl">
-                            Wallet Account
-                            <span v-if="!appStore.loggedIn && !walletAccount" class="text-red-500">&nbsp;*</span>
-                        </h1>
-                        <p class="mt-1 text-sm text-gray-500 max-w-3xl">
-                            The platform depends on there being a funded wallet daemon account setup and connected to
-                            the platform and blockchain so it can receive transactions from the platform, sign them on
-                            your behalf and then broadcast them to the network. You can get the latest version of the
-                            wallet daemon from this repository:
-                            <a href="https://github.com/enjin/wallet-daemon" target="_blank" class="text-primary">
-                                https://github.com/enjin/wallet-daemon</a
-                            >
-                            and an overview can be found here:
-                            <a
-                                href="https://docs.enjin.io/enjin-platform/wallet-daemon"
-                                target="_blank"
-                                class="text-primary"
-                            >
-                                https://docs.enjin.io/enjin-platform/wallet-daemon</a
-                            >
-                        </p>
-                        <div class="flex items-end space-x-4 mt-4">
-                            <FormInput
-                                v-model="walletAccount"
-                                class="sm:w-[300px] flex-1 sm:flex-none"
-                                :class="!enableAccountModify ? 'text-gray-400' : ''"
-                                name="tokenName"
-                                placeholder="Enter wallet account"
-                                :disabled="!enableAccountModify"
-                            />
-                            <Btn
-                                v-if="appStore.isMultiTenant"
-                                primary
-                                class="py-2.5 disabled:!bg-primary"
-                                @click="updateWalletAccount"
-                                :disabled="updating"
-                            >
-                                <span v-if="!updating" class="truncate">
-                                    {{ enableAccountModify ? 'Update' : 'Update Account' }}
-                                </span>
-                                <LoadingCircle v-else class="w-4 h-4 text-white" />
-                            </Btn>
-                        </div>
-                    </div>
-
                     <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
                         <div class="flex justify-between">
                             <h1 class="text-xl">
@@ -150,8 +103,6 @@ import snackbar from '~/util/snackbar';
 import FormInput from '../FormInput.vue';
 import { shortString, snackbarErrors } from '~/util';
 import CopyTextIcon from '../CopyTextIcon.vue';
-import { AuthApi } from '~/api/auth';
-import { addressToPublicKey, isValidAddress, publicKeyToAddress } from '~/util/address';
 import LoadingCircle from '../LoadingCircle.vue';
 
 const router = useRouter();
@@ -159,12 +110,9 @@ const appStore = useAppStore();
 
 const advancedMode = ref(appStore.advanced);
 const tokenName = ref();
-const walletAccount = ref(publicKeyToAddress(appStore.user?.account ?? appStore.config.daemon));
 const enableTokenCreate = ref(false);
-const enableAccountModify = ref(true);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
 const creating = ref(false);
-const updating = ref(false);
 
 const tokens = computed(() => appStore.user?.apiTokens);
 
@@ -185,40 +133,6 @@ const createApiToken = async () => {
             snackbar.error({ title: 'Token generation failed', text: e.message });
         } finally {
             creating.value = false;
-        }
-    }
-};
-
-const updateWalletAccount = async () => {
-    if (!enableAccountModify.value) {
-        enableAccountModify.value = true;
-    } else {
-        if (!walletAccount.value) {
-            return snackbar.error({ title: 'Account required', text: 'Please enter a wallet account.' });
-        } else if (addressToPublicKey(walletAccount.value) === appStore.user?.account) {
-            enableAccountModify.value = false;
-            return;
-        } else if (!isValidAddress(walletAccount.value)) {
-            return snackbar.error({ title: 'Invalid account', text: 'Please enter a valid wallet account.' });
-        }
-        try {
-            updating.value = true;
-            const res = await AuthApi.updateUser({ account: walletAccount.value });
-            enableAccountModify.value = false;
-            if (res.data.UpdateUser) {
-                appStore.user.account = walletAccount.value;
-                snackbar.info({
-                    title: 'Account wallet updated',
-                    text: `Your wallet account is set to ${walletAccount.value}`,
-                });
-            } else {
-                throw 'error';
-            }
-        } catch (e: any) {
-            if (snackbarErrors(e)) return;
-            snackbar.error({ title: 'Account wallet update failed', text: e.message });
-        } finally {
-            updating.value = false;
         }
     }
 };
@@ -245,15 +159,6 @@ const resetSettings = () => {
     router.push({ name: 'platform.setup' });
 };
 
-(() => {
-    if (appStore.user?.account) {
-        walletAccount.value = publicKeyToAddress(appStore.user.account);
-        enableAccountModify.value = false;
-    } else if (!appStore.isMultiTenant) {
-        enableAccountModify.value = false;
-    }
-})();
-
 watch(
     () => advancedMode.value,
     () => {
@@ -266,24 +171,13 @@ watch(
 );
 
 watch(
-    () => appStore.user?.account,
-    (newAccount) => {
-        if (newAccount) {
-            enableAccountModify.value = false;
-            walletAccount.value = publicKeyToAddress(appStore.user?.account);
-        }
-
-        if (!appStore.user?.apiTokens?.length) {
-            enableTokenCreate.value = true;
-        }
-    }
-);
-
-watch(
     () => appStore.user,
     (userVal) => {
         if (userVal) {
             loading.value = false;
+            if (!appStore.user?.apiTokens?.length) {
+                enableTokenCreate.value = true;
+            }
         }
     }
 );

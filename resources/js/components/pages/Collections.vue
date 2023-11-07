@@ -112,6 +112,7 @@ import NoItems from '~/components/NoItems.vue';
 import { snackbarErrors } from '~/util';
 import Btn from '~/components/Btn.vue';
 import { TransactionState } from '~/types/types.enums';
+import { useRoute, useRouter } from 'vue-router';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -134,6 +135,9 @@ const paginatorRef = ref();
 const modalSlide = ref(false);
 const slideComponent = ref();
 const searchInput = ref('');
+
+const route = useRoute();
+const router = useRouter();
 
 const enablePagination = computed(() => searchInput.value === '');
 
@@ -296,6 +300,15 @@ onMounted(() => {
     loadMoreCollectionsWithObserver();
     events.on('transaction', openTransactionSlide);
 });
+
+watch(
+    () => useAppStore().user,
+    () => {
+        if (useAppStore().isMultiTenant && !useAppStore().hasValidConfig && route.meta.requiresToken) {
+            router.push({ name: 'platform.user.settings' });
+        }
+    }
+);
 
 watch(() => collections.value, setCollectionIds);
 </script>

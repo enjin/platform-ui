@@ -25,7 +25,6 @@ export const useAppStore = defineStore('app', {
             tenant: false,
             webSocket: '',
             channel: '',
-            daemon: '',
         },
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
@@ -128,10 +127,6 @@ export const useAppStore = defineStore('app', {
             }
             if (appConfig.channel.length) {
                 this.config.channel = appConfig.channel;
-            }
-
-            if (window.bootstrap?.daemon) {
-                this.config.daemon = window.bootstrap.daemon;
             }
 
             if (window.bootstrap?.name) {
@@ -252,7 +247,7 @@ export const useAppStore = defineStore('app', {
     getters: {
         hasValidConfig(state: AppState) {
             if (this.isMultiTenant) {
-                return state.loggedIn && state.user?.apiTokens?.length > 0 && state.user?.account;
+                return state.loggedIn && state.user?.apiTokens?.length > 0;
             }
 
             return state.loggedIn && state.config.url;
