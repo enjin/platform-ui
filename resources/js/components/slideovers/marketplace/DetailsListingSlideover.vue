@@ -39,7 +39,8 @@
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Price</dt>
                         <dd class="mt-1 text-sm text-gray-900">
-                            {{ formatPriceFromENJ(item.price) }} {{ currencySymbol }}
+                            {{ item.price > 100 ? formatPriceFromENJ(item.price) : item.price }}
+                            {{ currencySymbol }}
                         </dd>
                     </div>
 
@@ -118,7 +119,7 @@ defineProps<{
     item?: {
         listingId: string;
         seller: string;
-        price: string;
+        price: number;
         amount: string;
         makeAssetId: {
             collectionId: string;
