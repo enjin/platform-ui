@@ -7,7 +7,7 @@ export default class Royalty {
 
     static getRoyaltyPercentage(item: any) {
         if (item?.royalty?.percentage) {
-            return item.royalty.percentage;
+            return item.royalty.percentage * 100;
         }
 
         return 0;
