@@ -8,8 +8,9 @@ import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
 export const formatData = (entries: any, type = 'object') => {
     const data: { [key: string]: any } = type === 'object' ? {} : [];
 
-    // eslint-disable-next-line
-    for (let [key, value] of Object.entries(entries)) {
+    for (const [key, value] of Object.entries(entries)) {
+        let entryValue = value;
+
         if (value === null || value === undefined) {
             continue;
         }
@@ -20,13 +21,13 @@ export const formatData = (entries: any, type = 'object') => {
             continue;
         }
         if (typeof value === 'object') {
-            value = formatData(value, Array.isArray(value) ? 'array' : 'object');
+            entryValue = formatData(value, Array.isArray(value) ? 'array' : 'object');
             if (Object.keys(value as any).length === 0) {
                 continue;
             }
         }
 
-        data[key] = value;
+        data[key] = entryValue;
     }
 
     return data;
@@ -94,6 +95,20 @@ export const formatPriceFromENJ = (price: any) => {
     return price / 1000000000000000000;
 };
 
+export const checkFormatPrice = (price, listing, currency) => {
+    if (
+        listing.makeAssetId.collectionId !== '0' ||
+        listing.makeAssetId.tokenId !== '0' ||
+        listing.takeAssetId.tokenId !== '0' ||
+        listing.takeAssetId.collectionId !== '0'
+    ) {
+        return `${formatPriceFromENJ(price)?.toLocaleString('en-US', {
+            maximumFractionDigits: 18,
+        })} ${currency}`;
+    }
+
+    return `${price} ${currency}`;
+};
 export const snackbarErrors = (errors: any) => {
     if (!errors.length) return false;
 
