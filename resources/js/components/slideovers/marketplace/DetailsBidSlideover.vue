@@ -17,7 +17,7 @@
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Price</dt>
                         <dd class="mt-1 text-sm text-gray-900">
-                            {{ formatPriceFromENJ(item.price) }} {{ currencySymbol }}
+                            {{ checkFormatPrice(item.price, item.listing, currencySymbol) }}
                         </dd>
                     </div>
 
@@ -40,13 +40,13 @@
 import { computed } from 'vue';
 import Address from '~/components/Address.vue';
 import { useAppStore } from '~/store';
-import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
+import { checkFormatPrice, currencySymbolByNetwork } from '~/util';
 
 defineProps<{
     item?: {
         id: string;
         bidder: string;
-        price: string;
+        price: number;
         height: string;
         listing: {
             listingId: string;

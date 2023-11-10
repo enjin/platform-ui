@@ -39,7 +39,7 @@
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Price</dt>
                         <dd class="mt-1 text-sm text-gray-900">
-                            {{ formatPriceFromENJ(item.price) }} {{ currencySymbol }}
+                            {{ checkFormatPrice(item.price, item, currencySymbol) }}
                         </dd>
                     </div>
 
@@ -112,13 +112,13 @@ import Address from '~/components/Address.vue';
 import Chip from '~/components/Chip.vue';
 import Tooltip from '~/components/Tooltip.vue';
 import { useAppStore } from '~/store';
-import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
+import { checkFormatPrice, currencySymbolByNetwork } from '~/util';
 
 defineProps<{
     item?: {
         listingId: string;
         seller: string;
-        price: string;
+        price: number;
         amount: string;
         makeAssetId: {
             collectionId: string;

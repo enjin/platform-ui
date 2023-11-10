@@ -56,8 +56,7 @@
                                     </span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ bid.price > 100 ? formatPriceFromENJ(bid.price) : bid.price }}
-                                    {{ currencySymbol }}
+                                    {{ checkFormatPrice(bid.price, bid.listing, currencySymbol) }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ addressShortHex(bid.bidder) }}
@@ -93,7 +92,7 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import debounce from 'lodash/debounce';
 import { addressShortHex } from '~/util/address';
-import { currencySymbolByNetwork, formatData, formatPriceFromENJ, shortString, snackbarErrors } from '~/util';
+import { checkFormatPrice, currencySymbolByNetwork, formatData, shortString, snackbarErrors } from '~/util';
 import DropdownMenu from '~/components/DropdownMenu.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';

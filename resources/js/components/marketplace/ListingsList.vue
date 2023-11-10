@@ -78,8 +78,7 @@
                                     {{ shortString(listing.listingId) }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ listing.price > 100 ? formatPriceFromENJ(listing.price) : listing.price }}
-                                    {{ currencySymbol }}
+                                    {{ checkFormatPrice(listing.price, listing, currencySymbol) }}
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ addressShortHex(listing.seller) }}
@@ -121,7 +120,7 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import debounce from 'lodash/debounce';
 import { addressShortHex } from '~/util/address';
-import { currencySymbolByNetwork, formatData, formatPriceFromENJ, shortString, snackbarErrors } from '~/util';
+import { checkFormatPrice, currencySymbolByNetwork, formatData, shortString, snackbarErrors } from '~/util';
 import DropdownMenu from '~/components/DropdownMenu.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';
