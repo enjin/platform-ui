@@ -20,6 +20,6 @@ return [
         'reset-password',
     ],
 
-    'domain' => env('PLATFORM_UI_DOMAIN', 'https://platform.enjinstaging.com'),
+    'domain' => env('PLATFORM_UI_DOMAIN'),
 
 ];
