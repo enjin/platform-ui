@@ -19,6 +19,13 @@
                         <Address :address="item.owner" />
                     </div>
 
+                    <div v-if="tankBalance" class="space-y-2 pt-4 pb-3 animate-fade-in">
+                        <dt class="text-base font-medium text-gray-500">Balance</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ formatPriceFromENJ(tankBalance)?.toFixed(4) }} {{ currencySymbol }}
+                        </dd>
+                    </div>
+
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Reserves Existential Deposit</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ item.reservesExistentialDeposit }}</dd>
@@ -132,9 +139,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+import { TransactionApi } from '~/api/transaction';
 import Address from '~/components/Address.vue';
+import { DTOWalletFactory as DTOFactory } from '~/factory/wallet';
+import { useAppStore } from '~/store';
+import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 
-defineProps<{
+const props = defineProps<{
     item?: {
         tankId: string;
         name: string;
@@ -156,4 +168,19 @@ defineProps<{
         }[];
     };
 }>();
+
+const tankBalance = ref();
+
+const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
+
+const getTankBalance = async () => {
+    if (!props.item) return;
+
+    const res = await TransactionApi.getWallet({ account: props.item.tankId });
+    tankBalance.value = DTOFactory.forWallet(res).items[0]?.balances?.free;
+};
+
+(() => {
+    getTankBalance();
+})();
 </script>
