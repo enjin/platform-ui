@@ -1,4 +1,4 @@
-import { BeamType, NotificationType, TokenCapType, TokenIdSelectType } from './types.enums';
+import { BeamType, NotificationType, TokenCapType, TokenIdSelectType, TransactionMethods } from './types.enums';
 import type SignClient from '@walletconnect/sign-client';
 
 export interface AppState {
@@ -122,4 +122,5 @@ export interface DispatchRulesValuesInterface {
         amount: number;
         resetPeriod: number;
     };
+    permittedExtrinsics?: TransactionMethods[];
 }

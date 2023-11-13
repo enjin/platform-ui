@@ -93,6 +93,30 @@
                             type="number"
                         />
 
+                        <div>
+                            <div class="flex space-x-3">
+                                <FormSelect
+                                    v-model="permittedExtrinsicValue"
+                                    :options="transactionMethods"
+                                    label="Permitted Extrinsics"
+                                    description="The list of permitted extrinsics in this ruleset."
+                                    name="permittedExtrinsics"
+                                    class="flex-1"
+                                />
+                                <Btn @click="addItem" class="!px-2 !flex mt-auto" primary>
+                                    <PlusIcon class="w-6 h-6 m-auto" />
+                                </Btn>
+                            </div>
+                            <div class="flex flex-wrap mt-4 gap-2" v-if="permittedExtrinsics.length">
+                                <Chip
+                                    v-for="(item, idx) in permittedExtrinsics"
+                                    :key="(item as string)"
+                                    :text="(item as string)"
+                                    @remove="removeItem(idx)"
+                                />
+                            </div>
+                        </div>
+
                         <div class="space-y-2">
                             <div>
                                 <h3 class="text-base font-semibold leading-6 text-gray-900">User Fuel Budget</h3>
@@ -153,13 +177,17 @@ import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
 import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, parseFormatedTokenId } from '~/util';
-import { TokenIdSelectType } from '~/types/types.enums';
+import { TokenIdSelectType, TransactionMethods } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import FormList from '../FormList.vue';
 import { formatWhitelistedCallers, formatWhitelistedCollections } from '~/util';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
 import { numberNotRequiredSchema, stringNotRequiredSchema } from '~/util/schemas';
 import { useAppStore } from '~/store';
+import FormSelect from '../FormSelect.vue';
+import { PlusIcon } from '@heroicons/vue/20/solid';
+import Btn from '../Btn.vue';
+import Chip from '../Chip.vue';
 
 const emit = defineEmits(['update:modelValue', 'validation', 'close']);
 
@@ -190,6 +218,10 @@ const userFuelAmount = ref(props.modelValue.userFuelBudget?.amount ?? null);
 const userFuelresetPeriod = ref(props.modelValue.userFuelBudget?.resetPeriod ?? null);
 const tankFuelAmount = ref(props.modelValue.tankFuelBudget?.amount ?? null);
 const tankFuelresetPeriod = ref(props.modelValue.tankFuelBudget?.resetPeriod ?? null);
+const permittedExtrinsics = ref(props.modelValue.permittedExtrinsics ?? []);
+const permittedExtrinsicValue = ref('');
+
+const transactionMethods = Object.values(TransactionMethods);
 
 const validForm = computed(() => formRef.value.getMeta().valid);
 const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
@@ -209,6 +241,18 @@ const validation = yup.object({
     tankFuelAmount: numberNotRequiredSchema.typeError('Tank Fuel Amount must be a number'),
     tankFuelresetPeriod: numberNotRequiredSchema.typeError('Tank Fuel Reset Period must be a number'),
 });
+
+const addItem = () => {
+    if (permittedExtrinsicValue.value === '') return;
+    if (permittedExtrinsics.value.includes(permittedExtrinsicValue.value as TransactionMethods)) return;
+
+    permittedExtrinsics.value.push(permittedExtrinsicValue.value as TransactionMethods);
+    permittedExtrinsicValue.value = '';
+};
+
+const removeItem = (idx: number) => {
+    permittedExtrinsics.value.splice(idx, 1);
+};
 
 const addCaller = () => {
     whitelistedCallers.value.push({ caller: '' });
@@ -243,6 +287,7 @@ const hasChanged = computed(() =>
             amount: formatPriceToENJ(tankFuelAmount.value),
             resetPeriod: tankFuelresetPeriod.value,
         },
+        permittedExtrinsics: permittedExtrinsics.value,
     })
 );
 
