@@ -36,6 +36,7 @@ class PlatformUiServiceProvider extends PackageServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../public' => public_path('vendor/platform-ui'),
+            __DIR__ . '/../public/images' => public_path('images'),
         ], ['platform-ui-assets']);
     }
 }
