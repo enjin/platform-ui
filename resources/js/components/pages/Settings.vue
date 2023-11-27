@@ -28,6 +28,7 @@
                                 placeholder="Enter token name"
                             />
                             <Btn
+                                id="create-api-token-button"
                                 primary
                                 class="py-2.5 disabled:!bg-primary"
                                 @click="createApiToken"
@@ -67,7 +68,7 @@
                                         />
                                     </span>
                                 </div>
-                                <Btn error @click="revokeToken(token.name)">Revoke</Btn>
+                                <Btn :id="`revoke-api-button__${token.name}`" error @click="revokeToken(token.name)">Revoke</Btn>
                             </div>
                         </div>
                     </div>

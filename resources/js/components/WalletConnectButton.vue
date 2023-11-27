@@ -2,6 +2,7 @@
     <Menu as="div" class="relative">
         <div>
             <MenuButton
+                id="wallet-connect-button"
                 class="flex items-center space-x-2 rounded-md bg-primary py-2 px-3 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 text-white transition-all"
             >
                 <WalletIcon class="h-6 w-6" />
@@ -16,6 +17,7 @@
                 <template v-if="!walletSession">
                     <MenuItem v-slot="{ active }">
                         <button
+                            id="wallet-connect-button__enjin"
                             :class="[
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
@@ -27,6 +29,7 @@
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
                         <button
+                            id="wallet-connect-button__polkadot"
                             :class="[
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
@@ -40,6 +43,7 @@
                 <template v-else>
                     <MenuItem v-slot="{ active }">
                         <button
+                            id="wallet-connect-button__disconnect"
                             :class="[
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
