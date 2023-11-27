@@ -83,7 +83,9 @@ const walletSession = computed(() => connectionStore.wallet);
 const connectWallet = async (provider: string) => {
     try {
         loading.value = true;
-        await connectionStore.connectWallet(provider);
+        await connectionStore.connectWallet(provider, () => {
+            loading.value = false;
+        });
         if (connectionStore.accounts) {
             showAccountsModal.value = true;
         }

@@ -44,9 +44,9 @@ export const useConnectionStore = defineStore('connection', {
         getWeb3Modal() {
             return new Web3Modal(walletConnectWeb3modalConfig);
         },
-        async connectWallet(provider) {
+        async connectWallet(provider: string, endLoading: Function) {
             if (provider === 'wc') {
-                await this.connectWC();
+                await this.connectWC(endLoading);
             }
 
             if (provider === 'polkadot.js') {
@@ -74,7 +74,7 @@ export const useConnectionStore = defineStore('connection', {
                 this.walletSession = this.walletClient.session.get(this.walletClient.session.keys[lastKeyIndex]);
             }
         },
-        async connectWC() {
+        async connectWC(endLoading: Function) {
             const walletConnect = this.getWeb3Modal();
             await this.initWalletClient();
 
@@ -84,6 +84,12 @@ export const useConnectionStore = defineStore('connection', {
 
             const { uri, approval } = await this.walletClient.connect({
                 requiredNamespaces: wcRequiredNamespaces(useAppStore().config.network),
+            });
+
+            walletConnect.subscribeModal(async (event) => {
+                if (event.open === false) {
+                    endLoading();
+                }
             });
 
             await walletConnect.openModal({
