@@ -51,7 +51,7 @@
 
                     <div class="space-y-2 pt-4 pb-3" v-if="item.flags.length">
                         <dt class="text-base font-medium text-gray-500">Flags</dt>
-                        <Chip v-for="flag in item.flags" :key="flag" :text="flag" :closable="false" />
+                        <Chip v-for="flag in item.flags" :key="flag" :text="flag" :closable="false" class="mr-2" />
                     </div>
                 </div>
             </div>

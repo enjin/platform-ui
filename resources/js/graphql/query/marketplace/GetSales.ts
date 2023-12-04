@@ -18,6 +18,14 @@ export default `query GetSales($ids: [BigInt!], $accounts: [String!], $listingId
           }
           listing {
             listingId
+            makeAssetId {
+                collectionId
+                tokenId
+            }
+            takeAssetId {
+                collectionId
+                tokenId
+            }
           }
         }
         cursor

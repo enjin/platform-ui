@@ -20,4 +20,6 @@ return [
         'reset-password',
     ],
 
+    'domain' => env('APP_DOMAIN'),
+
 ];

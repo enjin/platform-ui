@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { ConnectionState } from '~/types/types.interface';
-import { wcOptions } from '~/util';
 import { wcRequiredNamespaces } from '~/util';
 import { getAppMetadata, getSdkError } from '@walletconnect/utils';
 import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
@@ -8,8 +7,26 @@ import SignClient from '@walletconnect/sign-client';
 import { HexString } from '@polkadot/util/types';
 import { wcNamespaces, wcProjectId } from '~/util/constants';
 import { useAppStore } from '.';
-import { WalletConnectModalSign } from '@walletconnect/modal-sign-html';
 import snackbar from '~/util/snackbar';
+import { Web3Modal, Web3ModalConfig } from '@web3modal/standalone';
+
+export const PrivacyPolicyLink = 'https://nft.io/legal/privacy-policy';
+export const TermsOfServiceLink = 'https://nft.io/legal/terms-of-service';
+
+const walletConnectWeb3modalConfig: Web3ModalConfig = {
+    projectId: wcProjectId,
+    themeMode: 'light',
+    privacyPolicyUrl: PrivacyPolicyLink,
+    termsOfServiceUrl: TermsOfServiceLink,
+    explorerRecommendedWalletIds: ['bdc9433ffdaee55d31737d83b931caa1f17e30666f5b8e03eea794bac960eb4a'],
+    walletConnectVersion: 2,
+    themeVariables: {
+        '--w3m-background-color': '#7567CE',
+        '--w3m-accent-color': '#7567CE',
+        '--w3m-accent-fill-color': '#FFFFFF',
+        '--w3m-logo-image-url': '/images/enjin-wallet-long.svg',
+    },
+};
 
 export const useConnectionStore = defineStore('connection', {
     state: (): ConnectionState => ({
@@ -25,11 +42,11 @@ export const useConnectionStore = defineStore('connection', {
     },
     actions: {
         getWeb3Modal() {
-            return new WalletConnectModalSign(wcOptions);
+            return new Web3Modal(walletConnectWeb3modalConfig);
         },
-        async connectWallet(provider) {
+        async connectWallet(provider: string, endLoading: Function) {
             if (provider === 'wc') {
-                await this.connectWC();
+                await this.connectWC(endLoading);
             }
 
             if (provider === 'polkadot.js') {
@@ -57,28 +74,39 @@ export const useConnectionStore = defineStore('connection', {
                 this.walletSession = this.walletClient.session.get(this.walletClient.session.keys[lastKeyIndex]);
             }
         },
-        async connectWC() {
+        async connectWC(endLoading: Function) {
             const walletConnect = this.getWeb3Modal();
             await this.initWalletClient();
 
-            this.walletSession = await walletConnect.connect({
-                requiredNamespaces: wcRequiredNamespaces(useAppStore().config.network),
-            });
-
-            if (this.walletSession && this.walletSession.acknowledged) {
-                this.provider = 'wc';
-                this.wallet = true;
-                await this.initWalletClient();
-
+            if (!this.walletClient) {
                 return;
             }
 
-            await walletConnect!.disconnect({
-                topic: this.walletSession.topic,
-                reason: getSdkError('USER_REJECTED'),
+            const { uri, approval } = await this.walletClient.connect({
+                requiredNamespaces: wcRequiredNamespaces(useAppStore().config.network),
             });
 
-            this.account = null;
+            walletConnect.subscribeModal(async (event) => {
+                if (event.open === false) {
+                    endLoading();
+                }
+            });
+
+            await walletConnect.openModal({
+                uri,
+            });
+
+            try {
+                this.walletSession = await approval();
+                if (this.walletSession) {
+                    this.provider = 'wc';
+                    this.wallet = true;
+                    await this.initWalletClient();
+                }
+            } finally {
+                walletConnect.closeModal();
+                this.account = null;
+            }
         },
         async connectPolkadotJS() {
             const pkjs = new PolkadotjsWallet();

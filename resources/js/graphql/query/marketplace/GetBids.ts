@@ -18,6 +18,14 @@ export default `query GetBids($ids: [BigInt!], $accounts: [String!], $listingIds
           }
           listing {
             listingId
+            makeAssetId {
+                collectionId
+                tokenId
+            }
+            takeAssetId {
+                collectionId
+                tokenId
+            }
           }
         }
         cursor
