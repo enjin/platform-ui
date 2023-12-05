@@ -12,7 +12,7 @@ import { useConnectionStore } from './connection';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
-    polkadot: 'wss://rpc.matrix.blockchain.enjin.io',
+    enjin: 'wss://rpc.matrix.blockchain.enjin.io',
 };
 
 export const useTransactionStore = defineStore('transaction', {
