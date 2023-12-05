@@ -82,7 +82,7 @@
                         >
                             Cancel
                         </RouterLink>
-                        <Btn :loading="isLoading" primary is-submit>Create</Btn>
+                        <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
                     </div>
                 </div>
             </Form>

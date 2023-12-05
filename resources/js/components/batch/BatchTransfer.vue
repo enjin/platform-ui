@@ -61,7 +61,7 @@
                         >
                             Cancel
                         </RouterLink>
-                        <Btn :loading="isLoading" primary is-submit>Batch Transfer</Btn>
+                        <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Batch Transfer</Btn>
                     </div>
                 </div>
             </Form>
