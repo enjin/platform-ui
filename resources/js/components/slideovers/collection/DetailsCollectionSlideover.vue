@@ -20,7 +20,7 @@
                         <Address :address="Royalty.getRoyaltyBeneficiary(item)" />
 
                         <dt class="text-sm font-medium text-gray-500">Percentage</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ Royalty.getRoyaltyPercentage(item) }}%</dd>
+                        <dd class="mt-1 text-sm text-gray-900">{{ Royalty.getRoyaltyPercentage(item) * 100 }}%</dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">

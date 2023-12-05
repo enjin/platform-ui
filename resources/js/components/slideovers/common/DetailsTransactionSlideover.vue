@@ -66,7 +66,10 @@
                             <dt class="text-base font-medium text-gray-500">State</dt>
                             <dd class="mt-1 text-sm text-gray-900">{{ transaction.state }}</dd>
                         </div>
-                        <div class="space-y-2 pt-4 pb-3" v-if="transaction.result">
+                        <div
+                            class="space-y-2 pt-4 pb-3"
+                            v-if="transaction.result && transaction.state === TransactionState.FINALIZED"
+                        >
                             <dt class="text-base font-medium text-gray-500">Result</dt>
                             <dd class="mt-1 text-sm text-gray-900 font-bold">
                                 <TransactionResultChip :text="transaction.result" />
@@ -114,6 +117,12 @@
                                         v-if="isAddressKey(param.type) && param.value"
                                         :address="`0x${param.value}`"
                                     />
+                                    <dd
+                                        v-else-if="param.type === 'percentage'"
+                                        class="mt-1 text-sm text-gray-900 break-words"
+                                    >
+                                        {{ param.value / 10000000 }}%
+                                    </dd>
                                     <dd v-else class="mt-1 text-sm text-gray-900 break-words">
                                         {{ param.value ?? '-' }}
                                     </dd>
