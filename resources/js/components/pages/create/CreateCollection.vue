@@ -115,16 +115,17 @@
                             </div>
                             <div class="w-5"></div>
                         </template>
-                        <template #inputs="{ inputs }">
+                        <template #inputs="{ inputs, index }">
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.collectionId"
+                                    :dusk="`input__collection-id-${index + 1}`"
                                     type="number"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                             <div class="flex-1">
-                                <TokenIdInput v-model="inputs.tokenId" />
+                                <TokenIdInput v-model="inputs.tokenId" :dusk="`input_token-id-${index + 1}`" />
                             </div>
                         </template>
                     </FormList>
@@ -151,10 +152,11 @@
                             </div>
                             <div class="w-5"></div>
                         </template>
-                        <template #inputs="{ inputs }">
+                        <template #inputs="{ inputs, index }">
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.key"
+                                    :dusk="`input__attribute-key-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -162,6 +164,7 @@
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.value"
+                                    :dusk="`input__attribute-value-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />

@@ -1,5 +1,7 @@
 <template>
-    <span class="underline text-gray-400 cursor-pointer text-xs" @click="sendReadmoreEvent">Read more</span>
+    <span dusk="btn__readmore" class="underline text-gray-400 cursor-pointer text-xs" @click="sendReadmoreEvent">
+        Read more
+    </span>
 </template>
 
 <script setup lang="ts">
