@@ -98,6 +98,7 @@
                         tooltip="Token must be a currency"
                         readmore="Explicit Royalty Currencies"
                         flex
+                        dusk-id="royalty"
                     >
                         <template #headers>
                             <div class="flex-1">
@@ -110,7 +111,7 @@
                                 <label class="block text-sm font-medium leading-6 text-gray-900"> Token ID </label>
                                 <p class="mt-1 text-sm text-gray-500">
                                     Token ID that will be included as part of the royalty policy.
-                                    <ReadMoreButton readmore="Token ID" />
+                                    <ReadMoreButton readmore="Token ID" dusk="tokenId" />
                                 </p>
                             </div>
                             <div class="w-5"></div>
@@ -140,6 +141,7 @@
                         @remove="removeAttributeItem"
                         readmore="Attributes"
                         flex
+                        dusk-id="attributes"
                     >
                         <template #headers>
                             <div class="flex-1">

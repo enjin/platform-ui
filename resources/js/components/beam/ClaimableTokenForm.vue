@@ -49,6 +49,7 @@
                             @remove="removeAttributeItem"
                             readmore="Attributes"
                             tooltip="This method of beam creation mints the tokens beforehand instead of using already minted tokens, which is why it needs to have attributes for the metadata of the token"
+                            dusk-id="attributes"
                         >
                             <template #headers>
                                 <div class="flex-1">

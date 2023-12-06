@@ -14,6 +14,7 @@
                             @remove="removeCaller"
                             flex
                             add-text="Add Caller"
+                            dusk-id="caller"
                         >
                             <template #headers>
                                 <div class="flex-1">
@@ -62,6 +63,7 @@
                             @remove="removeWhiteCollection"
                             flex
                             add-text="Add Collection"
+                            dusk-id="collection"
                         >
                             <template #headers>
                                 <div class="flex-1">

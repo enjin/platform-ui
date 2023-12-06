@@ -10,7 +10,7 @@
 
             <p v-if="description" class="mt-1 text-sm text-gray-500">
                 {{ description }}
-                <ReadMoreButton v-if="readmore" :readmore="readmore" />
+                <ReadMoreButton v-if="readmore" :readmore="readmore" :dusk="duskId" />
             </p>
         </div>
 
@@ -63,6 +63,7 @@ const props = withDefaults(
         tooltip?: string;
         readmore?: string;
         addText?: string;
+        duskId?: string;
     }>(),
     {
         flex: false,

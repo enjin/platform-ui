@@ -31,6 +31,7 @@
                             @remove="removeUserInput"
                             flex
                             add-text="Add User"
+                            dusk-id="user"
                         >
                             <template #headers>
                                 <div class="flex-1">

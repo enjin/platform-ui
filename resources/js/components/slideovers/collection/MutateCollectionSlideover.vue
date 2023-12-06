@@ -47,6 +47,7 @@
                             description="Set the explicit royalty currencies for tokens in this collection."
                             @add="addExplicitRoyaltyCurrencyItem"
                             @remove="removeExplicitRoyaltyCurrencyItem"
+                            dusk-id="royalty"
                         >
                             <template #headers>
                                 <div class="flex-1">
@@ -59,7 +60,7 @@
                                     <label class="block text-sm font-medium leading-6 text-gray-900"> Token ID </label>
                                     <p class="mt-1 text-sm text-gray-500">
                                         The token ID of a multi token.
-                                        <ReadMoreButton readmore="Token ID" />
+                                        <ReadMoreButton readmore="Token ID" dusk="tokenId" />
                                     </p>
                                 </div>
                                 <div class="w-5"></div>

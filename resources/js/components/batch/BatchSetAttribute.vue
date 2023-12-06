@@ -59,6 +59,7 @@
                         @add="addAttributeItem"
                         @remove="removeAttributeItem"
                         readmore="Attributes"
+                        dusk-id="attributes"
                     >
                         <template #headers>
                             <div class="flex-1">

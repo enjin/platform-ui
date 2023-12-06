@@ -46,6 +46,7 @@
                             @add="addVariable"
                             @remove="removeVariable"
                             flex
+                            dusk-id="variables"
                         >
                             <template #headers>
                                 <div class="flex-1">

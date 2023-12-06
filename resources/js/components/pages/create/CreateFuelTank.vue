@@ -66,6 +66,7 @@
                                     @remove="removeCaller"
                                     flex
                                     add-text="Add Caller"
+                                    dusk-id="caller"
                                 >
                                     <template #headers>
                                         <div class="flex-1">
