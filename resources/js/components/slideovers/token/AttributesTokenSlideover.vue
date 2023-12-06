@@ -89,7 +89,7 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" primary is-submit>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>
                 {{ attributeActions.find((a) => a.value === attributeAction)?.btnText }}
             </Btn>
         </div>

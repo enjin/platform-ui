@@ -1,17 +1,15 @@
 <template>
     <Modal :is-open="isOpen" :close="closeModal">
-        <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900"> Disclaimer </DialogTitle>
+        <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900"> {{ title }} </DialogTitle>
         <div class="mt-2">
             <p class="text-sm text-gray-500">
-                Retries transactions that have failed or otherwise not been included on-chain after some time. Use with
-                caution and ensure the transactions really aren't yet on-chain (or likely to be) to make sure they are
-                not accidentally included twice.
+                {{ description }}
             </p>
         </div>
 
-        <div class="flex space-x-4 mt-4">
+        <div class="flex space-x-4 mt-6">
             <Btn @click="closeModal">Cancel</Btn>
-            <Btn primary @click="confirm">Retry transaction</Btn>
+            <Btn primary @click="confirm">Confirm</Btn>
         </div>
     </Modal>
 </template>
@@ -21,7 +19,7 @@ import { DialogTitle } from '@headlessui/vue';
 import Btn from '~/components/Btn.vue';
 import Modal from '~/components/Modal.vue';
 
-defineProps<{ isOpen: boolean }>();
+defineProps<{ isOpen: boolean; title: string; description: string }>();
 
 const emit = defineEmits(['closed', 'confirm']);
 

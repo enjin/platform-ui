@@ -97,7 +97,7 @@
                     >
                         Cancel
                     </RouterLink>
-                    <Btn :loading="isLoading" primary is-submit>Batch Set Attribute</Btn>
+                    <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Batch Set Attribute</Btn>
                 </div>
             </Form>
         </div>

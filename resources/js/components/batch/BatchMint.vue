@@ -54,7 +54,7 @@
                         >
                             Cancel
                         </RouterLink>
-                        <Btn :loading="isLoading" primary is-submit>Batch Mint</Btn>
+                        <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Batch Mint</Btn>
                     </div>
                 </div>
             </Form>

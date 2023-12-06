@@ -68,7 +68,9 @@
                                         />
                                     </span>
                                 </div>
-                                <Btn :id="`revoke-api-button__${token.name}`" error @click="revokeToken(token.name)">Revoke</Btn>
+                                <Btn :id="`revoke-api-button__${token.name}`" error @click="confirmRevoke(token.name)">
+                                    Revoke
+                                </Btn>
                             </div>
                         </div>
                     </div>
@@ -90,6 +92,13 @@
                 </div>
             </template>
         </div>
+        <ConfirmModal
+            :is-open="confirmModal"
+            title="Revoke API Token"
+            description="Do you want to revoke this API token?"
+            @closed="confirmModal = false"
+            @confirm="revokeToken"
+        />
     </div>
 </template>
 
@@ -105,6 +114,7 @@ import FormInput from '../FormInput.vue';
 import { shortString, snackbarErrors } from '~/util';
 import CopyTextIcon from '../CopyTextIcon.vue';
 import LoadingCircle from '../LoadingCircle.vue';
+import ConfirmModal from '../ConfirmModal.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -114,6 +124,8 @@ const tokenName = ref();
 const enableTokenCreate = ref(false);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
 const creating = ref(false);
+const confirmModal = ref(false);
+const confirmModalName = ref();
 
 const tokens = computed(() => appStore.user?.apiTokens);
 
@@ -138,15 +150,25 @@ const createApiToken = async () => {
     }
 };
 
-const revokeToken = async (name: string) => {
-    if (!name) return;
+const revokeToken = async () => {
+    if (!confirmModalName.value) return;
+
     try {
-        await appStore.revokeToken(name);
-        snackbar.info({ title: 'Token revoked', text: `Your token ${name} has been revoked.` });
+        await appStore.revokeToken(confirmModalName.value);
+        snackbar.info({ title: 'Token revoked', text: `Your token ${confirmModalName.value} has been revoked.` });
+        confirmModalName.value = null;
     } catch (e: any) {
         if (snackbarErrors(e)) return;
         snackbar.error({ title: 'Token revocation failed' });
+    } finally {
+        confirmModal.value = false;
+        confirmModalName.value = null;
     }
+};
+
+const confirmRevoke = (name: string) => {
+    confirmModal.value = true;
+    confirmModalName.value = name;
 };
 
 const logout = async () => {

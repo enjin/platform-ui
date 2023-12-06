@@ -25,10 +25,16 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" primary is-submit>Retry</Btn>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Retry</Btn>
         </div>
     </Form>
-    <ConfirmModal :is-open="modal" @closed="modal = false" @confirm="retryTransaction" />
+    <ConfirmModal
+        :is-open="modal"
+        title="Disclaimer"
+        description="Retries transactions that have failed or otherwise not been included on-chain after some time. Use with caution and ensure the transactions really aren't yet on-chain (or likely to be) to make sure they are not accidentally included twice."
+        @closed="modal = false"
+        @confirm="retryTransaction"
+    />
 </template>
 
 <script setup lang="ts">
