@@ -79,7 +79,7 @@ const props = withDefaults(
         required: false,
         description: undefined,
         type: 'text',
-        min: undefined,
+        min: 0,
         disabled: false,
         prefix: undefined,
         placeholder: undefined,

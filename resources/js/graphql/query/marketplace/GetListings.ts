@@ -1,4 +1,4 @@
-export default `query GetListings($ids: [BigInt!], $listingIds: [String!], $account: String, $makeAssetId: AssetInputType, $takeAssetId: AssetInputType, $after: String = null, $first: Int = 15) {
+export default `query GetListings($ids: [BigInt!], $listingIds: [String!], $account: String, $makeAssetId: MultiTokenIdInput, $takeAssetId: MultiTokenIdInput, $after: String = null, $first: Int = 15) {
     GetListings(
       ids: $ids
       listingIds: $listingIds
