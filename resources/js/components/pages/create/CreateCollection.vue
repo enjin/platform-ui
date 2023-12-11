@@ -126,7 +126,11 @@
                                 />
                             </div>
                             <div class="flex-1">
-                                <TokenIdInput v-model="inputs.tokenId" :dusk="`input_token-id-${index + 1}`" />
+                                <TokenIdInput
+                                    v-model="inputs.tokenId"
+                                    :dusk="`input_token-id-${index + 1}`"
+                                    :name="`input_token-id-${index + 1}`"
+                                />
                             </div>
                         </template>
                     </FormList>
