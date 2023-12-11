@@ -6,6 +6,7 @@
                     <!-- Mobile menu button -->
                     <div class="-ml-2 mr-2 space-x-2 flex items-center md:hidden animate-slide-in">
                         <DisclosureButton
+                            v-if="(appStore.isMultiTenant && appStore.hasValidConfig) || !appStore.isMultiTenant"
                             class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-light"
                         >
                             <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
