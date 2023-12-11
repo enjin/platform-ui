@@ -96,9 +96,14 @@
 
                         <div class="space-y-2 pt-4 pb-3" v-if="transaction.transactionHash">
                             <dt class="text-base font-medium text-gray-500">Transaction Hash</dt>
-                            <dd class="mt-1 text-sm text-gray-900 break-words">
-                                {{ transaction.transactionHash }}
-                                <CopyTextIcon :text="transaction.transactionHash" />
+                            <dd class="flex items-center mt-1 text-sm text-gray-900">
+                                <a
+                                    :href="getSubscanUrl(transaction.transactionHash)"
+                                    target="_blank"
+                                    class="text-primary font-medium truncate"
+                                >
+                                    {{ transaction.transactionHash }}
+                                </a>
                             </dd>
                         </div>
 
