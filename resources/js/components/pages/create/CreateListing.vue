@@ -71,6 +71,7 @@
                                             v-model="takeCollectionId"
                                             name="takeCollectionId"
                                             placeholder="Collection ID"
+                                            type="number"
                                         />
                                         <TokenIdInput
                                             class="col-span-1"
