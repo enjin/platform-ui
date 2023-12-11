@@ -10,7 +10,7 @@
 
             <p v-if="description" class="mt-1 text-sm text-gray-500">
                 {{ description }}
-                <ReadMoreButton v-if="readmore" :readmore="readmore" />
+                <ReadMoreButton v-if="readmore" :readmore="readmore" :dusk="duskId" />
             </p>
         </div>
 
@@ -28,9 +28,14 @@
                 leave-to-class="transform opacity-0 scale-95"
             >
                 <div v-for="(item, idx) in localItems" :key="idx" class="flex flex-row flex-nowrap gap-3 md:gap-6">
-                    <slot name="inputs" :inputs="item" />
+                    <slot name="inputs" :inputs="item" :index="idx" />
 
-                    <button type="button" class="my-auto cursor-pointer" @click="emit('remove', idx)">
+                    <button
+                        type="button"
+                        :dusk="`btn__remove-item-${idx + 1}`"
+                        class="my-auto cursor-pointer"
+                        @click="emit('remove', idx)"
+                    >
                         <TrashIcon class="h-5 w-5 text-red-600" aria-hidden="true" />
                     </button>
                 </div>
@@ -58,6 +63,7 @@ const props = withDefaults(
         tooltip?: string;
         readmore?: string;
         addText?: string;
+        duskId?: string;
     }>(),
     {
         flex: false,

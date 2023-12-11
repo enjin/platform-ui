@@ -6,12 +6,12 @@
         <Tooltip class="!flex items-center" v-if="tooltip" :text="tooltip">
             <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
         </Tooltip>
-        <ReadMoreButton v-if="readmore && !description" class="ml-2" :readmore="readmore" />
+        <ReadMoreButton v-if="readmore && !description" class="ml-2" :readmore="readmore" :dusk="duskId" />
     </div>
 
     <p class="mt-1 text-sm text-gray-500" v-if="description">
         {{ description }}
-        <ReadMoreButton v-if="readmore" :readmore="readmore" />
+        <ReadMoreButton v-if="readmore" :readmore="readmore" :dusk="duskId" />
     </p>
 </template>
 
@@ -26,5 +26,6 @@ defineProps<{
     tooltip?: string;
     readmore?: string;
     required?: boolean;
+    duskId?: string;
 }>();
 </script>

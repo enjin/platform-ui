@@ -286,7 +286,7 @@ const getSingleUseCode = async () => {
 const getBeamCodes = async () => {
     isLoading.value = true;
     try {
-        const res = await BeamApi.getBeams(formatData({ codes: [searchInput.value] }));
+        const res = await BeamApi.getBeams(formatData(searchInput.value ? { codes: [searchInput.value] } : {}));
         beams.value = DTOFactory.forBeams(res);
     } catch (e) {
         beams.value.items = [];
