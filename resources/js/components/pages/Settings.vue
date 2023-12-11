@@ -76,7 +76,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col space-y-4 mt-8">
+                <div class="flex flex-col space-y-4 mt-4">
                     <div class="flex justify-between">
                         <h1 class="text-xl md:text-2xl">Settings</h1>
                     </div>

@@ -28,6 +28,7 @@
                             required
                         />
                         <FormSelect
+                            v-if="freezeType === FreezeType.TOKEN"
                             v-model="freezeState"
                             label="Freeze State"
                             name="freezeState"
@@ -146,7 +147,7 @@ const validation = yup.object({
         then: () => stringRequiredSchema,
         otherwise: () => stringNotRequiredSchema,
     }),
-    freezeState: stringRequiredSchema.oneOf(freezeStates),
+    freezeState: stringNotRequiredSchema.oneOf(freezeStates),
     collectionAccount: stringNotRequiredSchema,
     tokenAccount: stringNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
@@ -166,7 +167,7 @@ const freeze = async () => {
                 freezeType: freezeType.value,
                 tokenId: formatToken(tokenId.value),
                 collectionAccount: collectionAccount.value,
-                freezeState: freezeState.value,
+                freezeState: freezeType.value === FreezeType.TOKEN ? freezeState.value : undefined,
                 tokenAccount: tokenAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
