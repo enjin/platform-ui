@@ -202,6 +202,7 @@ export const useAppStore = defineStore('app', {
         async createApiToken(name: string) {
             const res = await AuthApi.createApiToken(name);
             this.user.apiTokens.push(res.data.CreateApiToken);
+            this.tokensCount = this.user.apiTokens.length;
         },
         async revokeToken(name: string) {
             await AuthApi.revokeApiTokens([name]);
