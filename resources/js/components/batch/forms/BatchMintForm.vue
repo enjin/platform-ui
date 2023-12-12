@@ -171,7 +171,6 @@
                                 name="mintUnitPrice"
                                 label="Unit Price"
                                 description="Leave as null if you want to keep the same unitPrice. You can also put a value if you want to change the unitPrice. Please note you can only increase it and a deposit to the difference of every token previously minted will also be needed."
-                                type="number"
                                 :prefix="currencySymbol"
                             />
                         </div>

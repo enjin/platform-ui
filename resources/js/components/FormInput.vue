@@ -37,7 +37,8 @@
                             `block flex-1 flex-shrink-0 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 ${inputClass}`,
                         ]"
                         :placeholder="placeholder"
-                        @input="emit('inputChange', $event)"
+                        oninput="validity.valid||(value=value.replace(/\D+/g, ''))"
+                        @input="inputChange"
                         @keyup.enter="emit('submit')"
                         @focusout="hasFocus && emit('submit')"
                     />
@@ -94,6 +95,10 @@ const props = withDefaults(
 
 const emit = defineEmits(['update:modelValue', 'inputChange', 'submit']);
 
+const inputChange = (e: Event) => {
+    emit('inputChange', e);
+};
+
 const localModelValue = computed({
     get() {
         return props.modelValue;
@@ -105,3 +110,12 @@ const localModelValue = computed({
     },
 });
 </script>
+<style scoped>
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+</style>

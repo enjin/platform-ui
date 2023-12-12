@@ -103,6 +103,7 @@
                                         class="col-span-1"
                                         v-model="collectionId"
                                         name="collectionId"
+                                        type="number"
                                         placeholder="Collection ID"
                                     />
                                     <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />

@@ -10,6 +10,7 @@
                                     v-model="searchCollectionInput"
                                     name="searchInput"
                                     label="Collection ID"
+                                    type="number"
                                     placeholder="Search by collection ID"
                                     @input-change="searchCollectionChange"
                                 />

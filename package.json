@@ -3,10 +3,11 @@
     "scripts": {
         "serve": "vite",
         "serve-laravel": "vite -c vite.config.laravel.ts",
+        "vue-tsc": "vue-tsc",
         "dev": "vite build --mode staging",
         "dev-laravel": "vite build -c vite.config.laravel.ts --mode staging",
-        "prod": "vite build",
-        "prod-laravel": "vite build -c vite.config.laravel.ts",
+        "prod": "vue-tsc && vite build",
+        "prod-laravel": "vue-tsc && vite build -c vite.config.laravel.ts",
         "lint": "eslint ./resources/js --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --cache",
         "lint:fix": "eslint ./resources/js --ext.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore --fix --cache",
         "pretty:check": "prettier --check ./resources/js",
@@ -64,6 +65,7 @@
         "vue": "^3.3.4",
         "vue-loader": "^17.2.2",
         "vue-router": "^4.2.2",
+        "vue-tsc": "^1.8.25",
         "vue3-popper": "^1.5.0",
         "yup": "^1.0.2"
     }
