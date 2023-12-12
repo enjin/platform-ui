@@ -54,7 +54,6 @@
                                     name="unitPrice"
                                     label="Unit Price"
                                     description="Leave as null if you want to keep the same unitPrice. You can also put a value if you want to change the unitPrice. Please note you can only increase it and a deposit to the difference of every token previously minted will also be needed."
-                                    type="number"
                                     :prefix="currencySymbol"
                                     required
                                     tooltip="The backing of the token necessary for it to exist in the blockchain, not to be mistaken by the reserve value, once the token is burned, the Unit Price returns to the creator and not the holder."
@@ -145,6 +144,7 @@
                         @add="addAttributeItem"
                         @remove="removeAttributeItem"
                         readmore="Attributes"
+                        dusk-id="attributes"
                     >
                         <template #headers>
                             <div class="flex-1">
@@ -157,10 +157,11 @@
                             </div>
                             <div class="w-5"></div>
                         </template>
-                        <template #inputs="{ inputs }">
+                        <template #inputs="{ inputs, index }">
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.key"
+                                    :dusk="`input__attribute-key-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -168,6 +169,7 @@
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.value"
+                                    :dusk="`input__attribute-value-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -211,7 +213,7 @@
                     >
                         Cancel
                     </RouterLink>
-                    <Btn :loading="isLoading" primary is-submit>Create</Btn>
+                    <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
                 </div>
             </Form>
         </div>
@@ -285,6 +287,7 @@ const validation = yup.object({
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
     initialSupply: numberRequiredSchema.typeError('Initial Supply must be a number').min(1),
+    unitPrice: numberRequiredSchema.typeError('Unit Price must be a number').min(0),
     capType: stringRequiredSchema,
     capAmount: yup.number().when('capType', {
         is: TokenCapType.SUPPLY,

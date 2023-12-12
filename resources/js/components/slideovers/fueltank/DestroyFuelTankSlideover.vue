@@ -33,7 +33,7 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" primary is-submit>Destroy</Btn>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Destroy</Btn>
         </div>
     </Form>
 </template>

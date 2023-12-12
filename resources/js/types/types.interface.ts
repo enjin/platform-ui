@@ -20,6 +20,7 @@ export interface AppState {
     loggedIn: boolean;
     newCollection: boolean;
     user: any;
+    tokensCount: number;
 }
 
 export interface ConnectionState {

@@ -21,7 +21,9 @@
 
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Unit Price</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ formatPriceFromENJ(item.unitPrice) }} RFI</dd>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ formatPriceFromENJ(item.unitPrice) }} {{ currencySymbol }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
@@ -116,9 +118,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import Address from '~/components/Address.vue';
 import CopyTextIcon from '~/components/CopyTextIcon.vue';
-import { formatPriceFromENJ } from '~/util';
+import { useAppStore } from '~/store';
+import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 import Royalty from '~/util/royalty';
 
 defineProps<{
@@ -145,4 +149,6 @@ defineProps<{
         };
     };
 }>();
+
+const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
 </script>

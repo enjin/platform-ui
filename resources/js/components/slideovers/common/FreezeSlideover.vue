@@ -28,6 +28,7 @@
                             required
                         />
                         <FormSelect
+                            v-if="freezeType === FreezeType.TOKEN"
                             v-model="freezeState"
                             label="Freeze State"
                             name="freezeState"
@@ -81,7 +82,7 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" primary is-submit>Freeze</Btn>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Freeze</Btn>
         </div>
     </Form>
 </template>
@@ -146,7 +147,7 @@ const validation = yup.object({
         then: () => stringRequiredSchema,
         otherwise: () => stringNotRequiredSchema,
     }),
-    freezeState: stringRequiredSchema.oneOf(freezeStates),
+    freezeState: stringNotRequiredSchema.oneOf(freezeStates),
     collectionAccount: stringNotRequiredSchema,
     tokenAccount: stringNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
@@ -166,7 +167,7 @@ const freeze = async () => {
                 freezeType: freezeType.value,
                 tokenId: formatToken(tokenId.value),
                 collectionAccount: collectionAccount.value,
-                freezeState: freezeState.value,
+                freezeState: freezeType.value === FreezeType.TOKEN ? freezeState.value : undefined,
                 tokenAccount: tokenAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,

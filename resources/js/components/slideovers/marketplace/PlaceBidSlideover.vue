@@ -42,7 +42,7 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Close</Btn>
-            <Btn :loading="isLoading" primary is-submit>Place Bid</Btn>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Place Bid</Btn>
         </div>
     </Form>
 </template>

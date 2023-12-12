@@ -3,7 +3,7 @@
         <div>
             <MenuButton
                 id="wallet-connect-button"
-                class="flex items-center space-x-2 rounded-md bg-primary py-2 px-3 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 text-white transition-all"
+                class="flex items-center space-x-2 rounded-md bg-primary py-1 px-2 md:py-2 md:px-3 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 text-white transition-all"
             >
                 <WalletIcon class="h-6 w-6" />
                 <LoadingCircle v-if="loading" class="!text-white" />

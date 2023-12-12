@@ -14,6 +14,7 @@
                             @remove="removeCaller"
                             flex
                             add-text="Add Caller"
+                            dusk-id="caller"
                         >
                             <template #headers>
                                 <div class="flex-1">
@@ -26,10 +27,11 @@
                                 </div>
                                 <div class="w-5"></div>
                             </template>
-                            <template #inputs="{ inputs }">
+                            <template #inputs="{ inputs, index }">
                                 <div class="flex-1">
                                     <input
                                         v-model="inputs.caller"
+                                        :dusk="`input__caller-${index + 1}`"
                                         type="text"
                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
@@ -49,6 +51,7 @@
                                     class="col-span-1"
                                     v-model="collectionId"
                                     name="collectionId"
+                                    type="number"
                                     placeholder="Collection ID"
                                 />
                                 <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />
@@ -61,6 +64,7 @@
                             @remove="removeWhiteCollection"
                             flex
                             add-text="Add Collection"
+                            dusk-id="collection"
                         >
                             <template #headers>
                                 <div class="flex-1">
@@ -74,12 +78,13 @@
                                 </div>
                                 <div class="w-5"></div>
                             </template>
-                            <template #inputs="{ inputs }">
+                            <template #inputs="{ inputs, index }">
                                 <div class="flex-1">
-                                    <input
+                                    <FormInput
                                         v-model="inputs.collection"
+                                        :name="`collection-${index + 1}`"
                                         type="number"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        :dusk="`input__collection-id-${index + 1}`"
                                     />
                                 </div>
                             </template>

@@ -36,9 +36,10 @@ export const useAppStore = defineStore('app', {
         loggedIn: false,
         newCollection: false,
         user: null,
+        tokensCount: 0,
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount'],
     },
     actions: {
         async init() {
@@ -154,6 +155,7 @@ export const useAppStore = defineStore('app', {
         async getUser() {
             const res = await AuthApi.getUser();
             this.user = res.data.User;
+            this.tokensCount = res.data.User.apiTokens.length;
         },
         async fetchCollectionIds(totalCount?: number) {
             if (!this.loggedIn) return false;
@@ -200,10 +202,12 @@ export const useAppStore = defineStore('app', {
         async createApiToken(name: string) {
             const res = await AuthApi.createApiToken(name);
             this.user.apiTokens.push(res.data.CreateApiToken);
+            this.tokensCount = this.user.apiTokens.length;
         },
         async revokeToken(name: string) {
             await AuthApi.revokeApiTokens([name]);
             this.user.apiTokens = this.user.apiTokens.filter((token) => token.name !== name);
+            this.tokensCount = this.user.apiTokens.length;
         },
         setURL(url: string) {
             this.url = new URL(url);
@@ -247,7 +251,7 @@ export const useAppStore = defineStore('app', {
     getters: {
         hasValidConfig(state: AppState) {
             if (this.isMultiTenant) {
-                return state.loggedIn && state.user?.apiTokens?.length > 0;
+                return state.loggedIn && state.tokensCount > 0;
             }
 
             return state.loggedIn && state.config.url;

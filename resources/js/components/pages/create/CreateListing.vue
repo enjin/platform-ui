@@ -71,6 +71,7 @@
                                             v-model="takeCollectionId"
                                             name="takeCollectionId"
                                             placeholder="Collection ID"
+                                            type="number"
                                         />
                                         <TokenIdInput
                                             class="col-span-1"
@@ -143,7 +144,7 @@
                     >
                         Cancel
                     </RouterLink>
-                    <Btn :loading="isLoading" primary is-submit>Create</Btn>
+                    <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
                 </div>
             </Form>
         </div>

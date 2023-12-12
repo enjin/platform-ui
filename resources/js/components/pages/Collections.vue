@@ -7,6 +7,7 @@
                         <div class="relative rounded-md shadow-sm">
                             <FormInput
                                 v-model="searchInput"
+                                type="number"
                                 name="searchInput"
                                 label="Collection ID"
                                 placeholder="Search by collection ID"
@@ -218,11 +219,6 @@ const getCollection = async () => {
         collections.value = DTOFactory.forCollection(res);
     } catch (e) {
         collections.value.items = [];
-        if (snackbarErrors(e)) return;
-        snackbar.error({
-            title: 'Collection',
-            text: 'Error while fetching collection',
-        });
     } finally {
         isLoading.value = false;
     }

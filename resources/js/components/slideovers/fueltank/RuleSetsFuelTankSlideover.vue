@@ -68,7 +68,7 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4" v-if="actionType !== 'list'">
             <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" primary is-submit>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>
                 {{ actionType === 'add' ? 'Add' : 'Remove' }}
             </Btn>
         </div>
