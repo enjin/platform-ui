@@ -18,10 +18,10 @@
                         <dt class="text-base font-medium text-gray-500">Balances</dt>
                         <dt class="text-sm font-medium text-gray-500">Free</dt>
                         <dd class="mt-1 text-sm text-gray-900 break-words">
-                            {{ formatPriceFromENJ(item.balances.free) }} RFI
+                            {{ formatPriceFromENJ(item.balances.free) }} {{ currencySymbol }}
                         </dd>
                         <dt class="text-sm font-medium text-gray-500">Reserved</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ formatPriceFromENJ(item.balances.reserved) }} RFI</dd>
+                        <dd class="mt-1 text-sm text-gray-900">{{ formatPriceFromENJ(item.balances.reserved) }}</dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3" v-if="item.externalId">
@@ -45,8 +45,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import Address from '~/components/Address.vue';
-import { formatPriceFromENJ } from '~/util';
+import { useAppStore } from '~/store';
+import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 
 defineProps<{
     item?: {
@@ -61,4 +63,6 @@ defineProps<{
         network: string;
     };
 }>();
+
+const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
 </script>

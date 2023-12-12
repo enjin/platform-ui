@@ -54,7 +54,6 @@
                                     name="unitPrice"
                                     label="Unit Price"
                                     description="Leave as null if you want to keep the same unitPrice. You can also put a value if you want to change the unitPrice. Please note you can only increase it and a deposit to the difference of every token previously minted will also be needed."
-                                    type="number"
                                     :prefix="currencySymbol"
                                     required
                                     tooltip="The backing of the token necessary for it to exist in the blockchain, not to be mistaken by the reserve value, once the token is burned, the Unit Price returns to the creator and not the holder."
@@ -288,6 +287,7 @@ const validation = yup.object({
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
     initialSupply: numberRequiredSchema.typeError('Initial Supply must be a number').min(1),
+    unitPrice: numberRequiredSchema.typeError('Unit Price must be a number').min(0),
     capType: stringRequiredSchema,
     capAmount: yup.number().when('capType', {
         is: TokenCapType.SUPPLY,

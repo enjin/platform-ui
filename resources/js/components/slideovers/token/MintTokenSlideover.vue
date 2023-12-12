@@ -49,7 +49,6 @@
                             label="Unit Price"
                             description="Leave as null if you want to keep the same unitPrice. You can also put a value if you want to change the unitPrice. Please note you can only increase it and a deposit to the difference of every token previously minted will also be needed."
                             :prefix="currencySymbol"
-                            type="number"
                         />
 
                         <FormInput
@@ -140,7 +139,7 @@ const validation = yup.object({
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
     amount: numberRequiredSchema.typeError('Amount must be a number'),
-    unitPrice: numberRequiredSchema.min(0.01).typeError('Amount must be a number'),
+    unitPrice: numberRequiredSchema.min(0.01).typeError('Unit price must be a number'),
     idempotencyKey: stringNotRequiredSchema,
     skipValidation: booleanNotRequiredSchema,
 });
