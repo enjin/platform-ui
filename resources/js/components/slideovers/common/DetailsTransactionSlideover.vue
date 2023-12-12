@@ -170,7 +170,6 @@ import { ref, computed, watch } from 'vue';
 import { TransactionApi } from '~/api/transaction';
 import Address from '~/components/Address.vue';
 import Btn from '~/components/Btn.vue';
-import CopyTextIcon from '~/components/CopyTextIcon.vue';
 import LoadingCircle from '~/components/LoadingCircle.vue';
 import SignTransaction from '~/components/SignTransaction.vue';
 import TransactionResultChip from '~/components/TransactionResultChip.vue';
