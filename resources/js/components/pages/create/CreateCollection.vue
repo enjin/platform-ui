@@ -119,11 +119,11 @@
                         <template #inputs="{ inputs, index }">
                             <div class="flex-1">
                                 <FormInput
-                                        v-model="inputs.collectionId"
-                                        type="number"
-                                        :name="`collection-${index + 1}`"
-                                        :dusk="`input__collection-id-${index + 1}`"
-                                    />
+                                    v-model="inputs.collectionId"
+                                    type="number"
+                                    :name="`collection-${index + 1}`"
+                                    :dusk="`input__collection-id-${index + 1}`"
+                                />
                             </div>
                             <div class="flex-1">
                                 <TokenIdInput

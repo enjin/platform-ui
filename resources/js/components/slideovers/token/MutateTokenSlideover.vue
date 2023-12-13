@@ -129,7 +129,7 @@ const tokenId = ref({
 });
 const collectionId = ref(props.item?.collectionId);
 const beneficiaryAddress = ref(Royalty.getRoyaltyBeneficiary(props.item));
-const beneficiaryPercentage = ref(Royalty.getRoyaltyPercentage(props.item));
+const beneficiaryPercentage = ref(Royalty.getRoyaltyPercentage(props.item) * 100);
 const isCurrency = ref(props.item?.isCurrency ?? false);
 const listingForbidden = ref(false);
 const idempotencyKey = ref('');
