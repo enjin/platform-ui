@@ -162,7 +162,7 @@ const collectionId = ref(props.item?.collectionId);
 const newOwner = ref('');
 const idempotencyKey = ref('');
 const beneficiaryAddress = ref(Royalty.getRoyaltyBeneficiary(props.item));
-const beneficiaryPercentage = ref(Royalty.getRoyaltyPercentage(props.item));
+const beneficiaryPercentage = ref(Royalty.getRoyaltyPercentage(props.item) * 100);
 const skipValidation = ref(false);
 const formRef = ref();
 
