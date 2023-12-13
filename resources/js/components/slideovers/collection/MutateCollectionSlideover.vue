@@ -71,7 +71,9 @@
                                         v-model="inputs.collectionId"
                                         :dusk="`input__collection-id-${index + 1}`"
                                         type="number"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        min="0"
+                                        oninput="validity.valid||(value=value.replace(/\D+/g, ''))"
+                                        class="block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
                                 </div>
                                 <div class="flex-1">
@@ -190,6 +192,7 @@ const removeExplicitRoyaltyCurrencyItem = (index: number) => {
 
 const validation = yup.object({
     collectionId: collectionIdRequiredSchema,
+    newOwner: addressNotRequiredSchema,
     beneficiaryAddress: addressNotRequiredSchema,
     beneficiaryPercentage: yup.number().when('beneficiaryAddress', {
         is: (val) => val !== '' && val !== null,
@@ -254,3 +257,13 @@ const closeSlide = () => {
     emit('close');
 };
 </script>
+
+<style scoped>
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+</style>
