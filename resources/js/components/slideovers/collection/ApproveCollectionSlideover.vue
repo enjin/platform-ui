@@ -108,7 +108,7 @@ const formRef = ref();
 const validation = yup.object({
     collectionId: collectionIdRequiredSchema,
     operator: addressRequiredSchema,
-    expiration: numberNotRequiredSchema,
+    expiration: numberNotRequiredSchema.typeError('Expiration must be a number'),
     idempotencyKey: stringNotRequiredSchema,
     skipValidation: booleanNotRequiredSchema,
 });
