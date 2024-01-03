@@ -147,18 +147,21 @@ const attributeAction = ref('set');
 
 const attributeActions = [
     {
+        key: 'btn-set',
         label: 'Set',
         value: 'set',
         btnText: 'Set Attribute',
         action: () => setAttribute(),
     },
     {
+        key: 'btn-remove',
         label: 'Remove',
         value: 'remove',
         btnText: 'Remove Attribute',
         action: () => removeAttribute(),
     },
     {
+        key: 'btn-remove-all',
         label: 'Remove All',
         value: 'removeAll',
         btnText: 'Remove All Attributes',

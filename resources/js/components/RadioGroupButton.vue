@@ -17,6 +17,7 @@
                 as="template"
                 :value="item.value"
                 :key="item.value"
+                :dusk="item.key"
                 v-slot="{ checked, active }"
             >
                 <div
@@ -52,7 +53,7 @@ import { computed } from 'vue';
 const props = withDefaults(
     defineProps<{
         label?: string;
-        items: { label: string; value: string }[];
+        items: { label: string; value: string; key?: string }[];
         modelValue: string | boolean;
         cols: number;
     }>(),

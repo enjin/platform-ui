@@ -227,10 +227,12 @@ const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.ne
 const mintType = ref(props.modelValue.mintType ?? 'create');
 const mintTypes = [
     {
+        key: 'btn-create',
         label: 'Create',
         value: 'create',
     },
     {
+        key: 'btn-mint',
         label: 'Mint',
         value: 'mint',
     },

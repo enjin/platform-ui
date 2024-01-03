@@ -160,22 +160,25 @@ const actionType = ref('list');
 const usersInputs = ref([{ userId: '' }]);
 const actions = ref([
     {
+        key: 'btn-list',
         label: 'List',
         value: 'list',
         apiFunction: () => 'getAccounts',
-        key: () => 'GetAccounts',
+        functionKey: () => 'GetAccounts',
     },
     {
+        key: 'btn-add',
         label: 'Add',
         value: 'add',
         apiFunction: () => (usersInputs.value.length === 1 ? 'addAccount' : 'batchAddAccount'),
-        key: () => (usersInputs.value.length === 1 ? 'AddAccount' : 'BatchAddAccount'),
+        functionKey: () => (usersInputs.value.length === 1 ? 'AddAccount' : 'BatchAddAccount'),
     },
     {
+        key: 'btn-remove',
         label: 'Remove',
         value: 'remove',
         apiFunction: () => (usersInputs.value.length === 1 ? 'removeAccount' : 'batchRemoveAccount'),
-        key: () => (usersInputs.value.length === 1 ? 'RemoveAccount' : 'BatchRemoveAccount'),
+        functionKey: () => (usersInputs.value.length === 1 ? 'RemoveAccount' : 'BatchRemoveAccount'),
     },
 ]);
 const isPaginationLoading = ref(false);
@@ -232,7 +235,7 @@ const addAccounts = async () => {
             })
         );
 
-        const id = res.data?.[currentAction.key()]?.id;
+        const id = res.data?.[currentAction.functionKey()]?.id;
 
         if (id) {
             snackbar.success({
@@ -271,7 +274,7 @@ const removeAccounts = async () => {
             })
         );
 
-        const id = res.data?.[currentAction.key()]?.id;
+        const id = res.data?.[currentAction.functionKey()]?.id;
 
         if (id) {
             snackbar.success({

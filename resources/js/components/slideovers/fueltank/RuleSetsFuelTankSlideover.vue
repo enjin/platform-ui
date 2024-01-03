@@ -123,14 +123,17 @@ const ruleOptions = Object.values(RuleType);
 
 const actions = ref([
     {
+        key: 'btn-add',
         label: 'Add Rule',
         value: 'add',
     },
     {
+        key: 'btn-remove',
         label: 'Remove Rule',
         value: 'removeRule',
     },
     {
+        key: 'btn-remove-user',
         label: 'Remove User Rule',
         value: 'removeUserRule',
     },
