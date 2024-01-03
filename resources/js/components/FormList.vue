@@ -41,7 +41,7 @@
                 </div>
             </transition-group>
 
-            <Btn @click="emit('add')" primary class="text-xs">{{ addText }}</Btn>
+            <Btn @click="emit('add')" primary class="text-xs" :dusk="`btn__add-item-${duskId}`">{{ addText }}</Btn>
         </div>
     </div>
 </template>
