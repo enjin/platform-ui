@@ -149,6 +149,7 @@ const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const transferType = ref(TransferType.SimpleTransferToken);
 const transferTypes = Object.values(TransferType).map((type) => ({
+    key: `btn-${type}`,
     label: type.replace('TransferToken', ''),
     value: type,
 }));

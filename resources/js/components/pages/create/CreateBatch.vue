@@ -22,6 +22,7 @@ const router = useRouter();
 const batchType = ref(BatchType.BatchMint);
 
 const batchTypes = Object.values(BatchType).map((type) => ({
+    key: `btn-${type}`,
     label: type.replace('Batch', 'Batch '),
     value: type,
 }));

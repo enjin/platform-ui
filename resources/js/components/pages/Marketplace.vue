@@ -16,14 +16,17 @@ const marketType = ref('BidsList');
 
 const marketTypes = [
     {
+        key: 'btn-bids',
         label: 'Bids',
         value: 'BidsList',
     },
     {
+        key: 'btn-listings',
         label: 'Listings',
         value: 'ListingsList',
     },
     {
+        key: 'btn-sales',
         label: 'Sales',
         value: 'SalesList',
     },

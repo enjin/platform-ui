@@ -138,10 +138,12 @@ const props = defineProps<{
 const transferType = ref('simple');
 const transferTypes = [
     {
+        key: 'btn-simple',
         label: 'Simple',
         value: 'simple',
     },
     {
+        key: 'btn-operator',
         label: 'Operator',
         value: 'operator',
     },

@@ -16,10 +16,12 @@ const beamType = ref('BeamsList');
 
 const beamTypes = [
     {
+        key: 'btn-beams',
         label: 'Beams List',
         value: 'BeamsList',
     },
     {
+        key: 'btn-claims',
         label: 'Claims List',
         value: 'ClaimsList',
     },
