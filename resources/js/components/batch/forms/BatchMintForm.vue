@@ -317,7 +317,7 @@ const createValidation = yup.object({
     beneficiaryAddress: yup.string().when('mintType', {
         is: 'create',
         then: () => addressNotRequiredSchema,
-        otherwise: () => stringNotRequiredSchema,
+        otherwise: () => addressNotRequiredSchema,
     }),
     beneficiaryPercentage: yup.number().when('mintType', {
         is: 'create',
