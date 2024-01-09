@@ -96,10 +96,6 @@ export class TokenApi {
 
         const params: any = tokenData.params;
 
-        if (tokenData.transferType === TransferType.OperatorTransferToken) {
-            params['source'] = tokenData.source;
-        }
-
         const data = {
             query,
             variables: {
