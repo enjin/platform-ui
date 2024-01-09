@@ -182,7 +182,7 @@ const createBatch = async () => {
                 text: `Batch transfer created with transaction id ${id}`,
                 event: id,
             });
-            router.push({ name: 'platform.collections' });
+            router.push({ name: 'platform.tokens' });
         }
     } catch (e) {
         if (snackbarErrors(e)) return;
