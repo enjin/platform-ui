@@ -139,15 +139,20 @@ export class CollectionApi {
     }
 
     static async removeAllAttributes(removeAllAttributesData: Record<string, unknown>) {
+        const variables = {
+            collectionId: removeAllAttributesData.collectionId,
+            attributeCount: removeAllAttributesData.attributeCount,
+            idempotencyKey: removeAllAttributesData.idempotencyKey,
+            skipValidation: removeAllAttributesData.skipValidation,
+        };
+
+        if (removeAllAttributesData.tokenId) {
+            variables['tokenId'] = removeAllAttributesData.tokenId;
+        }
+
         const data = {
             query: mutations.RemoveAllAttributes,
-            variables: {
-                collectionId: removeAllAttributesData.collectionId,
-                tokenId: null,
-                attributeCount: removeAllAttributesData.attributeCount,
-                idempotencyKey: removeAllAttributesData.idempotencyKey,
-                skipValidation: removeAllAttributesData.skipValidation,
-            },
+            variables,
         };
 
         return ApiService.sendPlatformRequest(data);
