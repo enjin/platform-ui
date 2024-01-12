@@ -35,6 +35,7 @@ export const useAppStore = defineStore('app', {
         collections: [],
         loggedIn: false,
         newCollection: false,
+        allowResend: false,
         user: null,
         tokensCount: 0,
     }),
@@ -182,6 +183,7 @@ export const useAppStore = defineStore('app', {
 
             await this.getUser();
             if (!this.user.isVerified) {
+                this.allowResend = true;
                 await this.logout();
                 throw [{ field: 'Login error', message: 'Please verify your email address' }];
             }

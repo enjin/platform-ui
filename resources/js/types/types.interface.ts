@@ -18,6 +18,7 @@ export interface AppState {
     navigations: any[];
     collections: string[];
     loggedIn: boolean;
+    allowResend: boolean;
     newCollection: boolean;
     user: any;
     tokensCount: number;
