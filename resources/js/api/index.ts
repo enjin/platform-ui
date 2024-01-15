@@ -4,6 +4,21 @@ import mutations from '~/api/mutations';
 import snackbar from '~/util/snackbar';
 
 export class ApiService {
+    protected static async reloadCsrf() {
+        return (await fetch('/')).text().then((html) => {
+            const document = new DOMParser().parseFromString(html, 'text/html');
+            const token = document.querySelector('meta[name=csrf-token]')?.getAttribute('content');
+
+            if (token) {
+                window.document.querySelector('meta[name=csrf-token]')?.setAttribute('content', token);
+
+                return true;
+            }
+
+            return false;
+        });
+    }
+
     protected static async request({
         url,
         data = {},
@@ -11,6 +26,7 @@ export class ApiService {
         method = HttpMethods.POST,
         credentials = 'omit',
         mode = 'cors',
+        nest = true,
     }: {
         url: string;
         data?: Record<string, unknown>;
@@ -18,15 +34,21 @@ export class ApiService {
         method?: HttpMethods;
         credentials?: 'omit' | 'same-origin' | 'include';
         mode?: 'cors' | 'no-cors' | 'same-origin' | 'navigate';
+        nest?: boolean;
     }): Promise<any> {
         let body: string | null = null;
         const fullUrl = url;
+        const csrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         if (Object.keys(data).length > 0) {
             body = JSON.stringify(data);
         }
 
-        if (!useAppStore().isMultiTenant) headers.Authorization = useAppStore().config.authorization_token;
+        if (!useAppStore().isMultiTenant) {
+            headers.Authorization = useAppStore().config.authorization_token;
+        } else {
+            headers['X-CSRF-TOKEN'] = csrf;
+        }
 
         const resp = await fetch(fullUrl, {
             method,
@@ -39,6 +61,12 @@ export class ApiService {
             credentials,
             mode,
         });
+
+        if (resp.status === 419 && nest && useAppStore().isMultiTenant) {
+            if (await this.reloadCsrf()) {
+                return this.request({ url, method, data, headers });
+            }
+        }
 
         if (resp.status === 204) return null;
 
