@@ -93,4 +93,15 @@ export class AuthApi {
 
         return AuthApi.sendPlatfromRequest(data);
     }
+
+    static async resendVerificationEmail(email: string) {
+        const data = {
+            query: mutations.ResendVerifyEmail,
+            variables: {
+                email,
+            },
+        };
+
+        return AuthApi.sendPlatfromRequest(data);
+    }
 }

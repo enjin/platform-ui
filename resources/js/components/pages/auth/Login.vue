@@ -8,11 +8,11 @@
             </h2>
         </div>
         <div
-            v-if="!appStore.allowResend"
+            v-if="appStore.allowResend"
             class="flex justify-between p-4 text-sm items-center w-full sm:max-w-md bg-green-300 bg-opacity-20 rounded-lg"
         >
             <span class="font-medium">Did not receive a verification email ?</span>
-            <Btn primary>Resend</Btn>
+            <Btn primary @click="resendVerification">Resend</Btn>
         </div>
         <div class="mt-4 mx-auto w-full sm:max-w-md">
             <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
@@ -64,6 +64,7 @@ import * as yup from 'yup';
 import EnjinLogo from '~/components/EnjinLogo.vue';
 import snackbar from '~/util/snackbar';
 import { snackbarErrors } from '~/util';
+import { AuthApi } from '~/api/auth';
 
 const router = useRouter();
 const route = useRoute();
@@ -123,6 +124,31 @@ const checkVerified = () => {
             save: false,
         });
         router.replace({ query: undefined });
+    }
+};
+
+const resendVerification = async () => {
+    try {
+        if (!email.value) {
+            snackbar.error({
+                title: 'Email required',
+                text: 'Please enter your email address.',
+            });
+
+            return;
+        }
+        await AuthApi.resendVerificationEmail(email.value);
+        snackbar.success({
+            title: 'Verification email sent.',
+            text: 'Please check your inbox.',
+            save: false,
+        });
+    } catch (e) {
+        if (snackbarErrors(e)) return;
+        snackbar.error({
+            title: 'An error occurred while sending the verification email.',
+            text: 'Please try again.',
+        });
     }
 };
 
