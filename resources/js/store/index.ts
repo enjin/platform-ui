@@ -25,6 +25,7 @@ export const useAppStore = defineStore('app', {
             tenant: false,
             webSocket: '',
             channel: '',
+            daemon: '',
         },
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
@@ -121,6 +122,10 @@ export const useAppStore = defineStore('app', {
                 this.config.authorization_token = appConfig.authorization_token;
             } else if (!this.config.tenant) {
                 this.config.authorization_token = this.authorization_token;
+            }
+
+            if (window.bootstrap?.daemon) {
+                this.config.daemon = window.bootstrap.daemon;
             }
 
             if (appConfig.websocket.length) {
