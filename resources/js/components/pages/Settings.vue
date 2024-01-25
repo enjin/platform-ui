@@ -1,7 +1,7 @@
 <template>
-    <div class="px-4 pb-2 sm:px-6 lg:px-8 overflow-y-auto transition-all">
+    <div class="px-4 sm:px-6 lg:px-8 overflow-y-auto transition-all pb-14">
         <div class="mt-4 flow-root">
-            <LoadingCircle class="mt-40" :size="44" v-if="loading" />
+            <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
                 <div
                     v-if="!appStore.hasValidConfig && appStore.isMultiTenant && !tokens?.length"
@@ -13,94 +13,8 @@
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                        <div class="flex justify-between">
-                            <h1 class="text-xl">
-                                My API Tokens
-                                <span v-if="enableTokenCreate && !tokens?.length" class="text-red-500">&nbsp;*</span>
-                            </h1>
-                        </div>
-                        <div class="flex items-end space-x-4">
-                            <FormInput
-                                v-if="enableTokenCreate"
-                                class="sm:w-[300px] flex-1 sm:flex-none"
-                                v-model="tokenName"
-                                name="tokenName"
-                                placeholder="Enter token name"
-                            />
-                            <Btn
-                                dusk="btn__create-api-token"
-                                primary
-                                class="py-2.5 disabled:!bg-primary"
-                                @click="createApiToken"
-                                :disabled="creating"
-                            >
-                                <div v-if="!creating" class="flex items-center">
-                                    <KeyIcon class="w-4 h-4 mr-2 flex-shrink-0" />
-                                    <span class="truncate"> Create API Token </span>
-                                </div>
-                                <LoadingCircle v-else class="w-4 h-4 text-white" />
-                            </Btn>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div
-                                class="bg-white p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center gr"
-                                v-for="token in tokens"
-                                :key="token.name"
-                            >
-                                <div class="flex items-center">
-                                    <KeyIcon class="w-5 h-5 mr-4 text-green-500" />
-                                    <span class="text-gray-900 mr-4">{{ token.name }}</span>
-                                    <span class="text-gray-400 text-sm mt-1">
-                                        {{
-                                            shortString(
-                                                token.plainTextToken?.substring(
-                                                    token.plainTextToken?.indexOf('|') + 1 ?? 0
-                                                )
-                                            ) ?? '*******'
-                                        }}
-                                        <CopyTextIcon
-                                            v-if="token.plainTextToken"
-                                            :text="
-                                                token.plainTextToken.substring(
-                                                    token.plainTextToken?.indexOf('|') + 1 ?? 0
-                                                )
-                                            "
-                                        />
-                                    </span>
-                                </div>
-                                <Btn :dusk="`btn__revoke-api${token.name}`" error @click="confirmRevoke(token.name)">
-                                    Revoke
-                                </Btn>
-                            </div>
-                        </div>
-                        <div v-if="walletAccount">
-                            <h1 class="text-xl">Wallet Account</h1>
-                            <p class="mt-1 text-sm text-gray-500 max-w-3xl">
-                                The platform depends on there being a funded wallet daemon account setup and connected
-                                to the platform and blockchain so it can receive transactions from the platform, sign
-                                them on your behalf and then broadcast them to the network. You can get the latest
-                                version of the wallet daemon from this repository:
-                                <a href="https://github.com/enjin/wallet-daemon" target="_blank" class="text-primary">
-                                    https://github.com/enjin/wallet-daemon</a
-                                >
-                                and an overview can be found here:
-                                <a
-                                    href="https://docs.enjin.io/enjin-platform/wallet-daemon"
-                                    target="_blank"
-                                    class="text-primary"
-                                >
-                                    https://docs.enjin.io/enjin-platform/wallet-daemon</a
-                                >
-                            </p>
-                            <div class="flex items-end space-x-4 mt-4">
-                                <FormInput
-                                    v-model="walletAccount"
-                                    class="sm:w-[430px] flex-1 sm:flex-none text-gray-400"
-                                    name="walletAccount"
-                                    disabled
-                                />
-                            </div>
-                        </div>
+                        <SettingsApiTokens />
+                        <SettingsWalletAccount />
                     </div>
                 </div>
 
@@ -108,6 +22,7 @@
                     <div class="flex justify-between">
                         <h1 class="text-xl">Settings</h1>
                     </div>
+                    <SettingsResetPassword v-if="appStore.isMultiTenant" />
                     <FormCheckbox
                         v-model="advancedMode"
                         name="advancedMode"
@@ -120,13 +35,6 @@
                 </div>
             </template>
         </div>
-        <ConfirmModal
-            :is-open="confirmModal"
-            title="Revoke API Token"
-            description="Do you want to revoke this API token?"
-            @closed="confirmModal = false"
-            @confirm="revokeToken"
-        />
     </div>
 </template>
 
@@ -134,72 +42,21 @@
 import { computed, ref, watch } from 'vue';
 import { useAppStore } from '~/store';
 import Btn from '~/components/Btn.vue';
-import { KeyIcon } from '@heroicons/vue/24/outline';
 import { useRouter } from 'vue-router';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import snackbar from '~/util/snackbar';
-import FormInput from '../FormInput.vue';
-import { shortString, snackbarErrors } from '~/util';
-import CopyTextIcon from '../CopyTextIcon.vue';
 import LoadingCircle from '../LoadingCircle.vue';
-import ConfirmModal from '../ConfirmModal.vue';
-import { publicKeyToAddress } from '~/util/address';
+import SettingsResetPassword from './SettingsResetPassword.vue';
+import SettingsWalletAccount from './SettingsWalletAccount.vue';
+import SettingsApiTokens from './SettingsApiTokens.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
 
 const advancedMode = ref(appStore.advanced);
-const tokenName = ref();
-const enableTokenCreate = ref(false);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
-const creating = ref(false);
-const confirmModal = ref(false);
-const confirmModalName = ref();
-const walletAccount = computed(() => publicKeyToAddress(appStore.user.account || appStore.config.daemon));
 
 const tokens = computed(() => appStore.user?.apiTokens);
-
-const createApiToken = async () => {
-    if (!enableTokenCreate.value) {
-        enableTokenCreate.value = true;
-    } else {
-        if (!tokenName.value)
-            return snackbar.error({ title: 'Token name required', text: 'Please enter a token name.' });
-        try {
-            creating.value = true;
-            await appStore.createApiToken(tokenName.value);
-            enableTokenCreate.value = false;
-            tokenName.value = '';
-            snackbar.info({ title: 'Token generated', text: `Your token ${tokenName.value} has been generated.` });
-        } catch (e: any) {
-            if (snackbarErrors(e)) return;
-            snackbar.error({ title: 'Token generation failed', text: e.message });
-        } finally {
-            creating.value = false;
-        }
-    }
-};
-
-const revokeToken = async () => {
-    if (!confirmModalName.value) return;
-
-    try {
-        await appStore.revokeToken(confirmModalName.value);
-        snackbar.info({ title: 'Token revoked', text: `Your token ${confirmModalName.value} has been revoked.` });
-        confirmModalName.value = null;
-    } catch (e: any) {
-        if (snackbarErrors(e)) return;
-        snackbar.error({ title: 'Token revocation failed' });
-    } finally {
-        confirmModal.value = false;
-        confirmModalName.value = null;
-    }
-};
-
-const confirmRevoke = (name: string) => {
-    confirmModal.value = true;
-    confirmModalName.value = name;
-};
 
 const logout = async () => {
     await appStore.logout();
@@ -228,9 +85,6 @@ watch(
     (userVal) => {
         if (userVal) {
             loading.value = false;
-            if (!appStore.user?.apiTokens?.length) {
-                enableTokenCreate.value = true;
-            }
         }
     }
 );
