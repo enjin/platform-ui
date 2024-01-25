@@ -72,6 +72,27 @@ export class AuthApi {
         return AuthApi.sendPlatfromRequest(data);
     }
 
+    static async changePassword({
+        password,
+        passwordConfirmation,
+        oldPassword,
+    }: {
+        password: string;
+        passwordConfirmation: string;
+        oldPassword: string;
+    }) {
+        const data = {
+            query: mutations.ChangePassword,
+            variables: {
+                password,
+                passwordConfirmation,
+                oldPassword,
+            },
+        };
+
+        return AuthApi.sendPlatfromRequest(data);
+    }
+
     static async createApiToken(name: string) {
         const data = {
             query: mutations.CreateApiToken,
