@@ -184,7 +184,12 @@ export const useAppStore = defineStore('app', {
         },
         async login(email: string, password: string) {
             const res = await AuthApi.login(email, password);
-            if (!res.data.Login) throw [{ field: 'Login error', message: 'Invalid credentials' }];
+            if (!res.data.Login) {
+                if (res.errors.length) {
+                    throw res.errors;
+                }
+                throw [{ field: 'Login error', message: 'Invalid credentials' }];
+            }
 
             await this.getUser();
             if (!this.user.isVerified) {
