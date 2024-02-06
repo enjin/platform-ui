@@ -14,11 +14,21 @@
                     />
                 </div>
             </div>
-            <div class="flex items-center p-4">
+
+            <div v-if="actions" class="flex items-center p-4">
                 <slot name="actions" />
             </div>
         </div>
-        <slot v-if="open" />
+        <transition
+            enter-active-class="duration-300"
+            enter-from-class="transform opacity-0 max-h-0 delay-150"
+            enter-to-class="opacity-100 max-h-[300px]"
+            leave-active-class="duration-300"
+            leave-from-class="opacity-100 max-h-[300px]"
+            leave-to-class="transform opacity-0 max-h-0"
+        >
+            <slot v-if="open" />
+        </transition>
     </div>
 </template>
 
@@ -26,14 +36,19 @@
 import { ref } from 'vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/outline';
 
-defineProps({
-    title: {
-        type: String,
-        required: true,
-    },
-});
+const props = withDefaults(
+    defineProps<{
+        title: string;
+        actions?: boolean;
+        isOpen?: boolean;
+    }>(),
+    {
+        actions: true,
+        isOpen: false,
+    }
+);
 
-const open = ref(false);
+const open = ref(props.isOpen);
 
 const toggleCard = () => {
     open.value = !open.value;
