@@ -13,9 +13,34 @@
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                        <SettingsApiTokens />
-                        <SettingsWalletAccount />
+                        <CollapseCard title="Api tokens" :actions="false" :isOpen="!appStore.hasValidConfig">
+                            <div>
+                                <SettingsApiTokens />
+                            </div>
+                        </CollapseCard>
+                        <CollapseCard title="Wallet Account" :actions="false">
+                            <div>
+                                <SettingsWalletAccount />
+                            </div>
+                        </CollapseCard>
                     </div>
+                    <CollapseCard title="Helpful links" :actions="false">
+                        <div>
+                            <div class="flex flex-col space-y-4 p-6">
+                                <p
+                                    v-for="(packg, idx) in appStore.config.packages.filter((p) => p.link)"
+                                    :key="idx"
+                                    class="truncate text-sm font-medium text-primary hover:text-primary-light"
+                                >
+                                    <Tooltip :text="packg.version">
+                                        <a :href="packg.link" target="_blank" class="cursor-pointer capitalize">
+                                            {{ formatName(packg.name) }}
+                                        </a>
+                                    </Tooltip>
+                                </p>
+                            </div>
+                        </div>
+                    </CollapseCard>
                 </div>
 
                 <div class="flex flex-col space-y-4 mt-4">
@@ -49,6 +74,8 @@ import LoadingCircle from '../LoadingCircle.vue';
 import SettingsResetPassword from './SettingsResetPassword.vue';
 import SettingsWalletAccount from './SettingsWalletAccount.vue';
 import SettingsApiTokens from './SettingsApiTokens.vue';
+import CollapseCard from '../CollapseCard.vue';
+import Tooltip from '../Tooltip.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -67,6 +94,10 @@ const logout = async () => {
 const resetSettings = () => {
     appStore.resetSettings();
     router.push({ name: 'platform.setup' });
+};
+
+const formatName = (name: string) => {
+    return name.replaceAll('-', ' ');
 };
 
 watch(

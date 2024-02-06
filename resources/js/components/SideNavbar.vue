@@ -33,6 +33,54 @@
                 >
                     Feedback
                 </a>
+                <a
+                    :href="
+                        canaryHost ? 'https://platform.canary.enjin.io/graphiql' : 'https://platform.enjin.io/graphiql'
+                    "
+                    target="_blank"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
+                >
+                    GraphiQl playground
+                </a>
+                <a
+                    :href="canaryHost ? 'https://canary-matrix.subscan.io' : 'https://matrix.subscan.io'"
+                    target="_blank"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
+                >
+                    Blockchain explorer
+                </a>
+                <a
+                    :href="
+                        canaryHost
+                            ? 'https://console.enjin.io/?rpc=wss://rpc.matrix.canary.enjin.io#/explorer'
+                            : 'https://console.enjin.io/?rpc=wss://rpc.matrix.blockchain.enjin.io#/explorer'
+                    "
+                    target="_blank"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
+                >
+                    Blockchain console
+                </a>
+                <a
+                    href="https://www.enjinstatus.com/"
+                    target="_blank"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
+                >
+                    Service status
+                </a>
+                <a
+                    href="https://faucet.canary.enjin.io"
+                    target="_blank"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
+                >
+                    Enjin Coin faucet
+                </a>
+                <a
+                    href="https://nft.io"
+                    target="_blank"
+                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center rounded-md px-4 sm:px-2 py-2 text-sm font-medium"
+                >
+                    NFT.io Marketplace
+                </a>
             </div>
         </div>
     </div>
