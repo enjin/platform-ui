@@ -114,7 +114,7 @@ export const snackbarErrors = (errors: any) => {
     if (!errors.length) return false;
 
     errors.map((error: any) => {
-        snackbar.error({ title: error.field ?? null, text: error.message });
+        snackbar.error({ title: error.field ?? 'Error', text: error.message });
         if (error.message.includes('email address is not verified')) {
             useAppStore().allowResend = true;
         }
