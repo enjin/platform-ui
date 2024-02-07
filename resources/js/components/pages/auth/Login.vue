@@ -105,8 +105,10 @@ const login = async () => {
                 redirectToCollections();
             }
         }
-    } catch (e) {
-        if (snackbarErrors(e)) return;
+    } catch (e: any) {
+        if (snackbarErrors(e) || (e.errors && snackbarErrors(e.errors))) {
+            return;
+        }
         snackbar.error({
             title: 'An error occurred while logging in.',
             text: 'Please try again.',
