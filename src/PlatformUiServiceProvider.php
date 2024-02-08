@@ -3,6 +3,7 @@
 namespace Enjin\PlatformUi;
 
 use Enjin\PlatformUi\Console\InstallPlatformUi;
+use Enjin\PlatformUi\Console\RebuildPlatformUi;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -18,7 +19,8 @@ class PlatformUiServiceProvider extends PackageServiceProvider
             ->hasConfigFile(['enjin-platform-ui'])
             ->hasRoute('web')
             ->hasAssets()
-            ->hasCommand(InstallPlatformUi::class);
+            ->hasCommand(InstallPlatformUi::class)
+            ->hasCommand(RebuildPlatformUi::class);
     }
 
     /**
