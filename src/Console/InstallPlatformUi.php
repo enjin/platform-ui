@@ -16,17 +16,8 @@ class InstallPlatformUi extends Command
     {
         $this->resetJSON();
 
-        $tenant = $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
-
-        $this->askForInput('Please enter your Enjin Platform URL', 'URL_VALUE', '', 'host');
-
-        if ($tenant !== 'true') {
-            $this->askForInput('Please enter the authorization token', 'AUTHORIZATION_TOKEN_VALUE', '', 'token');
-        } else {
-            $this->updateConfig('AUTHORIZATION_TOKEN_VALUE', '');
-        }
-
-        $route = $this->askForInput('Please enter the default route path', 'ROUTE_VALUE', '', 'route');
+        $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
+        $route = $this->askForInput('Please enter the default route path? (optional)', 'ROUTE_VALUE', '', 'route');
         $this->updateRoute($route);
         $this->askForInput('Please enter WebSocket URL? (optional)', 'WEBSOCKET_VALUE', '', 'wsurl');
         $this->askForInput('Please enter WebSocket channel? (optional)', 'WEBSOCKET_CHANNEL_VALUE', '', 'wschannel');
