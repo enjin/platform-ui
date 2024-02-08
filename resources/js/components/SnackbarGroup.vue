@@ -6,9 +6,9 @@
                     v-for="notification in notifications"
                     :key="notification.id"
                     aria-live="assertive"
-                    class="pointer-events-none inset-0 flex items-end px-4 py-1 sm:items-start sm:p-1"
+                    class="pointer-events-none inset-0 flex items-center px-4 py-1 sm:p-1"
                 >
-                    <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+                    <div class="flex w-full flex-col items-center space-y-4">
                         <div
                             @click="close(notification.id)"
                             class="pointer-events-auto flex w-full max-w-md rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"

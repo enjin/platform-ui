@@ -111,17 +111,13 @@ export const useAppStore = defineStore('app', {
                 this.config.tenant = appConfig.tenant === 'true';
             }
 
-            if (appConfig?.url) {
-                this.config.url = parseConfigURL(appConfig.url);
-            } else if (window?.bootstrap?.url) {
+            if (window?.bootstrap?.url) {
                 this.config.url = parseConfigURL(window?.bootstrap?.url);
             } else {
                 this.config.url = this.url;
             }
 
-            if (!this.config.tenant && appConfig?.authorization_token?.length) {
-                this.config.authorization_token = appConfig.authorization_token;
-            } else if (!this.config.tenant) {
+            if (!this.config.tenant) {
                 this.config.authorization_token = this.authorization_token;
             }
 
@@ -160,8 +156,10 @@ export const useAppStore = defineStore('app', {
         },
         async getUser() {
             const res = await AuthApi.getUser();
-            this.user = res.data.User;
-            this.tokensCount = res.data.User.apiTokens.length;
+            if (res.data.User) {
+                this.user = res.data.User;
+                this.tokensCount = res.data.User?.apiTokens.length;
+            }
         },
         async fetchCollectionIds(totalCount?: number) {
             if (!this.loggedIn) return false;
