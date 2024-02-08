@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class InstallPlatformUi extends Command
 {
-    protected $signature = 'platform-ui:install {--host=} {--token=} {--route=} {--tenant=} {--wsurl=} {--wschannel=} {--skip}';
+    protected $signature = 'platform-ui:install {--tenant=} {--route=} {--wsurl=} {--wschannel=} {--skip}';
 
     protected $description = 'Install the Platform UI package';
     private $BASE_DIR = __DIR__ . '/../../';

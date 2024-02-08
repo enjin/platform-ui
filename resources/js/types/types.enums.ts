@@ -129,3 +129,9 @@ export enum RuleType {
     TANK_FUEL_BUDGET = 'TANK_FUEL_BUDGET',
     REQUIRE_TOKEN = 'REQUIRE_TOKEN',
 }
+
+export enum ResetPasswordResponse {
+    PASSWORD_RESET = 'PASSWORD_RESET',
+    INVALID_TOKEN = 'INVALID_TOKEN',
+    INVALID_USER = 'INVALID_USER',
+}

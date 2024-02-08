@@ -48,6 +48,7 @@ import EnjinLogo from '~/components/EnjinLogo.vue';
 import { AuthApi } from '~/api/auth';
 import snackbar from '~/util/snackbar';
 import { snackbarErrors } from '~/util';
+import { ResetPasswordResponse } from '~/types/types.enums';
 
 const router = useRouter();
 const route = useRoute();
@@ -90,11 +91,13 @@ const resetPassword = async () => {
     isLoading.value = true;
     try {
         const res = await AuthApi.resetPassword(email.value, password.value, confirmPassword.value, props.token);
-        if (res.data.ResetPassword === true) {
+        if (res.data.ResetPassword === ResetPasswordResponse.PASSWORD_RESET) {
             snackbar.success({ title: 'Password reset successfully.', save: false });
             redirectToLogin();
-        } else {
-            snackbar.error({ title: 'Error resetting password.' });
+        } else if (res.data.ResetPassword === ResetPasswordResponse.INVALID_TOKEN) {
+            snackbar.error({ title: 'Invalid token' });
+        } else if (res.data.ResetPassword === ResetPasswordResponse.INVALID_USER) {
+            snackbar.error({ title: 'Invalid user', text: 'Please check the email provided' });
         }
     } catch (e) {
         if (snackbarErrors(e)) return;
