@@ -267,7 +267,11 @@ const loadMoreTokensWithObserver = () => {
                 try {
                     if (!tokens.value.cursor || isPaginationLoading.value) return;
                     isPaginationLoading.value = true;
-                    const res = await TokenApi.getTokens(searchCollectionInput.value, tokens.value.cursor);
+                    const res = await TokenApi.getTokens(
+                        searchCollectionInput.value,
+                        formatTokens([searchTokensInput.value]),
+                        tokens.value.cursor
+                    );
                     const data = DTOFactory.forTokens(res);
                     tokens.value = { items: [...tokens.value.items, ...data.items], cursor: data.cursor };
                     isPaginationLoading.value = false;
