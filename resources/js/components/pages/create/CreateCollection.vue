@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6">
+                <div v-if="useAppStore().advanced" class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6">
                     <FormList
                         v-model="explicitRoyaltyCurrencies"
                         label="Explicit Royalty Currencies (optional)"
