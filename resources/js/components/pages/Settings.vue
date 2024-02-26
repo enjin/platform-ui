@@ -66,7 +66,7 @@
         <ConfirmModal
             :is-open="confirmModal"
             title="Delete account"
-            description="Do you want to delete your account?"
+            description="Your account will be deactivated and will be removed after 14 days, All active Beams or other pending platform actions will be permanently deleted. Do you want to delete your account?"
             @closed="confirmModal = false"
             @confirm="deleteAccount"
         />
@@ -115,6 +115,7 @@ const formatName = (name: string) => {
 
 const deleteAccount = async () => {
     await AuthApi.deleteAccount();
+    appStore.clearLogin();
 };
 
 watch(
