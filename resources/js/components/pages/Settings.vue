@@ -55,11 +55,21 @@
                         description="Enable advanced mode."
                         readmore="Advanced mode"
                     />
-                    <Btn v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
-                    <Btn v-else class="mr-auto" error @click="resetSettings"> Reset Settings </Btn>
+                    <div class="flex space-x-4">
+                        <Btn v-if="!appStore.isMultiTenant" @click="confirmModal = true"> Delete account </Btn>
+                        <Btn v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
+                        <Btn v-else class="mr-auto" error @click="resetSettings"> Reset Settings </Btn>
+                    </div>
                 </div>
             </template>
         </div>
+        <ConfirmModal
+            :is-open="confirmModal"
+            title="Delete account"
+            description="Do you want to delete your account?"
+            @closed="confirmModal = false"
+            @confirm="deleteAccount"
+        />
     </div>
 </template>
 
@@ -76,12 +86,15 @@ import SettingsWalletAccount from './SettingsWalletAccount.vue';
 import SettingsApiTokens from './SettingsApiTokens.vue';
 import CollapseCard from '../CollapseCard.vue';
 import Tooltip from '../Tooltip.vue';
+import { AuthApi } from '~/api/auth';
+import ConfirmModal from '../ConfirmModal.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
 
 const advancedMode = ref(appStore.advanced);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
+const confirmModal = ref(false);
 
 const tokens = computed(() => appStore.user?.apiTokens);
 
@@ -98,6 +111,10 @@ const resetSettings = () => {
 
 const formatName = (name: string) => {
     return name.replaceAll('-', ' ');
+};
+
+const deleteAccount = async () => {
+    await AuthApi.deleteAccount();
 };
 
 watch(

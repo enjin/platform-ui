@@ -125,4 +125,12 @@ export class AuthApi {
 
         return AuthApi.sendPlatfromRequest(data);
     }
+
+    static async deleteAccount() {
+        const data = {
+            query: mutations.DeleteAccount,
+        };
+
+        return AuthApi.sendPlatfromRequest(data);
+    }
 }
