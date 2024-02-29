@@ -56,7 +56,7 @@
                         readmore="Advanced mode"
                     />
                     <div class="flex space-x-4">
-                        <Btn v-if="!appStore.isMultiTenant" @click="confirmModal = true"> Delete account </Btn>
+                        <Btn v-if="appStore.isMultiTenant" @click="confirmModal = true"> Delete account </Btn>
                         <Btn v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
                         <Btn v-else class="mr-auto" error @click="resetSettings"> Reset Settings </Btn>
                     </div>
