@@ -194,7 +194,7 @@ const actions = [
     },
     {
         key: 'freeze',
-        name: 'Schedule Freeze',
+        name: 'Freeze / Unfreeze',
         component: 'FreezeFuelTankSlideover',
     },
 ];

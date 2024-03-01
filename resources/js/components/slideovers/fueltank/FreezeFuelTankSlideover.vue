@@ -65,7 +65,7 @@ import { addressToPublicKey } from '~/util/address';
 import { useAppStore } from '~/store';
 import {
     booleanRequiredSchema,
-    numberRequiredSchema,
+    numberNotRequiredSchema,
     stringNotRequiredSchema,
     stringRequiredSchema,
 } from '~/util/schemas';
@@ -96,7 +96,7 @@ const formRef = ref();
 const validation = yup.object({
     tankId: stringRequiredSchema,
     isFrozen: booleanRequiredSchema,
-    ruleSetId: numberRequiredSchema.typeError('Rule Set ID must be a number'),
+    ruleSetId: numberNotRequiredSchema.typeError('Rule Set ID must be a number'),
     idempotencyKey: stringNotRequiredSchema,
 });
 
