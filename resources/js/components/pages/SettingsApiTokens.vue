@@ -34,21 +34,33 @@
                 v-for="token in tokens"
                 :key="token.name"
             >
-                <div class="flex items-center">
+                <div class="flex-1 truncate flex items-center">
                     <KeyIcon class="w-5 h-5 mr-4 text-green-500" />
                     <span class="text-gray-900 mr-4">{{ token.name }}</span>
-                    <span class="text-gray-400 text-sm mt-1">
-                        {{
-                            shortString(token.plainTextToken?.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0)) ??
-                            '*******'
-                        }}
+                    <span class="text-gray-400 text-sm mt-1 truncate">
+                        <span v-if="!token.plainTextToken">
+                            {{ '*******' }}
+                        </span>
                         <CopyTextIcon
                             v-if="token.plainTextToken"
+                            ref="copyIconRef"
+                            class="cursor-pointer flex mr-4"
                             :text="token.plainTextToken.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0)"
-                        />
+                        >
+                            <span class="truncate">
+                                {{ token.plainTextToken?.substring(token.plainTextToken?.indexOf('|') + 1 ?? 0) }}
+                            </span>
+                        </CopyTextIcon>
                     </span>
                 </div>
-                <Btn :dusk="`btn__revoke-api-${token.name}`" error @click="confirmRevoke(token.name)"> Revoke </Btn>
+                <Btn
+                    class="flex-shrink-0"
+                    :dusk="`btn__revoke-api-${token.name}`"
+                    error
+                    @click="confirmRevoke(token.name)"
+                >
+                    Revoke
+                </Btn>
             </div>
         </div>
 
@@ -64,7 +76,7 @@
 
 <script setup lang="ts">
 import { KeyIcon } from '@heroicons/vue/24/outline';
-import { shortString, snackbarErrors } from '~/util';
+import { snackbarErrors } from '~/util';
 import CopyTextIcon from '../CopyTextIcon.vue';
 import { computed, ref, watch } from 'vue';
 import { useAppStore } from '~/store';
