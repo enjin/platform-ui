@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white shadow rounded-lg">
         <div class="flex divide-x divide-gray-200 transition-all" :class="{ 'border-b border-gray-200': open }">
-            <div class="flex justify-between px-4 py-5 flex-1" @click="toggleCard">
+            <div class="flex justify-between px-4 py-5 flex-1 cursor-pointer" @click="toggleCard">
                 <div class="inline-flex">
                     <label>{{ title }}</label>
                     <slot name="icon" />
@@ -22,9 +22,9 @@
         <transition
             enter-active-class="duration-300"
             enter-from-class="transform opacity-0 max-h-0 delay-150"
-            enter-to-class="opacity-100 max-h-[300px]"
+            enter-to-class="opacity-100 max-h-[600px]"
             leave-active-class="duration-300"
-            leave-from-class="opacity-100 max-h-[300px]"
+            leave-from-class="opacity-100 max-h-[600px]"
             leave-to-class="transform opacity-0 max-h-0"
         >
             <slot v-if="open" />

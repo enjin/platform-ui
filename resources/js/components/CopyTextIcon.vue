@@ -1,5 +1,8 @@
 <template>
-    <ClipboardIcon class="inline-block ml-1 mb-1 w-4 h-4 cursor-pointer hover:text-primary" @click="copyText" />
+    <div @click="copyText">
+        <slot />
+        <ClipboardIcon class="inline-block ml-1 my-auto w-4 h-4 cursor-pointer hover:text-primary flex-shrink-0" />
+    </div>
 </template>
 
 <script setup lang="ts">
