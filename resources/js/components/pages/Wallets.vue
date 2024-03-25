@@ -2,19 +2,25 @@
     <div class="px-4 sm:px-6 lg:px-8 bg-white m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all">
         <div class="mt-4 flow-root">
             <div class="md:-mx-6 lg:-mx-8 transition-all">
-                <div class="sm:py-2 sm:px-6 lg:px-8 mb-2 w-full">
-                    <div class="flex flex-wrap gap-4">
-                        <div class="" v-for="searchInput in searchInputs" :key="searchInput.name">
-                            <FormInput
-                                v-model="searchInput.value"
-                                :name="searchInput.name"
-                                :label="searchInput.label"
-                                :placeholder="searchInput.placeholder"
-                                @input-change="searchChange"
-                            />
+                <div class="flex md:flex-row flex-col-reverse justify-between">
+                    <div class="sm:py-2 sm:px-6 lg:px-8 mb-2 w-full flex justify-between">
+                        <div class="flex flex-wrap gap-4">
+                            <div class="" v-for="searchInput in searchInputs" :key="searchInput.name">
+                                <FormInput
+                                    v-model="searchInput.value"
+                                    :name="searchInput.name"
+                                    :label="searchInput.label"
+                                    :placeholder="searchInput.placeholder"
+                                    @input-change="searchChange"
+                                />
+                            </div>
                         </div>
                     </div>
+                    <div class="flex md:px-6 lg:px-8 py-2 mb-2 items-end">
+                        <Btn primary @click="openModalSlide('TransferBalanceSlideover')"> Transfer Balance </Btn>
+                    </div>
                 </div>
+
                 <LoadingContent
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
@@ -98,6 +104,7 @@ import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
 import NoItems from '~/components/NoItems.vue';
 import { TransactionState } from '~/types/types.enums';
+import Btn from '../Btn.vue';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -199,7 +206,7 @@ const getWallet = async () => {
     }
 };
 
-const openModalSlide = (componentName: string, wallet) => {
+const openModalSlide = (componentName: string, wallet?: any) => {
     let componentPath = 'common';
     slideComponent.value = { componentName, componentPath, ...wallet };
     modalSlide.value = true;

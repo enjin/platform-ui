@@ -21,6 +21,7 @@ import RemoveAllAttributes from '~/graphql/mutation/RemoveAllAttributes';
 import Freeze from '~/graphql/mutation/Freeze';
 import Thaw from '~/graphql/mutation/Thaw';
 import UpdateTransaction from '~/graphql/mutation/UpdateTransaction';
+import TransferBalance from '~/graphql/mutation/TransferBalance';
 
 import BatchMint from '~/graphql/mutation/batch/BatchMint';
 import BatchTransfer from '~/graphql/mutation/batch/BatchTransfer';
@@ -87,6 +88,7 @@ export default {
     Freeze,
     Thaw,
     UpdateTransaction,
+    TransferBalance,
 
     BatchMint,
     BatchTransfer,

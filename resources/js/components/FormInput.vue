@@ -37,6 +37,7 @@
                             `block flex-1 flex-shrink-0 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 ${inputClass}`,
                         ]"
                         :placeholder="placeholder"
+                        autocomplete="off"
                         oninput="validity.valid||(value=value.replace(/\D+/g, ''))"
                         @input="inputChange"
                         @keyup.enter="emit('submit')"

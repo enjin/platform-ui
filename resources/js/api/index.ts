@@ -213,4 +213,19 @@ export class ApiService {
 
         return ApiService.sendPlatformRequest(data);
     }
+
+    static async transferBalance(transferBalanceData: Record<string, unknown>) {
+        const data = {
+            query: mutations.TransferBalance,
+            variables: {
+                recipient: transferBalanceData.recipient,
+                amount: transferBalanceData.amount,
+                keepAlive: transferBalanceData.keepAlive,
+                idempotencyKey: transferBalanceData.idempotencyKey,
+                skipValidation: transferBalanceData.skipValidation,
+            },
+        };
+
+        return ApiService.sendPlatformRequest(data);
+    }
 }
