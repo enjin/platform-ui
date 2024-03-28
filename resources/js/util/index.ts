@@ -4,7 +4,6 @@ import snackbar from '~/util/snackbar';
 import { getAppMetadata } from '@walletconnect/utils';
 import { wcNamespaces, wcProjectId } from './constants';
 import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
-import { useAppStore } from '~/store';
 
 export const formatData = (entries: any, type = 'object') => {
     const data: { [key: string]: any } = type === 'object' ? {} : [];
@@ -115,9 +114,6 @@ export const snackbarErrors = (errors: any) => {
 
     errors.map((error: any) => {
         snackbar.error({ title: error.field ?? 'Error', text: error.message });
-        if (error.message.includes('email address is not verified')) {
-            useAppStore().allowResend = true;
-        }
     });
 
     return true;

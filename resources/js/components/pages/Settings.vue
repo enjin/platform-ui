@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 overflow-y-auto transition-all pb-14">
+    <div class="px-4 sm:px-6 lg:px-8 overflow-y-auto transition-all pb-14 max-w-4xl mx-auto w-full">
         <div class="mt-4 flow-root">
             <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
