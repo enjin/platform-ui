@@ -187,3 +187,25 @@ export const wcOptions: WalletConnectModalSignOptions = {
         },
     },
 };
+
+export const getMediaTypeFromUrl = (url) => {
+    const filename = url.split('/').pop().split('?')[0];
+    const fileExtension = filename.split('.').pop().toLowerCase();
+
+    const mediaTypeMap = {
+        jpg: 'image/jpeg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        gif: 'image/gif',
+        bmp: 'image/bmp',
+        svg: 'image/svg+xml',
+        mp3: 'audio/mpeg',
+        wav: 'audio/wav',
+        ogg: 'audio/ogg',
+        mp4: 'video/mp4',
+        webm: 'video/webm',
+        mkv: 'video/x-matroska',
+    };
+
+    return mediaTypeMap[fileExtension];
+};

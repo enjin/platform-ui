@@ -1,5 +1,5 @@
 <template>
-    <Disclosure as="nav" class="bg-white shadow z-40">
+    <Disclosure as="nav" class="bg-light-surface-primary shadow z-40">
         <div class="px-4 sm:px-6 lg:px-8 transition-all">
             <div class="flex h-16 justify-between">
                 <div class="flex">

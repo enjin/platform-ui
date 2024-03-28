@@ -5,8 +5,8 @@
         </template>
         <template #content>
             <span class="cursor-pointer text-center block">
-                <div class="bg-[#1a1a1a] bg-opacity-80 rounded-md shadow-md py-2 px-3 flex flex-col max-w-xs z-30">
-                    <p class="text-xs text-white">
+                <div class="bg-[#1a1a1a] bg-opacity-90 rounded-md shadow-md p-3 flex flex-col max-w-sm z-50">
+                    <p class="text-sm text-white">
                         {{ text }}
                     </p>
                 </div>

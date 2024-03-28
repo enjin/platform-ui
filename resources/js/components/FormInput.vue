@@ -16,12 +16,15 @@
             />
 
             <div class="mt-2 flex relative rounded-md w-full" :class="{ '!mt-0': !label, 'shadow-sm': haveShadow }">
-                <span
+                <p v-if="errorMessage" class="absolute left-0 -bottom-5 text-red-500 text-xs truncate">
+                    {{ errorMessage }}
+                </p>
+                <div
                     v-if="prefix"
-                    class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-sm"
+                    class="flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-sm"
                 >
                     {{ prefix }}
-                </span>
+                </div>
                 <div class="w-full flex">
                     <input
                         v-bind="{ ...field }"
@@ -34,7 +37,8 @@
                                 'rounded-md': !prefix,
                                 'rounded-r-none': hasAddon,
                             },
-                            `block flex-1 flex-shrink-0 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 ${inputClass}`,
+                            'block flex-1 flex-shrink-0 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 outline-none',
+                            inputClass,
                         ]"
                         :placeholder="placeholder"
                         autocomplete="off"
@@ -47,7 +51,6 @@
                     <slot name="addon" />
                 </div>
             </div>
-            <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
         </Field>
     </div>
 </template>

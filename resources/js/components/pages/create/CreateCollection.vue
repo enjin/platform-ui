@@ -1,20 +1,62 @@
 <template>
     <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
-        <div class="flow-root">
-            <div class="mb-4">
-                <h1 class="text-xl md:text-2xl">Create Collection</h1>
+        <div class="flow-root max-w-3xl mx-auto">
+            <div class="mb-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-medium md:text-2xl">Create Collection</h1>
+                </div>
+                <div class="space-x-4 ml-auto">
+                    <Btn :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
+                    <Btn :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
+                </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createCollection">
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Mint Policy</h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                This section determines the rules pertaining to token supply and amount of tokens
-                                available to be minted on future interactions with this collection.
-                            </p>
+                <div class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
+                    <div class="space-y-6">
+                        <FormInput
+                            v-model="imageUrl"
+                            name="imageUrl"
+                            label="Image URL"
+                            class="w-full"
+                            description="The URL of the image for the collection."
+                            required
+                        />
+                        <FormInput
+                            v-model="bannerUrl"
+                            class="w-full"
+                            name="bannerUrl"
+                            label="Banner URL"
+                            description="The URL of the banner image for the collection."
+                        />
+                        <FormInput
+                            v-model="name"
+                            name="name"
+                            label="Name"
+                            description="The name of the collection."
+                            required
+                        />
+                        <div>
+                            <RichTextEditor
+                                v-model="description"
+                                name="description"
+                                label="Description"
+                                description="The description of the collection."
+                            />
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
+                    </div>
+                </div>
+                <div v-if="isAdvanced" class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
+                    <div class="">
+                        <div class="flex items-center">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900">Mint Policy</h3>
+                            <Tooltip
+                                text="This section determines the rules pertaining to token supply and amount of tokens
+                                available to be minted on future interactions with this collection."
+                            >
+                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                            </Tooltip>
+                        </div>
+                        <div class="mt-6">
                             <div class="flex flex-col gap-6">
                                 <FormInput
                                     v-model="maxTokenCount"
@@ -56,29 +98,34 @@
                     </div>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Market Policy</h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                This section determines the rules which tokens and collections must follow when
-                                interacting with Marketplace on the blockchain.
-                            </p>
+                <div class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6">
+                    <div class="space-y-6">
+                        <div class="flex items-center">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900">Royalty</h3>
+                            <Tooltip
+                                text="This section determines the rules which tokens and collections must follow when
+                                interacting with Marketplace on the blockchain."
+                            >
+                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                            </Tooltip>
+                            <p class="mt-1 text-sm text-gray-500"></p>
                         </div>
                         <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
+                            <div class="flex flex-row space-x-4 w-full">
                                 <FormInput
                                     v-model="beneficiaryAddress"
                                     name="beneficiaryAddress"
-                                    label="Royalty Beneficiary"
-                                    description="Account receiving the royalties from Marketplace interactions."
+                                    class="w-full"
+                                    label="Beneficiary Address"
+                                    tooltip="Account receiving the royalties from Marketplace interactions."
                                 />
 
                                 <FormInput
                                     v-model="beneficiaryPercentage"
+                                    class="w-[100px] !mr-[40px] flex flex-col justify-between"
                                     name="beneficiaryPercentage"
-                                    label="Royalty Percentage"
-                                    description="The percentage of royalties the beneficiary will receive from Marketplace interactions."
+                                    label="Percentage"
+                                    tooltip="The percentage of royalties the beneficiary will receive from Marketplace interactions."
                                     type="number"
                                     :min="0"
                                     prefix="%"
@@ -88,7 +135,10 @@
                     </div>
                 </div>
 
-                <div v-if="useAppStore().advanced" class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6">
+                <div
+                    v-if="isAdvanced"
+                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                >
                     <FormList
                         v-model="explicitRoyaltyCurrencies"
                         label="Explicit Royalty Currencies (optional)"
@@ -136,7 +186,10 @@
                     </FormList>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6">
+                <div
+                    v-if="isAdvanced"
+                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                >
                     <FormList
                         v-model="attributes"
                         label="Attributes"
@@ -179,7 +232,10 @@
                     </FormList>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6" v-if="useAppStore().advanced">
+                <div
+                    v-if="isAdvanced"
+                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                >
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Other Options</h3>
@@ -206,11 +262,11 @@
                     </div>
                 </div>
 
-                <div class="flex space-x-3 justify-end">
+                <div class="flex space-x-3 justify-start">
                     <RouterLink
                         :to="{ name: 'platform.collections' }"
                         type="button"
-                        class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
                         Cancel
                     </RouterLink>
@@ -222,7 +278,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { Ref, computed, ref, watch } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
@@ -232,7 +288,7 @@ import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import FormList from '~/components/FormList.vue';
 import { addressToPublicKey } from '~/util/address';
-import { formatData, formatToken, snackbarErrors } from '~/util';
+import { formatData, formatToken, snackbarErrors, getMediaTypeFromUrl } from '~/util';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
@@ -240,11 +296,25 @@ import { CollectionApi } from '~/api/collection';
 import ReadMoreButton from '~/components/ReadMoreButton.vue';
 import { addressNotRequiredSchema, booleanNotRequiredSchema, numberNotRequiredSchema } from '~/util/schemas';
 import { TokenIdType } from '~/types/types.interface';
+import Tooltip from '~/components/Tooltip.vue';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
+import RichTextEditor from '~/components/RichTextEditor.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
 
+const formRef = ref();
 const isLoading = ref(false);
+const mode = ref('simple');
+// Simple
+const name = ref('');
+const description = ref('');
+const imageUrl = ref('');
+const bannerUrl = ref('');
+const imageType = ref();
+const bannerType = ref();
+
+// Advanced
 const maxTokenCount = ref();
 const maxTokenSupply = ref();
 const isInfiniteSupply = ref(true);
@@ -254,7 +324,6 @@ const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
-const formRef = ref();
 
 const attributes = ref([
     {
@@ -277,7 +346,13 @@ const explicitRoyaltyCurrencies: Ref<
     },
 ]);
 
+const isAdvanced = computed(() => mode.value === 'advanced');
+
 const validation = yup.object({
+    name: yup.string().required('Name is required'),
+    description: yup.string().nullable(),
+    imageUrl: yup.string().required('Image URL is required'),
+    bannerUrl: yup.string().nullable(),
     maxTokenCount: numberNotRequiredSchema.typeError('Max token count must be a number'),
     maxTokenSupply: numberNotRequiredSchema.typeError('Max token supply must be a number'),
     forceSingleMint: booleanNotRequiredSchema,
@@ -288,6 +363,32 @@ const validation = yup.object({
         otherwise: () => yup.number().typeError('Percentage must be a number'),
     }),
 });
+
+const simpleAttributes = () => {
+    return [
+        {
+            key: 'name',
+            value: name.value,
+        },
+        {
+            key: 'description',
+            value: description.value,
+        },
+        {
+            key: 'media',
+            value: JSON.stringify([
+                {
+                    url: imageUrl.value,
+                    type: imageType.value,
+                },
+                {
+                    url: bannerUrl.value,
+                    type: bannerType.value,
+                },
+            ]),
+        },
+    ];
+};
 
 const addExplicitRoyaltyCurrencyItem = () => {
     explicitRoyaltyCurrencies.value.push({
@@ -344,7 +445,7 @@ const createCollection = async () => {
                         collectionId: a.collectionId,
                         tokenId: formatToken(a.tokenId),
                     })),
-                attributes: attributes.value.filter((a) => a.key !== '' && a.value !== ''),
+                attributes: [...simpleAttributes(), attributes.value.filter((a) => a.key !== '' && a.value !== '')],
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })
@@ -371,4 +472,26 @@ const createCollection = async () => {
         isLoading.value = false;
     }
 };
+
+watch(
+    () => imageUrl.value,
+    (imageVal) => {
+        if (imageVal) {
+            imageType.value = getMediaTypeFromUrl(imageVal);
+        } else {
+            imageType.value = '';
+        }
+    }
+);
+
+watch(
+    () => bannerUrl.value,
+    (imageVal) => {
+        if (imageVal) {
+            bannerType.value = getMediaTypeFromUrl(imageVal);
+        } else {
+            bannerType.value = '';
+        }
+    }
+);
 </script>
