@@ -28,9 +28,9 @@
                 <LoadingCircle v-else class="w-4 h-4 text-white" />
             </Btn>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4">
             <div
-                class="bg-gray-100 p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center gr"
+                class="bg-gray-50 p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center gr"
                 v-for="token in tokens"
                 :key="token.name"
             >

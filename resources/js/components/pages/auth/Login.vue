@@ -8,7 +8,7 @@
             </h2>
         </div>
         <div
-            v-if="appStore.allowResend"
+            v-if="allowResend"
             class="flex justify-between p-4 text-sm items-center w-full sm:max-w-md bg-green-300 bg-opacity-20 rounded-lg"
         >
             <span class="font-medium">Did not receive a verification email ?</span>
@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { Form } from 'vee-validate';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '~/store';
 import Btn from '~/components/Btn.vue';
@@ -74,6 +74,8 @@ const isLoading = ref(false);
 const email = ref('');
 const password = ref('');
 const formRef = ref();
+
+const allowResend = computed(() => appStore.allowResend);
 
 const validation = yup.object().shape({
     email: yup.string().email('Email is not valid').required('Email is required'),
@@ -106,13 +108,21 @@ const login = async () => {
             }
         }
     } catch (e: any) {
-        if (snackbarErrors(e) || (e.errors && snackbarErrors(e.errors))) {
+        if (snackbarErrors(e)) {
             return;
         }
-        snackbar.error({
-            title: 'An error occurred while logging in.',
-            text: 'Please try again.',
-        });
+        if (e.message.includes('email address is not verified')) {
+            useAppStore().allowResend = true;
+            snackbar.error({
+                title: 'Email address is not verified',
+                text: 'Please verify your email address.',
+            });
+        } else {
+            snackbar.error({
+                title: 'An error occurred while logging in.',
+                text: 'Please try again.',
+            });
+        }
     } finally {
         isLoading.value = false;
     }
