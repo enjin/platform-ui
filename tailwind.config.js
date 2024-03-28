@@ -5,6 +5,58 @@ module.exports = {
         extend: {
             colors: {
                 primary: { DEFAULT: '#7567CE', light: '#8172e0', dark: '#6456b8' },
+                light: {
+                    surface: {
+                        background: '#F9FAFB',
+                        primary: '#FFFFFF',
+                    },
+                    stroke: {
+                        DEFAULT: '#E7E9EC',
+                        strong: '#D7D8D9',
+                    },
+                    content: {
+                        DEFAULT: '#5B5E68',
+                        strong: '#1B1D27',
+                        brand: '#7567CE',
+                        selected: '#9281EF',
+                    },
+                    btn: {
+                        background: {
+                            DEFAULT: '#FFFFFF',
+                            hover: '#9281EF',
+                            brand: {
+                                DEFAULT: '#7567CE',
+                                hover: '#9281EF',
+                            },
+                        },
+                    },
+                },
+                dark: {
+                    surface: {
+                        background: '#1B1D27',
+                        primary: '#2A2C36',
+                    },
+                    stroke: {
+                        DEFAULT: '#3A3C46',
+                        strong: '#3A3C46',
+                    },
+                    content: {
+                        DEFAULT: '#FFFFFF',
+                        strong: '#FFFFFF',
+                        brand: '#B2A4FF',
+                        selected: '#9281EF',
+                    },
+                    btn: {
+                        background: {
+                            DEFAULT: '#FFFFFF',
+                            hover: '#9281EF',
+                            brand: {
+                                DEFAULT: '#B2A4FF',
+                                hover: '#9281EF',
+                            },
+                        },
+                    },
+                },
             },
             keyframes: {
                 'fade-in': {
