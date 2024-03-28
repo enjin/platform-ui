@@ -4,7 +4,6 @@ import snackbar from '~/util/snackbar';
 import { getAppMetadata } from '@walletconnect/utils';
 import { wcNamespaces, wcProjectId } from './constants';
 import { WalletConnectModalSignOptions } from '@walletconnect/modal-sign-html';
-import { useAppStore } from '~/store';
 
 export const formatData = (entries: any, type = 'object') => {
     const data: { [key: string]: any } = type === 'object' ? {} : [];
