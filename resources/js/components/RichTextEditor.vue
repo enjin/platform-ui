@@ -46,9 +46,9 @@ const props = withDefaults(
     defineProps<{
         modelValue: string | object;
         name: string;
-        label: string;
-        description: string;
-        placeholder: string;
+        label?: string;
+        description?: string;
+        placeholder?: string;
         rows?: number;
         maxLength?: number;
         help?: string;

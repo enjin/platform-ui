@@ -1,14 +1,15 @@
 <template>
     <dd class="mt-1 text-sm text-gray-900 break-words" v-if="addressSwitch">
-        <span class="break-words">
-            {{ displayAddress }}
-        </span>
+        <CopyTextIcon :text="addressSwitch">
+            <span class="break-words">
+                {{ displayAddress }}
+            </span>
+        </CopyTextIcon>
         <ArrowsRightLeftIcon
             v-if="useAppStore().advanced && !props.short"
-            class="inline-block w-4 h-4 ml-1 cursor-pointer hover:text-primary"
+            class="w-4 h-4 ml-1 cursor-pointer hover:text-primary"
             @click="switchAddress = !switchAddress"
         />
-        <CopyTextIcon :text="addressSwitch" />
     </dd>
 </template>
 

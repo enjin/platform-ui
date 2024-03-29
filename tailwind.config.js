@@ -9,6 +9,10 @@ module.exports = {
                     surface: {
                         background: '#F9FAFB',
                         primary: '#FFFFFF',
+                        brand: {
+                            DEFAULT: '#7567CE',
+                            alpha: '#B2A4FF1A',
+                        },
                     },
                     stroke: {
                         DEFAULT: '#E7E9EC',

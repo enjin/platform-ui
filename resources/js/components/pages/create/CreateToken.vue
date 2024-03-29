@@ -1,142 +1,163 @@
 <template>
     <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
-        <div class="flow-root">
-            <div class="mb-4">
-                <h1 class="text-2xl">Create Token</h1>
+        <div class="flow-root max-w-3xl mx-auto">
+            <div class="mb-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl">Create Token</h1>
+                </div>
+                <div class="space-x-4 ml-auto">
+                    <Btn :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
+                    <Btn :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
+                </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createToken">
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6 transition-all">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Create Token</h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                Creates a new token in a collection owned by you, the new token will be automatically
-                                minted to the specified recipient account/wallet
-                            </p>
+                <div class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <h3 class="text-base font-semibold leading-6 text-gray-900">Token Details</h3>
+                                <Tooltip
+                                    text="Creates a new token in a collection owned by you, the new token will be automatically
+                                minted to the specified recipient account/wallet"
+                                >
+                                    <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                </Tooltip>
+                            </div>
+                            <a
+                                href="https://docs.enjin.io/docs/first-steps-start-here#step-2-click-create-token"
+                                target="_blank"
+                            >
+                                <Btn primary> Documentation </Btn>
+                            </a>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormSelect
-                                    v-model="collectionId"
-                                    name="collectionId"
-                                    label="Collection ID"
-                                    description="The collection ID to mint from."
-                                    tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
-                                    placeholder="Select a collection ID"
-                                    :options="collectionIds"
-                                    required
-                                />
-                                <TokenIdInput
-                                    v-model="tokenId"
-                                    label="Token ID"
-                                    description="The token ID to set. This must be unique for this collection."
-                                    required
-                                    readmore="Token ID"
-                                />
-                                <FormInput
-                                    v-model="recipient"
-                                    name="recipient"
-                                    label="Recipient"
-                                    description="The recipient account of the tokens for the initial mint."
-                                    required
-                                    tooltip="Wallet Address"
-                                />
-                                <FormInput
-                                    v-model="initialSupply"
-                                    name="initialSupply"
-                                    label="Initial Supply"
-                                    description="The initial supply of tokens to mint to the specified recipient. Must not exceed the token cap if set."
-                                    type="number"
-                                    tooltip="This supply will enter circulation after confirming this create token request."
-                                />
-                                <FormInput
-                                    v-model="unitPrice"
-                                    name="unitPrice"
-                                    label="Unit Price"
-                                    description="Leave as null if you want to keep the same unitPrice. You can also put a value if you want to change the unitPrice. Please note you can only increase it and a deposit to the difference of every token previously minted will also be needed."
-                                    :prefix="currencySymbol"
-                                    required
-                                    tooltip="The backing of the token necessary for it to exist in the blockchain, not to be mistaken by the reserve value, once the token is burned, the Unit Price returns to the creator and not the holder."
-                                />
-                                <FormCheckbox
-                                    v-model="listingForbidden"
-                                    name="listingForbidden"
-                                    label="Listing Forbidden"
-                                    description="By checking this field, you are prohibiting this token from being listed in the marketplace."
-                                />
+                        <FormSelect
+                            v-model="collectionId"
+                            name="collectionId"
+                            label="Collection ID"
+                            description="The collection ID to mint from."
+                            tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
+                            placeholder="Select a collection ID"
+                            :options="collectionIds"
+                            required
+                        />
+                        <TokenIdInput
+                            v-model="tokenId"
+                            label="Token ID"
+                            description="The token ID to set. This must be unique for this collection."
+                            required
+                            readmore="Token ID"
+                        />
+                        <FormInput
+                            v-model="imageUrl"
+                            name="imageUrl"
+                            label="Image URL"
+                            class="w-full"
+                            description="The URL of the image for the token."
+                            required
+                        />
+                        <FormInput
+                            v-model="name"
+                            name="name"
+                            label="Name"
+                            description="The name of the collection."
+                            required
+                        />
+                        <RichTextEditor
+                            v-model="description"
+                            name="description"
+                            label="Description"
+                            description="The description of the collection."
+                        />
+                        <FormInput
+                            v-model="recipient"
+                            name="recipient"
+                            label="Recipient"
+                            description="The recipient account of the tokens for the initial mint."
+                            required
+                            tooltip="Wallet Address"
+                        />
+                        <div>
+                            <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Token type</label>
+                            <div class="flex">
+                                <div
+                                    class="flex-1 px-4 py-8 border border-light-stroke-strong rounded-l-2xl cursor-pointer transition-all"
+                                    :class="{
+                                        'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'nft',
+                                    }"
+                                    @click="tokenType = 'nft'"
+                                >
+                                    <div class="font-bold text-lg">Non Fungible Token (NFT)</div>
+                                    <div class="text-xs mt-1">
+                                        Verifiably distinct and unique digital items. Recommended for collectibles.
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex-1 px-4 py-8 border border-light-stroke-strong rounded-r-2xl cursor-pointer transition-all"
+                                    :class="{
+                                        'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'ft',
+                                    }"
+                                    @click="tokenType = 'ft'"
+                                >
+                                    <div class="font-bold text-lg">Fungible Token (FT)</div>
+                                    <div class="text-xs mt-1">
+                                        Items that can have multiple copies. Recommended for gaming items, trading
+                                        cards, etc.
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <FormInput
+                            v-if="tokenType === 'ft'"
+                            v-model="initialSupply"
+                            name="initialSupply"
+                            label="Initial Supply"
+                            description="The initial supply of tokens to mint to the specified recipient. Must not exceed the token maximum supply if set."
+                            type="number"
+                            tooltip="Number of items to be minted when this item is first created. If this is below maximum supply, users can mint more of this item in the future."
+                        />
+                        <FormInput
+                            v-if="tokenType === 'ft'"
+                            v-model="capAmount"
+                            name="capAmount"
+                            label="Maximum Supply"
+                            tooltip="Once this limit is reached, minting of additional items will not be allowed."
+                            placeholder="Unlimited"
+                            type="number"
+                        />
                     </div>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6 transition-all">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Cap</h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                The token cap (if required). A cap of 1 will create this token as a Single Mint type to
-                                produce an NFT.
-                            </p>
-                        </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormSelect
-                                    v-model="capType"
-                                    :options="capTypes"
-                                    name="capType"
-                                    label="Cap Type"
-                                    required
-                                    tooltip="The type of mint cap for this token. A SINGLE_MINT type means a token can only be minted once, and cannot be re-minted once burned. A SUPPLY type allows you to set a limit on the total number of circulating tokens that can be minted, this type allows for burned tokens to be re-minted even if the supply amount is 1."
-                                />
-                                <FormInput
-                                    v-model="capAmount"
-                                    name="capAmount"
-                                    label="Cap Amount"
-                                    description="The cap amount when using the SUPPLY type."
-                                    type="number"
-                                    :disabled="capType !== 'SUPPLY'"
-                                    :required="capType === 'SUPPLY'"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6 transition-all">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Token Royalty Settings</h3>
+                <div class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                    <div class="space-y-6">
+                        <div class="">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900">Token Royalty</h3>
                             <p class="mt-1 text-sm text-gray-500">The market behavior for a token.</p>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
+                        <div class="mt-6">
+                            <div class="flex flex-row space-x-4">
                                 <FormInput
                                     v-model="beneficiaryAddress"
                                     name="beneficiaryAddress"
-                                    label="Beneficiary"
-                                    description="The account that will receive the royalty."
+                                    class="w-full"
+                                    label="Beneficiary Address"
+                                    tooltip="Account receiving the royalties from Marketplace interactions."
                                 />
                                 <FormInput
                                     v-model="beneficiaryPercentage"
+                                    class="w-[100px] !mr-[40px] flex flex-col justify-between"
                                     name="beneficiaryPercentage"
                                     label="Percentage"
-                                    description="The amount of royalty the beneficiary receives in percentage."
+                                    tooltip="The percentage of royalties the beneficiary will receive from Marketplace interactions."
                                     type="number"
                                     :min="0"
                                     prefix="%"
                                 />
-                                <FormCheckbox
-                                    v-model="isCurrency"
-                                    name="isCurrency"
-                                    label="Is Currency"
-                                    description="If the token is a currency."
-                                />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6 transition-all">
+                <div class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
                     <FormList
                         v-model="attributes"
                         label="Attributes"
@@ -178,13 +199,25 @@
                     </FormList>
                 </div>
 
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6 transition-all" v-if="useAppStore().advanced">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
+                <div v-if="isAdvanced" class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                    <div class="space-y-6">
+                        <div class="">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Other Options</h3>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
+                        <div class="mt-6">
                             <div class="flex flex-col gap-6">
+                                <FormCheckbox
+                                    v-model="listingForbidden"
+                                    name="listingForbidden"
+                                    label="Listing Forbidden"
+                                    description="By checking this field, you are prohibiting this token from being listed in the marketplace."
+                                />
+                                <FormCheckbox
+                                    v-model="isCurrency"
+                                    name="isCurrency"
+                                    label="Is Currency"
+                                    description="If the token is a currency."
+                                />
                                 <FormInput
                                     v-model="idempotencyKey"
                                     name="idempotencyKey"
@@ -230,7 +263,7 @@ import { useRouter } from 'vue-router';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey } from '~/util/address';
-import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, snackbarErrors } from '~/util';
+import { formatData, formatPriceToENJ, formatToken, snackbarErrors } from '~/util';
 import { TokenCapType, TokenIdSelectType } from '~/types/types.enums';
 import FormList from '~/components/FormList.vue';
 import TokenIdInput from '~/components/TokenIdInput.vue';
@@ -247,13 +280,22 @@ import {
     stringNotRequiredSchema,
     stringRequiredSchema,
 } from '~/util/schemas';
+import Tooltip from '~/components/Tooltip.vue';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
+import RichTextEditor from '~/components/RichTextEditor.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
 
-const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
-
 const isLoading = ref(false);
+const mode = ref('simple');
+const imageUrl = ref('');
+const imageType = ref();
+const name = ref('');
+const description = ref('');
+const tokenType = ref('nft');
+
+//Advanced
 const collectionId = ref('');
 const recipient = ref();
 const tokenId = ref({
@@ -261,7 +303,6 @@ const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
 });
 const initialSupply = ref(1);
-const capType = ref(TokenCapType.SINGLE_MINT);
 const capAmount = ref();
 const isCurrency = ref(false);
 const beneficiaryAddress = ref('');
@@ -279,21 +320,18 @@ const attributes = ref([
     },
 ]);
 
-const capTypes = Object.values(TokenCapType);
 const collectionIds = computed(() => appStore.collections);
+const isAdvanced = computed(() => mode.value === 'advanced');
 
 const validation = yup.object({
+    imageUrl: stringRequiredSchema,
+    name: stringRequiredSchema,
+    description: stringNotRequiredSchema,
     collectionId: collectionIdRequiredSchema,
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
     initialSupply: numberRequiredSchema.typeError('Initial Supply must be a number').min(1),
-    unitPrice: numberRequiredSchema.typeError('Unit Price must be a number').min(0),
-    capType: stringRequiredSchema,
-    capAmount: yup.number().when('capType', {
-        is: TokenCapType.SUPPLY,
-        then: () => numberRequiredSchema.typeError('Cap amount must be a number'),
-        otherwise: () => numberNotRequiredSchema.typeError('Cap amount must be a number'),
-    }),
+    capAmount: numberNotRequiredSchema,
     beneficiaryAddress: addressNotRequiredSchema,
     beneficiaryPercentage: yup.number().when('beneficiaryAddress', {
         is: (val) => val !== '' && val !== null,
@@ -311,6 +349,28 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
+const simpleAttributes = () => {
+    return [
+        {
+            key: 'name',
+            value: name.value,
+        },
+        {
+            key: 'description',
+            value: description.value,
+        },
+        {
+            key: 'media',
+            value: JSON.stringify([
+                {
+                    url: imageUrl.value,
+                    type: imageType.value,
+                },
+            ]),
+        },
+    ];
+};
+
 const createToken = async () => {
     if (!(await isValid())) return;
 
@@ -326,7 +386,12 @@ const createToken = async () => {
                     initialSupply: initialSupply.value,
                     unitPrice: formatPriceToENJ(unitPrice.value) ?? null,
                     cap: {
-                        type: capType.value,
+                        type:
+                            tokenType.value === 'ft'
+                                ? capAmount.value > 0
+                                    ? TokenCapType.SUPPLY
+                                    : TokenCapType.INFINITE
+                                : TokenCapType.SINGLE_MINT,
                         amount: capAmount.value,
                     },
                     behavior: {
@@ -340,7 +405,7 @@ const createToken = async () => {
                         isCurrency: isCurrency.value,
                     },
                     listingForbidden: listingForbidden.value,
-                    attributes: attributes.value.filter((a) => a.key !== '' && a.value !== ''),
+                    attributes: [...simpleAttributes(), attributes.value.filter((a) => a.key !== '' && a.value !== '')],
                 },
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,

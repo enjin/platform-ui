@@ -13,6 +13,17 @@
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createCollection">
                 <div class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
                     <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <h3 class="text-base font-semibold leading-6 text-gray-900">Collection Details</h3>
+                            </div>
+                            <a
+                                href="https://docs.enjin.io/docs/first-steps-start-here#step-2-click-create-collection"
+                                target="_blank"
+                            >
+                                <Btn primary> Documentation </Btn>
+                            </a>
+                        </div>
                         <FormInput
                             v-model="imageUrl"
                             name="imageUrl"
@@ -35,14 +46,12 @@
                             description="The name of the collection."
                             required
                         />
-                        <div>
-                            <RichTextEditor
-                                v-model="description"
-                                name="description"
-                                label="Description"
-                                description="The description of the collection."
-                            />
-                        </div>
+                        <RichTextEditor
+                            v-model="description"
+                            name="description"
+                            label="Description"
+                            description="The description of the collection."
+                        />
                     </div>
                 </div>
                 <div v-if="isAdvanced" class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
@@ -56,45 +65,41 @@
                                 <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
                             </Tooltip>
                         </div>
-                        <div class="mt-6">
-                            <div class="flex flex-col gap-6">
-                                <FormInput
-                                    v-model="maxTokenCount"
-                                    name="maxTokenCount"
-                                    label="Max Token Count"
-                                    description="The maximum number of individual tokens that can be created and exist for this collection."
-                                    type="number"
-                                    :disabled="isInfiniteCount"
-                                />
-                                <FormCheckbox
-                                    v-model="isInfiniteCount"
-                                    name="infiniteCount"
-                                    label="Infinite Count"
-                                    description="Use this option if you would like the collection to support an infinite amount of tokens."
-                                />
-                                <FormInput
-                                    v-model="maxTokenSupply"
-                                    name="maxTokenSupply"
-                                    label="Max Token Supply"
-                                    description="Absolute maximum supply for each token in this collection. Set to 1 for all tokens to be unique NFTs with a max supply of 1, all tokens that have a supply of more than 1 should be treated as fungible tokens (FTs)."
-                                    type="number"
-                                    :disabled="isInfiniteSupply"
-                                />
-                                <FormCheckbox
-                                    v-model="isInfiniteSupply"
-                                    name="infiniteSupply"
-                                    label="Infinite Supply"
-                                    description="With this option selected tokens in this collection will have an infinite supply."
-                                />
-                                <FormCheckbox
-                                    v-model="forceSingleMint"
-                                    name="forceSingleMint"
-                                    label="Force Single Mint"
-                                    description="Set whether the tokens in this collection will be minted as SingleMint
+                        <FormInput
+                            v-model="maxTokenCount"
+                            name="maxTokenCount"
+                            label="Max Token Count"
+                            description="The maximum number of individual tokens that can be created and exist for this collection."
+                            type="number"
+                            :disabled="isInfiniteCount"
+                        />
+                        <FormCheckbox
+                            v-model="isInfiniteCount"
+                            name="infiniteCount"
+                            label="Infinite Count"
+                            description="Use this option if you would like the collection to support an infinite amount of tokens."
+                        />
+                        <FormInput
+                            v-model="maxTokenSupply"
+                            name="maxTokenSupply"
+                            label="Max Token Supply"
+                            description="Absolute maximum supply for each token in this collection. Set to 1 for all tokens to be unique NFTs with a max supply of 1, all tokens that have a supply of more than 1 should be treated as fungible tokens (FTs)."
+                            type="number"
+                            :disabled="isInfiniteSupply"
+                        />
+                        <FormCheckbox
+                            v-model="isInfiniteSupply"
+                            name="infiniteSupply"
+                            label="Infinite Supply"
+                            description="With this option selected tokens in this collection will have an infinite supply."
+                        />
+                        <FormCheckbox
+                            v-model="forceSingleMint"
+                            name="forceSingleMint"
+                            label="Force Single Mint"
+                            description="Set whether the tokens in this collection will be minted as SingleMint
                                             types. This would indicate the tokens in this collection are NFTs."
-                                />
-                            </div>
-                        </div>
+                        />
                     </div>
                 </div>
 
@@ -110,7 +115,7 @@
                             </Tooltip>
                             <p class="mt-1 text-sm text-gray-500"></p>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
+                        <div class="mt-6">
                             <div class="flex flex-row space-x-4 w-full">
                                 <FormInput
                                     v-model="beneficiaryAddress"

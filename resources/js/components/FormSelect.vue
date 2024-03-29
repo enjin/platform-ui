@@ -10,7 +10,10 @@
             />
 
             <Combobox v-bind="field" v-model="localModelValue">
-                <div class="mt-2 relative rounded-md shadow-sm" :class="{ '!mt-0': !label }">
+                <div class="relative rounded-md shadow-sm" :class="{ '!mt-0': !label }">
+                    <p v-if="errorMessage" class="absolute left-0 -bottom-5 text-red-500 text-xs truncate">
+                        {{ errorMessage }}
+                    </p>
                     <div
                         class="relative w-full cursor-default overflow-hidden bg-white text-left text-sm leading-6 transition-all"
                     >
@@ -71,8 +74,6 @@
                     </TransitionRoot>
                 </div>
             </Combobox>
-
-            <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
         </Field>
     </div>
 </template>
