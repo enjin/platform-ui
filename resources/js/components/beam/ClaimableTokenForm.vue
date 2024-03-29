@@ -1,20 +1,20 @@
 <template>
     <Form ref="formRef" class="space-y-6" :validation-schema="createValidation">
         <div class="bg-white px-4 py-5 sm:p-6 rounded-b-lg">
-            <div class="md:grid md:grid-cols-3 md:gap-6">
+            <div class="space-y-6">
                 <div class="md:col-span-1">
                     <h3 class="text-base font-semibold leading-6 text-gray-900">Token Details</h3>
                     <p class="mt-1 text-sm text-gray-500">
                         Enter all the details regarding the tokens that you are adding in this Enjin Beam
                     </p>
                 </div>
-                <div class="mt-5 md:col-span-2 md:mt-0">
+                <div class="">
                     <div class="flex flex-col gap-6">
                         <FormChipsInput
                             v-model="tokenIds"
                             name="tokenIds"
                             label="Token IDs"
-                            description="The token chain IDs available to claim."
+                            tooltip="The token chain IDs available to claim."
                             placeholder="1, 2 or 10..20 (Integers range)"
                             :regex-function="testInteger"
                         />
@@ -22,14 +22,14 @@
                             v-model="tokenQuantityPerClaim"
                             name="tokenQuantityPerClaim"
                             label="Token Quantity Per Claim"
-                            description="The quantity of token that can be received per claim."
+                            tooltip="The quantity of token that can be received per claim."
                             type="number"
                         />
                         <FormInput
                             v-model="claimQuantity"
                             name="claimQuantity"
                             label="Claim Quantity"
-                            description="The total amount of times each token ID can be claimed. This is mainly relevant for fungible tokens, where you can specify that there are a certain amount of claims for a token ID, e.g. 10 individual claims to receive 1 token with ID 123 per claim."
+                            tooltip="The total amount of times each token ID can be claimed. This is mainly relevant for fungible tokens, where you can specify that there are a certain amount of claims for a token ID, e.g. 10 individual claims to receive 1 token with ID 123 per claim."
                             type="number"
                         />
                         <FormSelect
@@ -68,7 +68,7 @@
                                         v-model="inputs.key"
                                         :dusk="`input__attribute-key-${index + 1}`"
                                         type="text"
-                                        class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
                                 </div>
                                 <div class="flex-1">
@@ -76,7 +76,7 @@
                                         v-model="inputs.value"
                                         :dusk="`input__attribute-value-${index + 1}`"
                                         type="text"
-                                        class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </template>

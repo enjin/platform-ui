@@ -10,7 +10,7 @@
             />
 
             <Combobox v-bind="field" v-model="localModelValue">
-                <div class="relative rounded-md shadow-sm" :class="{ '!mt-0': !label }">
+                <div class="relative rounded-md shadow-sm mt-2" :class="{ '!mt-0': !label }">
                     <p v-if="errorMessage" class="absolute left-0 -bottom-5 text-red-500 text-xs truncate">
                         {{ errorMessage }}
                     </p>

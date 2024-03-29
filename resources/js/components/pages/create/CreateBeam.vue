@@ -1,15 +1,36 @@
 <template>
     <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
-        <div class="flow-root space-y-4 pb-4">
+        <div class="flow-root space-y-4 pb-4 max-w-3xl mx-auto">
             <div class="mb-4">
                 <h1 class="text-2xl">Create Beam</h1>
             </div>
+            <CollapseCard
+                v-for="(item, idx) in tokens"
+                :key="idx"
+                class="animate-fade-in"
+                :title="`Beam Asset ${idx + 1}`"
+            >
+                <template #icon>
+                    <CheckCircleIcon class="ml-2 my-auto h-5 w-5 text-green-400" aria-hidden="true" v-if="item.valid" />
+                    <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
+                </template>
+                <template #actions>
+                    <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
+                </template>
+                <ClaimableTokenForm v-model="item.values" @validation="setValidation(idx, $event)" />
+            </CollapseCard>
+            <Btn class="!flex" @click="addItem" primary>Add Asset</Btn>
+
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBeam">
                 <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Parameters</h3>
-                            <p class="mt-1 text-sm text-gray-500">Mutation for creating a beam.</p>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <h3 class="text-base font-semibold leading-6 text-gray-900">Parameters</h3>
+                            </div>
+                            <a href="https://docs.enjin.io/docs/creating-an-enjin-beam" target="_blank">
+                                <Btn primary> Documentation </Btn>
+                            </a>
                         </div>
                         <div class="mt-5 md:col-span-2 md:mt-0">
                             <div class="flex flex-col gap-6">
@@ -17,8 +38,7 @@
                                     v-model="collectionId"
                                     name="collectionId"
                                     label="Collection ID"
-                                    description="The collection ID to mint from."
-                                    tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
+                                    description="The collection ID"
                                     placeholder="Select a collection ID"
                                     :options="collectionIds"
                                     required
@@ -73,7 +93,6 @@
                 </div>
 
                 <div class="flex justify-between">
-                    <Btn class="!m-0 !flex" @click="addItem" primary>Add Token</Btn>
                     <div class="flex space-x-3 justify-end">
                         <RouterLink
                             :to="{ name: 'platform.collections' }"
@@ -86,21 +105,6 @@
                     </div>
                 </div>
             </Form>
-            <CollapseCard
-                class="animate-fade-in"
-                :title="`Token Item ${idx + 1}`"
-                v-for="(item, idx) in tokens"
-                :key="idx"
-            >
-                <template #icon>
-                    <CheckCircleIcon class="ml-2 my-auto h-5 w-5 text-green-400" aria-hidden="true" v-if="item.valid" />
-                    <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
-                </template>
-                <template #actions>
-                    <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
-                </template>
-                <ClaimableTokenForm v-model="item.values" @validation="setValidation(idx, $event)" />
-            </CollapseCard>
         </div>
     </div>
 </template>

@@ -238,7 +238,7 @@
                     </div>
                 </div>
 
-                <div class="flex space-x-3 justify-end px-4 sm:px-0">
+                <div class="flex space-x-3 justify-start px-4 sm:px-0">
                     <RouterLink
                         :to="{ name: 'platform.collections' }"
                         type="button"
