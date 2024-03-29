@@ -1,131 +1,50 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
-        <div class="flow-root space-y-4 pb-4">
+    <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
+        <div class="flow-root max-w-3xl mx-auto">
             <div class="mb-4">
                 <h1 class="text-2xl">Create Fuel Tank</h1>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createFueltank">
                 <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Parameters</h3>
-                            <p class="mt-1 text-sm text-gray-500">Mutation for creating a beam.</p>
-                        </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormInput
-                                    v-model="name"
-                                    name="name"
-                                    label="Name"
-                                    description="The fuel tank name."
-                                    required
-                                />
-                                <FormCheckbox
-                                    v-model="providesDeposit"
-                                    name="providesDeposit"
-                                    label="Provides Deposit"
-                                    description="The flag for deposit."
-                                />
-                                <FormCheckbox
-                                    v-model="reservesExistentialDeposit"
-                                    name="reservesExistentialDeposit"
-                                    label="Reserves Existential Deposit"
-                                    description="The flag for existential deposit."
-                                />
-                                <FormCheckbox
-                                    v-model="reservesAccountCreationDeposit"
-                                    name="reservesAccountCreationDeposit"
-                                    label="Reserves Account Creation Deposit"
-                                    description="The flag for account creation deposit."
-                                />
-                                <FormInput
-                                    v-if="useAppStore().advanced"
-                                    v-model="idempotencyKey"
-                                    name="idempotencyKey"
-                                    label="Idempotency Key"
-                                    description="The idempotency key to set. It is recommended to use a UUID for this."
-                                    tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
-                                    readmore="Idempotency Key"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white px-4 py-5 shadow rounded-lg transition-all sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Account Rules</h3>
-                            <p class="mt-1 text-sm text-gray-500">The fuel tank account rules.</p>
-                        </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormList
-                                    v-model="whitelistedCallers"
-                                    @add="addCaller"
-                                    @remove="removeCaller"
-                                    flex
-                                    add-text="Add Caller"
-                                    dusk-id="caller"
-                                >
-                                    <template #headers>
-                                        <div class="flex-1">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">
-                                                Whitelisted Callers
-                                            </label>
-                                            <p class="mt-1 text-sm text-gray-500">
-                                                The wallet accounts that are allowed to use the fuel tank.
-                                            </p>
-                                        </div>
-                                        <div class="w-5"></div>
-                                    </template>
-                                    <template #inputs="{ inputs, index }">
-                                        <div class="flex-1">
-                                            <input
-                                                v-model="inputs.caller"
-                                                :dusk="`input__caller-${index + 1}`"
-                                                type="text"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
-                                    </template>
-                                </FormList>
-
-                                <div>
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        The wallet account must have a specific token in their wallet to use the fuel
-                                        tank.
-                                    </p>
+                    <div class="">
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <h3 class="text-base font-semibold leading-6 text-gray-900">Fuel tank Details</h3>
                                 </div>
-                                <div class="grid grid-cols-2 space-x-4">
-                                    <FormInput
-                                        class="col-span-1"
-                                        v-model="collectionId"
-                                        name="collectionId"
-                                        type="number"
-                                        placeholder="Collection ID"
-                                    />
-                                    <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />
-                                </div>
+                                <a href="https://docs.enjin.io/docs/creating-a-fuel-tank" target="_blank">
+                                    <Btn primary> Documentation </Btn>
+                                </a>
                             </div>
+                            <FormInput
+                                v-model="name"
+                                name="name"
+                                label="Name"
+                                description="The fuel tank name."
+                                required
+                            />
+                            <MultiCheckbox
+                                v-model="flags"
+                                name="flags"
+                                :options="fuelFlags"
+                                label="Flags"
+                                description="The beam flags that should be enabled/disabled."
+                                cols-class="grid-cols-1 md:!grid-cols-2"
+                            />
+                            <FormInput
+                                v-if="useAppStore().advanced"
+                                v-model="idempotencyKey"
+                                name="idempotencyKey"
+                                label="Idempotency Key"
+                                description="The idempotency key to set. It is recommended to use a UUID for this."
+                                tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
+                                readmore="Idempotency Key"
+                            />
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-between">
-                    <Btn class="!m-0 !flex" @click="addItem" primary>Add Dispatch Rule</Btn>
-                    <div class="flex space-x-3 justify-end">
-                        <RouterLink
-                            :to="{ name: 'platform.collections' }"
-                            type="button"
-                            class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                        >
-                            Cancel
-                        </RouterLink>
-                        <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
-                    </div>
-                </div>
+                <Btn class="!flex" @click="addItem" primary>Add Dispatch Rule</Btn>
 
                 <CollapseCard
                     v-for="(item, idx) in dispatchRules"
@@ -146,6 +65,76 @@
                     </template>
                     <DispatchRuleForm v-model="item.values" @validation="setValidation(idx, $event)" />
                 </CollapseCard>
+
+                <CollapseCard title="Account Rules" :actions="false">
+                    <template #icon>
+                        <Tooltip text="The fuel tank account rules.">
+                            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                        </Tooltip>
+                    </template>
+                    <div class="space-y-6 p-6">
+                        <FormList
+                            v-model="whitelistedCallers"
+                            flex
+                            add-text="Add Caller"
+                            dusk-id="caller"
+                            @add="addCaller"
+                            @remove="removeCaller"
+                        >
+                            <template #headers>
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                        Whitelisted Callers
+                                    </label>
+                                    <p class="mt-1 text-sm text-gray-500">
+                                        The wallet accounts that are allowed to use the fuel tank.
+                                    </p>
+                                </div>
+                                <div class="w-5"></div>
+                            </template>
+                            <template #inputs="{ inputs, index }">
+                                <div class="flex-1">
+                                    <input
+                                        v-model="inputs.caller"
+                                        :dusk="`input__caller-${index + 1}`"
+                                        type="text"
+                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </template>
+                        </FormList>
+
+                        <div>
+                            <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
+                            <p class="mt-1 text-sm text-gray-500">
+                                The wallet account must have a specific token in their wallet to use the fuel tank.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-2 space-x-4">
+                            <FormInput
+                                class="col-span-1"
+                                v-model="collectionId"
+                                name="collectionId"
+                                type="number"
+                                placeholder="Collection ID"
+                            />
+                            <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />
+                        </div>
+                    </div>
+                </CollapseCard>
+
+                <div class="flex justify-between">
+                    <div class="flex space-x-3 justify-end">
+                        <RouterLink
+                            :to="{ name: 'platform.fuel-tanks' }"
+                            type="button"
+                            class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >
+                            Cancel
+                        </RouterLink>
+                        <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
+                    </div>
+                </div>
             </Form>
         </div>
     </div>
@@ -161,25 +150,23 @@ import { useRouter } from 'vue-router';
 import FormInput from '~/components/FormInput.vue';
 import { formatData, formatToken, snackbarErrors } from '~/util';
 import { useAppStore } from '~/store';
-import FormCheckbox from '~/components/FormCheckbox.vue';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { TokenIdSelectType } from '~/types/types.enums';
 import { FuelTankApi } from '~/api/fueltank';
 import CollapseCard from '~/components/CollapseCard.vue';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, QuestionMarkCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { XMarkIcon } from '@heroicons/vue/20/solid';
 import DispatchRuleForm from '~/components/fueltank/DispatchRuleForm.vue';
 import FormList from '~/components/FormList.vue';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
+import MultiCheckbox from '~/components/MultiCheckbox.vue';
+import Tooltip from '~/components/Tooltip.vue';
 
 const router = useRouter();
 
 const formRef = ref();
 const isLoading = ref(false);
 const name = ref('');
-const providesDeposit = ref(false);
-const reservesExistentialDeposit = ref(false);
-const reservesAccountCreationDeposit = ref(false);
 const whitelistedCallers = ref([{ caller: '' }]);
 const collectionId = ref('');
 const tokenId = ref({
@@ -188,6 +175,7 @@ const tokenId = ref({
 });
 const idempotencyKey = ref('');
 const dispatchRules: Ref<{ valid: boolean; values: DispatchRulesValuesInterface }[]> = ref([]);
+const flags: Ref<string[]> = ref([]);
 
 const validation = yup.object({
     name: yup.string().nullable().required(),
@@ -200,6 +188,24 @@ const isAllValid = computed(() => {
         formRef.value.getMeta().valid
     );
 });
+
+const fuelFlags = ref([
+    {
+        label: 'Provide Deposit',
+        value: 'provideDeposit',
+        tooltip: 'The flag for deposit.',
+    },
+    {
+        label: 'Reserve Existential Deposit',
+        value: 'reserveExistentialDeposit',
+        tooltip: 'The flag for existential deposit.',
+    },
+    {
+        label: 'Reserve Account Creation Deposit',
+        value: 'reserveAccountCreationDeposit',
+        tooltip: 'The flag for account creation deposit.',
+    },
+]);
 
 const addItem = () => {
     dispatchRules.value.push({
@@ -237,9 +243,9 @@ const createFueltank = async () => {
         const res = await FuelTankApi.createFuelTank(
             formatData({
                 name: name.value,
-                providesDeposit: providesDeposit.value,
-                reservesExistentialDeposit: reservesExistentialDeposit.value,
-                reservesAccountCreationDeposit: reservesAccountCreationDeposit.value,
+                providesDeposit: flags.value.includes('provideDeposit'),
+                reservesExistentialDeposit: flags.value.includes('reserveExistentialDeposit'),
+                reservesAccountCreationDeposit: flags.value.includes('reserveAccountCreationDeposit'),
                 accountRules: {
                     whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller),
                     requireToken: collectionId.value

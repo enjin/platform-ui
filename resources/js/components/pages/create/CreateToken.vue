@@ -367,7 +367,7 @@ const simpleAttributes = () => {
                 },
             ]),
         },
-    ].filter((a) => a.key !== '' && a.value !== '');
+    ].filter((a) => a.value !== '');
 };
 
 const createToken = async () => {

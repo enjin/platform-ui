@@ -392,7 +392,7 @@ const simpleAttributes = () => {
                 },
             ]),
         },
-    ];
+    ].filter((a) => a.value !== '');
 };
 
 const addExplicitRoyaltyCurrencyItem = () => {

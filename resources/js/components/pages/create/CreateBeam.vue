@@ -7,6 +7,7 @@
             <CollapseCard
                 v-for="(item, idx) in tokens"
                 :key="idx"
+                :class="{ 'border border-red-400': !item.valid, 'border border-green-400': item.valid }"
                 class="animate-fade-in"
                 :title="`Beam Asset ${idx + 1}`"
             >

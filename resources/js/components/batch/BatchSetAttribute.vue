@@ -2,53 +2,51 @@
     <div class="mt-4 flow-root">
         <div class="space-y-4 pb-4">
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBatch">
-                <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
+                <div class="bg-white p-6 shadow rounded-lg">
+                    <div class="space-y-6">
+                        <div class="flex items-center">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Batch Set Attribute</h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                Use this to set multiple attributes on a collection or token in one transaction. Setting
+                            <Tooltip
+                                text="Use this to set multiple attributes on a collection or token in one transaction. Setting
                                 the continueOnFailure flag to true will allow all valid attributes to be set while
                                 skipping invalid attributes so they can be fixed and attempted again in another
-                                transaction.
-                            </p>
+                                transaction."
+                            >
+                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                            </Tooltip>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormSelect
-                                    v-model="collectionId"
-                                    name="collectionId"
-                                    label="Collection ID"
-                                    description="The collection ID to mint from."
-                                    tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
-                                    placeholder="Select a collection ID"
-                                    :options="collectionIds"
-                                    required
-                                />
-                                <TokenIdInput
-                                    v-model="tokenId"
-                                    label="Token ID"
-                                    description="The token ID to set. This must be unique for this collection."
-                                    readmore="Token ID"
-                                />
-                                <FormInput
-                                    v-if="useAppStore().advanced"
-                                    v-model="idempotencyKey"
-                                    name="idempotencyKey"
-                                    label="Idempotency Key"
-                                    description="The idempotency key to set. It is recommended to use a UUID for this."
-                                    tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
-                                    readmore="Idempotency Key"
-                                />
-                                <FormCheckbox
-                                    v-if="useAppStore().advanced"
-                                    v-model="skipValidation"
-                                    name="skipValidation"
-                                    label="Skip validation"
-                                    description="Skip all validation rules, use with caution. Defaults to false."
-                                />
-                            </div>
-                        </div>
+                        <FormSelect
+                            v-model="collectionId"
+                            name="collectionId"
+                            label="Collection ID"
+                            description="The collection ID to mint from."
+                            tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
+                            placeholder="Select a collection ID"
+                            :options="collectionIds"
+                            required
+                        />
+                        <TokenIdInput
+                            v-model="tokenId"
+                            label="Token ID"
+                            description="The token ID to set. This must be unique for this collection."
+                            readmore="Token ID"
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
+                            v-model="idempotencyKey"
+                            name="idempotencyKey"
+                            label="Idempotency Key"
+                            description="The idempotency key to set. It is recommended to use a UUID for this."
+                            tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
+                            readmore="Idempotency Key"
+                        />
+                        <FormCheckbox
+                            v-if="useAppStore().advanced"
+                            v-model="skipValidation"
+                            name="skipValidation"
+                            label="Skip validation"
+                            description="Skip all validation rules, use with caution. Defaults to false."
+                        />
                     </div>
                 </div>
                 <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
@@ -92,9 +90,9 @@
                         </template>
                     </FormList>
                 </div>
-                <div class="flex space-x-3 justify-end">
+                <div class="flex space-x-4 justify-start">
                     <RouterLink
-                        :to="{ name: 'platform.collections' }"
+                        :to="{ name: 'platform.tokens' }"
                         type="button"
                         class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
@@ -123,6 +121,8 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import FormList from '~/components/FormList.vue';
 import { useAppStore } from '~/store';
 import FormSelect from '../FormSelect.vue';
+import Tooltip from '../Tooltip.vue';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 
 const router = useRouter();
 const appStore = useAppStore();

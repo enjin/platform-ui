@@ -1,13 +1,15 @@
 <template>
-    <div class="px-4 pb-2 sm:px-6 lg:px-8 overflow-y-auto transition-all">
-        <RadioGroupButton
-            class="pt-6"
-            v-model="batchType"
-            label="Select batch type"
-            :items="batchTypes"
-            :cols="batchTypes.length"
-        />
-        <router-view />
+    <div class="px-4 sm:px-6 lg:px-8 pb-20 overflow-y-auto transition-all">
+        <div class="flow-root max-w-3xl mx-auto">
+            <RadioGroupButton
+                class="pt-6"
+                v-model="batchType"
+                label="Select batch type"
+                :items="batchTypes"
+                :cols="batchTypes.length"
+            />
+            <router-view />
+        </div>
     </div>
 </template>
 

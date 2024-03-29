@@ -1,174 +1,169 @@
 <template>
     <Form ref="formRef" class="space-y-6" :validation-schema="validation">
         <div class="bg-white px-4 py-5 sm:p-6 rounded-lg" :class="{ '!p-0 sm:p-0': isModal }">
-            <div :class="`md:grid md:grid-cols-${isModal ? '1' : '3'} md:gap-6`">
-                <div class="md:col-span-1">
+            <div class="space-y-6">
+                <div class="">
                     <h3 class="text-base font-semibold leading-6 text-gray-900">Dispatch Rule</h3>
                     <p class="mt-1 text-sm text-gray-500">The fuel tank dispatch rules.</p>
                 </div>
-                <div class="mt-5 md:col-span-2 md:mt-0">
-                    <div class="flex flex-col gap-6">
-                        <FormList
-                            v-model="whitelistedCallers"
-                            @add="addCaller"
-                            @remove="removeCaller"
-                            flex
-                            add-text="Add Caller"
-                            dusk-id="caller"
-                        >
-                            <template #headers>
-                                <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
-                                        Whitelisted Callers
-                                    </label>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        The wallet accounts that are allowed to use the fuel tank.
-                                    </p>
-                                </div>
-                                <div class="w-5"></div>
-                            </template>
-                            <template #inputs="{ inputs, index }">
-                                <div class="flex-1">
-                                    <input
-                                        v-model="inputs.caller"
-                                        :dusk="`input__caller-${index + 1}`"
-                                        type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </template>
-                        </FormList>
-
-                        <div class="space-y-2">
-                            <div>
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
-                                <p class="mt-1 text-sm text-gray-500">
-                                    The wallet account must have a specific token in their wallet to use the fuel tank.
-                                </p>
-                            </div>
-                            <div :class="`grid grid-cols-${isModal ? '1' : '2'} gap-4`">
-                                <FormInput
-                                    class="col-span-1"
-                                    v-model="collectionId"
-                                    name="collectionId"
-                                    type="number"
-                                    placeholder="Collection ID"
-                                />
-                                <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />
-                            </div>
+                <FormList
+                    v-model="whitelistedCallers"
+                    @add="addCaller"
+                    @remove="removeCaller"
+                    flex
+                    add-text="Add Caller"
+                    dusk-id="caller"
+                >
+                    <template #headers>
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">
+                                Whitelisted Callers
+                            </label>
+                            <p class="mt-1 text-sm text-gray-500">
+                                The wallet accounts that are allowed to use the fuel tank.
+                            </p>
                         </div>
+                        <div class="w-5"></div>
+                    </template>
+                    <template #inputs="{ inputs, index }">
+                        <div class="flex-1">
+                            <input
+                                v-model="inputs.caller"
+                                :dusk="`input__caller-${index + 1}`"
+                                type="text"
+                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            />
+                        </div>
+                    </template>
+                </FormList>
 
-                        <FormList
-                            v-model="whitelistedCollections"
-                            @add="addWhiteCollection"
-                            @remove="removeWhiteCollection"
-                            flex
-                            add-text="Add Collection"
-                            dusk-id="collection"
-                        >
-                            <template #headers>
-                                <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
-                                        Whitelisted Collections
-                                    </label>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        The wallet account must have a specific token in their wallet to use the fuel
-                                        tank.
-                                    </p>
-                                </div>
-                                <div class="w-5"></div>
-                            </template>
-                            <template #inputs="{ inputs, index }">
-                                <div class="flex-1">
-                                    <FormInput
-                                        v-model="inputs.collection"
-                                        :name="`collection-${index + 1}`"
-                                        type="number"
-                                        :dusk="`input__collection-id-${index + 1}`"
-                                    />
-                                </div>
-                            </template>
-                        </FormList>
-
+                <div class="space-y-2">
+                    <div>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            The wallet account must have a specific token in their wallet to use the fuel tank.
+                        </p>
+                    </div>
+                    <div :class="`grid grid-cols-${isModal ? '1' : '2'} gap-4`">
                         <FormInput
-                            v-model="maxFuelBurnPerTransaction"
-                            name="maxFuelBurnPerTransaction"
-                            label="Max Fuel Burn Per Transaction"
-                            description="The maximum amount of fuel can be used per transaction."
+                            class="col-span-1"
+                            v-model="collectionId"
+                            name="collectionId"
+                            type="number"
+                            placeholder="Collection ID"
+                        />
+                        <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />
+                    </div>
+                </div>
+
+                <FormList
+                    v-model="whitelistedCollections"
+                    @add="addWhiteCollection"
+                    @remove="removeWhiteCollection"
+                    flex
+                    add-text="Add Collection"
+                    dusk-id="collection"
+                >
+                    <template #headers>
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">
+                                Whitelisted Collections
+                            </label>
+                            <p class="mt-1 text-sm text-gray-500">
+                                The wallet account must have a specific token in their wallet to use the fuel tank.
+                            </p>
+                        </div>
+                        <div class="w-5"></div>
+                    </template>
+                    <template #inputs="{ inputs, index }">
+                        <div class="flex-1">
+                            <FormInput
+                                v-model="inputs.collection"
+                                :name="`collection-${index + 1}`"
+                                type="number"
+                                :dusk="`input__collection-id-${index + 1}`"
+                            />
+                        </div>
+                    </template>
+                </FormList>
+
+                <FormInput
+                    v-model="maxFuelBurnPerTransaction"
+                    name="maxFuelBurnPerTransaction"
+                    label="Max Fuel Burn Per Transaction"
+                    description="The maximum amount of fuel can be used per transaction."
+                    type="number"
+                />
+
+                <div>
+                    <div class="flex space-x-3">
+                        <FormSelect
+                            v-model="permittedExtrinsicValue"
+                            :options="transactionMethods"
+                            label="Permitted Extrinsics"
+                            description="The list of permitted extrinsics in this ruleset."
+                            name="permittedExtrinsics"
+                            class="flex-1"
+                        />
+                        <Btn @click="addItem" class="!px-2 !flex mt-auto" primary>
+                            <PlusIcon class="w-6 h-6 m-auto" />
+                        </Btn>
+                    </div>
+                    <div class="flex flex-wrap mt-4 gap-2" v-if="permittedExtrinsics.length">
+                        <Chip
+                            v-for="(item, idx) in permittedExtrinsics"
+                            :key="(item as string)"
+                            :text="(item as string)"
+                            @remove="removeItem(idx)"
+                        />
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900">User Fuel Budget</h3>
+                        <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
+                    </div>
+                    <div class="grid grid-cols-2 space-x-4">
+                        <FormInput
+                            class="col-span-1"
+                            v-model="userFuelAmount"
+                            name="userFuelAmount"
+                            placeholder="Amount"
+                            type="number"
+                            :prefix="currencySymbol"
+                        />
+                        <FormInput
+                            class="col-span-1"
+                            v-model="userFuelresetPeriod"
+                            name="userFuelresetPeriod"
+                            placeholder="Reset Period"
                             type="number"
                         />
+                    </div>
+                </div>
 
-                        <div>
-                            <div class="flex space-x-3">
-                                <FormSelect
-                                    v-model="permittedExtrinsicValue"
-                                    :options="transactionMethods"
-                                    label="Permitted Extrinsics"
-                                    description="The list of permitted extrinsics in this ruleset."
-                                    name="permittedExtrinsics"
-                                    class="flex-1"
-                                />
-                                <Btn @click="addItem" class="!px-2 !flex mt-auto" primary>
-                                    <PlusIcon class="w-6 h-6 m-auto" />
-                                </Btn>
-                            </div>
-                            <div class="flex flex-wrap mt-4 gap-2" v-if="permittedExtrinsics.length">
-                                <Chip
-                                    v-for="(item, idx) in permittedExtrinsics"
-                                    :key="(item as string)"
-                                    :text="(item as string)"
-                                    @remove="removeItem(idx)"
-                                />
-                            </div>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div>
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">User Fuel Budget</h3>
-                                <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
-                            </div>
-                            <div class="grid grid-cols-2 space-x-4">
-                                <FormInput
-                                    class="col-span-1"
-                                    v-model="userFuelAmount"
-                                    name="userFuelAmount"
-                                    placeholder="Amount"
-                                    type="number"
-                                    :prefix="currencySymbol"
-                                />
-                                <FormInput
-                                    class="col-span-1"
-                                    v-model="userFuelresetPeriod"
-                                    name="userFuelresetPeriod"
-                                    placeholder="Reset Period"
-                                    type="number"
-                                />
-                            </div>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div>
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Tank Fuel Budget</h3>
-                                <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
-                            </div>
-                            <div class="grid grid-cols-2 space-x-4">
-                                <FormInput
-                                    class="col-span-1"
-                                    v-model="tankFuelAmount"
-                                    name="tankFuelAmount"
-                                    placeholder="Amount"
-                                    type="number"
-                                    :prefix="currencySymbol"
-                                />
-                                <FormInput
-                                    class="col-span-1"
-                                    v-model="tankFuelresetPeriod"
-                                    name="tankFuelresetPeriod"
-                                    placeholder="Reset Period"
-                                    type="number"
-                                />
-                            </div>
-                        </div>
+                <div class="space-y-2">
+                    <div>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900">Tank Fuel Budget</h3>
+                        <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
+                    </div>
+                    <div class="grid grid-cols-2 space-x-4">
+                        <FormInput
+                            class="col-span-1"
+                            v-model="tankFuelAmount"
+                            name="tankFuelAmount"
+                            placeholder="Amount"
+                            type="number"
+                            :prefix="currencySymbol"
+                        />
+                        <FormInput
+                            class="col-span-1"
+                            v-model="tankFuelresetPeriod"
+                            name="tankFuelresetPeriod"
+                            placeholder="Reset Period"
+                            type="number"
+                        />
                     </div>
                 </div>
             </div>
@@ -300,8 +295,10 @@ watch(
     () => hasChanged.value,
     async () => {
         await formRef.value.validate();
-        emit('validation', validForm.value);
-        emit('update:modelValue', hasChanged.value);
+        setTimeout(() => {
+            emit('validation', validForm.value);
+            emit('update:modelValue', hasChanged.value);
+        }, 50); 
     }
 );
 </script>
