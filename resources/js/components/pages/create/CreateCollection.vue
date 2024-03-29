@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
+    <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
         <div class="flow-root max-w-3xl mx-auto">
             <div class="mb-4 flex items-center justify-between">
                 <div>

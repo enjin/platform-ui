@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
+    <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
         <div class="flow-root max-w-3xl mx-auto">
             <div class="mb-4 flex items-center justify-between">
                 <div>
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <FormInput
-                            v-if="tokenType === 'ft'"
+                            v-show="tokenType === 'ft'"
                             v-model="initialSupply"
                             name="initialSupply"
                             label="Initial Supply"
@@ -240,7 +240,7 @@
 
                 <div class="flex space-x-3 justify-start px-4 sm:px-0">
                     <RouterLink
-                        :to="{ name: 'platform.collections' }"
+                        :to="{ name: 'platform.tokens' }"
                         type="button"
                         class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
@@ -263,7 +263,7 @@ import { useRouter } from 'vue-router';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey } from '~/util/address';
-import { formatData, formatPriceToENJ, formatToken, snackbarErrors } from '~/util';
+import { formatData, formatToken, snackbarErrors } from '~/util';
 import { TokenCapType, TokenIdSelectType } from '~/types/types.enums';
 import FormList from '~/components/FormList.vue';
 import TokenIdInput from '~/components/TokenIdInput.vue';
@@ -308,7 +308,6 @@ const isCurrency = ref(false);
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const listingForbidden = ref(false);
-const unitPrice = ref(0.01);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const formRef = ref();
@@ -368,7 +367,7 @@ const simpleAttributes = () => {
                 },
             ]),
         },
-    ];
+    ].filter((a) => a.key !== '' && a.value !== '');
 };
 
 const createToken = async () => {
@@ -384,7 +383,6 @@ const createToken = async () => {
                 params: {
                     tokenId: formatToken(tokenId.value),
                     initialSupply: initialSupply.value,
-                    unitPrice: formatPriceToENJ(unitPrice.value) ?? null,
                     cap: {
                         type:
                             tokenType.value === 'ft'

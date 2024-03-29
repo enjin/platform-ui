@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
+    <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
         <div class="flow-root">
             <div class="mb-4">
                 <h1 class="text-xl md:text-2xl">Create Listing</h1>
@@ -138,7 +138,7 @@
 
                 <div class="flex space-x-3 justify-end">
                     <RouterLink
-                        :to="{ name: 'platform.collections' }"
+                        :to="{ name: 'platform.marketplace' }"
                         type="button"
                         class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
