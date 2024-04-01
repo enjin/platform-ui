@@ -25,21 +25,26 @@
                             label="Owner"
                             description="The new owner account of the collection."
                         />
-                        <FormInput
-                            v-model="beneficiaryAddress"
-                            name="beneficiaryAddress"
-                            label="Beneficiary"
-                            description="The account that will receive the royalty."
-                        />
-                        <FormInput
-                            v-model="beneficiaryPercentage"
-                            name="beneficiaryPercentage"
-                            label="Percentage"
-                            description="The amount of royalty the beneficiary receives in percentage."
-                            type="number"
-                            :min="0"
-                            prefix="%"
-                        />
+                        <div class="flex flex-row space-x-4 w-full">
+                            <FormInput
+                                v-model="beneficiaryAddress"
+                                name="beneficiaryAddress"
+                                label="Beneficiary"
+                                class="w-full"
+                                description="The account that will receive the royalty."
+                            />
+                            <FormInput
+                                v-model="beneficiaryPercentage"
+                                name="beneficiaryPercentage"
+                                class="w-[100px] !mr-[40px] flex flex-col justify-between"
+                                label="Percentage"
+                                tooltip="The amount of royalty the beneficiary receives in percentage."
+                                type="number"
+                                :min="0"
+                                prefix="%"
+                            />
+                        </div>
+
                         <FormList
                             flex
                             v-model="explicitRoyaltyCurrencies"
@@ -66,7 +71,7 @@
                                 <div class="w-5"></div>
                             </template>
                             <template #inputs="{ inputs, index }">
-                                <div class="flex-1">
+                                <div class="w-1/2">
                                     <input
                                         v-model="inputs.collectionId"
                                         :dusk="`input__collection-id-${index + 1}`"
@@ -76,7 +81,7 @@
                                         class="block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
                                 </div>
-                                <div class="flex-1">
+                                <div class="w-1/2">
                                     <TokenIdInput v-model="inputs.tokenId" :dusk="`input__token-id-${index + 1}`" />
                                 </div>
                             </template>

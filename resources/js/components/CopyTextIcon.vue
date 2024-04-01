@@ -1,5 +1,5 @@
 <template>
-    <div class="cursor-pointer" @click="copyText">
+    <div class="cursor-pointer flex items-center" @click="copyText">
         <slot />
         <ClipboardIcon class="inline-block ml-1 my-auto w-4 h-4 hover:text-primary flex-shrink-0" />
     </div>

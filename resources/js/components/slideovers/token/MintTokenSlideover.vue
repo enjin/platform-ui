@@ -44,14 +44,6 @@
                         />
 
                         <FormInput
-                            v-model="unitPrice"
-                            name="unitPrice"
-                            label="Unit Price"
-                            description="Leave as null if you want to keep the same unitPrice. You can also put a value if you want to change the unitPrice. Please note you can only increase it and a deposit to the difference of every token previously minted will also be needed."
-                            :prefix="currencySymbol"
-                        />
-
-                        <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
@@ -81,14 +73,14 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
-import { Ref, computed, ref } from 'vue';
+import { Ref, ref } from 'vue';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import Btn from '~/components/Btn.vue';
 import { TokenApi } from '~/api/token';
 import snackbar from '~/util/snackbar';
 import { addressToPublicKey, publicKeyToAddress } from '~/util/address';
-import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, snackbarErrors } from '~/util';
+import { formatData, formatToken, snackbarErrors } from '~/util';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
@@ -118,15 +110,10 @@ const props = withDefaults(
     }
 );
 
-const appStore = useAppStore();
-
-const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
-
 const isLoading = ref(false);
 const collectionId = ref(props.item?.collectionId);
 const recipient = ref(publicKeyToAddress(props.item?.owner ?? ''));
 const amount = ref();
-const unitPrice = ref();
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const tokenId: Ref<TokenIdType> = ref({
@@ -159,7 +146,6 @@ const mintToken = async () => {
                 params: {
                     tokenId: formatToken(tokenId.value),
                     amount: amount.value,
-                    unitPrice: formatPriceToENJ(unitPrice.value) ?? null,
                 },
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,

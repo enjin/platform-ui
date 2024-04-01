@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div v-if="isAdvanced" class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
-                    <div class="">
+                    <div class="space-y-4">
                         <div class="flex items-center">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Mint Policy</h3>
                             <Tooltip
@@ -241,29 +241,25 @@
                     v-if="isAdvanced"
                     class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
+                    <div class="space-y-6">
+                        <div class="">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Other Options</h3>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormInput
-                                    v-model="idempotencyKey"
-                                    name="idempotencyKey"
-                                    label="Idempotency Key"
-                                    description="The idempotency key to set. It is recommended to use a UUID for this."
-                                    tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
-                                    readmore="Idempotency Key"
-                                />
+                        <FormInput
+                            v-model="idempotencyKey"
+                            name="idempotencyKey"
+                            label="Idempotency Key"
+                            description="The idempotency key to set. It is recommended to use a UUID for this."
+                            tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
+                            readmore="Idempotency Key"
+                        />
 
-                                <FormCheckbox
-                                    v-model="skipValidation"
-                                    name="skipValidation"
-                                    label="Skip validation"
-                                    description="Skip all validation rules, use with caution. Defaults to false."
-                                />
-                            </div>
-                        </div>
+                        <FormCheckbox
+                            v-model="skipValidation"
+                            name="skipValidation"
+                            label="Skip validation"
+                            description="Skip all validation rules, use with caution. Defaults to false."
+                        />
                     </div>
                 </div>
 
@@ -370,6 +366,22 @@ const validation = yup.object({
 });
 
 const simpleAttributes = () => {
+    const media = [
+        {
+            url: imageUrl.value,
+            type: imageType.value,
+        },
+    ];
+
+    if (bannerUrl.value) {
+        media.push({
+            url: bannerUrl.value,
+            type: bannerType.value,
+        });
+    }
+
+    console.log(description.value);
+
     return [
         {
             key: 'name',
@@ -381,16 +393,7 @@ const simpleAttributes = () => {
         },
         {
             key: 'media',
-            value: JSON.stringify([
-                {
-                    url: imageUrl.value,
-                    type: imageType.value,
-                },
-                {
-                    url: bannerUrl.value,
-                    type: bannerType.value,
-                },
-            ]),
+            value: JSON.stringify(media),
         },
     ].filter((a) => a.value !== '');
 };

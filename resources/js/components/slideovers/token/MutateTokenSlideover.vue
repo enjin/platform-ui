@@ -26,21 +26,26 @@
                             disabled
                             required
                         />
-                        <FormInput
-                            v-model="beneficiaryAddress"
-                            name="beneficiaryAddress"
-                            label="Beneficiary"
-                            description="The account that will receive the royalty."
-                        />
-                        <FormInput
-                            v-model="beneficiaryPercentage"
-                            name="beneficiaryPercentage"
-                            label="Percentage"
-                            description="The amount of royalty the beneficiary receives in percentage."
-                            type="number"
-                            :min="0"
-                            prefix="%"
-                        />
+                        <div class="flex flex-row space-x-4 w-full">
+                            <FormInput
+                                v-model="beneficiaryAddress"
+                                name="beneficiaryAddress"
+                                label="Beneficiary"
+                                class="w-full"
+                                description="The account that will receive the royalty."
+                            />
+                            <FormInput
+                                v-model="beneficiaryPercentage"
+                                name="beneficiaryPercentage"
+                                label="Percentage"
+                                class="w-[100px] !mr-[40px] flex flex-col justify-between"
+                                tooltip="The amount of royalty the beneficiary receives in percentage."
+                                type="number"
+                                :min="0"
+                                prefix="%"
+                            />
+                        </div>
+
                         <FormCheckbox
                             v-model="isCurrency"
                             name="isCurrency"
