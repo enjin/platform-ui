@@ -34,7 +34,7 @@
                         </p>
                     </div>
                     <div class="px-4 py-2" v-if="appStore.config.packages.length">
-                        <p class="text-sm text-gray-500 mb-1">Packages</p>
+                        <p class="text-sm text-gray-500 mb-1">Packages Available</p>
                         <p
                             v-for="(packg, idx) in appStore.config.packages"
                             :key="idx"

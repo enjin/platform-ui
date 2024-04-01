@@ -2,44 +2,80 @@
     <Form ref="formRef" class="space-y-6" :validation-schema="validation">
         <div class="bg-white px-4 py-5 sm:p-6 rounded-lg" :class="{ '!p-0 sm:p-0': isModal }">
             <div class="space-y-6">
-                <div class="">
-                    <h3 class="text-base font-semibold leading-6 text-gray-900">Dispatch Rule</h3>
-                    <p class="mt-1 text-sm text-gray-500">The fuel tank dispatch rules.</p>
+                <div class="flex items-center">
+                    <h3 class="text-base font-semibold leading-6 text-gray-900">Dispatch Rules</h3>
+                    <Tooltip
+                        text="These are evaluated upon call dispatches. Composed of one to many rule sets each containing
+                        different rule definitions. All rules are independent of each other, so they can be used both
+                        separately and together, allowing great flexibity when creating a rule set. These rule sets then
+                        allow different means of access to the same fuel tank, where each set is identified by u32 and
+                        user must provide rule set ID when dispatching a call through fuel tank."
+                    >
+                        <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                    </Tooltip>
                 </div>
-                <FormList
-                    v-model="whitelistedCallers"
-                    @add="addCaller"
-                    @remove="removeCaller"
-                    flex
-                    add-text="Add Caller"
-                    dusk-id="caller"
-                >
-                    <template #headers>
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">
-                                Whitelisted Callers
-                            </label>
-                            <p class="mt-1 text-sm text-gray-500">
-                                The wallet accounts that are allowed to use the fuel tank.
-                            </p>
-                        </div>
-                        <div class="w-5"></div>
-                    </template>
-                    <template #inputs="{ inputs, index }">
-                        <div class="flex-1">
-                            <input
-                                v-model="inputs.caller"
-                                :dusk="`input__caller-${index + 1}`"
-                                type="text"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </template>
-                </FormList>
+                <FormInput :value="props.ruleId" name="ruleId" label="Rule set ID" type="number" disabled />
+                <div class="flex space-x-3">
+                    <FormSelect
+                        v-model="selectedDispatchRule"
+                        :options="availableDispatchRules"
+                        label="Choose a dispatch rule"
+                        description=""
+                        name="selectedDispatchRule"
+                        class="flex-1"
+                    />
+                    <Btn @click="addDispatchRuleItem" class="!px-2 !flex mt-auto" primary>
+                        <PlusIcon class="w-6 h-6 m-auto" />
+                    </Btn>
+                </div>
+                <div v-if="checkSelectedDispatchRule(DispatchRules.WhitelistedCallers)" class="relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.WhitelistedCallers)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
+                    <FormList
+                        v-model="whitelistedCallers"
+                        @add="addCaller"
+                        @remove="removeCaller"
+                        flex
+                        add-text="Add Caller"
+                        dusk-id="caller"
+                    >
+                        <template #headers>
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    Whitelisted Callers
+                                </label>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    The wallet accounts that are allowed to use the fuel tank.
+                                </p>
+                            </div>
+                            <div class="w-5"></div>
+                        </template>
+                        <template #inputs="{ inputs, index }">
+                            <div class="flex-1">
+                                <input
+                                    v-model="inputs.caller"
+                                    :dusk="`input__caller-${index + 1}`"
+                                    type="text"
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </template>
+                    </FormList>
+                </div>
 
-                <div class="space-y-2">
+                <div v-if="checkSelectedDispatchRule(DispatchRules.RequireToken)" class="space-y-2 relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.RequireToken)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
                     <div>
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
+                        <h3 class="text-sm font-semibold leading-6 text-gray-900">Require Token</h3>
                         <p class="mt-1 text-sm text-gray-500">
                             The wallet account must have a specific token in their wallet to use the fuel tank.
                         </p>
@@ -56,46 +92,68 @@
                     </div>
                 </div>
 
-                <FormList
-                    v-model="whitelistedCollections"
-                    @add="addWhiteCollection"
-                    @remove="removeWhiteCollection"
-                    flex
-                    add-text="Add Collection"
-                    dusk-id="collection"
-                >
-                    <template #headers>
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">
-                                Whitelisted Collections
-                            </label>
-                            <p class="mt-1 text-sm text-gray-500">
-                                The wallet account must have a specific token in their wallet to use the fuel tank.
-                            </p>
-                        </div>
-                        <div class="w-5"></div>
-                    </template>
-                    <template #inputs="{ inputs, index }">
-                        <div class="flex-1">
-                            <FormInput
-                                v-model="inputs.collection"
-                                :name="`collection-${index + 1}`"
-                                type="number"
-                                :dusk="`input__collection-id-${index + 1}`"
-                            />
-                        </div>
-                    </template>
-                </FormList>
+                <div v-if="checkSelectedDispatchRule(DispatchRules.WhitelistedCollections)" class="relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.WhitelistedCollections)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
+                    <FormList
+                        v-model="whitelistedCollections"
+                        @add="addWhiteCollection"
+                        @remove="removeWhiteCollection"
+                        flex
+                        add-text="Add Collection"
+                        dusk-id="collection"
+                    >
+                        <template #headers>
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    Whitelisted Collections
+                                </label>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    The wallet account must have a specific token in their wallet to use the fuel tank.
+                                </p>
+                            </div>
+                            <div class="w-5"></div>
+                        </template>
+                        <template #inputs="{ inputs, index }">
+                            <div class="flex-1">
+                                <FormInput
+                                    v-model="inputs.collection"
+                                    :name="`collection-${index + 1}`"
+                                    type="number"
+                                    :dusk="`input__collection-id-${index + 1}`"
+                                />
+                            </div>
+                        </template>
+                    </FormList>
+                </div>
 
-                <FormInput
-                    v-model="maxFuelBurnPerTransaction"
-                    name="maxFuelBurnPerTransaction"
-                    label="Max Fuel Burn Per Transaction"
-                    description="The maximum amount of fuel can be used per transaction."
-                    type="number"
-                />
+                <div v-if="checkSelectedDispatchRule(DispatchRules.MaxFuelBurnPerTransaction)" class="relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.MaxFuelBurnPerTransaction)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
+                    <FormInput
+                        v-model="maxFuelBurnPerTransaction"
+                        name="maxFuelBurnPerTransaction"
+                        label="Max Fuel Burn Per Transaction"
+                        description="The maximum amount of fuel can be used per transaction."
+                        type="number"
+                    />
+                </div>
 
-                <div>
+                <div v-if="checkSelectedDispatchRule(DispatchRules.PermittedExtrinsic)" class="relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.PermittedExtrinsic)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
                     <div class="flex space-x-3">
                         <FormSelect
                             v-model="permittedExtrinsicValue"
@@ -119,9 +177,15 @@
                     </div>
                 </div>
 
-                <div class="space-y-2">
+                <div v-if="checkSelectedDispatchRule(DispatchRules.UserFuelBudget)" class="space-y-2 relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.UserFuelBudget)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
                     <div>
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">User Fuel Budget</h3>
+                        <h3 class="text-sm font-semibold leading-6 text-gray-900">User Fuel Budget</h3>
                         <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
                     </div>
                     <div class="grid grid-cols-2 space-x-4">
@@ -143,9 +207,15 @@
                     </div>
                 </div>
 
-                <div class="space-y-2">
+                <div v-if="checkSelectedDispatchRule(DispatchRules.TankFuelBudget)" class="space-y-2 relative">
+                    <div
+                        class="absolute -right-2 top-0 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                        @click="removeSelectedDispatch(DispatchRules.TankFuelBudget)"
+                    >
+                        <XMarkIcon class="w-6 h-6 m-auto" />
+                    </div>
                     <div>
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">Tank Fuel Budget</h3>
+                        <h3 class="text-sm font-semibold leading-6 text-gray-900">Tank Fuel Budget</h3>
                         <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
                     </div>
                     <div class="grid grid-cols-2 space-x-4">
@@ -172,12 +242,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, Ref } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
 import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, parseFormatedTokenId } from '~/util';
-import { TokenIdSelectType, TransactionMethods } from '~/types/types.enums';
+import { TokenIdSelectType, TransactionMethods, DispatchRules } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import FormList from '../FormList.vue';
 import { formatWhitelistedCallers, formatWhitelistedCollections } from '~/util';
@@ -188,6 +258,8 @@ import FormSelect from '../FormSelect.vue';
 import { PlusIcon } from '@heroicons/vue/20/solid';
 import Btn from '../Btn.vue';
 import Chip from '../Chip.vue';
+import Tooltip from '../Tooltip.vue';
+import { QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const emit = defineEmits(['update:modelValue', 'validation', 'close']);
 
@@ -195,6 +267,7 @@ const props = withDefaults(
     defineProps<{
         modelValue: DispatchRulesValuesInterface;
         isModal?: boolean;
+        ruleId: number;
     }>(),
     {
         isModal: false,
@@ -220,9 +293,13 @@ const tankFuelAmount = ref(props.modelValue.tankFuelBudget?.amount ?? null);
 const tankFuelresetPeriod = ref(props.modelValue.tankFuelBudget?.resetPeriod ?? null);
 const permittedExtrinsics = ref(props.modelValue.permittedExtrinsics ?? []);
 const permittedExtrinsicValue = ref('');
+const selectedDispatchRule = ref('');
+const selectedDispatchRules: Ref<DispatchRules[]> = ref([]);
 
 const transactionMethods = Object.values(TransactionMethods);
+const allowedDispatchRules = Object.values(DispatchRules);
 
+const availableDispatchRules = allowedDispatchRules.filter((rule) => !selectedDispatchRules.value.includes(rule));
 const validForm = computed(() => formRef.value.getMeta().valid);
 const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
 
@@ -241,6 +318,14 @@ const validation = yup.object({
     tankFuelAmount: numberNotRequiredSchema.typeError('Tank Fuel Amount must be a number'),
     tankFuelresetPeriod: numberNotRequiredSchema.typeError('Tank Fuel Reset Period must be a number'),
 });
+
+const addDispatchRuleItem = () => {
+    if (selectedDispatchRule.value === '') return;
+    if (selectedDispatchRules.value.includes(selectedDispatchRule.value as DispatchRules)) return;
+
+    selectedDispatchRules.value.push(selectedDispatchRule.value as DispatchRules);
+    selectedDispatchRule.value = '';
+};
 
 const addItem = () => {
     if (permittedExtrinsicValue.value === '') return;
@@ -268,6 +353,17 @@ const addWhiteCollection = () => {
 
 const removeWhiteCollection = (index: number) => {
     whitelistedCollections.value.splice(index, 1);
+};
+
+const checkSelectedDispatchRule = (rule: DispatchRules) => {
+    return selectedDispatchRules.value.includes(rule);
+};
+
+const removeSelectedDispatch = (rule: DispatchRules) => {
+    const index = selectedDispatchRules.value.indexOf(rule);
+    if (index > -1) {
+        selectedDispatchRules.value.splice(index, 1);
+    }
 };
 
 const hasChanged = computed(() =>
@@ -298,7 +394,7 @@ watch(
         setTimeout(() => {
             emit('validation', validForm.value);
             emit('update:modelValue', hasChanged.value);
-        }, 50); 
+        }, 50);
     }
 );
 </script>

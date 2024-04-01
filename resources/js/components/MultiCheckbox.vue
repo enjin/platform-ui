@@ -52,7 +52,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 const props = withDefaults(
     defineProps<{
         label: string;
-        description: string;
+        description?: string;
         options: { label: string; value: string; tooltip?: string }[];
         modelValue: string[];
         name: string;

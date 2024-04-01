@@ -31,6 +31,7 @@
                         :type="type"
                         :min="min"
                         :disabled="disabled"
+                        :value="props.value"
                         :class="[
                             {
                                 'rounded-none rounded-r-md': prefix,
@@ -67,6 +68,7 @@ const props = withDefaults(
         type?: string;
         min?: number;
         modelValue?: number | string | null;
+        value?: number | string;
         disabled?: boolean;
         prefix?: string;
         name: string;

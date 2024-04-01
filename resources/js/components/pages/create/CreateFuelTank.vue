@@ -27,8 +27,7 @@
                                 v-model="flags"
                                 name="flags"
                                 :options="fuelFlags"
-                                label="Flags"
-                                description="The beam flags that should be enabled/disabled."
+                                label="Options"
                                 cols-class="grid-cols-1 md:!grid-cols-2"
                             />
                             <FormInput
@@ -63,7 +62,7 @@
                     <template #actions>
                         <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
                     </template>
-                    <DispatchRuleForm v-model="item.values" @validation="setValidation(idx, $event)" />
+                    <DispatchRuleForm v-model="item.values" :rule-id="idx" @validation="setValidation(idx, $event)" />
                 </CollapseCard>
 
                 <CollapseCard title="Account Rules" :actions="false">
