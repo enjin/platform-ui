@@ -19,7 +19,7 @@
                         <Address :address="item.owner" />
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3">
+                    <div v-if="item.unitPrice" class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Unit Price</dt>
                         <dd class="mt-1 text-sm text-gray-900">
                             {{ formatPriceFromENJ(item.unitPrice) }} {{ currencySymbol }}
@@ -77,9 +77,9 @@
                         <dd class="mt-1 text-sm text-gray-900">{{ item.collection.network }}</dd>
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3" v-if="item.attributes.length">
+                    <div v-if="item.attributes.length" class="space-y-2 pt-4 pb-3 overflow-x-scroll">
                         <dt class="text-base font-medium text-gray-500">Attributes</dt>
-                        <table class="min-w-full divide-y divide-gray-300">
+                        <table class="divide-y divide-gray-300">
                             <thead>
                                 <tr class="divide-x divide-gray-200">
                                     <th
@@ -99,12 +99,10 @@
                                     :key="idx"
                                     class="divide-x divide-gray-200"
                                 >
-                                    <td
-                                        class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0 break-words"
-                                    >
+                                    <td class="py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0 break-words">
                                         {{ attribute.key }}
                                     </td>
-                                    <td class="whitespace-nowrap p-4 text-sm text-gray-500 break-words">
+                                    <td class="p-4 text-sm text-gray-500 break-words">
                                         {{ attribute.value }}
                                     </td>
                                 </tr>

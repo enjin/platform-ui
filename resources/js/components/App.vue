@@ -1,7 +1,8 @@
 <template>
-    <div class="h-full flex flex-row">
+    <div class="h-full flex flex-row bg-light-surface-background">
         <SideNavbar v-if="appStore.hasValidConfig" />
         <SnackbarGroup />
+        <SupportButton />
 
         <div class="flex flex-col w-full overflow-hidden">
             <UserNavbar />
@@ -18,6 +19,7 @@
 import { useAppStore } from '~/store';
 import ScaleTransition from '~/components/ScaleTransition.vue';
 import SideNavbar from '~/components/SideNavbar.vue';
+import SupportButton from '~/components/SupportButton.vue';
 import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
 import { computed, watch } from 'vue';

@@ -1,144 +1,140 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 py-4 overflow-y-auto transition-all">
-        <div class="flow-root">
+    <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
+        <div class="flow-root space-y-4 pb-4 max-w-3xl mx-auto">
             <div class="mb-4">
                 <h1 class="text-xl md:text-2xl">Create Listing</h1>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createListing">
                 <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
+                    <div class="space-y-6">
+                        <div class="">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Parameters</h3>
                             <p class="mt-1 text-sm text-gray-500">Places a sell order.</p>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormInput
-                                    v-model="account"
-                                    name="account"
-                                    label="Account"
-                                    description="The seller account."
-                                    required
-                                    tooltip="Wallet Address"
+                        <FormInput
+                            v-model="account"
+                            name="account"
+                            label="Account"
+                            description="The seller account."
+                            required
+                            tooltip="Wallet Address"
+                        />
+
+                        <div class="space-y-2">
+                            <div>
+                                <h3 class="text-sm leading-6 text-gray-900">
+                                    Make Asset ID
+                                    <span class="text-red-500">&nbsp;*</span>
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    The collection and token ID of the asset being sold.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <FormSelect
+                                    v-model="makeCollectionId"
+                                    name="makeCollectionId"
+                                    placeholder="Select a collection ID"
+                                    :options="collectionIds"
                                 />
-
-                                <div class="space-y-2">
-                                    <div>
-                                        <h3 class="text-sm leading-6 text-gray-900">
-                                            Make Asset ID
-                                            <span class="text-red-500">&nbsp;*</span>
-                                        </h3>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            The collection and token ID of the asset being sold.
-                                        </p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <FormSelect
-                                            v-model="makeCollectionId"
-                                            name="makeCollectionId"
-                                            placeholder="Select a collection ID"
-                                            :options="collectionIds"
-                                        />
-                                        <TokenIdInput
-                                            class="col-span-1"
-                                            v-model="makeTokenId"
-                                            placeholder="Token ID"
-                                            name="makeTokenId"
-                                        />
-                                    </div>
-                                </div>
-
-                                <FormCheckbox
-                                    v-model="enableTakeCollectionId"
-                                    name="enableTakeCollection"
-                                    label="Enable offer"
-                                    description="Use this option to enable offering a different asset in exchange for the asset being sold."
-                                />
-
-                                <div v-if="enableTakeCollectionId" class="space-y-2 animate-fade-in">
-                                    <div>
-                                        <h3 class="text-sm leading-6 text-gray-900">
-                                            Take Asset ID
-                                            <span class="text-red-500">&nbsp;*</span>
-                                        </h3>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            The collection and token ID of the asset being requested.
-                                        </p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <FormInput
-                                            class="col-span-1"
-                                            v-model="takeCollectionId"
-                                            name="takeCollectionId"
-                                            placeholder="Collection ID"
-                                            type="number"
-                                        />
-                                        <TokenIdInput
-                                            class="col-span-1"
-                                            v-model="takeTokenId"
-                                            placeholder="Token ID"
-                                            name="takeTokenId"
-                                        />
-                                    </div>
-                                </div>
-
-                                <FormInput
-                                    v-model="amount"
-                                    name="amount"
-                                    label="Amount"
-                                    description="The number of units being sold."
-                                    type="number"
-                                    required
-                                />
-
-                                <FormInput
-                                    v-model="price"
-                                    name="price"
-                                    label="Price"
-                                    description="The requested price for each unit. If it’s an auction, this is the minimum bid."
-                                    type="number"
-                                    required
-                                    :prefix="currencySymbol"
-                                />
-
-                                <FormInput
-                                    v-model="salt"
-                                    name="salt"
-                                    label="Salt"
-                                    description="Can be used to differentiate listings."
-                                />
-
-                                <FormInput
-                                    v-model="auctionDataStart"
-                                    name="auctionDataStart"
-                                    label="Auction Data Start Block"
-                                    description="The block number the auction starts at."
-                                />
-
-                                <FormInput
-                                    v-model="auctionDataEnd"
-                                    name="auctionDataEnd"
-                                    label="Auction Data End Block"
-                                    description="The block number the auction ends at."
-                                />
-
-                                <FormInput
-                                    v-if="appStore.advanced"
-                                    v-model="idempotencyKey"
-                                    name="idempotencyKey"
-                                    label="Idempotency Key"
-                                    description="The idempotency key to set. It is recommended to use a UUID for this."
-                                    tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
-                                    readmore="Idempotency Key"
+                                <TokenIdInput
+                                    class="col-span-1"
+                                    v-model="makeTokenId"
+                                    placeholder="Token ID"
+                                    name="makeTokenId"
                                 />
                             </div>
                         </div>
+
+                        <FormCheckbox
+                            v-model="enableTakeCollectionId"
+                            name="enableTakeCollection"
+                            label="Enable offer"
+                            description="Use this option to enable offering a different asset in exchange for the asset being sold."
+                        />
+
+                        <div v-if="enableTakeCollectionId" class="space-y-2 animate-fade-in">
+                            <div>
+                                <h3 class="text-sm leading-6 text-gray-900">
+                                    Take Asset ID
+                                    <span class="text-red-500">&nbsp;*</span>
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    The collection and token ID of the asset being requested.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <FormInput
+                                    class="col-span-1"
+                                    v-model="takeCollectionId"
+                                    name="takeCollectionId"
+                                    placeholder="Collection ID"
+                                    type="number"
+                                />
+                                <TokenIdInput
+                                    class="col-span-1"
+                                    v-model="takeTokenId"
+                                    placeholder="Token ID"
+                                    name="takeTokenId"
+                                />
+                            </div>
+                        </div>
+
+                        <FormInput
+                            v-model="amount"
+                            name="amount"
+                            label="Amount"
+                            description="The number of units being sold."
+                            type="number"
+                            required
+                        />
+
+                        <FormInput
+                            v-model="price"
+                            name="price"
+                            label="Price"
+                            description="The requested price for each unit. If it’s an auction, this is the minimum bid."
+                            type="number"
+                            required
+                            :prefix="currencySymbol"
+                        />
+
+                        <FormInput
+                            v-model="salt"
+                            name="salt"
+                            label="Salt"
+                            description="Can be used to differentiate listings."
+                        />
+
+                        <FormInput
+                            v-model="auctionDataStart"
+                            name="auctionDataStart"
+                            label="Auction Data Start Block"
+                            description="The block number the auction starts at."
+                        />
+
+                        <FormInput
+                            v-model="auctionDataEnd"
+                            name="auctionDataEnd"
+                            label="Auction Data End Block"
+                            description="The block number the auction ends at."
+                        />
+
+                        <FormInput
+                            v-if="appStore.advanced"
+                            v-model="idempotencyKey"
+                            name="idempotencyKey"
+                            label="Idempotency Key"
+                            description="The idempotency key to set. It is recommended to use a UUID for this."
+                            tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
+                            readmore="Idempotency Key"
+                        />
                     </div>
                 </div>
 
                 <div class="flex space-x-3 justify-end">
                     <RouterLink
-                        :to="{ name: 'platform.collections' }"
+                        :to="{ name: 'platform.marketplace' }"
                         type="button"
                         class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >

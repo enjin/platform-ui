@@ -1,6 +1,6 @@
 <template>
-    <div class="md:grid md:grid-cols-3 gap-4" :class="{ 'md:!flex md:!flex-col': flex }">
-        <div class="md:col-span-1" v-if="label || description">
+    <div class="space-y-4" :class="{ 'md:!flex md:!flex-col': flex }">
+        <div class="" v-if="label || description">
             <div class="flex" v-if="label">
                 <h3 class="text-base font-semibold leading-6 text-gray-900">{{ label }}</h3>
                 <Tooltip class="!flex items-center" v-if="tooltip" :text="tooltip">
@@ -14,7 +14,7 @@
             </p>
         </div>
 
-        <div class="col-span-2 md:mt-0 space-y-3" :class="(label || description) && 'mt-5'">
+        <div class="space-y-4">
             <div class="flex flex-row flex-nowrap gap-3 md:gap-6">
                 <slot name="headers" />
             </div>

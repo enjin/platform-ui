@@ -1,5 +1,5 @@
 <template>
-    <Form ref="formRef" class="sm:rounded-b-lg" :validation-schema="createValidation">
+    <Form ref="formRef" class="sm:rounded-b-lg" :validation-schema="formValidation">
         <RadioGroupButton
             class="p-6"
             v-model="transferType"
@@ -7,99 +7,91 @@
             :items="transferTypes"
             :cols="transferTypes.length"
         />
+        <input type="hidden" name="transferType" v-model="transferType" />
         <FadeTransition>
-            <div class="bg-white px-4 py-5 sm:p-6" v-if="transferType === 'simple'">
-                <input type="hidden" name="transferType" v-model="transferType" />
-                <div class="md:grid md:grid-cols-3 md:gap-6">
-                    <div class="md:col-span-1">
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">Simple Transfer</h3>
-                        <p class="mt-1 text-sm text-gray-500">The params to make a simple transfer.</p>
-                    </div>
-                    <div class="mt-5 md:col-span-2 md:mt-0">
-                        <div class="flex flex-col gap-6">
-                            <FormInput
-                                v-model="account"
-                                name="account"
-                                label="Account"
-                                description="The recipient account of the token."
-                                required
-                            />
-                            <TokenIdInput
-                                v-model="simpleTokenId"
-                                name="simpleTokenId"
-                                label="Token ID"
-                                description="The token ID."
-                                required
-                                readmore="Token ID"
-                            />
-                            <FormInput
-                                v-model="simpleAmount"
-                                name="simpleAmount"
-                                label="Amount"
-                                description="The amount to transfer."
-                                type="number"
-                                required
-                            />
-                            <FormCheckbox
-                                v-model="simpleKeepAlive"
-                                name="simpleKeepAlive"
-                                label="Keep Alive"
-                                description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
-                            />
-                        </div>
-                    </div>
+            <div class="rounded-b-lg p-6 pt-0" v-if="transferType === 'simple'">
+                <div class="space-y-6">
+                    <FormInput
+                        v-model="account"
+                        name="account"
+                        label="Account"
+                        description="The recipient account of the token."
+                        required
+                    />
+                    <TokenIdInput
+                        v-model="simpleTokenId"
+                        name="simpleTokenId"
+                        label="Token ID"
+                        description="The token ID."
+                        required
+                        readmore="Token ID"
+                    />
+                    <FormInput
+                        v-model="simpleAmount"
+                        name="simpleAmount"
+                        label="Amount"
+                        description="The amount to transfer."
+                        type="number"
+                        required
+                    />
+                    <FormCheckbox
+                        v-if="useAppStore().advanced"
+                        v-model="simpleKeepAlive"
+                        name="simpleKeepAlive"
+                        label="Keep Alive"
+                        description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
+                    />
                 </div>
             </div>
-            <div class="px-4 sm:rounded-b-lg py-5 sm:p-6" v-else>
-                <div class="md:grid md:grid-cols-3 md:gap-6">
-                    <div class="md:col-span-1">
+            <div class="rounded-b-lg p-6 pt-0" v-else>
+                <div class="space-y-6">
+                    <div class="flex items-center">
                         <h3 class="text-base font-semibold leading-6 text-gray-900">Operator Transfer</h3>
-                        <p class="mt-1 text-sm text-gray-500">
-                            The params to make an operator transfer. Operator transfers are transfers that you make
+                        <Tooltip
+                            text="The params to make an operator transfer. Operator transfers are transfers that you make
                             using tokens from somebody else's wallet as the source. To make this type of transfer the
-                            source wallet owner must approve you for transferring their tokens.
-                        </p>
+                            source wallet owner must approve you for transferring their tokens."
+                        >
+                            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                        </Tooltip>
                     </div>
-                    <div class="mt-5 md:col-span-2 md:mt-0">
-                        <div class="flex flex-col gap-6">
-                            <FormInput
-                                v-model="account"
-                                name="account"
-                                label="Account"
-                                description="The recipient account of the token."
-                                required
-                            />
-                            <TokenIdInput
-                                v-model="operatorTokenId"
-                                name="operatorTokenId"
-                                label="Token ID"
-                                description="The token ID."
-                                required
-                                readmore="Token ID"
-                            />
-                            <FormInput
-                                v-model="operatorSource"
-                                name="operatorSource"
-                                label="Source"
-                                description="The source account of the token."
-                                required
-                            />
-                            <FormInput
-                                v-model="operatorAmount"
-                                name="operatorAmount"
-                                label="Amount"
-                                description="The amount to transfer."
-                                type="number"
-                                required
-                            />
-                            <FormCheckbox
-                                v-model="operatorKeepAlive"
-                                name="operatorKeepAlive"
-                                label="Keep Alive"
-                                description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
-                            />
-                        </div>
-                    </div>
+                    <FormInput
+                        v-model="account"
+                        name="account"
+                        label="Account"
+                        description="The recipient account of the token."
+                        required
+                    />
+                    <TokenIdInput
+                        v-model="operatorTokenId"
+                        name="operatorTokenId"
+                        label="Token ID"
+                        description="The token ID."
+                        required
+                        readmore="Token ID"
+                    />
+                    <FormInput
+                        v-model="operatorSource"
+                        name="operatorSource"
+                        label="Source"
+                        description="The source account of the token."
+                        required
+                    />
+                    <FormInput
+                        v-model="operatorAmount"
+                        name="operatorAmount"
+                        label="Amount"
+                        description="The amount to transfer."
+                        type="number"
+                        required
+                    />
+                    <FormCheckbox
+                        v-if="useAppStore().advanced"
+                        v-model="operatorKeepAlive"
+                        name="operatorKeepAlive"
+                        label="Keep Alive"
+                        description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
+                    />
                 </div>
             </div>
         </FadeTransition>
@@ -123,11 +115,13 @@ import {
     addressRequiredSchema,
     booleanNotRequiredSchema,
     booleanRequiredSchema,
-    numberNotRequiredSchema,
     numberRequiredSchema,
     stringNotRequiredSchema,
     stringRequiredSchema,
 } from '~/util/schemas';
+import { useAppStore } from '~/store';
+import Tooltip from '~/components/Tooltip.vue';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 
 const emit = defineEmits(['update:modelValue', 'validation']);
 
@@ -170,44 +164,22 @@ const operatorSource = ref(props.modelValue.operatorParams?.source ?? '');
 
 const validForm = computed(() => formRef.value.getMeta().valid);
 
-const createValidation = yup.object({
+const formValidation = computed(() => (transferType.value === 'simple' ? simpleValidation : operatorValidation));
+
+const operatorValidation = yup.object({
+    account: addressRequiredSchema,
+    operatorTokenId: stringRequiredSchema.typeError('Token ID is required'),
+    operatorAmount: numberRequiredSchema.typeError('Amount must be a number'),
+    operatorSource: stringRequiredSchema,
+    operatorKeepAlive: booleanNotRequiredSchema,
+});
+
+const simpleValidation = yup.object({
     account: addressRequiredSchema,
     transferType: stringNotRequiredSchema,
-    simpleTokenId: yup.string().when('transferType', {
-        is: 'simple',
-        then: () => stringRequiredSchema.typeError('Token ID is required'),
-        otherwise: () => stringNotRequiredSchema.typeError('Token ID is required'),
-    }),
-    simpleAmount: yup.number().when('transferType', {
-        is: 'simple',
-        then: () => numberRequiredSchema.typeError('Amount must be a number'),
-        otherwise: () => numberNotRequiredSchema.typeError('Amount must be a number'),
-    }),
-    simpleKeepAlive: yup.boolean().when('transferType', {
-        is: 'simple',
-        then: () => booleanRequiredSchema,
-        otherwise: () => booleanNotRequiredSchema,
-    }),
-    operatorTokenId: yup.string().when('transferType', {
-        is: 'operator',
-        then: () => stringRequiredSchema.typeError('Token ID is required'),
-        otherwise: () => stringNotRequiredSchema.typeError('Token ID is required'),
-    }),
-    operatorAmount: yup.number().when('transferType', {
-        is: 'operator',
-        then: () => numberRequiredSchema.typeError('Amount must be a number'),
-        otherwise: () => numberNotRequiredSchema.typeError('Amount must be a number'),
-    }),
-    operatorKeepAlive: yup.boolean().when('transferType', {
-        is: 'operator',
-        then: () => booleanRequiredSchema,
-        otherwise: () => booleanNotRequiredSchema,
-    }),
-    operatorSource: yup.string().when('transferType', {
-        is: 'operator',
-        then: () => stringRequiredSchema,
-        otherwise: () => stringNotRequiredSchema,
-    }),
+    simpleTokenId: stringRequiredSchema.typeError('Token ID is required'),
+    simpleAmount: numberRequiredSchema.typeError('Amount must be a number'),
+    simpleKeepAlive: booleanRequiredSchema,
 });
 
 const hasChanged = computed(() =>
@@ -238,8 +210,10 @@ watch(
     () => hasChanged.value,
     async () => {
         await formRef.value.validate();
-        emit('validation', validForm.value);
-        emit('update:modelValue', hasChanged.value);
+        setTimeout(() => {
+            emit('validation', validForm.value);
+            emit('update:modelValue', hasChanged.value);
+        }, 50);
     }
 );
 </script>

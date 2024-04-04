@@ -3,59 +3,77 @@
         <div class="space-y-6 pb-4">
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBatch">
                 <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
+                    <div class="space-y-6">
+                        <div class="flex items-center">
                             <h3 class="text-base font-semibold leading-6 text-gray-900">Batch Transfer</h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                Use this method to transfer multiple tokens in one transaction. You can include up to
+                            <Tooltip
+                                text="Use this method to transfer multiple tokens in one transaction. You can include up to
                                 250 different transfers per batch. Set the continueOnFailure to true to allow all valid
                                 transfers to complete while skipping transfers which would fali so they can be fixed and
-                                attempted again in another transaction.
-                            </p>
+                                attempted again in another transaction."
+                            >
+                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                            </Tooltip>
                         </div>
-                        <div class="mt-5 md:col-span-2 md:mt-0">
-                            <div class="flex flex-col gap-6">
-                                <FormSelect
-                                    v-model="collectionId"
-                                    name="collectionId"
-                                    label="Collection ID"
-                                    description="The collection ID to mint from."
-                                    tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
-                                    placeholder="Select a collection ID"
-                                    :options="collectionIds"
-                                    required
-                                />
-                                <FormInput
-                                    v-model="signingAccount"
-                                    name="signingAccount"
-                                    label="Signing Account"
-                                    description="The signing wallet for this transaction. Defaults to wallet daemon."
-                                />
-                                <FormInput
-                                    v-if="useAppStore().advanced"
-                                    v-model="idempotencyKey"
-                                    name="idempotencyKey"
-                                    label="Idempotency Key"
-                                    description="The idempotency key to set. It is recommended to use a UUID for this."
-                                    tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
-                                    readmore="Idempotency Key"
-                                />
-                                <FormCheckbox
-                                    v-if="useAppStore().advanced"
-                                    v-model="skipValidation"
-                                    name="skipValidation"
-                                    label="Skip validation"
-                                    description="Skip all validation rules, use with caution. Defaults to false."
-                                />
-                            </div>
-                        </div>
+                        <FormSelect
+                            v-model="collectionId"
+                            name="collectionId"
+                            label="Collection ID"
+                            description="The collection ID to mint from."
+                            tooltip="The Collection ID can be retrieved by accessing the details of the request on the transactions page."
+                            placeholder="Select a collection ID"
+                            :options="collectionIds"
+                            required
+                        />
+                        <FormInput
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The signing wallet for this transaction. Defaults to wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
+                            v-model="idempotencyKey"
+                            name="idempotencyKey"
+                            label="Idempotency Key"
+                            description="The idempotency key to set. It is recommended to use a UUID for this."
+                            tooltip="In mathematical and computer science terms, idempotency is a property of certain operations that can be applied repeated times without changing the initial result of the application."
+                            readmore="Idempotency Key"
+                        />
+                        <FormCheckbox
+                            v-if="useAppStore().advanced"
+                            v-model="skipValidation"
+                            name="skipValidation"
+                            label="Skip validation"
+                            description="Skip all validation rules, use with caution. Defaults to false."
+                        />
                     </div>
                 </div>
+                <CollapseCard
+                    v-for="(item, idx) in transfers"
+                    :key="idx"
+                    class="animate-fade-in"
+                    :class="{ 'border border-red-400': !item.valid, 'border border-green-400': item.valid }"
+                    :title="`Transfer Item ${idx + 1}`"
+                >
+                    <template #icon>
+                        <CheckCircleIcon
+                            v-if="item.valid"
+                            class="ml-2 my-auto h-5 w-5 text-green-400"
+                            aria-hidden="true"
+                        />
+                        <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
+                    </template>
+                    <template #actions>
+                        <XMarkIcon class="h-5 w-5 cursor-pointer" @click.prevent="removeItem(idx)" />
+                    </template>
+                    <BatchTransferForm v-model="item.values" @validation="setValidation(idx, $event)" />
+                </CollapseCard>
                 <div class="flex justify-between">
                     <Btn class="!m-0 !flex" @click="addItem" primary>Add Item</Btn>
                     <div class="flex space-x-3 justify-end">
                         <RouterLink
-                            :to="{ name: 'platform.collections' }"
+                            :to="{ name: 'platform.tokens' }"
                             type="button"
                             class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                         >
@@ -65,21 +83,6 @@
                     </div>
                 </div>
             </Form>
-            <CollapseCard
-                class="animate-fade-in"
-                :title="`Transfer Item ${idx + 1}`"
-                v-for="(item, idx) in transfers"
-                :key="idx"
-            >
-                <template #icon>
-                    <CheckCircleIcon class="ml-2 my-auto h-5 w-5 text-green-400" aria-hidden="true" v-if="item.valid" />
-                    <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
-                </template>
-                <template #actions>
-                    <XMarkIcon class="h-5 w-5 cursor-pointer" @click.prevent="removeItem(idx)" />
-                </template>
-                <BatchTransferForm v-model="item.values" @validation="setValidation(idx, $event)" />
-            </CollapseCard>
         </div>
     </div>
 </template>
@@ -87,7 +90,7 @@
 <script setup lang="ts">
 import { ref, computed, Ref } from 'vue';
 import { XMarkIcon } from '@heroicons/vue/20/solid';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
+import { CheckCircleIcon, QuestionMarkCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
@@ -102,6 +105,7 @@ import BatchTransferForm from '~/components/batch/forms/BatchTransferForm.vue';
 import { useAppStore } from '~/store';
 import { TransferValuesInterface } from '~/types/types.interface';
 import FormSelect from '../FormSelect.vue';
+import Tooltip from '../Tooltip.vue';
 
 const router = useRouter();
 const appStore = useAppStore();

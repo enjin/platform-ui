@@ -2,7 +2,7 @@
     <div class="bg-white shadow rounded-lg">
         <div class="flex divide-x divide-gray-200 transition-all" :class="{ 'border-b border-gray-200': open }">
             <div class="flex justify-between px-4 py-5 flex-1 cursor-pointer" @click="toggleCard">
-                <div class="inline-flex">
+                <div class="inline-flex items-center">
                     <label>{{ title }}</label>
                     <slot name="icon" />
                 </div>

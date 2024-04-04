@@ -14,7 +14,7 @@
     >
         <template #input>
             <TranslateTransition>
-                <div class="block w-24" v-if="localTokenType === TokenIdSelectType.Erc1155">
+                <div class="block w-16" v-if="localTokenType === TokenIdSelectType.Erc1155">
                     <FormInput name="index" v-model="localIndex" placeholder="Index" input-class="!rounded-none" />
                 </div>
             </TranslateTransition>

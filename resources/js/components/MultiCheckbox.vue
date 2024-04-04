@@ -12,7 +12,7 @@
             type="checkbox"
             class="hidden"
         />
-        <div :class="`mt-4 grid grid-cols-3 gap-y-6 gap-x-4`">
+        <div class="mt-4 grid grid-cols-3 gap-y-6 gap-x-4" :class="colsClass">
             <template v-for="option in options" :key="option.value">
                 <div
                     :class="[
@@ -52,13 +52,14 @@ import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 const props = withDefaults(
     defineProps<{
         label: string;
-        description: string;
+        description?: string;
         options: { label: string; value: string; tooltip?: string }[];
         modelValue: string[];
         name: string;
         required?: boolean;
         tooltip?: string;
         readmore?: string;
+        colsClass?: string;
     }>(),
     {
         required: false,

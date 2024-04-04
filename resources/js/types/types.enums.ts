@@ -93,6 +93,16 @@ export enum TransactionResultType {
     EXTRINSIC_FAILED = 'EXTRINSIC_FAILED',
 }
 
+export enum DispatchRules {
+    WhitelistedCallers = 'WhitelistedCallers',
+    WhitelistedCollections = 'WhitelistedCollections',
+    MaxFuelBurnPerTransaction = 'MaxFuelBurnPerTransaction',
+    UserFuelBudget = 'UserFuelBudget',
+    TankFuelBudget = 'TankFuelBudget',
+    RequireToken = 'RequireToken',
+    PermittedExtrinsic = 'PermittedExtrinsic',
+}
+
 export enum TransactionMethods {
     ApproveCollection = 'ApproveCollection',
     ApproveToken = 'ApproveToken',

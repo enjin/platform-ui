@@ -1,6 +1,6 @@
 <template>
-    <div class="w-64 flex-col hidden md:flex animate-slide-in">
-        <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-4 pb-4">
+    <div class="w-64 flex-col hidden md:flex animate-slide-in bg-light-surface-primary">
+        <div class="flex flex-grow flex-col overflow-y-auto border-r border-light-stroke pt-4 pb-4">
             <div class="flex flex-shrink-0 items-center px-4">
                 <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
                 <EnjinLogo v-else class="h-8 w-auto" />
