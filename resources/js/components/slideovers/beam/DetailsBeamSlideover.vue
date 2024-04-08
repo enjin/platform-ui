@@ -41,7 +41,7 @@
 
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-gray-500">Collection ID</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.collection.collectionId }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900">{{ item.collection?.collectionId }}</dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
