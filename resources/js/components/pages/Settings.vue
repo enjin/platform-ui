@@ -88,6 +88,7 @@ import CollapseCard from '../CollapseCard.vue';
 import Tooltip from '../Tooltip.vue';
 import { AuthApi } from '~/api/auth';
 import ConfirmModal from '../ConfirmModal.vue';
+import { ApiService } from '~/api';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -116,6 +117,7 @@ const formatName = (name: string) => {
 const deleteAccount = async () => {
     await AuthApi.deleteAccount();
     appStore.clearLogin();
+    await ApiService.reloadCsrf();
 };
 
 watch(
