@@ -4,7 +4,7 @@ import mutations from '~/api/mutations';
 import snackbar from '~/util/snackbar';
 
 export class ApiService {
-    protected static async reloadCsrf() {
+    static async reloadCsrf() {
         return (await fetch('/')).text().then((html) => {
             const document = new DOMParser().parseFromString(html, 'text/html');
             const token = document.querySelector('meta[name=csrf-token]')?.getAttribute('content');
