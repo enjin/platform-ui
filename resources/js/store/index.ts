@@ -81,7 +81,7 @@ export const useAppStore = defineStore('app', {
                     this.addMarketplaceNavigation();
                 }
 
-                if (this.loggedIn && this.hasMultiTenantPackage && !this.user) {
+                if (this.loggedIn && this.hasMultiTenantPackage && this.config.tenant && !this.user) {
                     await this.getUser();
                 }
 
@@ -190,11 +190,13 @@ export const useAppStore = defineStore('app', {
             }
 
             await ApiService.reloadCsrf();
-            await this.getUser();
-            if (!this.user.isVerified) {
-                this.allowResend = true;
-                await this.logout();
-                throw [{ field: 'Login error', message: 'Please verify your email address' }];
+            if (this.config.tenant) {
+                await this.getUser();
+                if (!this.user.isVerified) {
+                    this.allowResend = true;
+                    await this.logout();
+                    throw [{ field: 'Login error', message: 'Please verify your email address' }];
+                }
             }
             this.loggedIn = res.data.Login;
 
