@@ -91,6 +91,10 @@ const resetPassword = async () => {
     isLoading.value = true;
     try {
         const res = await AuthApi.resetPassword(email.value, password.value, confirmPassword.value, props.token);
+        if (res.data.ResetPassword === null) {
+            throw res.errors[0];
+        }
+
         if (res.data.ResetPassword === ResetPasswordResponse.PASSWORD_RESET) {
             snackbar.success({ title: 'Password reset successfully.', save: false });
             redirectToLogin();
@@ -99,9 +103,16 @@ const resetPassword = async () => {
         } else if (res.data.ResetPassword === ResetPasswordResponse.INVALID_USER) {
             snackbar.error({ title: 'Invalid user', text: 'Please check the email provided' });
         }
-    } catch (e) {
+    } catch (e: any) {
         if (snackbarErrors(e)) return;
-        snackbar.error({ title: 'Error resetting password.' });
+        if (e.message.includes('Too many requests')) {
+            snackbar.error({
+                title: 'Too many requests',
+                text: e.message,
+            });
+        } else {
+            snackbar.error({ title: 'Error resetting password.' });
+        }
     } finally {
         isLoading.value = false;
     }
