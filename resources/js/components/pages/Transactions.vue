@@ -468,6 +468,16 @@ const retryTransaction = async () => {
     }
 };
 
+const updateTransactionState = (id) => {
+    transactions.value.items.map((p) => {
+        if (p.id === id) {
+            p.state = TransactionState.ABANDONED;
+        }
+
+        return p;
+    });
+};
+
 const cancelTransaction = async () => {
     modalCancel.value = false;
     const transactionId = selectedId.value;
@@ -475,7 +485,7 @@ const cancelTransaction = async () => {
     try {
         const res = await TransactionApi.updateTransaction(
             formatData({
-                id: [transactionId],
+                id: transactionId,
                 state: TransactionState.ABANDONED,
             })
         );
@@ -483,6 +493,7 @@ const cancelTransaction = async () => {
         const id = res.data?.UpdateTransaction;
 
         if (id) {
+            updateTransactionState(transactionId);
             snackbar.success({
                 title: `Cancel transactions`,
                 text: `Cancel transactions successful`,
