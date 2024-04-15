@@ -9,6 +9,7 @@ import { SignerPayloadJSON } from '@polkadot/types/types';
 import { markRaw } from 'vue';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 import { useConnectionStore } from './connection';
+import { HexString } from '@polkadot/util/types';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -49,7 +50,7 @@ export const useTransactionStore = defineStore('transaction', {
                 address: address,
                 blockHash: blockHash,
                 blockNumber: '0x00',
-                era: '0x' + era,
+                era: '0x' + era as HexString,
                 genesisHash: genesis,
                 method: call,
                 nonce: account.nonce.toHex(),
