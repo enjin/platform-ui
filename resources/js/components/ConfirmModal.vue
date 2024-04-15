@@ -7,7 +7,7 @@
             </p>
         </div>
 
-        <div class="flex space-x-4 mt-6">
+        <div class="flex justify-end space-x-4 mt-6">
             <Btn @click="closeModal">Cancel</Btn>
             <Btn primary @click="confirm">Confirm</Btn>
         </div>

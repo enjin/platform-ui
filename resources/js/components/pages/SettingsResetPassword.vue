@@ -28,12 +28,12 @@
                 />
                 <div class="flex space-x-4">
                     <Btn @click="enableReset = false">Cancel</Btn>
-                    <Btn is-submit primary :loading="isLoading">Reset password</Btn>
+                    <Btn is-submit primary :loading="isLoading">Change password</Btn>
                 </div>
             </Form>
         </div>
         <div v-else>
-            <Btn primary @click="enableReset = true">Reset Password</Btn>
+            <Btn primary @click="enableReset = true">Change Password</Btn>
         </div>
     </div>
 </template>

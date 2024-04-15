@@ -110,7 +110,7 @@
                                         <TransactionResultChip v-if="transaction.result" :text="transaction.result" />
                                     </td>
                                     <td
-                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
+                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end items-center"
                                     >
                                         <Btn
                                             v-if="
@@ -131,6 +131,10 @@
                                             :transaction="transaction"
                                             @success="onSuccess(transaction.id)"
                                         />
+                                        <DropdownMenu
+                                            :actions="actions"
+                                            @clicked="($event) => openModalSlide($event, transaction)"
+                                        />
                                     </td>
                                 </tr>
                             </tbody>
@@ -143,6 +147,24 @@
             </div>
         </div>
         <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" @update="updateTransaction" />
+
+        <ConfirmModal
+            key="retry"
+            :is-open="modalRetry"
+            title="Disclaimer"
+            description="Retries transactions that have failed or otherwise not been included on-chain after some time. Use with caution and ensure the transactions really aren't yet on-chain (or likely to be) to make sure they are not accidentally included twice."
+            @closed="modalRetry = false"
+            @confirm="retryTransaction"
+        />
+
+        <ConfirmModal
+            key="cancel"
+            :is-open="modalCancel"
+            title="Disclaimer"
+            description="Cancels the selected transaction. This action cannot be undone."
+            @closed="modalCancel = false"
+            @confirm="cancelTransaction"
+        />
     </div>
 </template>
 
@@ -163,6 +185,8 @@ import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
 import SignTransaction from '../SignTransaction.vue';
 import { TransactionApi } from '~/api/transaction';
+import DropdownMenu from '../DropdownMenu.vue';
+import ConfirmModal from '../ConfirmModal.vue';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -182,8 +206,12 @@ const transactions: Ref<{
 });
 const paginatorRef = ref();
 const modalSlide = ref(false);
+const modalRetry = ref(false);
+const modalCancel = ref(false);
 const slideComponent = ref();
 const selectedTransaction: Ref<number[]> = ref([]);
+
+const selectedId = ref(0);
 
 const indeterminate = computed(
     () => selectedTransaction.value.length > 0 && selectedTransaction.value.length < transactions.value.items.length
@@ -249,6 +277,24 @@ const searchInputs = ref([
         value: [],
     },
 ]);
+
+const actions = [
+    {
+        key: 'details',
+        name: 'Details',
+        component: 'DetailsTransactionSlideover',
+    },
+    {
+        key: 'retry',
+        name: 'Retry',
+        component: 'RetryModal',
+    },
+    {
+        key: 'cancel',
+        name: 'Cancel',
+        component: 'CancelModal',
+    },
+];
 
 const enablePagination = computed(() => !isLoading.value);
 
@@ -380,8 +426,86 @@ const loadMoreItemsWithObserver = () => {
 
 const openModalSlide = (componentName: string, transaction) => {
     let componentPath = 'common';
-    slideComponent.value = { componentName, componentPath, ...transaction };
-    modalSlide.value = true;
+    if (componentName.toLowerCase().includes('modal')) {
+        selectedId.value = transaction.id;
+        if (componentName.toLowerCase().includes('retry')) {
+            modalRetry.value = true;
+        } else if (componentName.toLowerCase().includes('cancel')) {
+            modalCancel.value = true;
+        }
+    } else {
+        slideComponent.value = { componentName, componentPath, ...transaction };
+        modalSlide.value = true;
+    }
+};
+
+const retryTransaction = async () => {
+    modalRetry.value = false;
+    try {
+        const res = await TransactionApi.retryTransactions(
+            formatData({
+                ids: [selectedId.value],
+            })
+        );
+
+        const id = res.data?.RetryTransactions;
+
+        if (id) {
+            snackbar.success({
+                title: `Retry transactions`,
+                text: `Retry transactions successful`,
+            });
+        }
+    } catch (e) {
+        if (snackbarErrors(e)) return;
+        snackbar.error({
+            title: `Retry transactions`,
+            text: `Retry transactions failed`,
+        });
+    } finally {
+        isLoading.value = false;
+        selectedId.value = 0;
+    }
+};
+
+const updateTransactionState = (id) => {
+    transactions.value.items.map((p) => {
+        if (p.id === id) {
+            p.state = TransactionState.ABANDONED;
+        }
+
+        return p;
+    });
+};
+
+const cancelTransaction = async () => {
+    modalCancel.value = false;
+    const transactionId = selectedId.value;
+    selectedId.value = 0;
+    try {
+        const res = await TransactionApi.updateTransaction(
+            formatData({
+                id: transactionId,
+                state: TransactionState.ABANDONED,
+            })
+        );
+
+        const id = res.data?.UpdateTransaction;
+
+        if (id) {
+            updateTransactionState(transactionId);
+            snackbar.success({
+                title: `Cancel transactions`,
+                text: `Cancel transactions successful`,
+            });
+        }
+    } catch (e) {
+        if (snackbarErrors(e)) return;
+        snackbar.error({
+            title: `Cancel transactions`,
+            text: `Cancel transactions failed`,
+        });
+    }
 };
 
 const closeModalSlide = () => {
