@@ -14,7 +14,14 @@
                         <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
                     </Tooltip>
                 </div>
-                <FormInput v-if="props.ruleId" v-model="ruleId" name="ruleId" label="Rule set ID" type="number" disabled />
+                <FormInput
+                    v-if="props.ruleId"
+                    v-model="ruleId"
+                    name="ruleId"
+                    label="Rule set ID"
+                    type="number"
+                    disabled
+                />
                 <div class="flex space-x-3">
                     <FormSelect
                         v-model="selectedDispatchRule"
