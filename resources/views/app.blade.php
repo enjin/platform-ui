@@ -21,7 +21,7 @@
             network: "{{ env('NETWORK') }}",
             url: window.location.origin,
             daemon: "{{ Enjin\Platform\Support\Account::daemon()['public_key'] }}",
-            captcha_key: "{{ env("CAPTCHA_KEY") }}"
+            captcha_key: "{{ env("GOOGLE_RECAPTCHA_KEY") }}"
         }
     </script>
 
