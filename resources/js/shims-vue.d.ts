@@ -11,5 +11,6 @@ interface Window {
         url: string;
         daemon: string;
         name: string;
+        captcha_key: string;
     };
 }
