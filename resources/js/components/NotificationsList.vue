@@ -4,6 +4,7 @@
             <div>
                 <Tooltip class="flex my-auto" text="Notifications on/off">
                     <MenuButton
+                        dusk="notificationMenuBtn"
                         class="flex rounded-full bg-white p-1 focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 transition-all"
                     >
                         <BellIcon class="h-6 w-6 text-gray-400" />

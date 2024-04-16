@@ -4,6 +4,7 @@
             <div>
                 <Tooltip class="flex my-auto" text="Settings">
                     <MenuButton
+                        dusk="settingMenuBtn"
                         class="flex rounded-full bg-white p-1 focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 transition-all"
                     >
                         <Cog6ToothIcon class="h-6 w-6 text-gray-400" />
@@ -53,6 +54,7 @@
                     <div class="py-1">
                         <MenuItem v-slot="{ active }">
                             <button
+                                dusk="settingsBtn"
                                 :class="[
                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                     'block px-4 py-2 text-sm w-full text-center transition-all',
