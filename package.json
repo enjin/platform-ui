@@ -67,6 +67,7 @@
         "vite-plugin-eslint": "^1.8.1",
         "vue": "^3.3.4",
         "vue-loader": "^17.2.2",
+        "vue-recaptcha": "^2.0.2",
         "vue-router": "^4.2.2",
         "vue-tsc": "^1.8.25",
         "vue3-popper": "^1.5.0",
