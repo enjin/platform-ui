@@ -111,7 +111,9 @@ const onCaptchaExpired = () => {
 };
 
 const loadCaptchaScript = async () => {
-    if (!hasCaptcha) return;
+    if (!hasCaptcha) {
+        return;
+    }
     if (!document.getElementById('recaptcha-script')) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
@@ -133,14 +135,15 @@ const verifyCaptcha = () => {
     captchaRef.value.execute();
 };
 
-const login = async () => {
+const login = async (recaptcha?: string) => {
     if (!(await isValid())) return;
 
     isLoading.value = true;
     try {
-        if (!(await appStore.login(email.value, password.value))) {
+        if (!(await appStore.login(email.value, password.value, recaptcha))) {
             snackbar.error({ title: 'Invalid username or password' });
             isLoading.value = false;
+
             return;
         }
         if (await appStore.init()) {

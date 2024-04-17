@@ -133,15 +133,16 @@ const verifyCaptcha = () => {
     if (!hasCaptcha) {
         return register();
     }
+
     captchaRef.value.execute();
 };
 
-const register = async () => {
+const register = async (recaptcha?: string) => {
     if (!(await isValid())) return;
 
     isLoading.value = true;
     try {
-        const res = await AuthApi.register(email.value, password.value);
+        const res = await AuthApi.register(email.value, password.value, recaptcha);
         if (res.data.RegisterUser.id) {
             snackbar.success({
                 title: 'Account created successfully!',
