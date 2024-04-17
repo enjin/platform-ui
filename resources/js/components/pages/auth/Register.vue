@@ -7,12 +7,13 @@
         </div>
         <div class="mt-8 mx-auto w-full sm:max-w-md">
             <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="register">
+                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="verifyCaptcha">
                     <FormInput
                         v-model="email"
                         label="Email address"
                         name="email"
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        @focus="loadCaptchaScript"
                     />
                     <FormInput
                         v-model="password"
@@ -27,6 +28,16 @@
                         name="confirmPassword"
                         input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         type="password"
+                    />
+                    <vue-recaptcha
+                        v-if="hasCaptcha"
+                        ref="captchaRef"
+                        :style="{ visibility: isCaptchaBadgeVisible ? 'visible' : 'hidden' }"
+                        size="invisible"
+                        :load-recaptcha-script="false"
+                        :sitekey="reCaptchaSiteKey"
+                        @verify="register"
+                        @expired="onCaptchaExpired"
                     />
                     <div>
                         <div class="flex items-center justify-end mb-4">
@@ -65,6 +76,7 @@ import EnjinLogo from '~/components/EnjinLogo.vue';
 import { AuthApi } from '~/api/auth';
 import snackbar from '~/util/snackbar';
 import { snackbarErrors } from '~/util';
+import { VueRecaptcha } from 'vue-recaptcha';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -74,6 +86,10 @@ const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const formRef = ref();
+const captchaRef = ref();
+const isCaptchaBadgeVisible = ref(false);
+const reCaptchaSiteKey = window.bootstrap?.captcha_key || 'null';
+const hasCaptcha = window.bootstrap?.captcha_key?.length > 0;
 
 const validation = yup.object().shape({
     email: yup.string().email('Email is not valid').required('Email is required'),
@@ -91,6 +107,33 @@ const redirectToLogin = () => {
 const isValid = async () => {
     await formRef.value.validate();
     return formRef.value.getMeta().valid;
+};
+
+const onCaptchaExpired = () => {
+    captchaRef.value.reset();
+};
+
+const loadCaptchaScript = async () => {
+    if (!hasCaptcha) return;
+
+    if (!document.getElementById('recaptcha-script')) {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.id = 'recaptcha-script';
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit&hl=:1';
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }
+
+    isCaptchaBadgeVisible.value = true;
+};
+
+const verifyCaptcha = () => {
+    if (!hasCaptcha) {
+        return register();
+    }
+    captchaRef.value.execute();
 };
 
 const register = async () => {

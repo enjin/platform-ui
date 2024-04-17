@@ -50,7 +50,7 @@ export const useTransactionStore = defineStore('transaction', {
                 address: address,
                 blockHash: blockHash,
                 blockNumber: '0x00',
-                era: '0x' + era as HexString,
+                era: ('0x' + era) as HexString,
                 genesisHash: genesis,
                 method: call,
                 nonce: account.nonce.toHex(),

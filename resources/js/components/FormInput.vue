@@ -44,6 +44,7 @@
                         autocomplete="off"
                         oninput="validity.valid||(value=value.replace(/\D+/g, ''))"
                         @input="inputChange"
+                        @focus="emit('focus')"
                         @keyup.enter="emit('submit')"
                         @focusout="hasFocus && emit('submit')"
                     />
@@ -97,7 +98,7 @@ const props = withDefaults(
     }
 );
 
-const emit = defineEmits(['update:modelValue', 'inputChange', 'submit']);
+const emit = defineEmits(['update:modelValue', 'inputChange', 'submit', 'focus']);
 
 const inputChange = (e: Event) => {
     emit('inputChange', e);
