@@ -7,7 +7,7 @@
         </div>
         <div class="mt-8 mx-auto w-full sm:max-w-md">
             <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="verifyCapthca">
+                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="verifyCaptcha">
                     <FormInput
                         v-model="email"
                         label="Email address"
@@ -30,6 +30,7 @@
                         type="password"
                     />
                     <vue-recaptcha
+                        v-if="hasCaptcha"
                         ref="captchaRef"
                         :style="{ visibility: isCaptchaBadgeVisible ? 'visible' : 'hidden' }"
                         size="invisible"
@@ -88,6 +89,7 @@ const formRef = ref();
 const captchaRef = ref();
 const isCaptchaBadgeVisible = ref(false);
 const reCaptchaSiteKey = window.bootstrap?.captcha_key || 'null';
+const hasCaptcha = window.bootstrap?.captcha_key?.length > 0;
 
 const validation = yup.object().shape({
     email: yup.string().email('Email is not valid').required('Email is required'),
@@ -112,6 +114,8 @@ const onCaptchaExpired = () => {
 };
 
 const loadCaptchaScript = async () => {
+    if (!hasCaptcha) return;
+
     if (!document.getElementById('recaptcha-script')) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
@@ -125,16 +129,20 @@ const loadCaptchaScript = async () => {
     isCaptchaBadgeVisible.value = true;
 };
 
-const verifyCapthca = () => {
+const verifyCaptcha = () => {
+    if (!hasCaptcha) {
+        return register();
+    }
+
     captchaRef.value.execute();
 };
 
-const register = async () => {
+const register = async (recaptcha?: string) => {
     if (!(await isValid())) return;
 
     isLoading.value = true;
     try {
-        const res = await AuthApi.register(email.value, password.value);
+        const res = await AuthApi.register(email.value, password.value, recaptcha);
         if (res.data.RegisterUser.id) {
             snackbar.success({
                 title: 'Account created successfully!',
