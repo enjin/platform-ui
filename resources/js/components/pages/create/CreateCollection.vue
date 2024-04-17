@@ -380,8 +380,6 @@ const simpleAttributes = () => {
         });
     }
 
-    console.log(description.value);
-
     return [
         {
             key: 'name',

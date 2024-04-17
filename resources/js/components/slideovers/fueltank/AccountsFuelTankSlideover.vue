@@ -304,7 +304,6 @@ const getAccounts = async () => {
         const res = await FuelTankApi.getAccounts(addressToPublicKey(tankId.value) ?? '');
         accounts.value = DTOFactory.forAccounts(res);
     } catch (e) {
-        console.log(e);
         // Do nothing
     } finally {
         isLoading.value = false;
