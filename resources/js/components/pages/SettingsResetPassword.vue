@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="enableReset" class="flex flex-col space-y-4">
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="resetPassword">
+            <Form id="passwordResetForm" ref="formRef" class="space-y-6" :validation-schema="validation" @submit="resetPassword">
                 <FormInput
                     v-model="oldPassword"
                     label="Old Password"
@@ -27,13 +27,13 @@
                     type="password"
                 />
                 <div class="flex space-x-4">
-                    <Btn @click="enableReset = false">Cancel</Btn>
-                    <Btn is-submit primary :loading="isLoading">Change password</Btn>
+                    <Btn @click="enableReset = false" id="passwordResetCancelBtn">Cancel</Btn>
+                    <Btn is-submit primary :loading="isLoading" id="passwordResetSubmitBtn">Change password</Btn>
                 </div>
             </Form>
         </div>
         <div v-else>
-            <Btn primary @click="enableReset = true">Change Password</Btn>
+            <Btn primary @click="enableReset = true" dusk="changePasswordBtn">Change Password</Btn>
         </div>
     </div>
 </template>
