@@ -180,8 +180,8 @@ export const useAppStore = defineStore('app', {
 
             return true;
         },
-        async login(email: string, password: string) {
-            const res = await AuthApi.login(email, password);
+        async login(email: string, password: string, recaptcha?: string) {
+            const res = await AuthApi.login(email, password, recaptcha);
             if (!res.data.Login) {
                 if (res.errors.length) {
                     throw res.errors;

@@ -1,3 +1,3 @@
-export default `mutation RequestPasswordReset($email: String!) {
-    RequestPasswordReset(email: $email)
+export default `mutation RequestPasswordReset($email: String!, $recaptcha: String!) {
+    RequestPasswordReset(email: $email, recaptchaResponse: $recaptcha)
   }`;

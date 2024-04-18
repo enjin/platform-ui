@@ -7,12 +7,13 @@ export class AuthApi {
         return ApiService.sendPlatformRequest(data, '/multi-tenant');
     }
 
-    static async login(email: string, password: string) {
+    static async login(email: string, password: string, recaptcha?: string) {
         const data = {
             query: queries.Login,
             variables: {
                 email,
                 password,
+                recaptcha,
             },
         };
 
@@ -35,23 +36,25 @@ export class AuthApi {
         return AuthApi.sendPlatfromRequest(data);
     }
 
-    static async register(email: string, password: string) {
+    static async register(email: string, password: string, recaptcha?: string) {
         const data = {
             query: mutations.RegisterUser,
             variables: {
                 email,
                 password,
+                recaptcha,
             },
         };
 
         return AuthApi.sendPlatfromRequest(data);
     }
 
-    static async requestPasswordReset(email: string) {
+    static async requestPasswordReset(email: string, recaptcha?: string) {
         const data = {
             query: mutations.RequestPasswordReset,
             variables: {
                 email,
+                recaptcha,
             },
         };
 
