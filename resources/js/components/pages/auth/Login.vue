@@ -56,7 +56,9 @@
                                 Forgot your password?
                             </RouterLink>
                         </div>
-                        <Btn is-submit primary :loading="isLoading" class="w-full"> Sign in </Btn>
+                        <Btn is-submit primary :disabled="!isCaptchaBadgeVisible" :loading="isLoading" class="w-full">
+                            Sign in
+                        </Btn>
                     </div>
                 </Form>
             </div>
@@ -112,6 +114,8 @@ const onCaptchaExpired = () => {
 
 const loadCaptchaScript = async () => {
     if (!hasCaptcha) {
+        isCaptchaBadgeVisible.value = true;
+
         return;
     }
     if (!document.getElementById('recaptcha-script')) {
@@ -214,6 +218,8 @@ const resendVerification = async () => {
     checkVerified();
     if (appStore.loggedIn) {
         redirectToCollections();
+    } else {
+        loadCaptchaScript();
     }
 })();
 
