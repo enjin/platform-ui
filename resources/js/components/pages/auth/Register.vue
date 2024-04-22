@@ -50,7 +50,9 @@
                                 </RouterLink>
                             </div>
                         </div>
-                        <Btn is-submit primary :loading="isLoading" class="w-full"> Register </Btn>
+                        <Btn is-submit primary :disabled="!isCaptchaBadgeVisible" :loading="isLoading" class="w-full">
+                            Register
+                        </Btn>
                     </div>
                 </Form>
             </div>
@@ -114,7 +116,11 @@ const onCaptchaExpired = () => {
 };
 
 const loadCaptchaScript = async () => {
-    if (!hasCaptcha) return;
+    if (!hasCaptcha) {
+        isCaptchaBadgeVisible.value = true;
+
+        return;
+    }
 
     if (!document.getElementById('recaptcha-script')) {
         const script = document.createElement('script');
@@ -165,6 +171,8 @@ const register = async (recaptcha?: string) => {
 (async () => {
     if (appStore.loggedIn) {
         redirectToLogin();
+    } else {
+        loadCaptchaScript();
     }
 })();
 </script>
