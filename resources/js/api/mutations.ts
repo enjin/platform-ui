@@ -35,8 +35,10 @@ import ExpireSingleUseCodes from '~/graphql/mutation/beam/ExpireSingleUseCodes';
 import RetryTransactions from '~/graphql/mutation/RetryTransactions';
 
 import RegisterUser from '~/graphql/mutation/auth/RegisterUser';
+import RegisterUserRecaptcha from '~/graphql/mutation/auth/RegisterUserRecaptcha';
 import ResetPassword from '~/graphql/mutation/auth/ResetPassword';
 import RequestPasswordReset from '~/graphql/mutation/auth/RequestPasswordReset';
+import RequestPasswordResetRecaptcha from '~/graphql/mutation/auth/RequestPasswordResetRecaptcha';
 import CreateApiToken from '~/graphql/mutation/auth/CreateApiToken';
 import RevokeApiTokens from '~/graphql/mutation/auth/RevokeApiTokens';
 import ResendVerifyEmail from '~/graphql/query/auth/ResendVerifyEmail';
@@ -102,8 +104,10 @@ export default {
     RetryTransactions,
 
     RegisterUser,
+    RegisterUserRecaptcha,
     ResetPassword,
     RequestPasswordReset,
+    RequestPasswordResetRecaptcha,
     CreateApiToken,
     RevokeApiTokens,
     ResendVerifyEmail,

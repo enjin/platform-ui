@@ -8,8 +8,9 @@ export class AuthApi {
     }
 
     static async login(email: string, password: string, recaptcha?: string) {
+        const query = recaptcha ? queries.LoginRecaptcha : queries.Login;
         const data = {
-            query: queries.Login,
+            query,
             variables: {
                 email,
                 password,
@@ -37,8 +38,10 @@ export class AuthApi {
     }
 
     static async register(email: string, password: string, recaptcha?: string) {
+        const query = recaptcha ? mutations.RegisterUserRecaptcha : mutations.RegisterUser;
+
         const data = {
-            query: mutations.RegisterUser,
+            query,
             variables: {
                 email,
                 password,
@@ -50,8 +53,9 @@ export class AuthApi {
     }
 
     static async requestPasswordReset(email: string, recaptcha?: string) {
+        const query = recaptcha ? mutations.RequestPasswordResetRecaptcha : mutations.RequestPasswordReset;
         const data = {
-            query: mutations.RequestPasswordReset,
+            query,
             variables: {
                 email,
                 recaptcha,
