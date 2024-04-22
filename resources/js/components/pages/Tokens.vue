@@ -28,10 +28,10 @@
                     </div>
                     <div class="flex gap-2 sm:px-6 lg:px-8 py-2 mb-2 items-end">
                         <RouterLink :to="{ name: 'platform.create.batch.mint' }">
-                            <Btn primary> Batch </Btn>
+                            <Btn primary dusk="batchBtn"> Batch </Btn>
                         </RouterLink>
                         <RouterLink :to="{ name: 'platform.create.token' }">
-                            <Btn primary> Create Token </Btn>
+                            <Btn primary dusk="createTokenBtn"> Create Token </Btn>
                         </RouterLink>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="tokens.items?.length">
+                    <table id="tokensTable" class="min-w-full divide-y divide-gray-300" v-if="tokens.items?.length">
                         <thead>
                             <tr>
                                 <th

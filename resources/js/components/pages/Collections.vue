@@ -17,7 +17,7 @@
                     </div>
                     <div class="flex md:px-6 lg:px-8 py-2 mb-2 items-end">
                         <RouterLink :to="{ name: 'platform.create.collection' }">
-                            <Btn primary> Create Collection </Btn>
+                            <Btn dusk="createCollectionBtn" primary> Create Collection </Btn>
                         </RouterLink>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="collections.items?.length">
+                    <table id="collectionsTable" class="min-w-full divide-y divide-gray-300" v-if="collections.items?.length">
                         <thead>
                             <tr>
                                 <th

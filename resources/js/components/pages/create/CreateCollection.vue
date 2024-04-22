@@ -6,8 +6,8 @@
                     <h1 class="text-xl font-medium md:text-2xl">Create Collection</h1>
                 </div>
                 <div class="space-x-4 ml-auto">
-                    <Btn :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
-                    <Btn :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
+                    <Btn dusk="simpleBtn" :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
+                    <Btn dusk="advancedBtn" :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
                 </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createCollection">
@@ -220,7 +220,7 @@
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.key"
-                                    :dusk="`input__attribute-key-${index + 1}`"
+                                    :name="`input__attribute-key-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -228,7 +228,7 @@
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.value"
-                                    :dusk="`input__attribute-value-${index + 1}`"
+                                    :name="`input__attribute-value-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -271,7 +271,7 @@
                     >
                         Cancel
                     </RouterLink>
-                    <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
+                    <Btn :loading="isLoading" :disabled="isLoading" primary is-submit dusk="createBtn">Create</Btn>
                 </div>
             </Form>
         </div>
