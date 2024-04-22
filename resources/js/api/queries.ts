@@ -12,6 +12,7 @@ import GetClaims from '~/graphql/query/beam/GetClaims';
 import GetSingleUseCodes from '~/graphql/query/beam/GetSingleUseCodes';
 
 import Login from '~/graphql/query/auth/Login';
+import LoginRecaptcha from '~/graphql/query/auth/LoginRecaptcha';
 import Logout from '~/graphql/query/auth/Logout';
 import User from '~/graphql/query/auth/User';
 
@@ -38,6 +39,7 @@ export default {
     GetSingleUseCodes,
 
     Login,
+    LoginRecaptcha,
     Logout,
     User,
 
