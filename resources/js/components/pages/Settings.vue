@@ -13,18 +13,18 @@
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                        <CollapseCard title="Api tokens" :actions="false" :isOpen="!appStore.hasValidConfig">
+                        <CollapseCard dusk-id="apiTokensTab" title="Api tokens" :actions="false" :isOpen="!appStore.hasValidConfig">
                             <div>
                                 <SettingsApiTokens />
                             </div>
                         </CollapseCard>
-                        <CollapseCard title="Wallet Account" :actions="false">
+                        <CollapseCard dusk-id="walletTab" title="Wallet Account" :actions="false">
                             <div>
                                 <SettingsWalletAccount />
                             </div>
                         </CollapseCard>
                     </div>
-                    <CollapseCard title="Helpful links" :actions="false">
+                    <CollapseCard dusk-id="linksTab" title="Helpful links" :actions="false">
                         <div>
                             <div class="flex flex-col space-y-4 p-6">
                                 <p
@@ -56,9 +56,9 @@
                         readmore="Advanced mode"
                     />
                     <div class="flex space-x-4">
-                        <Btn v-if="appStore.isMultiTenant" @click="confirmModal = true"> Delete account </Btn>
-                        <Btn v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
-                        <Btn v-else class="mr-auto" error @click="resetSettings"> Reset Settings </Btn>
+                        <Btn dusk="deleteBtn" v-if="appStore.isMultiTenant" @click="confirmModal = true">Delete account</Btn>
+                        <Btn dusk="logoutBtn" v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
+                        <Btn dusk="resetBtn" v-else class="mr-auto" error @click="resetSettings">Reset Settings</Btn>
                     </div>
                 </div>
             </template>

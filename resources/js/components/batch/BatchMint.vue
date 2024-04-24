@@ -63,16 +63,17 @@
                     <BatchMintForm v-model="item.values" @validation="setValidation(idx, $event)" />
                 </CollapseCard>
                 <div class="flex justify-between">
-                    <Btn class="!m-0 !flex" @click="addItem" primary>Add Item</Btn>
+                    <Btn dusk="addItemBtn" class="!m-0 !flex" @click="addItem" primary>Add Item</Btn>
                     <div class="flex space-x-3 justify-end">
                         <RouterLink
+                            dusk="cancelBtn"
                             :to="{ name: 'platform.tokens' }"
                             type="button"
                             class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                         >
                             Cancel
                         </RouterLink>
-                        <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Batch Mint</Btn>
+                        <Btn dusk="submitBtn" :loading="isLoading" :disabled="isLoading" primary is-submit>Batch Mint</Btn>
                     </div>
                 </div>
             </Form>

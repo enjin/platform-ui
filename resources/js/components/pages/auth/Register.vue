@@ -139,7 +139,6 @@ const verifyCaptcha = () => {
     if (!hasCaptcha) {
         return register();
     }
-
     captchaRef.value.execute();
 };
 

@@ -6,8 +6,8 @@
                     <h1 class="text-2xl">Create Token</h1>
                 </div>
                 <div class="space-x-4 ml-auto">
-                    <Btn :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
-                    <Btn :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
+                    <Btn dusk="simpleBtn" :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
+                    <Btn dusk="advancedBtn" :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
                 </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createToken">
@@ -85,6 +85,7 @@
                                         'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'nft',
                                     }"
                                     @click="tokenType = 'nft'"
+                                    dusk="nftOption"
                                 >
                                     <div class="font-bold text-lg">Non Fungible Token (NFT)</div>
                                     <div class="text-xs mt-1">
@@ -97,6 +98,7 @@
                                         'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'ft',
                                     }"
                                     @click="tokenType = 'ft'"
+                                    dusk="ftOption"
                                 >
                                     <div class="font-bold text-lg">Fungible Token (FT)</div>
                                     <div class="text-xs mt-1">
@@ -182,7 +184,7 @@
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.key"
-                                    :dusk="`input__attribute-key-${index + 1}`"
+                                    :name="`input__attribute-key-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -190,7 +192,7 @@
                             <div class="flex-1">
                                 <input
                                     v-model="inputs.value"
-                                    :dusk="`input__attribute-value-${index + 1}`"
+                                    :name="`input__attribute-value-${index + 1}`"
                                     type="text"
                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
@@ -242,11 +244,12 @@
                     <RouterLink
                         :to="{ name: 'platform.tokens' }"
                         type="button"
+                        dusk="cancelBtn"
                         class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
                         Cancel
                     </RouterLink>
-                    <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
+                    <Btn dusk="createBtn" :loading="isLoading" :disabled="isLoading" primary is-submit>Create</Btn>
                 </div>
             </Form>
         </div>
