@@ -32,6 +32,7 @@
                         <div class="flex items-center justify-start mb-4">
                             <div class="text-sm">
                                 <RouterLink
+                                    id="backToLoginLink"
                                     :to="{ name: 'platform.auth.login' }"
                                     class="font-medium text-primary hover:text-primary-light"
                                 >

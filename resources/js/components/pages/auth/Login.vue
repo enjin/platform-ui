@@ -44,12 +44,14 @@
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <RouterLink
+                                id="createAccountLink"
                                 :to="{ name: 'platform.auth.register' }"
                                 class="font-medium text-primary hover:text-primary-light text-xs sm:text-sm"
                             >
                                 Create an account
                             </RouterLink>
                             <RouterLink
+                                id="forgotPasswordLink"
                                 :to="{ name: 'platform.auth.forgot.password' }"
                                 class="font-medium text-primary hover:text-primary-light text-xs sm:text-sm"
                             >
