@@ -73,7 +73,9 @@
                         >
                             Cancel
                         </RouterLink>
-                        <Btn dusk="submitBtn" :loading="isLoading" :disabled="isLoading" primary is-submit>Batch Mint</Btn>
+                        <Btn dusk="submitBtn" :loading="isLoading" :disabled="isLoading" primary is-submit
+                            >Batch Mint</Btn
+                        >
                     </div>
                 </div>
             </Form>

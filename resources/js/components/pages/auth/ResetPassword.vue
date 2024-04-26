@@ -104,15 +104,10 @@ const resetPassword = async () => {
             snackbar.error({ title: 'Invalid user', text: 'Please check the email provided' });
         }
     } catch (e: any) {
-        if (snackbarErrors(e)) return;
-        if (e.message.includes('Too many requests')) {
-            snackbar.error({
-                title: 'Too many requests',
-                text: e.message,
-            });
-        } else {
-            snackbar.error({ title: 'Error resetting password.' });
+        if (snackbarErrors(e)) {
+            return;
         }
+        snackbar.error({ title: 'Error resetting password.' });
     } finally {
         isLoading.value = false;
     }

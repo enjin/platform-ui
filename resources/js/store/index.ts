@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia';
-import { AppState } from '~/types/types.interface';
-import appConfig from '~/config.json';
 import { ApiService } from '~/api';
-import snackbar from '~/util/snackbar';
+import { AppState } from '~/types/types.interface';
 import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
+import appConfig from '~/config.json';
+import { defineStore } from 'pinia';
+import snackbar from '~/util/snackbar';
 import { useConnectionStore } from './connection';
 
 const parseConfigURL = (url: string): URL => {
@@ -56,7 +56,7 @@ export const useAppStore = defineStore('app', {
                 }
 
                 const urlConfig = await this.checkURL(this.config.url);
-                this.config.network = urlConfig.network;
+                this.config.network = urlConfig?.network;
                 this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
                     let link =
                         urlConfig.url +
