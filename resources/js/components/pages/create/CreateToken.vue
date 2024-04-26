@@ -48,25 +48,24 @@
                             readmore="Token ID"
                         />
                         <FormInput
+                            v-model="name"
+                            name="name"
+                            label="Name"
+                            description="The name of the token."
+                            required
+                        />
+                        <FormInput
                             v-model="imageUrl"
                             name="imageUrl"
                             label="Image URL"
                             class="w-full"
                             description="The URL of the image for the token."
-                            required
-                        />
-                        <FormInput
-                            v-model="name"
-                            name="name"
-                            label="Name"
-                            description="The name of the collection."
-                            required
                         />
                         <RichTextEditor
                             v-model="description"
                             name="description"
                             label="Description"
-                            description="The description of the collection."
+                            description="The description of the token."
                         />
                         <FormInput
                             v-model="recipient"
@@ -326,7 +325,7 @@ const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
 
 const validation = yup.object({
-    imageUrl: stringRequiredSchema,
+    imageUrl: stringNotRequiredSchema,
     name: stringRequiredSchema,
     description: stringNotRequiredSchema,
     collectionId: collectionIdRequiredSchema,
