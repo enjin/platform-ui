@@ -1,7 +1,7 @@
-import { useAppStore } from '~/store';
 import { HttpMethods } from '~/types/types.enums';
 import mutations from '~/api/mutations';
 import snackbar from '~/util/snackbar';
+import { useAppStore } from '~/store';
 
 export class ApiService {
     static async reloadCsrf() {
@@ -68,7 +68,9 @@ export class ApiService {
             }
         }
 
-        if (resp.status === 204) return null;
+        if (resp.status === 204) {
+            return null;
+        }
 
         if (resp.status === 401) {
             useAppStore().clearLogin();
@@ -77,7 +79,7 @@ export class ApiService {
         }
 
         if (resp.status >= 400 && resp.status < 600) {
-            throw resp as unknown as Error;
+            throw resp;
         }
 
         return resp.json();
@@ -95,29 +97,37 @@ export class ApiService {
                 url: `${appStore.config.url}graphql${schema}`,
                 data,
                 credentials: appStore.isMultiTenant ? 'include' : 'omit',
-            }).then((res: any) => {
-                if (res.errors) {
-                    const message = res.errors[0].message;
-                    if (message === 'validation') {
-                        const error = res.errors[0].extensions?.validation;
-                        const errors = Object.keys(error).map((key) => {
-                            return {
-                                field: key,
-                                message: error[key][0],
-                            };
+            })
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((error) => {
+                    if (error instanceof Response) {
+                        error.json().then((res) => {
+                            if (res.errors) {
+                                const message = res.errors[0].message;
+                                if (message === 'validation') {
+                                    const error = res.errors[0].extensions?.validation;
+                                    const errors = Object.keys(error).map((key) => {
+                                        return {
+                                            field: key,
+                                            message: error[key][0],
+                                        };
+                                    });
+                                    reject(errors);
+                                } else {
+                                    reject({ field: 'Error', message });
+                                }
+                            }
+
+                            if (res.field == 'Error') {
+                                reject(res);
+                            }
                         });
-                        reject(errors);
                     } else {
-                        reject({ field: 'Error', message });
+                        reject({ field: 'Error', message: 'Unknown error' });
                     }
-                }
-
-                if (res.field == 'Error') {
-                    reject(res);
-                }
-
-                resolve(res);
-            });
+                });
         });
     }
 

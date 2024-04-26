@@ -127,14 +127,20 @@ const requestReset = async (recaptcha?: string) => {
     isLoading.value = true;
     try {
         await AuthApi.requestPasswordReset(email.value, recaptcha);
-    } catch {
-        // do nothing
+        snackbar.success({
+            title: "If an account with this email exists, you'll receive an email shortly with information on resetting your password.",
+            save: false,
+        });
+    } catch (e: any) {
+        if (e.message.includes('Too many requests')) {
+            snackbar.error({
+                title: 'Error',
+                text: e.message,
+            });
+        }
+    } finally {
+        isLoading.value = false;
     }
-    snackbar.success({
-        title: "If an account with this email exists, you'll receive an email shortly with information on resetting your password.",
-        save: false,
-    });
-    isLoading.value = false;
 };
 
 (async () => {
