@@ -1,7 +1,13 @@
 <template>
     <div>
         <div v-if="enableReset" class="flex flex-col space-y-4">
-            <Form id="passwordResetForm" ref="formRef" class="space-y-6" :validation-schema="validation" @submit="resetPassword">
+            <Form
+                id="passwordResetForm"
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @submit="resetPassword"
+            >
                 <FormInput
                     v-model="oldPassword"
                     label="Old Password"

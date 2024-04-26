@@ -13,7 +13,12 @@
                 </div>
                 <div class="flex flex-col space-y-8">
                     <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
-                        <CollapseCard dusk-id="apiTokensTab" title="Api tokens" :actions="false" :isOpen="!appStore.hasValidConfig">
+                        <CollapseCard
+                            dusk-id="apiTokensTab"
+                            title="Api tokens"
+                            :actions="false"
+                            :isOpen="!appStore.hasValidConfig"
+                        >
                             <div>
                                 <SettingsApiTokens />
                             </div>
@@ -56,7 +61,9 @@
                         readmore="Advanced mode"
                     />
                     <div class="flex space-x-4">
-                        <Btn dusk="deleteBtn" v-if="appStore.isMultiTenant" @click="confirmModal = true">Delete account</Btn>
+                        <Btn dusk="deleteBtn" v-if="appStore.isMultiTenant" @click="confirmModal = true"
+                            >Delete account</Btn
+                        >
                         <Btn dusk="logoutBtn" v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
                         <Btn dusk="resetBtn" v-else class="mr-auto" error @click="resetSettings">Reset Settings</Btn>
                     </div>

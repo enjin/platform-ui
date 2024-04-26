@@ -25,7 +25,11 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table id="collectionsTable" class="min-w-full divide-y divide-gray-300" v-if="collections.items?.length">
+                    <table
+                        id="collectionsTable"
+                        class="min-w-full divide-y divide-gray-300"
+                        v-if="collections.items?.length"
+                    >
                         <thead>
                             <tr>
                                 <th
