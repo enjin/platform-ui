@@ -370,7 +370,7 @@ const loadMoreApi = async () => {
         return DTOFactory.forSingleUseCodes(res);
     } else {
         const res = await BeamApi.getBeams({
-            codes: [searchInput.value],
+            ...formatData(searchInput.value ? { codes: [searchInput.value] } : {}),
             after: beams.value.cursor,
         });
 
