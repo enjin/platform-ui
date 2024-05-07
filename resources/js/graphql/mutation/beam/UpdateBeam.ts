@@ -1,4 +1,4 @@
-export default `mutation UpdateBeam($code: String!, $name: String, $description: String, $image: String, $start: DateTime, $end: DateTime, $flags: [BeamFlagInputType!]) {
+export default `mutation UpdateBeam($code: String!, $name: String, $description: String, $image: String, $start: DateTime, $end: DateTime, $flags: [BeamFlagInputType!], $claimConditions:  [ClaimConditionInputType]) {
     UpdateBeam(
       code: $code
       name: $name
@@ -7,5 +7,6 @@ export default `mutation UpdateBeam($code: String!, $name: String, $description:
       start: $start
       end: $end
       flags: $flags
+      claimConditions: $claimConditions
     )
   }`;

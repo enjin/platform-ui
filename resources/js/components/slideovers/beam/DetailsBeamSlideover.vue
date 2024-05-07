@@ -53,6 +53,16 @@
                         <dt class="text-base font-medium text-gray-500">Flags</dt>
                         <Chip v-for="flag in item.flags" :key="flag" :text="flag" :closable="false" class="mr-2" />
                     </div>
+                    <div class="space-y-2 pt-4 pb-3" v-if="item.claimConditions.length">
+                        <dt class="text-base font-medium text-gray-500">Conditions</dt>
+                        <Chip
+                            v-for="condition in item.claimConditions"
+                            :key="condition.type"
+                            :text="formatCondition(condition)"
+                            :closable="false"
+                            class="mr-2"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,6 +87,13 @@ defineProps<{
         isClaimable: boolean;
         flags: string[];
         image: string;
+        claimConditions: { type: string; value: string }[];
     };
 }>();
+
+const formatCondition = (condition) => {
+    const type = condition.type.replace(/_/g, ' ');
+
+    return `${type}: ${condition.value}`;
+};
 </script>
