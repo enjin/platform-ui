@@ -30,6 +30,7 @@
                         @click="openHelp"
                     />
                     <NotificationsList />
+                    <ThemeToggler />
                     <ProfileMenu />
                 </div>
             </div>
@@ -60,7 +61,8 @@ import DisclosureMenu from '~/components/DisclosureMenu.vue';
 import NotificationsList from '~/components/NotificationsList.vue';
 import Handbook from '~/components/Handbook.vue';
 import WalletConnectButton from '~/components/WalletConnectButton.vue';
-import CanaryEnjinLogo from './CanaryEnjinLogo.vue';
+import CanaryEnjinLogo from '~/components/CanaryEnjinLogo.vue';
+import ThemeToggler from '~/components/ThemeToggler.vue';
 
 const open = ref(false);
 const help = ref(false);

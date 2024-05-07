@@ -23,6 +23,7 @@ export interface AppState {
     newCollection: boolean;
     user: any;
     tokensCount: number;
+    theme?: 'dark' | 'light';
 }
 
 export interface ConnectionState {
