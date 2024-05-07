@@ -18,7 +18,9 @@
                         allow different means of access to the same fuel tank, where each set is identified by u32 and
                         user must provide rule set ID when dispatching a call through fuel tank."
                     >
-                        <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                        <QuestionMarkCircleIcon
+                            class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                        />
                     </Tooltip>
                 </div>
                 <FormInput
@@ -42,10 +44,10 @@
                         <PlusIcon class="w-6 h-6 m-auto" />
                     </Btn>
                 </div>
-                <div class="space-y-6 divide-y-[1px] divide-gray-300">
+                <div class="space-y-6 divide-y-[1px] divide-light-stroke dark:divide-dark-stroke">
                     <div v-if="checkSelectedDispatchRule(DispatchRules.WhitelistedCallers)" class="relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.WhitelistedCallers)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -77,7 +79,7 @@
                                         v-model="inputs.caller"
                                         :dusk="`input__caller-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                             </template>
@@ -86,7 +88,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.RequireToken)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.RequireToken)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -115,7 +117,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.WhitelistedCollections)" class="relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.WhitelistedCollections)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -160,7 +162,7 @@
                         class="relative pt-3"
                     >
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.MaxFuelBurnPerTransaction)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -176,7 +178,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.PermittedExtrinsic)" class="relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.PermittedExtrinsic)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -206,7 +208,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.UserFuelBudget)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.UserFuelBudget)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -242,7 +244,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.TankFuelBudget)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.TankFuelBudget)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />

@@ -19,8 +19,10 @@
             <template v-for="option in options" :key="option.value">
                 <div
                     :class="[
-                        hasValue(option.value) ? 'border-primary ring-2 ring-primary' : '',
-                        'relative flex cursor-pointer rounded-lg border bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
+                        hasValue(option.value)
+                            ? 'ring-primary'
+                            : 'ring-light-stroke-strong dark:ring-dark-stroke-strong',
+                        'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
                     ]"
                     @click="updateCheckbox(option.value)"
                 >
@@ -32,7 +34,9 @@
                                 {{ option.label }}
                             </span>
                             <Tooltip class="!flex items-center" v-if="option.tooltip" :text="option.tooltip">
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </span>
                     </span>

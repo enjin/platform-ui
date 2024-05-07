@@ -2,7 +2,7 @@
     <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
         <div class="flow-root space-y-4 pb-4 max-w-3xl mx-auto">
             <div class="mb-4">
-                <h1 class="text-2xl">Create Beam</h1>
+                <h1 class="text-2xl text-light-content-strong dark:text-dark-content-strong">Create Beam</h1>
             </div>
             <CollapseCard
                 v-for="(item, idx) in tokens"
@@ -16,7 +16,10 @@
                     <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
                 </template>
                 <template #actions>
-                    <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
+                    <XMarkIcon
+                        class="h-5 w-5 cursor-pointer text-light-content dark:text-dark-content"
+                        @click="removeItem(idx)"
+                    />
                 </template>
                 <ClaimableTokenForm v-model="item.values" @validation="setValidation(idx, $event)" />
             </CollapseCard>
@@ -102,7 +105,7 @@
                         <RouterLink
                             :to="{ name: 'platform.beams' }"
                             type="button"
-                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                         >
                             Cancel
                         </RouterLink>

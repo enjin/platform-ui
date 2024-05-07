@@ -1,13 +1,13 @@
 <template>
     <div
-        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
     >
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
             Transaction Details for {{ transaction?.transactionId ?? transaction?.id }}
         </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
-                <div class="px-4 sm:px-6 divide-y divide-gray-200">
+                <div class="px-4 sm:px-6 divide-y divide-light-stroke dark:divide-dark-stroke">
                     <div>
                         <template v-if="transaction?.state === TransactionState.PENDING">
                             <div class="flex justify-center py-4">
@@ -133,7 +133,10 @@
                         >
                             Events
                         </h3>
-                        <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="events?.length">
+                        <div
+                            class="space-y-2 pb-3 divide divide-y divide-light-stroke dark:divide-dark-stroke"
+                            v-if="events?.length"
+                        >
                             <div class="" v-for="event in events" :key="event">
                                 <div class="space-y-2 pt-4 pb-3">
                                     <dt class="text-base font-medium text-light-content dark:text-dark-content">
@@ -175,7 +178,10 @@
                             >
                                 Advanced Events
                             </h3>
-                            <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="advancedEvents.length">
+                            <div
+                                class="space-y-2 pb-3 divide divide-y divide-light-stroke dark:divide-dark-stroke"
+                                v-if="advancedEvents.length"
+                            >
                                 <div class="" v-for="event in advancedEvents" :key="event">
                                     <div class="space-y-2 pt-4 pb-3">
                                         <dt class="text-base font-medium text-light-content dark:text-dark-content">

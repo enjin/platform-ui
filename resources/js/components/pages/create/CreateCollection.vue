@@ -3,7 +3,9 @@
         <div class="flow-root max-w-3xl mx-auto">
             <div class="mb-4 flex items-center justify-between">
                 <div>
-                    <h1 class="text-xl font-medium md:text-2xl">Create Collection</h1>
+                    <h1 class="text-xl font-medium md:text-2xl text-light-content-strong dark:text-dark-content-strong">
+                        Create Collection
+                    </h1>
                 </div>
                 <div class="space-x-4 ml-auto">
                     <Btn dusk="simpleBtn" :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
@@ -11,7 +13,7 @@
                 </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createCollection">
-                <div class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
+                <div class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg">
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
@@ -58,7 +60,10 @@
                         />
                     </div>
                 </div>
-                <div v-if="isAdvanced" class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
+                <div
+                    v-if="isAdvanced"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg"
+                >
                     <div class="space-y-4">
                         <div class="flex items-center">
                             <h3
@@ -111,7 +116,9 @@
                     </div>
                 </div>
 
-                <div class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                >
                     <div class="space-y-6">
                         <div class="flex items-center">
                             <h3
@@ -123,7 +130,9 @@
                                 text="This section determines the rules which tokens and collections must follow when
                                 interacting with Marketplace on the blockchain."
                             >
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                             <p class="mt-1 text-sm text-light-content dark:text-dark-content"></p>
                         </div>
@@ -154,7 +163,7 @@
 
                 <div
                     v-if="isAdvanced"
-                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
                     <FormList
                         v-model="explicitRoyaltyCurrencies"
@@ -213,7 +222,7 @@
 
                 <div
                     v-if="isAdvanced"
-                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
                     <FormList
                         v-model="attributes"
@@ -252,7 +261,7 @@
                                     v-model="inputs.key"
                                     :name="`input__attribute-key-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                             <div class="flex-1">
@@ -260,7 +269,7 @@
                                     v-model="inputs.value"
                                     :name="`input__attribute-value-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                         </template>
@@ -269,7 +278,7 @@
 
                 <div
                     v-if="isAdvanced"
-                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
                     <div class="space-y-6">
                         <div class="">
@@ -301,7 +310,7 @@
                     <RouterLink
                         :to="{ name: 'platform.collections' }"
                         type="button"
-                        class="rounded-md bg-light-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
                         Cancel
                     </RouterLink>

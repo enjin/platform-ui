@@ -14,9 +14,11 @@
             <ScaleTransition>
                 <MenuItems
                     v-if="appStore.loggedIn"
-                    class="absolute right-0 z-10 mt-2 w-72 sm:w-80 origin-top-right divide-y divide-gray-100 rounded-md bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
+                    class="absolute right-0 z-10 mt-2 w-72 sm:w-80 origin-top-right divide-y divide-light-stroke dark:divide-dark-stroke rounded-md bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
                 >
-                    <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 scrollbar-hide">
+                    <div
+                        class="max-h-80 overflow-y-auto divide-y divide-light-stroke dark:divide-dark-stroke scrollbar-hide"
+                    >
                         <MenuItem
                             class="group flex flex-row justify-between overflow-hidden"
                             as="div"
@@ -53,7 +55,7 @@
 
                     <div v-if="notifications.length">
                         <button
-                            class="block px-4 py-2 text-sm w-full transition-all text-gray-700 hover:bg-gray-100 hover:text-light-content-strong dark:text-dark-content-strong"
+                            class="block px-4 py-2 text-sm w-full transition-all text-light-content dark:text-dark-content hover:bg-light-surface-background hover:dark:bg-dark-surface-background hover:text-light-content-strong hover:dark:text-dark-content-strong"
                             @click="clearAll"
                         >
                             Clear All
@@ -89,7 +91,7 @@ const notificationColor = (type: NotificationType) => {
         case NotificationType.Info:
             return 'bg-blue-400';
         default:
-            return 'bg-gray-100';
+            return 'bg-light-surface-background dark:bg-dark-surface-background';
     }
 };
 

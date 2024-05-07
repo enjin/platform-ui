@@ -1,7 +1,7 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="formAction"
     >
@@ -17,7 +17,10 @@
                     :items="actions"
                     :cols="actions.length"
                 />
-                <div class="divide-y divide-gray-200 px-4 sm:px-6" v-if="actionType !== 'list'">
+                <div
+                    class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6"
+                    v-if="actionType !== 'list'"
+                >
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
                             v-model="tankId"
@@ -56,7 +59,7 @@
                                         v-model="inputs.userId"
                                         :dusk="`input__user-id-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                             </template>
@@ -77,7 +80,10 @@
                         class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                         :is-loading="isLoading"
                     >
-                        <table class="min-w-full divide-y divide-gray-300" v-if="accounts.items?.length">
+                        <table
+                            class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                            v-if="accounts.items?.length"
+                        >
                             <thead>
                                 <tr>
                                     <th
@@ -98,7 +104,11 @@
                                 <tr
                                     v-for="(account, idx) in accounts.items"
                                     :key="idx"
-                                    :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                    :class="
+                                        idx % 2 === 0
+                                            ? undefined
+                                            : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                    "
                                 >
                                     <td
                                         class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"

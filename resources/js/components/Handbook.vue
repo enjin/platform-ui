@@ -10,7 +10,9 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity" />
+                <div
+                    class="fixed inset-0 bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-500 bg-opacity-25 transition-opacity"
+                />
             </TransitionChild>
 
             <div class="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
@@ -24,7 +26,7 @@
                     leave-to="opacity-0 scale-95"
                 >
                     <DialogPanel
-                        class="mx-auto max-w-3xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-light-surface-primary dark:bg-dark-surface-primary shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
+                        class="mx-auto max-w-3xl transform divide-y divide-light-stroke dark:divide-dark-stroke overflow-hidden rounded-xl bg-light-surface-primary dark:bg-dark-surface-primary shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
                     >
                         <Combobox v-model="selectedContent">
                             <div class="relative">
@@ -33,7 +35,7 @@
                                     aria-hidden="true"
                                 />
                                 <ComboboxInput
-                                    class="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-light-content-strong dark:text-dark-content-strong placeholder:text-light-content dark:text-dark-content focus:ring-0 sm:text-sm"
+                                    class="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-light-content-strong dark:text-dark-content-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-0 sm:text-sm"
                                     placeholder="Search..."
                                     :value="query"
                                     @change="queryChange"
@@ -42,7 +44,7 @@
 
                             <ComboboxOptions
                                 v-if="query === '' || filteredContent.length > 0"
-                                class="flex divide-x divide-gray-100"
+                                class="flex divide-x divide-light-stroke dark:divide-dark-stroke"
                                 as="div"
                                 static
                                 hold
@@ -53,7 +55,7 @@
                                         selectedContent && 'sm:h-96',
                                     ]"
                                 >
-                                    <div hold class="-mx-2 text-sm text-gray-700">
+                                    <div hold class="-mx-2 text-sm text-light-content dark:text-dark-content">
                                         <ComboboxOption
                                             v-for="content in query === '' ? contents : filteredContent"
                                             :key="content.id"
@@ -65,9 +67,9 @@
                                                 :class="[
                                                     'group flex cursor-default select-none items-center rounded-md p-2 transition-all',
                                                     active &&
-                                                        'bg-gray-100 text-light-content-strong dark:text-dark-content-strong',
+                                                        'bg-light-surface-background dark:bg-dark-surface-background text-light-content-strong dark:text-dark-content-strong',
                                                     selectedContent?.id === content.id &&
-                                                        'bg-gray-50 text-light-content-strong dark:text-dark-content-strong',
+                                                        'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 text-light-content-strong dark:text-dark-content-strong',
                                                 ]"
                                             >
                                                 <span class="ml-3 flex-auto truncate">{{ content.name }}</span>
@@ -84,7 +86,7 @@
                                 <div class="h-96 w-1/2 overflow-y-auto">
                                     <div
                                         v-if="selectedContent"
-                                        class="flex flex-none flex-col divide-y divide-gray-100"
+                                        class="flex flex-none flex-col divide-y divide-light-stroke dark:divide-dark-stroke"
                                     >
                                         <div class="flex-none p-6 text-center">
                                             <h2
@@ -93,7 +95,9 @@
                                                 {{ selectedContent.name }}
                                             </h2>
                                         </div>
-                                        <div class="flex flex-col p-6 space-y-2 text-sm">
+                                        <div
+                                            class="flex flex-col p-6 space-y-2 text-sm text-light-content dark:text-dark-content"
+                                        >
                                             <ul v-if="selectedContent.type === 'list'" class="list-disc space-y-2">
                                                 <li v-for="option in selectedContent.content" :key="option">
                                                     <span

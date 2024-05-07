@@ -47,7 +47,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex border-l border-gray-200" v-if="notification.event">
+                            <div
+                                class="flex border-l border-light-stroke dark:border-dark-stroke"
+                                v-if="notification.event"
+                            >
                                 <button
                                     type="button"
                                     @click="close(notification.id, true)"

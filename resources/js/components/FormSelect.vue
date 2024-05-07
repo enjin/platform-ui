@@ -18,7 +18,7 @@
                         class="relative w-full cursor-default overflow-hidden bg-light-surface-primary dark:bg-dark-surface-primary text-left text-sm leading-6 transition-all"
                     >
                         <ComboboxInput
-                            :class="`w-full py-2.5 pl-3 pr-10 text-sm leading-5 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary rounded-md transition-all disabled:bg-gray-100 {inputClass}`"
+                            class="w-full py-2.5 pl-3 pr-10 text-sm leading-5 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary rounded-md transition-all disabled:bg-dark-surface-background/10 disabled:dark:bg-light-surface-background/10 bg-light-surface-background dark:bg-dark-surface-background"
                             @change="query = $event.target.value"
                             @click="openSelect"
                         />
@@ -40,7 +40,7 @@
                         >
                             <div
                                 v-if="filteredOptions.length === 0 && query !== ''"
-                                class="relative cursor-default select-none py-2 px-4 text-gray-700"
+                                class="relative cursor-default select-none py-2 px-4 text-light-content dark:text-dark-content"
                             >
                                 Nothing found.
                             </div>
@@ -55,7 +55,8 @@
                                 <li
                                     class="relative cursor-default select-none py-2 pl-10 pr-4 transition-all"
                                     :class="{
-                                        'bg-primary-light/10': active,
+                                        'bg-light-surface-primary/10 text-light-content-strong dark:text-dark-content-strong':
+                                            active,
                                         'text-light-content-strong dark:text-dark-content-strong': !active,
                                     }"
                                 >

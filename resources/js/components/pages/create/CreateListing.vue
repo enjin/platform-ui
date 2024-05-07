@@ -2,7 +2,9 @@
     <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
         <div class="flow-root space-y-4 pb-4 max-w-3xl mx-auto">
             <div class="mb-4">
-                <h1 class="text-xl md:text-2xl">Create Listing</h1>
+                <h1 class="text-xl md:text-2xl text-light-content-strong dark:text-dark-content-strong">
+                    Create Listing
+                </h1>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createListing">
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
@@ -140,7 +142,7 @@
                     <RouterLink
                         :to="{ name: 'platform.marketplace' }"
                         type="button"
-                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
                         Cancel
                     </RouterLink>

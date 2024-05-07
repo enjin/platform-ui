@@ -16,11 +16,11 @@
                         >
                             <template #addon>
                                 <div
-                                    class="rounded-r-md border border-l-0 border-gray-300 inset-y-0 left-0 flex items-center"
+                                    class="rounded-r-md border border-l-0 border-light-stroke-strong dark:border-dark-stroke-strong inset-y-0 left-0 flex items-center"
                                 >
                                     <select
                                         v-model="searchCodeType"
-                                        class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-light-content dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+                                        class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-light-content dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm cursor-pointer"
                                     >
                                         <option v-for="codeType in codeTypes" :key="codeType">
                                             {{ codeType }}
@@ -61,13 +61,16 @@
                             </Btn>
                             <Btn class="!px-2 !py-1 text-sm animate-fade-in" @click="exportSelectedBeams">Export</Btn>
                         </div>
-                        <table v-if="beams.items?.length" class="min-w-full divide-y divide-gray-300">
+                        <table
+                            v-if="beams.items?.length"
+                            class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        >
                             <thead>
                                 <tr>
                                     <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
                                         <input
                                             type="checkbox"
-                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary transition-all"
+                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary transition-all bg-light-surface-background dark:bg-dark-surface-background"
                                             :checked="isChecked"
                                             :indeterminate="indeterminate"
                                             @change="checkedChange"
@@ -110,7 +113,10 @@
                                 <tr
                                     v-for="beam in beams.items"
                                     :key="beam.id"
-                                    :class="[checkBeamIncluded(beam) && 'bg-gray-50']"
+                                    :class="[
+                                        checkBeamIncluded(beam) &&
+                                            'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50',
+                                    ]"
                                 >
                                     <td class="relative px-7 sm:w-12 sm:px-6">
                                         <div
@@ -119,7 +125,7 @@
                                         ></div>
                                         <input
                                             type="checkbox"
-                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary transition-all"
+                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary transition-all bg-light-surface-background dark:bg-dark-surface-background"
                                             :value="beam"
                                             v-model="selectedBeams"
                                         />

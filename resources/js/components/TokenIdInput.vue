@@ -20,12 +20,14 @@
             </TranslateTransition>
         </template>
         <template #addon>
-            <div class="rounded-r-md border border-l-0 border-gray-300 inset-y-0 right-0 flex items-center z-10">
+            <div
+                class="rounded-r-md border border-l-0 border-light-stroke-strong dark:border-dark-stroke-strong inset-y-0 right-0 flex items-center z-10"
+            >
                 <select
                     v-model="localTokenType"
                     name="tokenType"
                     :disabled="disabled"
-                    class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-light-content dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary text-sm disabled:bg-gray-100"
+                    class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-light-content dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary text-sm disabled:bg-dark-surface-background/10 disabled:dark:bg-light-surface-background/10 cursor-pointer"
                 >
                     <option v-for="tokenType in tokenTypes" :key="tokenType" :value="tokenType">
                         <span class="uppercase">

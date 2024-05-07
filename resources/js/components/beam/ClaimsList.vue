@@ -28,7 +28,10 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="claims.items?.length">
+                    <table
+                        class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        v-if="claims.items?.length"
+                    >
                         <thead>
                             <tr>
                                 <th
@@ -56,7 +59,11 @@
                             <tr
                                 v-for="(beam, idx) in claims.items"
                                 :key="beam.id"
-                                :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                :class="
+                                    idx % 2 === 0
+                                        ? undefined
+                                        : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                "
                             >
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"

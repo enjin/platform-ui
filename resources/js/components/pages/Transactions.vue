@@ -37,13 +37,16 @@
                                 {{ `Retry ${selectedTransaction.length > 1 ? 'all' : ''}` }}
                             </Btn>
                         </div>
-                        <table class="min-w-full divide-y divide-gray-300" v-if="transactions.items?.length">
+                        <table
+                            class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                            v-if="transactions.items?.length"
+                        >
                             <thead>
                                 <tr>
                                     <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
                                         <input
                                             type="checkbox"
-                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary bg-light-surface-background dark:bg-dark-surface-background"
                                             :checked="isChecked"
                                             :indeterminate="indeterminate"
                                             @change="checkedChange"
@@ -91,7 +94,10 @@
                                 <tr
                                     v-for="transaction in transactions.items"
                                     :key="transaction.id"
-                                    :class="[selectedTransaction.includes(transaction.id) && 'bg-gray-50']"
+                                    :class="[
+                                        selectedTransaction.includes(transaction.id) &&
+                                            'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50',
+                                    ]"
                                 >
                                     <td class="relative px-7 sm:w-12 sm:px-6">
                                         <div
@@ -100,7 +106,7 @@
                                         ></div>
                                         <input
                                             type="checkbox"
-                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary bg-light-surface-background dark:bg-dark-surface-background"
                                             :value="transaction.id"
                                             v-model="selectedTransaction"
                                         />

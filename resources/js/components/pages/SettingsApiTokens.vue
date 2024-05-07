@@ -1,7 +1,7 @@
 <template>
     <div class="p-6">
         <div class="flex justify-between mb-4">
-            <h1 class="text-xl">
+            <h1 class="text-xl text-light-content-strong dark:text-dark-content-strong">
                 My API Tokens
                 <span v-if="enableTokenCreate && !tokens?.length" class="text-red-500">&nbsp;*</span>
             </h1>
@@ -30,7 +30,7 @@
         </div>
         <div class="grid grid-cols-1 gap-4">
             <div
-                class="bg-gray-50 p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center gr"
+                class="bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 p-3 shadow sm:rounded-lg sm:p-4 flex justify-between items-center gr"
                 v-for="token in tokens"
                 :key="token.name"
             >

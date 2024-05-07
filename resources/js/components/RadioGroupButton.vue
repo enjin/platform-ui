@@ -25,8 +25,8 @@
             >
                 <div
                     :class="[
-                        active || checked ? 'border-primary ring-2 ring-primary' : '',
-                        'relative flex cursor-pointer rounded-lg border bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
+                        active || checked ? 'ring-primary' : 'ring-light-stroke-strong dark:ring-dark-stroke-strong',
+                        'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
                     ]"
                 >
                     <span class="flex flex-1 items-center break-words">

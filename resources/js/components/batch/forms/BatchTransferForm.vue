@@ -56,7 +56,9 @@
                             using tokens from somebody else's wallet as the source. To make this type of transfer the
                             source wallet owner must approve you for transferring their tokens."
                         >
-                            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                            <QuestionMarkCircleIcon
+                                class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                            />
                         </Tooltip>
                     </div>
                     <FormInput

@@ -6,7 +6,7 @@
         :class="{
             'text-white bg-primary hover:bg-primary-light': primary,
             'text-white bg-red-500 hover:bg-red-600': error,
-            'text-light-content-strong dark:text-dark-content-strong bg-light-surface-primary dark:bg-dark-surface-primary hover:bg-gray-50 ring-1 ring-inset ring-gray-300':
+            'text-light-content-strong dark:text-dark-content-strong bg-light-surface-primary dark:bg-dark-surface-primary hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50 ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong':
                 basic && !error && !primary,
             'px-5': loading,
             '!bg-gray-400': disabled,

@@ -18,7 +18,7 @@
 
             <input class="hidden" v-bind="{ ...field }" />
             <div
-                class="mt-2 flex flex-col space-y-2 rounded-md p-2 flex-1 flex-shrink-0 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-gray-300 overflow-hidden transition-all"
+                class="mt-2 flex flex-col space-y-2 rounded-md p-2 flex-1 flex-shrink-0 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong overflow-hidden transition-all bg-light-surface-background dark:bg-dark-surface-background"
             >
                 <div class="flex space-x-3">
                     <FormInput

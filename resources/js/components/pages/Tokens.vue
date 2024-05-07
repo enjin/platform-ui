@@ -41,7 +41,11 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table id="tokensTable" class="min-w-full divide-y divide-gray-300" v-if="tokens.items?.length">
+                    <table
+                        id="tokensTable"
+                        class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        v-if="tokens.items?.length"
+                    >
                         <thead>
                             <tr>
                                 <th
@@ -81,7 +85,11 @@
                             <tr
                                 v-for="(token, idx) in tokens.items"
                                 :key="token.tokenId"
-                                :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                :class="
+                                    idx % 2 === 0
+                                        ? undefined
+                                        : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                "
                             >
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"

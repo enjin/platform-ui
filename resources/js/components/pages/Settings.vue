@@ -38,7 +38,11 @@
                                     class="truncate text-sm font-medium text-primary hover:text-primary-light"
                                 >
                                     <Tooltip :text="packg.version">
-                                        <a :href="packg.link" target="_blank" class="cursor-pointer capitalize">
+                                        <a
+                                            :href="packg.link"
+                                            target="_blank"
+                                            class="cursor-pointer capitalize text-light-content dark:text-dark-content"
+                                        >
                                             {{ formatName(packg.name) }}
                                         </a>
                                     </Tooltip>
@@ -50,7 +54,7 @@
 
                 <div class="flex flex-col space-y-4 mt-4">
                     <div class="flex justify-between">
-                        <h1 class="text-xl">Settings</h1>
+                        <h1 class="text-xl text-light-content-strong dark:text-dark-content-strong">Settings</h1>
                     </div>
                     <SettingsResetPassword v-if="appStore.isMultiTenant" />
                     <FormCheckbox

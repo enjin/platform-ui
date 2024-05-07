@@ -34,7 +34,7 @@
                 <div
                     v-for="account in connectionStore.accounts"
                     :key="account.address"
-                    class="px-4 py-3 border border-gray-300 rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4"
+                    class="px-4 py-3 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4"
                     @click="selectAccount(account)"
                 >
                     <Identicon :address="account.address" />

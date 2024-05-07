@@ -6,7 +6,9 @@
                     {{ label }}
                 </h3>
                 <Tooltip class="!flex items-center" v-if="tooltip" :text="tooltip">
-                    <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                    <QuestionMarkCircleIcon
+                        class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                    />
                 </Tooltip>
             </div>
 

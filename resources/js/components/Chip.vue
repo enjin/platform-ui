@@ -3,7 +3,8 @@
         class="inline-flex rounded-md px-1 truncate"
         :class="{
             'bg-red-500 !text-white ': isError,
-            'bg-slate-200 text-slate-600': !isError,
+            'bg-light-surface-primary/60 dark:bg-dark-surface-primary/60 text-light-content-strong dark:text-dark-content-strong':
+                !isError,
         }"
     >
         <span

@@ -2,7 +2,7 @@
     <Menu as="div" class="relative ml-3 inline-block text-left">
         <div>
             <MenuButton
-                class="-my-2 flex items-center rounded-full p-2 text-light-content dark:text-dark-content hover:text-gray-600 focus:outline-none focus:ring-0"
+                class="-my-2 flex items-center rounded-full p-2 text-light-content dark:text-dark-content hover:text-light-content-strong hover:dark:text-dark-content-strong focus:outline-none focus:ring-0"
             >
                 <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
             </MenuButton>
@@ -18,9 +18,9 @@
                             class="cursor-pointer"
                             :class="[
                                 active
-                                    ? 'bg-gray-100 text-light-content-strong dark:text-dark-content-strong'
-                                    : 'text-gray-700',
-                                'flex justify-between px-4 py-2 text-sm',
+                                    ? 'bg-light-surface-background dark:bg-dark-surface-background text-light-content-strong dark:text-dark-content-strong'
+                                    : 'text-light-content dark:text-dark-content ',
+                                'flex justify-between px-4 py-2 text-sm transition-all',
                             ]"
                             @click="emitAction(action.component)"
                         >

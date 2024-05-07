@@ -7,7 +7,7 @@
             {{ label }} <span v-if="required" class="text-red-500">&nbsp;*</span>
         </label>
         <Tooltip class="!flex items-center" v-if="tooltip" :text="tooltip">
-            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content" />
         </Tooltip>
         <ReadMoreButton v-if="readmore && !description" class="ml-2" :readmore="readmore" :dusk="duskId" />
     </div>

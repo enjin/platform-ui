@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         v-if="item"
     >
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
@@ -23,7 +23,7 @@
                         </dd>
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3">
+                    <div v-if="item.owner" class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Owner</dt>
                         <Address :address="item.owner" />
                     </div>
@@ -98,9 +98,9 @@
 
                     <div v-if="item.attributes.length" class="space-y-2 pt-4 pb-3 overflow-x-scroll">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Attributes</dt>
-                        <table class="divide-y divide-gray-300">
+                        <table class="divide-y divide-light-stroke dark:divide-dark-stroke">
                             <thead>
-                                <tr class="divide-x divide-gray-200">
+                                <tr class="divide-x divide-light-stroke dark:divide-dark-stroke">
                                     <th
                                         scope="col"
                                         class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-0"
@@ -116,12 +116,12 @@
                                 </tr>
                             </thead>
                             <tbody
-                                class="divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary"
+                                class="divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary"
                             >
                                 <tr
                                     v-for="(attribute, idx) in item.attributes"
                                     :key="idx"
-                                    class="divide-x divide-gray-200"
+                                    class="divide-x divide-light-stroke dark:divide-dark-stroke"
                                 >
                                     <td
                                         class="py-4 pl-4 pr-4 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-0 break-words"

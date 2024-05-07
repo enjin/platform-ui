@@ -9,7 +9,9 @@
             >
                 Page not found
             </h1>
-            <p class="mt-6 text-base leading-7 text-gray-600">Sorry, we couldn't find the page you're looking for.</p>
+            <p class="mt-6 text-base leading-7 text-light-content-strong dark:text-dark-content-strong">
+                Sorry, we couldn't find the page you're looking for.
+            </p>
             <div class="mt-10 flex items-center justify-center gap-x-6">
                 <RouterLink :to="{ name: 'platform.collections' }">
                     <button

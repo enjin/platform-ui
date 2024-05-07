@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         v-if="item"
     >
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3" v-if="Royalty.getRoyaltyBeneficiary(item)">
-                        <dt class="text-base font-medium text-gray-700">Royalty</dt>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Royalty</dt>
                         <dt class="text-sm font-medium text-light-content dark:text-dark-content">Beneficiary</dt>
                         <Address :address="Royalty.getRoyaltyBeneficiary(item)" />
 
@@ -55,9 +55,9 @@
 
                     <div class="space-y-2 pt-4 pb-3" v-if="item.attributes.length">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Attributes</dt>
-                        <table class="min-w-full divide-y divide-gray-300">
+                        <table class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke">
                             <thead>
-                                <tr class="divide-x divide-gray-200">
+                                <tr class="divide-x divide-light-stroke dark:divide-dark-stroke">
                                     <th
                                         scope="col"
                                         class="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-0"
@@ -73,12 +73,12 @@
                                 </tr>
                             </thead>
                             <tbody
-                                class="divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary"
+                                class="divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary"
                             >
                                 <tr
                                     v-for="(attribute, idx) in item.attributes"
                                     :key="idx"
-                                    class="divide-x divide-gray-200"
+                                    class="divide-x divide-light-stroke dark:divide-dark-stroke"
                                 >
                                     <td
                                         class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-0 break-words"

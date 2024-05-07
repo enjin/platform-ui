@@ -14,7 +14,7 @@
             <ScaleTransition>
                 <MenuItems
                     v-if="appStore.loggedIn"
-                    class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
+                    class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-light-stroke dark:divide-dark-stroke rounded-md bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
                 >
                     <div class="px-4 py-2" v-if="appStore.user">
                         <p class="text-sm text-light-content dark:text-dark-content">Email</p>
@@ -57,8 +57,8 @@
                                 dusk="settingsBtn"
                                 :class="[
                                     active
-                                        ? 'bg-gray-100 text-light-content-strong dark:text-dark-content-strong'
-                                        : 'text-gray-700',
+                                        ? 'bg-light-surface-background dark:bg-dark-surface-background text-light-content-strong dark:text-dark-content-strong'
+                                        : 'text-light-content dark:text-dark-content',
                                     'block px-4 py-2 text-sm w-full text-center transition-all',
                                 ]"
                                 @click="redirectSettings"

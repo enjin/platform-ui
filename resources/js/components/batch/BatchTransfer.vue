@@ -18,7 +18,9 @@
                                 transfers to complete while skipping transfers which would fali so they can be fixed and
                                 attempted again in another transaction."
                             >
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </div>
                         <FormSelect
@@ -71,7 +73,10 @@
                         <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
                     </template>
                     <template #actions>
-                        <XMarkIcon class="h-5 w-5 cursor-pointer" @click.prevent="removeItem(idx)" />
+                        <XMarkIcon
+                            class="h-5 w-5 cursor-pointer text-light-content-strong dark:text-dark-content-strong"
+                            @click.prevent="removeItem(idx)"
+                        />
                     </template>
                     <BatchTransferForm v-model="item.values" @validation="setValidation(idx, $event)" />
                 </CollapseCard>
@@ -81,7 +86,7 @@
                         <RouterLink
                             :to="{ name: 'platform.tokens' }"
                             type="button"
-                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                         >
                             Cancel
                         </RouterLink>
