@@ -24,7 +24,7 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="claims.items?.length">
+                    <table id="claimsTable" class="min-w-full divide-y divide-gray-300" v-if="claims.items?.length">
                         <thead>
                             <tr>
                                 <th

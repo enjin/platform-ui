@@ -19,6 +19,7 @@
                                     class="rounded-r-md border border-l-0 border-gray-300 inset-y-0 left-0 flex items-center"
                                 >
                                     <select
+                                        name="searchCodeType"
                                         v-model="searchCodeType"
                                         class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
                                     >
@@ -37,13 +38,14 @@
                                 class="animate-fade-in"
                                 primary
                                 :loading="downloadLoading"
+                                dusk="exportAllBtn"
                                 @click="exportAllBeams"
                             >
                                 Export All
                             </Btn>
                         </div>
                         <RouterLink :to="{ name: 'platform.create.beam' }">
-                            <Btn primary> Create Enjin Beam </Btn>
+                            <Btn dusk="createBtn" primary> Create Enjin Beam </Btn>
                         </RouterLink>
                     </div>
                 </div>
@@ -56,12 +58,12 @@
                             v-if="selectedBeams.length > 0"
                             class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-white sm:left-12"
                         >
-                            <Btn class="!px-2 !py-1 text-sm animate-fade-in" @click="expireSelectedBeams"
+                            <Btn dusk="expireAllBtn" class="!px-2 !py-1 text-sm animate-fade-in" @click="expireSelectedBeams"
                                 >{{ `Expire ${selectedBeams.length > 1 ? 'All' : ''} ` }}
                             </Btn>
-                            <Btn class="!px-2 !py-1 text-sm animate-fade-in" @click="exportSelectedBeams">Export</Btn>
+                            <Btn dusk="exportBtn" class="!px-2 !py-1 text-sm animate-fade-in" @click="exportSelectedBeams">Export</Btn>
                         </div>
-                        <table v-if="beams.items?.length" class="min-w-full divide-y divide-gray-300">
+                        <table id="beamsTable" v-if="beams.items?.length" class="min-w-full divide-y divide-gray-300">
                             <thead>
                                 <tr>
                                     <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
@@ -71,6 +73,7 @@
                                             :checked="isChecked"
                                             :indeterminate="indeterminate"
                                             @change="checkedChange"
+                                            dusk="checkAllCheckbox"
                                         />
                                     </th>
                                     <th

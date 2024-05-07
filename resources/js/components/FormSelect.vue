@@ -21,6 +21,7 @@
                             :class="`w-full py-2.5 pl-3 pr-10 text-sm leading-5 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary rounded-md transition-all disabled:bg-gray-100 {inputClass}`"
                             @change="query = $event.target.value"
                             @click="openSelect"
+                            :name="name"
                         />
                         <ComboboxButton ref="comboButtonRef" class="absolute inset-y-0 right-0 flex items-center pr-2">
                             <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
