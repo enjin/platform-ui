@@ -15,7 +15,7 @@
             v-if="closable"
             class="h-5 w-5 ml-auto my-auto cursor-pointer flex-shrink-0"
             :class="{
-                'text-gray-400': !isError,
+                'text-light-content dark:text-dark-content': !isError,
             }"
             @click="emit('remove')"
         />

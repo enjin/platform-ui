@@ -1,34 +1,45 @@
 <template>
-    <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl" v-if="item">
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Sale Details</h3>
+    <div
+        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+        v-if="item"
+    >
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Sale Details
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="px-4 sm:px-6">
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Sale ID</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.id }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Sale ID</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.id }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Seller</dt>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Seller</dt>
                         <Address :address="item.bidder" />
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Price</dt>
-                        <dd class="mt-1 text-sm text-gray-900">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Price</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
                             {{ checkFormatPrice(item.price, item.listing, currencySymbol) }}
                         </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Amount</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.amount }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Amount</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.amount }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Listing</dt>
-                        <dd class="mt-1 text-sm text-gray-900 break-words">{{ item.listing.listingId }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Listing</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words">
+                            {{ item.listing.listingId }}
+                        </dd>
                     </div>
                 </div>
             </div>

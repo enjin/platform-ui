@@ -4,7 +4,10 @@
         <span v-else> Sign </span>
     </Btn>
     <Modal :is-open="showAccountsModal" :close="closeModal" width="max-w-lg">
-        <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center">
+        <DialogTitle
+            as="h3"
+            class="text-lg font-medium leading-6 text-light-content-strong dark:text-dark-content-strong text-center"
+        >
             <span v-if="!signing">Select an account to sign the transaction</span>
             <span v-else>Signing</span>
         </DialogTitle>
@@ -43,7 +46,9 @@
                     </div>
                 </div>
                 <div v-if="!connectionStore.accounts?.length" class="text-center">
-                    <span class="text-sm text-gray-500"> No accounts found. Please connect your wallet. </span>
+                    <span class="text-sm text-light-content dark:text-dark-content">
+                        No accounts found. Please connect your wallet.
+                    </span>
                 </div>
             </div>
             <div v-else class="py-20">

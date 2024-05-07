@@ -3,30 +3,34 @@
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <EnjinLogo class="h-12 w-auto mx-auto" />
 
-            <h2 class="mt-6 text-center text-2xl font-semibold tracking-normal text-gray-900">Create an account</h2>
+            <h2
+                class="mt-6 text-center text-2xl font-semibold tracking-normal text-light-content-strong dark:text-dark-content-strong"
+            >
+                Create an account
+            </h2>
         </div>
         <div class="mt-8 mx-auto w-full sm:max-w-md">
-            <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+            <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-8 shadow sm:rounded-lg sm:px-10">
                 <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="verifyCaptcha">
                     <FormInput
                         v-model="email"
                         label="Email address"
                         name="email"
-                        input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        input-class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         @focus="loadCaptchaScript"
                     />
                     <FormInput
                         v-model="password"
                         label="Password"
                         name="password"
-                        input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        input-class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         type="password"
                     />
                     <FormInput
                         v-model="confirmPassword"
                         label="Confirm Password"
                         name="confirmPassword"
-                        input-class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        input-class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         type="password"
                     />
                     <vue-recaptcha

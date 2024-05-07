@@ -1,8 +1,14 @@
 <template>
-    <div class="grid min-h-full place-items-center bg-white px-4 py-12 lg:px-8">
+    <div
+        class="grid min-h-full place-items-center bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-12 lg:px-8"
+    >
         <div class="text-center">
             <p class="text-base font-semibold text-primary">404</p>
-            <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Page not found</h1>
+            <h1
+                class="mt-4 text-3xl font-bold tracking-tight text-light-content-strong dark:text-dark-content-strong sm:text-5xl"
+            >
+                Page not found
+            </h1>
             <p class="mt-6 text-base leading-7 text-gray-600">Sorry, we couldn't find the page you're looking for.</p>
             <div class="mt-10 flex items-center justify-center gap-x-6">
                 <RouterLink :to="{ name: 'platform.collections' }">

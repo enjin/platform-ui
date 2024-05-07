@@ -1,6 +1,9 @@
 <template>
     <RadioGroup v-model="localModelValue">
-        <RadioGroupLabel class="text-base font-semibold leading-6 text-gray-900" v-if="label">
+        <RadioGroupLabel
+            class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+            v-if="label"
+        >
             {{ label }}
         </RadioGroupLabel>
         <div
@@ -23,12 +26,15 @@
                 <div
                     :class="[
                         active || checked ? 'border-primary ring-2 ring-primary' : '',
-                        'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none transition-all',
+                        'relative flex cursor-pointer rounded-lg border bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
                     ]"
                 >
                     <span class="flex flex-1 items-center break-words">
                         <span class="flex flex-col">
-                            <RadioGroupLabel as="span" class="block text-sm font-medium text-gray-900">
+                            <RadioGroupLabel
+                                as="span"
+                                class="block text-sm font-medium text-light-content-strong dark:text-dark-content-strong"
+                            >
                                 {{ item.label }}
                             </RadioGroupLabel>
                         </span>

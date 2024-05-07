@@ -36,8 +36,8 @@
             >
                 <div class="flex-1 truncate flex items-center">
                     <KeyIcon class="w-5 h-5 mr-4 text-green-500" />
-                    <span class="text-gray-900 mr-4">{{ token.name }}</span>
-                    <span class="text-gray-400 text-sm mt-1 truncate">
+                    <span class="text-light-content-strong dark:text-dark-content-strong mr-4">{{ token.name }}</span>
+                    <span class="text-light-content dark:text-dark-content text-sm mt-1 truncate">
                         <span v-if="!token.plainTextToken">
                             {{ '*******' }}
                         </span>

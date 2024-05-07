@@ -15,15 +15,18 @@
                         {{ errorMessage }}
                     </p>
                     <div
-                        class="relative w-full cursor-default overflow-hidden bg-white text-left text-sm leading-6 transition-all"
+                        class="relative w-full cursor-default overflow-hidden bg-light-surface-primary dark:bg-dark-surface-primary text-left text-sm leading-6 transition-all"
                     >
                         <ComboboxInput
-                            :class="`w-full py-2.5 pl-3 pr-10 text-sm leading-5 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary rounded-md transition-all disabled:bg-gray-100 {inputClass}`"
+                            :class="`w-full py-2.5 pl-3 pr-10 text-sm leading-5 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary rounded-md transition-all disabled:bg-gray-100 {inputClass}`"
                             @change="query = $event.target.value"
                             @click="openSelect"
                         />
                         <ComboboxButton ref="comboButtonRef" class="absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <ChevronUpDownIcon
+                                class="h-5 w-5 text-light-content dark:text-dark-content"
+                                aria-hidden="true"
+                            />
                         </ComboboxButton>
                     </div>
                     <TransitionRoot
@@ -33,7 +36,7 @@
                         @after-leave="query = ''"
                     >
                         <ComboboxOptions
-                            class="absolute mt-1 max-h-60 overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-30 py-1 w-full"
+                            class="absolute mt-1 max-h-60 overflow-auto rounded-md bg-light-surface-primary dark:bg-dark-surface-primary text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-30 py-1 w-full"
                         >
                             <div
                                 v-if="filteredOptions.length === 0 && query !== ''"
@@ -53,7 +56,7 @@
                                     class="relative cursor-default select-none py-2 pl-10 pr-4 transition-all"
                                     :class="{
                                         'bg-primary-light/10': active,
-                                        'text-gray-900': !active,
+                                        'text-light-content-strong dark:text-dark-content-strong': !active,
                                     }"
                                 >
                                     <span

@@ -11,7 +11,7 @@
                     <div class="flex w-full flex-col items-center space-y-4">
                         <div
                             @click="close(notification.id)"
-                            class="pointer-events-auto flex w-full max-w-md rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
+                            class="pointer-events-auto flex w-full max-w-md rounded-lg bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5"
                         >
                             <div class="w-0 flex-1 p-4">
                                 <div class="flex items-center">
@@ -33,10 +33,15 @@
                                         />
                                     </div>
                                     <div class="ml-3 w-0 flex-1">
-                                        <p class="text-sm font-medium text-gray-900">
+                                        <p
+                                            class="text-sm font-medium text-light-content-strong dark:text-dark-content-strong"
+                                        >
                                             {{ notification.title }}
                                         </p>
-                                        <p class="mt-1 text-sm text-gray-500 break-words" v-if="notification.text">
+                                        <p
+                                            class="mt-1 text-sm text-light-content dark:text-dark-content break-words"
+                                            v-if="notification.text"
+                                        >
                                             {{ notification.text }}
                                         </p>
                                     </div>

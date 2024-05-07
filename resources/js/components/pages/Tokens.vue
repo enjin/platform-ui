@@ -1,5 +1,7 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 bg-white m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all">
+    <div
+        class="px-4 sm:px-6 lg:px-8 bg-light-surface-primary dark:bg-dark-surface-primary m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all"
+    >
         <div class="mt-4 flow-root">
             <div class="sm:-mx-6 lg:-mx-8 transition-all">
                 <div class="flex lg:flex-row flex-col-reverse justify-between">
@@ -44,35 +46,46 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
                                     Token ID
                                 </th>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
                                     Collection ID
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Owner
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Attributes
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Frozen
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white">
+                        <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
                                 v-for="(token, idx) in tokens.items"
                                 :key="token.tokenId"
                                 :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
                             >
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
                                     <span
                                         class="cursor-pointer"
                                         @click="openModalSlide('DetailsTokenSlideover', token)"
@@ -80,16 +93,24 @@
                                         {{ `#${token.tokenId}` }}
                                     </span>
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     #{{ token.collection.collectionId }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ addressShortHex(token.owner) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ token.attributeCount }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ token.isFrozen }}
                                 </td>
                                 <td

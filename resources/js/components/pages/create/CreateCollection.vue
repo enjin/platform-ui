@@ -15,7 +15,11 @@
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Collection Details</h3>
+                                <h3
+                                    class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Collection Details
+                                </h3>
                             </div>
                             <a
                                 href="https://docs.enjin.io/docs/first-steps-start-here#step-2-click-create-collection"
@@ -57,7 +61,11 @@
                 <div v-if="isAdvanced" class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Mint Policy</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Mint Policy
+                            </h3>
                             <Tooltip
                                 text="This section determines the rules pertaining to token supply and amount of tokens
                                 available to be minted on future interactions with this collection."
@@ -106,14 +114,18 @@
                 <div class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6">
                     <div class="space-y-6">
                         <div class="flex items-center">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Royalty</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Royalty
+                            </h3>
                             <Tooltip
                                 text="This section determines the rules which tokens and collections must follow when
                                 interacting with Marketplace on the blockchain."
                             >
                                 <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
                             </Tooltip>
-                            <p class="mt-1 text-sm text-gray-500"></p>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content"></p>
                         </div>
                         <div class="mt-6">
                             <div class="flex flex-row space-x-4 w-full">
@@ -157,14 +169,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Collection ID </label>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Collection ID
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                     Collection ID of the token that will be included as part of the royalty policy
                                 </p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Token ID </label>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Token ID
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                     Token ID that will be included as part of the royalty policy.
                                     <ReadMoreButton readmore="Token ID" dusk="tokenId" />
                                 </p>
@@ -207,12 +227,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Key </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute key.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Key
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">The attribute key.</p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Value </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute value.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Value
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                    The attribute value.
+                                </p>
                             </div>
                             <div class="w-5"></div>
                         </template>
@@ -222,7 +252,7 @@
                                     v-model="inputs.key"
                                     :name="`input__attribute-key-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                             <div class="flex-1">
@@ -230,7 +260,7 @@
                                     v-model="inputs.value"
                                     :name="`input__attribute-value-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </template>
@@ -243,7 +273,11 @@
                 >
                     <div class="space-y-6">
                         <div class="">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Other Options</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Other Options
+                            </h3>
                         </div>
                         <FormInput
                             v-model="idempotencyKey"
@@ -267,7 +301,7 @@
                     <RouterLink
                         :to="{ name: 'platform.collections' }"
                         type="button"
-                        class="rounded-md bg-light-surface-primary py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
                         Cancel
                     </RouterLink>

@@ -1,6 +1,8 @@
 <template>
-    <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">
+    <div
+        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+    >
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
             Transaction Details for {{ transaction?.transactionId ?? transaction?.id }}
         </h3>
         <div class="h-0 flex-1 overflow-y-auto">
@@ -25,8 +27,12 @@
                             </div>
                             <div v-else-if="webSocketEvents" class="py-4">
                                 <div class="space-y-2 pt-2 pb-2" v-for="(event, idx) in webSocketEvents" :key="idx">
-                                    <dt class="text-base font-medium text-gray-500">{{ event.title }}</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ event.value }}</dd>
+                                    <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                        {{ event.title }}
+                                    </dt>
+                                    <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                                        {{ event.value }}
+                                    </dd>
                                 </div>
 
                                 <Btn
@@ -63,27 +69,37 @@
 
                     <div v-if="transaction" class="animate-fade-in" as="div">
                         <div class="space-y-2 pt-4 pb-3">
-                            <dt class="text-base font-medium text-gray-500">State</dt>
-                            <dd class="mt-1 text-sm text-gray-900">{{ transaction.state }}</dd>
+                            <dt class="text-base font-medium text-light-content dark:text-dark-content">State</dt>
+                            <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                                {{ transaction.state }}
+                            </dd>
                         </div>
                         <div
                             class="space-y-2 pt-4 pb-3"
                             v-if="transaction.result && transaction.state === TransactionState.FINALIZED"
                         >
-                            <dt class="text-base font-medium text-gray-500">Result</dt>
-                            <dd class="mt-1 text-sm text-gray-900 font-bold">
+                            <dt class="text-base font-medium text-light-content dark:text-dark-content">Result</dt>
+                            <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong font-bold">
                                 <TransactionResultChip :text="transaction.result" />
                             </dd>
                         </div>
 
                         <div class="space-y-2 pt-4 pb-3">
-                            <dt class="text-base font-medium text-gray-500">Transaction Method</dt>
-                            <dd class="mt-1 text-sm text-gray-900">{{ transaction.method }}</dd>
+                            <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                Transaction Method
+                            </dt>
+                            <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                                {{ transaction.method }}
+                            </dd>
                         </div>
 
                         <div class="space-y-2 pt-4 pb-3" v-if="transaction.transactionId">
-                            <dt class="text-base font-medium text-gray-500">Transaction ID</dt>
-                            <dd class="flex items-center mt-1 text-sm text-gray-900">
+                            <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                Transaction ID
+                            </dt>
+                            <dd
+                                class="flex items-center mt-1 text-sm text-light-content-strong dark:text-dark-content-strong"
+                            >
                                 <a
                                     :href="getSubscanUrl(transaction.transactionId)"
                                     target="_blank"
@@ -95,8 +111,12 @@
                         </div>
 
                         <div class="space-y-2 pt-4 pb-3" v-if="transaction.transactionHash">
-                            <dt class="text-base font-medium text-gray-500">Transaction Hash</dt>
-                            <dd class="flex items-center mt-1 text-sm text-gray-900">
+                            <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                Transaction Hash
+                            </dt>
+                            <dd
+                                class="flex items-center mt-1 text-sm text-light-content-strong dark:text-dark-content-strong"
+                            >
                                 <a
                                     :href="getSubscanUrl(transaction.transactionHash)"
                                     target="_blank"
@@ -107,28 +127,42 @@
                             </dd>
                         </div>
 
-                        <h3 class="text-xl font-semibold pt-4 text-gray-900" v-if="events?.length">Events</h3>
+                        <h3
+                            class="text-xl font-semibold pt-4 text-light-content-strong dark:text-dark-content-strong"
+                            v-if="events?.length"
+                        >
+                            Events
+                        </h3>
                         <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="events?.length">
                             <div class="" v-for="event in events" :key="event">
                                 <div class="space-y-2 pt-4 pb-3">
-                                    <dt class="text-base font-medium text-gray-500">Event ID</dt>
-                                    <dd class="mt-1 text-gray-900 break-words font-semibold">
+                                    <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                        Event ID
+                                    </dt>
+                                    <dd
+                                        class="mt-1 text-light-content-strong dark:text-dark-content-strong break-words font-semibold"
+                                    >
                                         {{ event.eventId }}
                                     </dd>
                                 </div>
                                 <div class="space-y-2 pb-3" v-for="param in event.params" :key="param">
-                                    <dt class="text-base font-medium text-gray-500">{{ param.type }}</dt>
+                                    <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                        {{ param.type }}
+                                    </dt>
                                     <Address
                                         v-if="isAddressKey(param.type) && param.value"
                                         :address="`0x${param.value}`"
                                     />
                                     <dd
                                         v-else-if="param.type === 'percentage'"
-                                        class="mt-1 text-sm text-gray-900 break-words"
+                                        class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words"
                                     >
                                         {{ param.value / 10000000 }}%
                                     </dd>
-                                    <dd v-else class="mt-1 text-sm text-gray-900 break-words">
+                                    <dd
+                                        v-else
+                                        class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words"
+                                    >
                                         {{ param.value ?? '-' }}
                                     </dd>
                                 </div>
@@ -136,22 +170,35 @@
                         </div>
 
                         <template v-if="useAppStore().advanced && advancedEvents?.length">
-                            <h3 class="text-xl font-semibold pt-4 text-gray-900">Advanced Events</h3>
+                            <h3
+                                class="text-xl font-semibold pt-4 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Advanced Events
+                            </h3>
                             <div class="space-y-2 pb-3 divide divide-y divide-gray-300" v-if="advancedEvents.length">
                                 <div class="" v-for="event in advancedEvents" :key="event">
                                     <div class="space-y-2 pt-4 pb-3">
-                                        <dt class="text-base font-medium text-gray-500">Event ID</dt>
-                                        <dd class="mt-1 text-gray-900 break-words font-semibold">
+                                        <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                            Event ID
+                                        </dt>
+                                        <dd
+                                            class="mt-1 text-light-content-strong dark:text-dark-content-strong break-words font-semibold"
+                                        >
                                             {{ event.eventId }}
                                         </dd>
                                     </div>
                                     <div class="space-y-2 pb-3" v-for="param in event.params" :key="param">
-                                        <dt class="text-base font-medium text-gray-500">{{ param.type }}</dt>
+                                        <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                                            {{ param.type }}
+                                        </dt>
                                         <Address
                                             v-if="isAddressKey(param.type) && param.value"
                                             :address="`0x${param.value}`"
                                         />
-                                        <dd v-else class="mt-1 text-sm text-gray-900 break-words">
+                                        <dd
+                                            v-else
+                                            class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words"
+                                        >
                                             {{ param.value }}
                                         </dd>
                                     </div>

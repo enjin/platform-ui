@@ -2,16 +2,23 @@
     <Popover ref="popperRef" theme="dark" @open:popper="open = true" @close:popper="open = false">
         <template #activator>
             <Btn ref="btnOpenerRef" :class="open ? 'ring-1 ring-primary' : 'text-opacity-90'">
-                <span class="text-sm text-gray-900 hover:text-opacity-100 font-normal">{{ label }}</span>
-                <span class="ml-2 w-2 text-sm text-gray-500 font-normal">{{ localModelValue.length }}</span>
+                <span
+                    class="text-sm text-light-content-strong dark:text-dark-content-strong hover:text-opacity-100 font-normal"
+                    >{{ label }}</span
+                >
+                <span class="ml-2 w-2 text-sm text-light-content dark:text-dark-content font-normal">{{
+                    localModelValue.length
+                }}</span>
                 <ChevronDownIcon
-                    class="ml-2 h-5 w-5 text-gray-900 transition duration-150 ease-in-out group-hover:text-opacity-80"
+                    class="ml-2 h-5 w-5 text-light-content-strong dark:text-dark-content-strong transition duration-150 ease-in-out group-hover:text-opacity-80"
                     aria-hidden="true"
                 />
             </Btn>
         </template>
         <template #content>
-            <div class="bg-white rounded-md shadow-md p-4 flex flex-col w-[320px] z-10">
+            <div
+                class="bg-light-surface-primary dark:bg-dark-surface-primary rounded-md shadow-md p-4 flex flex-col w-[320px] z-10"
+            >
                 <div class="flex space-x-3">
                     <FormInput
                         v-if="type === 'text'"

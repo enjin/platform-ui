@@ -21,7 +21,7 @@
                 </p>
                 <div
                     v-if="prefix"
-                    class="flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-sm"
+                    class="flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-light-content dark:text-dark-content text-sm"
                 >
                     {{ prefix }}
                 </div>
@@ -37,7 +37,7 @@
                                 'rounded-md': !prefix,
                                 'rounded-r-none': hasAddon,
                             },
-                            'block flex-1 flex-shrink-0 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 outline-none',
+                            'block flex-1 flex-shrink-0 border-0 bg-light-surface-background dark:bg-dark-surface-background  text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong  placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 outline-none',
                             inputClass,
                         ]"
                         :placeholder="placeholder"

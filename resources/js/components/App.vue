@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full flex flex-row bg-light-surface-background">
+    <div class="h-full flex flex-row bg-light-surface-background dark:bg-dark-surface-background">
         <SideNavbar v-if="appStore.hasValidConfig" />
         <SnackbarGroup />
         <SupportButton />

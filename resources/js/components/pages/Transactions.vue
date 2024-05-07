@@ -1,9 +1,15 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 bg-white m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all">
+    <div
+        class="px-4 sm:px-6 lg:px-8 bg-light-surface-primary dark:bg-dark-surface-primary m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all"
+    >
         <div class="mt-4 flow-root">
             <div class="md:-mx-6 lg:-mx-8 transition-all">
                 <div class="sm:py-2 sm:px-6 lg:px-8 mb-2 w-full">
-                    <h1 class="block text-sm font-medium leading-6 text-gray-900">Filters</h1>
+                    <h1
+                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                    >
+                        Filters
+                    </h1>
                     <div class="flex flex-wrap gap-4 mt-2">
                         <CollapseFilter
                             v-for="searchInput in searchInputs"
@@ -25,7 +31,7 @@
                     <div class="relative">
                         <div
                             v-if="selectedTransaction.length > 0"
-                            class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-white sm:left-12"
+                            class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-light-surface-primary dark:bg-dark-surface-primary sm:left-12"
                         >
                             <Btn class="!px-2 !py-1 text-sm" @click="retrySelectedTransactions">
                                 {{ `Retry ${selectedTransaction.length > 1 ? 'all' : ''}` }}
@@ -45,31 +51,43 @@
                                     </th>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                     >
                                         ID
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Wallet
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Method
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         State
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Result
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 truncate"
+                                        class="px-3 py-3.5 text-right text-sm font-semibold text-light-content-strong dark:text-dark-content-strong truncate"
                                     >
                                         Transaction ID
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white">
+                            <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                                 <tr
                                     v-for="transaction in transactions.items"
                                     :key="transaction.id"
@@ -88,7 +106,7 @@
                                         />
                                     </td>
                                     <td
-                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3"
+                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                     >
                                         <span
                                             class="cursor-pointer"
@@ -97,16 +115,24 @@
                                             {{ `#${transaction.id}` }}
                                         </span>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ addressShortHex(transaction.wallet) }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ transaction.method }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ transaction.state }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         <TransactionResultChip v-if="transaction.result" :text="transaction.result" />
                                     </td>
                                     <td

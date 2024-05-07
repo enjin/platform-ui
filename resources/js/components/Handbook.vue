@@ -24,16 +24,16 @@
                     leave-to="opacity-0 scale-95"
                 >
                     <DialogPanel
-                        class="mx-auto max-w-3xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
+                        class="mx-auto max-w-3xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-light-surface-primary dark:bg-dark-surface-primary shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
                     >
                         <Combobox v-model="selectedContent">
                             <div class="relative">
                                 <MagnifyingGlassIcon
-                                    class="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400"
+                                    class="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-light-content dark:text-dark-content"
                                     aria-hidden="true"
                                 />
                                 <ComboboxInput
-                                    class="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                                    class="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-light-content-strong dark:text-dark-content-strong placeholder:text-light-content dark:text-dark-content focus:ring-0 sm:text-sm"
                                     placeholder="Search..."
                                     :value="query"
                                     @change="queryChange"
@@ -64,14 +64,16 @@
                                             <div
                                                 :class="[
                                                     'group flex cursor-default select-none items-center rounded-md p-2 transition-all',
-                                                    active && 'bg-gray-100 text-gray-900',
-                                                    selectedContent?.id === content.id && 'bg-gray-50 text-gray-900',
+                                                    active &&
+                                                        'bg-gray-100 text-light-content-strong dark:text-dark-content-strong',
+                                                    selectedContent?.id === content.id &&
+                                                        'bg-gray-50 text-light-content-strong dark:text-dark-content-strong',
                                                 ]"
                                             >
                                                 <span class="ml-3 flex-auto truncate">{{ content.name }}</span>
                                                 <ChevronRightIcon
                                                     v-if="active"
-                                                    class="ml-3 h-5 w-5 flex-none text-gray-400"
+                                                    class="ml-3 h-5 w-5 flex-none text-light-content dark:text-dark-content"
                                                     aria-hidden="true"
                                                 />
                                             </div>
@@ -85,7 +87,9 @@
                                         class="flex flex-none flex-col divide-y divide-gray-100"
                                     >
                                         <div class="flex-none p-6 text-center">
-                                            <h2 class="font-semibold text-gray-900">
+                                            <h2
+                                                class="font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                            >
                                                 {{ selectedContent.name }}
                                             </h2>
                                         </div>
@@ -115,9 +119,14 @@
                                 v-if="query !== '' && filteredContent.length === 0"
                                 class="px-6 py-14 text-center text-sm sm:px-14"
                             >
-                                <NewspaperIcon class="mx-auto h-6 w-6 text-gray-400" aria-hidden="true" />
-                                <p class="mt-4 font-semibold text-gray-900">No content found</p>
-                                <p class="mt-2 text-gray-500">
+                                <NewspaperIcon
+                                    class="mx-auto h-6 w-6 text-light-content dark:text-dark-content"
+                                    aria-hidden="true"
+                                />
+                                <p class="mt-4 font-semibold text-light-content-strong dark:text-dark-content-strong">
+                                    No content found
+                                </p>
+                                <p class="mt-2 text-light-content dark:text-dark-content">
                                     We couldn't find anything with that name. Please try again.
                                 </p>
                             </div>

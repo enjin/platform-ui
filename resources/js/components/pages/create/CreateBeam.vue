@@ -23,11 +23,15 @@
             <Btn class="!flex" @click="addItem" primary>Add Asset</Btn>
 
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBeam">
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
+                <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Parameters</h3>
+                                <h3
+                                    class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Parameters
+                                </h3>
                             </div>
                             <a href="https://docs.enjin.io/docs/creating-an-enjin-beam" target="_blank">
                                 <Btn primary> Documentation </Btn>
@@ -98,7 +102,7 @@
                         <RouterLink
                             :to="{ name: 'platform.beams' }"
                             type="button"
-                            class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                         >
                             Cancel
                         </RouterLink>

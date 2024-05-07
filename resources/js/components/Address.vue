@@ -1,5 +1,5 @@
 <template>
-    <dd class="mt-1 text-sm text-gray-900 break-words" v-if="addressSwitch">
+    <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words" v-if="addressSwitch">
         <CopyTextIcon :text="addressSwitch">
             <span class="break-words">
                 {{ displayAddress }}

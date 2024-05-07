@@ -25,7 +25,7 @@
                     v-model="localTokenType"
                     name="tokenType"
                     :disabled="disabled"
-                    class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary text-sm disabled:bg-gray-100"
+                    class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-light-content dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary text-sm disabled:bg-gray-100"
                 >
                     <option v-for="tokenType in tokenTypes" :key="tokenType" :value="tokenType">
                         <span class="uppercase">

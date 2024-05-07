@@ -5,12 +5,16 @@
                 <h1 class="text-2xl">Create Fuel Tank</h1>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createFueltank">
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
+                <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="">
                         <div class="space-y-6">
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900">Fuel tank Details</h3>
+                                    <h3
+                                        class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
+                                        Fuel tank Details
+                                    </h3>
                                 </div>
                                 <a href="https://docs.enjin.io/docs/creating-a-fuel-tank" target="_blank">
                                     <Btn primary> Documentation </Btn>
@@ -82,10 +86,12 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Whitelisted Callers
                                     </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The wallet accounts that are allowed to use the fuel tank.
                                     </p>
                                 </div>
@@ -97,15 +103,19 @@
                                         v-model="inputs.caller"
                                         :dusk="`input__caller-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </template>
                         </FormList>
 
                         <div>
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
-                            <p class="mt-1 text-sm text-gray-500">
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Require Token
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                 The wallet account must have a specific token in their wallet to use the fuel tank.
                             </p>
                         </div>
@@ -127,7 +137,7 @@
                         <RouterLink
                             :to="{ name: 'platform.fuel-tanks' }"
                             type="button"
-                            class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                         >
                             Cancel
                         </RouterLink>

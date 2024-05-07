@@ -1,11 +1,13 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="mutateFuelTank"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Mutate Fuel Tank</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Mutate Fuel Tank
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="divide-y divide-gray-200 px-4 sm:px-6">
@@ -46,10 +48,12 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Whitelisted Callers
                                     </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The wallet accounts that are allowed to use the fuel tank.
                                     </p>
                                 </div>
@@ -61,14 +65,18 @@
                                         v-model="inputs.caller"
                                         :dusk="`input__caller-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </template>
                         </FormList>
                         <div>
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
-                            <p class="mt-1 text-sm text-gray-500">
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Require Token
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                 The wallet account must have a specific token in their wallet to use the fuel tank.
                             </p>
                         </div>

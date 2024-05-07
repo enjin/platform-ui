@@ -12,14 +12,16 @@
         </div>
         <ScaleTransition>
             <MenuItems
-                class="absolute right-0 z-10 mt-2 w-44 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
+                class="absolute right-0 z-10 mt-2 w-44 origin-top-right divide-y divide-gray-100 rounded-md bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
             >
                 <template v-if="!walletSession">
                     <MenuItem v-slot="{ active }">
                         <button
                             id="wallet-connect-button__enjin"
                             :class="[
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                active
+                                    ? 'bg-gray-100 text-light-content-strong dark:text-dark-content-strong'
+                                    : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
                             ]"
                             @click="connectWallet('wc')"
@@ -31,7 +33,9 @@
                         <button
                             id="wallet-connect-button__polkadot"
                             :class="[
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                active
+                                    ? 'bg-gray-100 text-light-content-strong dark:text-dark-content-strong'
+                                    : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
                             ]"
                             @click="connectWallet('polkadot.js')"
@@ -45,7 +49,9 @@
                         <button
                             id="wallet-connect-button__disconnect"
                             :class="[
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                active
+                                    ? 'bg-gray-100 text-light-content-strong dark:text-dark-content-strong'
+                                    : 'text-gray-700',
                                 'block px-4 py-2 text-sm w-full text-center transition-all',
                             ]"
                             @click="disconnectWallet"

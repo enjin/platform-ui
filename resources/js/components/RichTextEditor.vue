@@ -7,7 +7,10 @@
             :name="name"
         >
             <label class="mb-2 flex justify-between text-base text-light-content-strong">
-                <label v-if="label" class="block text-sm font-medium leading-6 text-gray-900">
+                <label
+                    v-if="label"
+                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                >
                     {{ label }} <span v-if="required" class="text-red-500">&nbsp;*</span>
                 </label>
 
@@ -20,7 +23,7 @@
                 </span>
             </label>
 
-            <p class="my-2 text-sm text-gray-500" v-if="description">
+            <p class="my-2 text-sm text-light-content dark:text-dark-content" v-if="description">
                 {{ description }}
             </p>
             <textarea

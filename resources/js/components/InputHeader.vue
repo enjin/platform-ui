@@ -1,6 +1,9 @@
 <template>
     <div class="flex items-center">
-        <label v-if="label" class="block text-sm font-medium leading-6 text-gray-900">
+        <label
+            v-if="label"
+            class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+        >
             {{ label }} <span v-if="required" class="text-red-500">&nbsp;*</span>
         </label>
         <Tooltip class="!flex items-center" v-if="tooltip" :text="tooltip">
@@ -9,7 +12,7 @@
         <ReadMoreButton v-if="readmore && !description" class="ml-2" :readmore="readmore" :dusk="duskId" />
     </div>
 
-    <p class="mt-1 text-sm text-gray-500" v-if="description">
+    <p class="mt-1 text-sm text-light-content dark:text-dark-content" v-if="description">
         {{ description }}
         <ReadMoreButton v-if="readmore" :readmore="readmore" :dusk="duskId" />
     </p>

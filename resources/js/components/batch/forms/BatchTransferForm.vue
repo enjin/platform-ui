@@ -46,7 +46,11 @@
             <div class="rounded-b-lg p-6 pt-0" v-else>
                 <div class="space-y-6">
                     <div class="flex items-center">
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">Operator Transfer</h3>
+                        <h3
+                            class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                        >
+                            Operator Transfer
+                        </h3>
                         <Tooltip
                             text="The params to make an operator transfer. Operator transfers are transfers that you make
                             using tokens from somebody else's wallet as the source. To make this type of transfer the

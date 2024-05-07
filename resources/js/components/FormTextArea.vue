@@ -15,7 +15,7 @@
             :validate-on-mount="false"
             :name="name"
             rows="5"
-            :class="`mt-2 block w-full flex-1 rounded-md flex-shrink-0 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 ${inputClass}`"
+            :class="`mt-2 block w-full flex-1 rounded-md flex-shrink-0 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-gray-300 placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary text-sm leading-6 overflow-hidden transition-all disabled:bg-gray-100 ${inputClass}`"
         >
             <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
         </Field>

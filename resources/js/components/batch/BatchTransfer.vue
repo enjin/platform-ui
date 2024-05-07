@@ -2,10 +2,16 @@
     <div class="mt-4 flow-root">
         <div class="space-y-6 pb-4">
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBatch">
-                <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow sm:rounded-lg sm:p-6"
+                >
                     <div class="space-y-6">
                         <div class="flex items-center">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Batch Transfer</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Batch Transfer
+                            </h3>
                             <Tooltip
                                 text="Use this method to transfer multiple tokens in one transaction. You can include up to
                                 250 different transfers per batch. Set the continueOnFailure to true to allow all valid
@@ -75,7 +81,7 @@
                         <RouterLink
                             :to="{ name: 'platform.tokens' }"
                             type="button"
-                            class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                         >
                             Cancel
                         </RouterLink>

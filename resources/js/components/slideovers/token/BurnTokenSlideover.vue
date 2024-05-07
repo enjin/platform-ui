@@ -1,11 +1,13 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-gray-200 bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="burnToken"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Burn Token</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Burn Token
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="divide-y divide-gray-200 px-4 sm:px-6">
