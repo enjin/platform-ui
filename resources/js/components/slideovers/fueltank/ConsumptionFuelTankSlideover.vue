@@ -110,7 +110,7 @@ const formRef = ref();
 const validation = yup.object({
     tankId: stringRequiredSchema,
     ruleSetId: numberRequiredSchema.typeError('Rule Set ID must be a number'),
-    userId: stringRequiredSchema,
+    userId: stringNotRequiredSchema,
     totalConsumed: numberRequiredSchema.typeError('Total Consumed must be a number'),
     lastResetBlock: numberNotRequiredSchema.typeError('Last Reset Block must be a number'),
     idempotencyKey: stringNotRequiredSchema,

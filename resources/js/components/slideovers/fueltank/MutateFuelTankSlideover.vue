@@ -119,6 +119,12 @@ import { addressToPublicKey } from '~/util/address';
 import { TokenIdType } from '~/types/types.interface';
 import { useAppStore } from '~/store';
 import FormSelect from '~/components/FormSelect.vue';
+import {
+    booleanNotRequiredSchema,
+    booleanRequiredSchema,
+    stringNotRequiredSchema,
+    stringRequiredSchema,
+} from '~/util/schemas';
 
 const emit = defineEmits(['close']);
 
@@ -166,14 +172,18 @@ const removeCaller = (index: number) => {
 };
 
 const validation = yup.object({
-    tankId: yup.string().required(),
-    providesDeposit: yup.boolean().required(),
-    reservesExistentialDeposit: yup.boolean(),
-    reservesAccountCreationDeposit: yup.boolean(),
-    whitelistedCallers: yup.string().nullable(),
-    collectionId: yup.string().nullable(),
-    tokenId: yup.string().nullable(),
-    idempotencyKey: yup.string().nullable(),
+    tankId: stringRequiredSchema,
+    providesDeposit: booleanRequiredSchema,
+    reservesExistentialDeposit: booleanNotRequiredSchema,
+    reservesAccountCreationDeposit: booleanNotRequiredSchema,
+    whitelistedCallers: yup.array().of(
+        yup.object({
+            caller: stringRequiredSchema,
+        })
+    ),
+    collectionId: stringNotRequiredSchema,
+    tokenId: stringNotRequiredSchema,
+    idempotencyKey: stringNotRequiredSchema,
 });
 
 const mutateFuelTank = async () => {
@@ -190,7 +200,7 @@ const mutateFuelTank = async () => {
                     reservesExistentialDeposit: reservesExistentialDeposit.value,
                     reservesAccountCreationDeposit: reservesAccountCreationDeposit.value,
                     accountRules: {
-                        whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller),
+                        whitelistedCallers: formatData(whitelistedCallers.value.map((item: any) => item.caller)),
                         requireToken: collectionId.value
                             ? {
                                   collectionId: collectionId.value,
