@@ -96,6 +96,7 @@ const props = withDefaults(
             start: string;
             end: string;
             flags: string[];
+            claimConditions: { type: string; value: string }[];
         };
     }>(),
     {
@@ -151,6 +152,7 @@ const checkChanges = () => {
                       };
                   })
                 : null,
+        claimConditions: props.item?.claimConditions,
     };
 };
 

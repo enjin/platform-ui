@@ -112,6 +112,7 @@ export class BeamApi {
                 start: updateBeamData.start,
                 end: updateBeamData.end,
                 flags: updateBeamData.flags,
+                claimConditions: updateBeamData.claimConditions,
             },
         };
 
