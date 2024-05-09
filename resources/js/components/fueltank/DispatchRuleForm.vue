@@ -31,7 +31,7 @@
                         name="selectedDispatchRule"
                         class="flex-1"
                     />
-                    <Btn @click="addDispatchRuleItem" class="!px-2 !flex mt-auto" primary>
+                    <Btn dusk="addRuleBtn" @click="addDispatchRuleItem" class="!px-2 !flex mt-auto" primary>
                         <PlusIcon class="w-6 h-6 m-auto" />
                     </Btn>
                 </div>
@@ -41,7 +41,7 @@
                             class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.WhitelistedCallers)"
                         >
-                            <XMarkIcon class="w-6 h-6 m-auto" />
+                            <XMarkIcon class="w-6 h-6 m-auto" dusk="removeRuleBtn" />
                         </div>
                         <FormList
                             v-model="whitelistedCallers"

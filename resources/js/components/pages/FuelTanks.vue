@@ -20,7 +20,7 @@
 
                     <div class="flex md:px-6 lg:px-8 py-2 mb-2 items-end">
                         <RouterLink :to="{ name: 'platform.create.fuel-tank' }">
-                            <Btn primary> Create Fuel Tank </Btn>
+                            <Btn dusk="createBtn" primary> Create Fuel Tank </Btn>
                         </RouterLink>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="fueltanks.items?.length">
+                    <table id="fuelTanksTable" class="min-w-full divide-y divide-gray-300" v-if="fueltanks.items?.length">
                         <thead>
                             <tr>
                                 <th
