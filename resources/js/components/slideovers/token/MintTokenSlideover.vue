@@ -114,13 +114,13 @@ const props = withDefaults(
 
 const isLoading = ref(false);
 const collectionId = ref(props.item?.collectionId);
-const recipient = ref(publicKeyToAddress(props.item?.owner ?? ''));
+const recipient = ref(publicKeyToAddress(props.item?.owner!));
 const amount = ref();
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const tokenId: Ref<TokenIdType> = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item?.tokenId ?? '',
+    tokenId: props.item?.tokenId!,
 });
 const formRef = ref();
 

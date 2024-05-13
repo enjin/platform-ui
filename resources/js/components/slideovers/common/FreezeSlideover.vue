@@ -130,7 +130,7 @@ const collectionId = ref(props.item?.collectionId);
 const freezeType = ref(props.item?.freezeType ?? FreezeType.COLLECTION);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item?.tokenId ?? '',
+    tokenId: props.item?.tokenId!,
 });
 const collectionAccount = ref('');
 const freezeState = ref(FreezeStateType.TEMPORARY);

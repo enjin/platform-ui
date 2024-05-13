@@ -202,7 +202,7 @@ const dispatchFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.dispatch(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 ruleSetId: ruleSetId.value,
                 dispatch: {
                     call: call.value,

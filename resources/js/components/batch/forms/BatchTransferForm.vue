@@ -149,7 +149,7 @@ const transferTypes = [
     },
 ];
 const formRef = ref();
-const account = ref(publicKeyToAddress(props.modelValue.account ?? '') ?? '');
+const account = ref(publicKeyToAddress(props.modelValue.account!)!);
 const simpleTokenId = ref(
     parseFormatedTokenId(props.modelValue.simpleParams?.tokenId ?? null) ?? {
         tokenId: '',
@@ -166,7 +166,7 @@ const simpleAmount = ref(props.modelValue.simpleParams?.amount ?? 1);
 const operatorAmount = ref(props.modelValue.operatorParams?.amount ?? 1);
 const simpleKeepAlive = ref(props.modelValue.simpleParams?.keepAlive ?? false);
 const operatorKeepAlive = ref(props.modelValue.operatorParams?.keepAlive ?? false);
-const operatorSource = ref(props.modelValue.operatorParams?.source ?? '');
+const operatorSource = ref(props.modelValue.operatorParams?.source!);
 
 const validForm = computed(() => formRef.value.getMeta().valid);
 

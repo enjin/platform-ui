@@ -19,6 +19,7 @@
                     >
                         <ComboboxInput
                             class="w-full py-2.5 pl-3 pr-10 text-sm leading-5 border-0 text-light-content-strong dark:text-dark-content-strong ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary rounded-md transition-all disabled:bg-dark-surface-background/10 disabled:dark:bg-light-surface-background/10 bg-light-surface-background dark:bg-dark-surface-background"
+                            autocomplete="off"
                             @change="query = $event.target.value"
                             @click="openSelect"
                         />
@@ -99,10 +100,10 @@ import { useAppStore } from '~/store';
 
 const props = withDefaults(
     defineProps<{
+        modelValue: string | number | undefined;
         label?: string;
         description?: string;
         options: string[];
-        modelValue: string | number;
         name: string;
         required?: boolean;
         tooltip?: string;

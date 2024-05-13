@@ -54,7 +54,13 @@
                             required
                         />
                         <template v-if="actionType === 'add'">
-                            <DispatchRuleForm v-model="dispatchRule" is-modal :can-save="false" />
+                            <DispatchRuleForm
+                                v-model="dispatchRule"
+                                is-modal
+                                :can-save="false"
+                                required
+                                :error="dispatchRuleError"
+                            />
                         </template>
                         <FormInput
                             v-if="useAppStore().advanced"
@@ -95,6 +101,7 @@ import { addressToPublicKey } from '~/util/address';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
 import { useAppStore } from '~/store';
 import { stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
+import { isEmpty } from 'lodash';
 
 const emit = defineEmits(['close']);
 
@@ -121,6 +128,7 @@ const formRef = ref();
 const dispatchRule: Ref<DispatchRulesValuesInterface> = ref({});
 const userId = ref('');
 const rule = ref('');
+const dispatchRuleError = ref(false);
 
 const ruleOptions = Object.values(RuleType);
 
@@ -169,6 +177,10 @@ const formAction = () => {
 };
 
 const insertRule = async () => {
+    if (isEmpty(dispatchRule.value)) {
+        dispatchRuleError.value = true;
+        return;
+    }
     await formRef.value?.validate();
     if (!formRef.value?.getMeta().valid) return;
 
@@ -179,7 +191,7 @@ const insertRule = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.insertRuleSet(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 ruleSetId: ruleSetId.value,
                 dispatchRules: dispatchRule.value,
                 idempotencyKey: idempotencyKey.value,

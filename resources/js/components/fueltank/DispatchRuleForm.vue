@@ -22,6 +22,10 @@
                             class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
                         />
                     </Tooltip>
+                    <span v-if="required" class="text-red-500">&nbsp;*</span>
+                </div>
+                <div v-if="required && error" class="!my-0">
+                    <p class="text-red-500 text-sm">At least one rule is required</p>
                 </div>
                 <FormInput
                     v-if="props.ruleId"
@@ -36,7 +40,6 @@
                         v-model="selectedDispatchRule"
                         :options="availableDispatchRules"
                         label="Choose a dispatch rule"
-                        description=""
                         name="selectedDispatchRule"
                         class="flex-1"
                     />
@@ -288,13 +291,13 @@ import { ref, computed, watch, Ref } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
-import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, parseFormatedTokenId } from '~/util';
+import { currencySymbolByNetwork, formatData, formatPriceToENJ, parseFormatedTokenId } from '~/util';
 import { TokenIdSelectType, TransactionMethods, DispatchRules } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import FormList from '../FormList.vue';
 import { formatWhitelistedCallers, formatWhitelistedCollections } from '~/util';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
-import { numberNotRequiredSchema, stringNotRequiredSchema } from '~/util/schemas';
+import { addressNotRequiredSchema, numberNotRequiredSchema, stringNotRequiredSchema } from '~/util/schemas';
 import { useAppStore } from '~/store';
 import FormSelect from '../FormSelect.vue';
 import { PlusIcon } from '@heroicons/vue/20/solid';
@@ -310,6 +313,8 @@ const props = withDefaults(
         modelValue: DispatchRulesValuesInterface;
         isModal?: boolean;
         ruleId?: number;
+        required?: boolean;
+        error?: boolean;
     }>(),
     {
         isModal: false,
@@ -318,7 +323,7 @@ const props = withDefaults(
 
 const formRef = ref();
 const whitelistedCallers = ref(formatWhitelistedCallers(props.modelValue.whitelistedCallers) ?? [{ caller: '' }]);
-const collectionId = ref(props.modelValue.requireToken?.collectionId ?? '');
+const collectionId = ref(props.modelValue.requireToken?.collectionId!);
 const tokenId = ref(
     parseFormatedTokenId(props.modelValue.requireToken?.tokenId ?? null) ?? {
         tokenId: '',
@@ -349,12 +354,16 @@ const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().conf
 const validation = yup.object({
     whitelistedCallers: yup.array().of(
         yup.object({
-            caller: yup.string(),
+            caller: addressNotRequiredSchema,
         })
     ),
     collectionId: stringNotRequiredSchema,
     tokenId: stringNotRequiredSchema,
-    whitelistedCollections: stringNotRequiredSchema,
+    whitelistedCollections: yup.array().of(
+        yup.object({
+            collection: numberNotRequiredSchema,
+        })
+    ),
     maxFuelBurnPerTransaction: numberNotRequiredSchema.typeError('Max Fuel Burn Per Transaction must be a number'),
     userFuelAmount: numberNotRequiredSchema.typeError('User Fuel Amount must be a number'),
     userFuelresetPeriod: numberNotRequiredSchema.typeError('User Fuel Reset Period must be a number'),
@@ -405,27 +414,59 @@ const checkSelectedDispatchRule = (rule: DispatchRules) => {
 const removeSelectedDispatch = (rule: DispatchRules) => {
     const index = selectedDispatchRules.value.indexOf(rule);
     if (index > -1) {
+        clearSelectedDispatchRule(rule);
         selectedDispatchRules.value.splice(index, 1);
+    }
+};
+
+const clearSelectedDispatchRule = (rule: DispatchRules) => {
+    switch (rule) {
+        case DispatchRules.WhitelistedCallers:
+            whitelistedCallers.value = [{ caller: '' }];
+            break;
+        case DispatchRules.RequireToken:
+            collectionId.value = '';
+            tokenId.value = { tokenId: '', tokenType: TokenIdSelectType.Integer };
+            break;
+        case DispatchRules.WhitelistedCollections:
+            whitelistedCollections.value = [{ collection: '' }];
+            break;
+        case DispatchRules.MaxFuelBurnPerTransaction:
+            maxFuelBurnPerTransaction.value = null;
+            break;
+        case DispatchRules.PermittedExtrinsic:
+            permittedExtrinsics.value = [];
+            break;
+        case DispatchRules.UserFuelBudget:
+            userFuelAmount.value = null;
+            userFuelresetPeriod.value = null;
+            break;
+        case DispatchRules.TankFuelBudget:
+            tankFuelAmount.value = null;
+            tankFuelresetPeriod.value = null;
+            break;
     }
 };
 
 const hasChanged = computed(() =>
     formatData({
-        whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller),
-        requireToken: {
+        whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller).filter((item: string) => item),
+        requireToken: formatData({
             collectionId: collectionId.value,
-            tokenId: formatToken(tokenId.value),
-        },
-        whitelistedCollections: whitelistedCollections.value.map((item: any) => item.collection),
+            tokenId: tokenId.value.tokenId,
+        }),
+        whitelistedCollections: whitelistedCollections.value
+            .map((item: any) => item.collection)
+            .filter((item: number) => item),
         maxFuelBurnPerTransaction: maxFuelBurnPerTransaction.value,
-        userFuelBudget: {
+        userFuelBudget: formatData({
             amount: formatPriceToENJ(userFuelAmount.value),
             resetPeriod: userFuelresetPeriod.value,
-        },
-        tankFuelBudget: {
+        }),
+        tankFuelBudget: formatData({
             amount: formatPriceToENJ(tankFuelAmount.value),
             resetPeriod: tankFuelresetPeriod.value,
-        },
+        }),
         permittedExtrinsics: permittedExtrinsics.value,
     })
 );
@@ -433,6 +474,7 @@ const hasChanged = computed(() =>
 watch(
     () => hasChanged.value,
     async () => {
+        console.log(hasChanged.value);
         await formRef.value.validate();
         setTimeout(() => {
             emit('validation', validForm.value);
