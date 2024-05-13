@@ -474,7 +474,6 @@ const hasChanged = computed(() =>
 watch(
     () => hasChanged.value,
     async () => {
-        console.log(hasChanged.value);
         await formRef.value.validate();
         setTimeout(() => {
             emit('validation', validForm.value);
