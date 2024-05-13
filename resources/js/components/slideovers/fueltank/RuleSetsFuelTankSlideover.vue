@@ -41,6 +41,7 @@
                             name="ruleSetId"
                             label="Rule Set ID"
                             description="The rule set index."
+                            type="number"
                             required
                         />
                         <FormSelect

@@ -25,6 +25,7 @@
                             name="ruleSetId"
                             label="Rule Set ID"
                             description="The rule set index."
+                            type="number"
                             required
                         />
                         <FormSelect
@@ -40,6 +41,7 @@
                             name="query"
                             label="Query"
                             description="The GraphQL query. It's required to query the 'id' and 'encodedData' from the result."
+                            required
                         />
                         <FormList
                             v-model="variables"
@@ -172,7 +174,7 @@ const validation = yup.object({
     tankId: stringRequiredSchema,
     ruleSetId: stringRequiredSchema,
     call: stringRequiredSchema,
-    query: stringNotRequiredSchema,
+    query: stringRequiredSchema,
     variables: yup.array().of(
         yup.object({
             key: stringNotRequiredSchema,
