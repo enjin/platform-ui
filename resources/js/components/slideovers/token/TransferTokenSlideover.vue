@@ -139,7 +139,7 @@ const props = withDefaults(
 const isLoading = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item?.tokenId ?? '',
+    tokenId: props.item?.tokenId!,
 });
 const collectionId = ref(props.item?.collectionId);
 const recipient = ref('');

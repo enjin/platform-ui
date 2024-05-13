@@ -126,7 +126,7 @@ const setConsumption = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.setConsumption(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 ruleSetId: ruleSetId.value,
                 userId: userId.value,
                 totalConsumed: totalConsumed.value,

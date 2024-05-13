@@ -212,7 +212,7 @@ const accounts: Ref<{
     items: [],
     cursor: null,
 });
-const tankId = ref(props.item?.tankId ?? '');
+const tankId = ref(props.item?.tankId!);
 const idempotencyKey = ref('');
 const formRef = ref();
 const paginatorRef = ref();
@@ -321,7 +321,7 @@ const closeSlide = () => {
 
 const getAccounts = async () => {
     try {
-        const res = await FuelTankApi.getAccounts(addressToPublicKey(tankId.value) ?? '');
+        const res = await FuelTankApi.getAccounts(addressToPublicKey(tankId.value)!);
         accounts.value = DTOFactory.forAccounts(res);
     } catch (e) {
         // Do nothing

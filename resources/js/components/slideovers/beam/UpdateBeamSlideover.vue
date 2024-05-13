@@ -138,11 +138,11 @@ const checkChanges = () => {
         description: description.value !== props.item?.description ? description.value : null,
         image: image.value !== props.item?.image ? image.value : null,
         start:
-            new Date(start.value).toString() !== new Date(props.item?.start ?? '').toString()
+            new Date(start.value).toString() !== new Date(props.item?.start!).toString()
                 ? new Date(start.value).toString()
                 : null,
         end:
-            new Date(end.value).toString() !== new Date(props.item?.end ?? '').toString()
+            new Date(end.value).toString() !== new Date(props.item?.end!).toString()
                 ? new Date(end.value).toString()
                 : null,
         flags:

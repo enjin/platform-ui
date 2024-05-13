@@ -260,7 +260,7 @@ const mintTypes = [
     },
 ];
 const formRef: Ref<typeof Form | undefined> = ref();
-const account = ref(publicKeyToAddress(props.modelValue.account ?? '') ?? '');
+const account = ref(publicKeyToAddress(props.modelValue.account!)!);
 const createTokenId: Ref<TokenIdType> = ref(
     parseFormatedTokenId(props.modelValue.createParams?.tokenId ?? null) ?? {
         tokenId: '',
@@ -277,7 +277,7 @@ const initialSupply = ref(props.modelValue.createParams?.initialSupply ?? 1);
 const capAmount = ref(props.modelValue.createParams?.cap?.amount ?? undefined);
 const mintAmount = ref(props.modelValue.mintParams?.amount ?? 1);
 const isCurrency = ref(props.modelValue.createParams?.behavior?.isCurrency ?? false);
-const beneficiaryAddress = ref(props.modelValue.createParams?.behavior?.hasRoyalty?.beneficiary ?? '');
+const beneficiaryAddress = ref(props.modelValue.createParams?.behavior?.hasRoyalty?.beneficiary!);
 const beneficiaryPercentage = ref(props.modelValue.createParams?.behavior?.hasRoyalty?.percentage ?? 0);
 const listingForbidden = ref(props.modelValue.createParams?.listingForbidden ?? false);
 

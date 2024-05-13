@@ -141,7 +141,7 @@ const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const tokenId = ref({
     tokenType: TokenIdSelectType.Integer,
-    tokenId: props.item?.tokenId ?? '',
+    tokenId: props.item?.tokenId!,
 });
 const formRef = ref();
 

@@ -277,7 +277,7 @@ const getTransaction = async () => {
         }
 
         isLoading.value = true;
-        const res = await TransactionApi.getTransaction(props.item?.id ?? '');
+        const res = await TransactionApi.getTransaction(props.item?.id!);
         transaction.value = DTOTransactionFactory.forTransaction(res);
         if (transaction.value.state === TransactionState.FINALIZED) {
             emit('update', transaction.value);

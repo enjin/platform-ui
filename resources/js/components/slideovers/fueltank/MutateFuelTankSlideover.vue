@@ -202,7 +202,7 @@ const mutateFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.mutateFuelTank(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 mutation: {
                     providesDeposit: providesDeposit.value,
                     reservesExistentialDeposit: reservesExistentialDeposit.value,

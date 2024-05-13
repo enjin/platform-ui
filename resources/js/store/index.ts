@@ -253,7 +253,7 @@ export const useAppStore = defineStore('app', {
             if (this.navigations.find((nav) => nav.name === 'Marketplace')) return;
             this.navigations = [
                 ...this.navigations,
-                { name: 'Marketplace', to: { name: 'platform.marketplace' }, pos: 5 },
+                { name: 'Marketplace', to: { name: 'platform.marketplace.bids' }, pos: 5 },
             ].sort((a, b) => a.pos - b.pos);
         },
         setAdvancedMode(advanced: boolean) {

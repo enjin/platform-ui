@@ -110,7 +110,7 @@ const freezeFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.scheduleMutateFreezeState(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 isFrozen: isFrozen.value,
                 ruleSetId: ruleSetId.value,
                 idempotencyKey: idempotencyKey.value,
