@@ -31,12 +31,18 @@
                             </a>
                         </div>
                         <FormInput
+                            v-model="name"
+                            name="name"
+                            label="Name"
+                            description="The name of the collection."
+                            required
+                        />
+                        <FormInput
                             v-model="imageUrl"
                             name="imageUrl"
                             label="Image URL"
                             class="w-full"
                             description="The URL of the image for the collection."
-                            required
                         />
                         <FormInput
                             v-model="bannerUrl"
@@ -44,13 +50,6 @@
                             name="bannerUrl"
                             label="Banner URL"
                             description="The URL of the banner image for the collection."
-                        />
-                        <FormInput
-                            v-model="name"
-                            name="name"
-                            label="Name"
-                            description="The name of the collection."
-                            required
                         />
                         <RichTextEditor
                             v-model="description"
@@ -338,7 +337,13 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
 import { CollectionApi } from '~/api/collection';
 import ReadMoreButton from '~/components/ReadMoreButton.vue';
-import { addressNotRequiredSchema, booleanNotRequiredSchema, numberNotRequiredSchema } from '~/util/schemas';
+import {
+    addressNotRequiredSchema,
+    booleanNotRequiredSchema,
+    numberNotRequiredSchema,
+    stringNotRequiredSchema,
+    stringRequiredSchema,
+} from '~/util/schemas';
 import { TokenIdType } from '~/types/types.interface';
 import Tooltip from '~/components/Tooltip.vue';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
@@ -393,10 +398,10 @@ const explicitRoyaltyCurrencies: Ref<
 const isAdvanced = computed(() => mode.value === 'advanced');
 
 const validation = yup.object({
-    name: yup.string().required('Name is required'),
-    description: yup.string().nullable(),
-    imageUrl: yup.string().required('Image URL is required'),
-    bannerUrl: yup.string().nullable(),
+    name: stringRequiredSchema.typeError('Name is required'),
+    description: stringNotRequiredSchema,
+    imageUrl: stringNotRequiredSchema,
+    bannerUrl: stringNotRequiredSchema,
     maxTokenCount: numberNotRequiredSchema.typeError('Max token count must be a number'),
     maxTokenSupply: numberNotRequiredSchema.typeError('Max token supply must be a number'),
     forceSingleMint: booleanNotRequiredSchema,
