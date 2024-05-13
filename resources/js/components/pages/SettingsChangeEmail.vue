@@ -44,7 +44,6 @@ import { snackbarErrors } from '~/util';
 import snackbar from '~/util/snackbar';
 import { Form } from 'vee-validate';
 import { useAppStore } from '~/store';
-import { ApiService } from '~/api';
 
 const appStore = useAppStore();
 
