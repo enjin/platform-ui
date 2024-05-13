@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full flex flex-row bg-light-surface-background">
+    <div class="h-full flex flex-row bg-light-surface-background dark:bg-dark-surface-background">
         <SideNavbar v-if="appStore.hasValidConfig" />
         <SnackbarGroup />
         <SupportButton />
@@ -29,13 +29,20 @@ const appStore = useAppStore();
 const router = useRouter();
 const route = useRoute();
 
-(async () => {
-    await appStore.init();
-})();
-
 const canaryHost = computed(() => appStore.config.network === 'canary');
 
+const initialTheme = () => {
+    if (appStore.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+};
+
 (() => {
+    appStore.init();
+    initialTheme();
+
     if (window.bootstrap?.name) {
         return;
     }
@@ -46,6 +53,13 @@ const canaryHost = computed(() => appStore.config.network === 'canary');
         document.title = 'Enjin Platform';
     }
 })();
+
+watch(
+    () => appStore.theme,
+    () => {
+        initialTheme();
+    }
+);
 
 watch(
     () => appStore.loggedIn,

@@ -1,7 +1,14 @@
 <template>
-    <div class="bg-white shadow rounded-lg">
-        <div class="flex divide-x divide-gray-200 transition-all" :class="{ 'border-b border-gray-200': open }">
-            <div class="flex justify-between px-4 py-5 flex-1 cursor-pointer" @click="toggleCard" :dusk="duskId">
+    <div class="bg-light-surface-primary dark:bg-dark-surface-primary shadow rounded-lg">
+        <div
+            class="flex divide-x divide-light-stroke dark:divide-dark-stroke transition-all"
+            :class="{ 'border-b border-light-stroke dark:border-dark-stroke': open }"
+        >
+            <div
+                class="flex justify-between px-4 py-5 flex-1 cursor-pointer text-light-content-strong dark:text-dark-content-strong"
+                @click="toggleCard"
+                :dusk="duskId"
+            >
                 <div class="inline-flex items-center">
                     <label>{{ title }}</label>
                     <slot name="icon" />

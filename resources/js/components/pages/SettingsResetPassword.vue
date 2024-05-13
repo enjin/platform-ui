@@ -12,7 +12,7 @@
                     v-model="oldPassword"
                     label="Old Password"
                     placeholder="Old Password"
-                    class="sm:w-[430px] flex-1 sm:flex-none text-gray-400"
+                    class="sm:w-[430px] flex-1 sm:flex-none text-light-content dark:text-dark-content"
                     name="oldPassword"
                     type="password"
                 />
@@ -20,7 +20,7 @@
                     v-model="newPassword"
                     label="New Password"
                     placeholder="New Password"
-                    class="sm:w-[430px] flex-1 sm:flex-none text-gray-400"
+                    class="sm:w-[430px] flex-1 sm:flex-none text-light-content dark:text-dark-content"
                     name="newPassword"
                     type="password"
                 />
@@ -28,7 +28,7 @@
                     v-model="confirmPassword"
                     label="Confirm Password"
                     placeholder="Confirm Password"
-                    class="sm:w-[430px] flex-1 sm:flex-none text-gray-400"
+                    class="sm:w-[430px] flex-1 sm:flex-none text-light-content dark:text-dark-content"
                     name="confirmPassword"
                     type="password"
                 />

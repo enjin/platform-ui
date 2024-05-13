@@ -12,7 +12,7 @@
                     v-model="localModelValue"
                     v-bind="{ ...field }"
                     type="checkbox"
-                    class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary-light"
+                    class="h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary-light bg-light-surface-background dark:bg-dark-surface-background"
                 />
             </div>
             <div class="ml-3">

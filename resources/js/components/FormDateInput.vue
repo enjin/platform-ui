@@ -20,6 +20,7 @@
                 :min-date="minDate"
                 :is-24="false"
                 position="right"
+                dark
                 auto-apply
                 class="mt-2 shadow-sm rounded-md"
             >
@@ -28,7 +29,7 @@
                         type="text"
                         :value="value"
                         :placeholder="placeholder"
-                        class="block w-full flex-1 rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 overflow-hidden transition-all,"
+                        class="block w-full flex-1 rounded-md border-0 py-1.5 text-light-content-strong placeholder:dark:text-dark-content-strong ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 overflow-hidden transition-all bg-light-surface-background dark:bg-dark-surface-background"
                         @input="handleInput"
                         @change="handleChange"
                         @blur="handleBlur"

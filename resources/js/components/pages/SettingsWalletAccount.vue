@@ -1,7 +1,7 @@
 <template>
     <div v-if="walletAccount" class="p-6">
-        <h1 class="text-xl">Wallet Account</h1>
-        <p class="mt-1 text-sm text-gray-500 max-w-3xl">
+        <h1 class="text-xl text-light-content-strong dark:text-dark-content-strong">Wallet Account</h1>
+        <p class="mt-1 text-sm text-light-content dark:text-dark-content max-w-3xl">
             The platform depends on there being a funded wallet daemon account setup and connected to the platform and
             blockchain so it can receive transactions from the platform, sign them on your behalf and then broadcast
             them to the network. You can get the latest version of the wallet daemon from this repository:
@@ -16,7 +16,7 @@
         <div class="flex items-end space-x-4 mt-4">
             <FormInput
                 v-model="walletAccount"
-                class="sm:w-[430px] flex-1 sm:flex-none text-gray-400"
+                class="sm:w-[430px] flex-1 sm:flex-none text-light-content dark:text-dark-content"
                 name="walletAccount"
                 disabled
             />

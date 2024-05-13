@@ -7,7 +7,10 @@
             :name="name"
         >
             <label class="mb-2 flex justify-between text-base text-light-content-strong">
-                <label v-if="label" class="block text-sm font-medium leading-6 text-gray-900">
+                <label
+                    v-if="label"
+                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                >
                     {{ label }} <span v-if="required" class="text-red-500">&nbsp;*</span>
                 </label>
 
@@ -20,7 +23,7 @@
                 </span>
             </label>
 
-            <p class="my-2 text-sm text-gray-500" v-if="description">
+            <p class="my-2 text-sm text-light-content dark:text-dark-content" v-if="description">
                 {{ description }}
             </p>
             <textarea
@@ -92,7 +95,14 @@ const initMDE = () => {
         element: markdownEditorRef.value,
         previewRender: renderMarkdown,
         toolbar: ['bold', 'italic', 'link', 'unordered-list', 'ordered-list', '|', 'preview', 'fullscreen', 'guide'],
-        previewClass: ['bg-light-surface-primary', 'max-w-none', 'prose', 'dark:prose-invert', 'pl-2'],
+        previewClass: [
+            'bg-light-surface-background',
+            'dark:bg-dark-surface-background',
+            'max-w-none',
+            'prose',
+            'dark:prose-invert',
+            'pl-2',
+        ],
     });
 
     easyMDE.codemirror.on('change', () => {
@@ -116,12 +126,16 @@ onMounted(() => {
         .editor-toolbar {
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
+            @apply text-light-content dark:text-dark-content;
+            @apply border-light-stroke-strong dark:bg-dark-surface-background dark:border-dark-stroke-strong;
 
             button:hover {
+                @apply bg-light-surface-background dark:bg-dark-surface-background;
                 @apply transition-all;
             }
 
             button.active {
+                @apply bg-light-surface-background dark:bg-dark-surface-background;
                 @apply transition-all;
             }
         }
@@ -129,13 +143,15 @@ onMounted(() => {
         .CodeMirror {
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
+            @apply border-light-stroke-strong dark:border-dark-stroke-strong;
+            @apply bg-light-surface-primary dark:bg-dark-surface-primary;
+            @apply text-light-content dark:text-dark-content;
         }
 
         .CodeMirror-wrap {
             pre.CodeMirror-line,
             pre.CodeMirror-line-like {
                 word-break: break-word;
-                font-size: 14px;
             }
         }
     }

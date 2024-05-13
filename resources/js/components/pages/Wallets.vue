@@ -1,5 +1,7 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 bg-white m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all">
+    <div
+        class="px-4 sm:px-6 lg:px-8 bg-light-surface-primary dark:bg-dark-surface-primary m-4 sm:m-8 shadow rounded-lg overflow-y-auto h-full transition-all"
+    >
         <div class="mt-4 flow-root">
             <div class="md:-mx-6 lg:-mx-8 transition-all">
                 <div class="flex md:flex-row flex-col-reverse justify-between">
@@ -25,34 +27,52 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="wallets.items?.length">
+                    <table
+                        class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        v-if="wallets.items?.length"
+                    >
                         <thead>
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
                                     Id
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Account
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Managed
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Network
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white">
+                        <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
                                 v-for="(wallet, idx) in wallets.items"
                                 :key="wallet.id"
-                                :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                :class="
+                                    idx % 2 === 0
+                                        ? undefined
+                                        : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                "
                             >
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
                                     <span
                                         class="cursor-pointer"
                                         @click="openModalSlide('DetailsWalletSlideover', wallet)"
@@ -60,13 +80,19 @@
                                         {{ `#${wallet.id}` }}
                                     </span>
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ addressShortHex(wallet.account) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ wallet.managed }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ wallet.network }}
                                 </td>
                                 <td

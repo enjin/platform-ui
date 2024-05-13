@@ -8,7 +8,10 @@
             :cols="mintTypes.length"
         />
         <FadeTransition>
-            <div class="bg-white rounded-b-lg p-6 pt-0" v-if="mintType === 'create'">
+            <div
+                class="bg-light-surface-primary dark:bg-dark-surface-primary rounded-b-lg p-6 pt-0"
+                v-if="mintType === 'create'"
+            >
                 <input v-model="mintType" class="hidden" />
                 <div class="space-y-6">
                     <TokenIdInput
@@ -48,12 +51,15 @@
                         required
                     />
                     <div>
-                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Token type</label>
+                        <label
+                            class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong mb-2"
+                            >Token type</label
+                        >
                         <div class="flex">
                             <div
-                                class="flex-1 px-4 py-8 border border-light-stroke-strong rounded-l-2xl cursor-pointer transition-all"
+                                class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-l-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong"
                                 :class="{
-                                    'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'nft',
+                                    'bg-light-surface-brand/30 !border-light-surface-brand': tokenType === 'nft',
                                 }"
                                 @click="tokenType = 'nft'"
                             >
@@ -63,9 +69,9 @@
                                 </div>
                             </div>
                             <div
-                                class="flex-1 px-4 py-8 border border-light-stroke-strong rounded-r-2xl cursor-pointer transition-all"
+                                class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-r-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong"
                                 :class="{
-                                    'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'ft',
+                                    'bg-light-surface-brand/30 !border-light-surface-brand': tokenType === 'ft',
                                 }"
                                 @click="tokenType = 'ft'"
                             >
@@ -126,12 +132,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Key </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute key.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Key
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">The attribute key.</p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Value </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute value.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Value
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                    The attribute value.
+                                </p>
                             </div>
                             <div class="w-5"></div>
                         </template>
@@ -141,7 +157,7 @@
                                     v-model="inputs.key"
                                     :dusk="`input__attribute-key-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                             <div class="flex-1">
@@ -149,7 +165,7 @@
                                     v-model="inputs.value"
                                     :dusk="`input__attribute-value-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                         </template>

@@ -14,3 +14,7 @@ interface Window {
         captcha_key: string;
     };
 }
+
+interface Document {
+    startViewTransition: null | any;
+}

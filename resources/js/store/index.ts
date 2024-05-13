@@ -39,9 +39,10 @@ export const useAppStore = defineStore('app', {
         allowResend: false,
         user: null,
         tokensCount: 0,
+        theme: 'light',
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount', 'theme'],
     },
     actions: {
         async init() {
@@ -260,6 +261,9 @@ export const useAppStore = defineStore('app', {
         },
         setCollections(collections: string[]) {
             this.collections = collections;
+        },
+        setTheme(theme: 'dark' | 'light') {
+            this.theme = theme;
         },
     },
     getters: {

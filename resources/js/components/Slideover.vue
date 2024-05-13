@@ -23,7 +23,7 @@
                                     @update="($event) => emit('update', $event)"
                                 />
                                 <XMarkIcon
-                                    class="absolute top-0 right-0 w-6 h-6 mt-4 mr-6 text-black cursor-pointer hover:text-gray-500 transition-all"
+                                    class="absolute top-0 right-0 w-6 h-6 mt-4 mr-6 text-black cursor-pointer hover:text-light-content dark:text-dark-content transition-all"
                                     @click="emit('close')"
                                 />
                             </DialogPanel>

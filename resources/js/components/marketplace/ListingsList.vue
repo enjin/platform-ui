@@ -1,12 +1,16 @@
 <template>
     <div
-        class="mb-1 mt-4 sm:mt-8 bg-white px-4 sm:px-6 lg:px-8 shadow rounded-lg overflow-y-auto h-full transition-all"
+        class="mb-1 mt-4 sm:mt-8 bg-light-surface-primary dark:bg-dark-surface-primary px-4 sm:px-6 lg:px-8 shadow rounded-lg overflow-y-auto h-full transition-all"
     >
         <div class="mt-4 flow-root">
             <div class="sm:-mx-6 lg:-mx-8 transition-all">
                 <div class="flex lg:flex-row flex-col-reverse justify-between">
                     <div class="gap-4 min-w-0 mb-2 py-2 sm:px-6 lg:px-8 transition-all">
-                        <h1 class="block text-sm font-medium leading-6 text-gray-900">Filters</h1>
+                        <h1
+                            class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                        >
+                            Filters
+                        </h1>
                         <div class="flex flex-wrap gap-4 mt-2">
                             <CollapseFilter
                                 v-for="searchInput in searchInputs"
@@ -30,43 +34,70 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table class="min-w-full divide-y divide-gray-300" v-if="listings.items?.length">
+                    <table
+                        class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        v-if="listings.items?.length"
+                    >
                         <thead>
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3 truncate"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate"
                                 >
                                     ID
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Listing ID
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Price
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Seller
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Sales
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Bids
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     State
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white">
+                        <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
                                 v-for="(listing, idx) in listings.items"
                                 :key="listing.id"
-                                :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                :class="
+                                    idx % 2 === 0
+                                        ? undefined
+                                        : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                "
                             >
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
                                     <span
                                         class="cursor-pointer"
                                         @click="openModalSlide('DetailsListingSlideover', listing)"
@@ -74,22 +105,34 @@
                                         {{ `#${listing.id}` }}
                                     </span>
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ shortString(listing.listingId) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ checkFormatPrice(listing.price, listing, currencySymbol) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ addressShortHex(listing.seller) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ listing.sales }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ listing.bids }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ listing.state.__typename }}
                                 </td>
                                 <td

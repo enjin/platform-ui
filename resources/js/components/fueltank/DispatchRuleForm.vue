@@ -1,9 +1,16 @@
 <template>
     <Form ref="formRef" class="space-y-6" :validation-schema="validation">
-        <div class="bg-white px-4 py-5 sm:p-6 rounded-lg" :class="{ '!p-0 sm:p-0': isModal }">
+        <div
+            class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 sm:p-6 rounded-lg"
+            :class="{ '!p-0 sm:p-0': isModal }"
+        >
             <div class="space-y-6">
                 <div class="flex items-center">
-                    <h3 class="text-base font-semibold leading-6 text-gray-900">Dispatch Rules</h3>
+                    <h3
+                        class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                    >
+                        Dispatch Rules
+                    </h3>
                     <Tooltip
                         text="These are evaluated upon call dispatches. Composed of one to many rule sets each containing
                         different rule definitions. All rules are independent of each other, so they can be used both
@@ -11,7 +18,9 @@
                         allow different means of access to the same fuel tank, where each set is identified by u32 and
                         user must provide rule set ID when dispatching a call through fuel tank."
                     >
-                        <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                        <QuestionMarkCircleIcon
+                            class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                        />
                     </Tooltip>
                 </div>
                 <FormInput
@@ -35,10 +44,10 @@
                         <PlusIcon class="w-6 h-6 m-auto" />
                     </Btn>
                 </div>
-                <div class="space-y-6 divide-y-[1px] divide-gray-300">
+                <div class="space-y-6 divide-y-[1px] divide-light-stroke dark:divide-dark-stroke">
                     <div v-if="checkSelectedDispatchRule(DispatchRules.WhitelistedCallers)" class="relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.WhitelistedCallers)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -53,10 +62,12 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Whitelisted Callers
                                     </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The wallet accounts that are allowed to use the fuel tank.
                                     </p>
                                 </div>
@@ -68,7 +79,7 @@
                                         v-model="inputs.caller"
                                         :dusk="`input__caller-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                             </template>
@@ -77,14 +88,18 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.RequireToken)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.RequireToken)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
                         </div>
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Require Token</h3>
-                            <p class="mt-1 text-sm text-gray-500">
+                            <h3
+                                class="text-sm font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Require Token
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                 The wallet account must have a specific token in their wallet to use the fuel tank.
                             </p>
                         </div>
@@ -102,7 +117,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.WhitelistedCollections)" class="relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.WhitelistedCollections)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -117,10 +132,12 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Whitelisted Collections
                                     </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The wallet account must have a specific token in their wallet to use the fuel
                                         tank.
                                     </p>
@@ -145,7 +162,7 @@
                         class="relative pt-3"
                     >
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.MaxFuelBurnPerTransaction)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -161,7 +178,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.PermittedExtrinsic)" class="relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.PermittedExtrinsic)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -191,14 +208,20 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.UserFuelBudget)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.UserFuelBudget)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
                         </div>
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">User Fuel Budget</h3>
-                            <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                User Fuel Budget
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                The rule for fuel budget.
+                            </p>
                         </div>
                         <div class="grid grid-cols-2 space-x-4">
                             <FormInput
@@ -221,14 +244,20 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.TankFuelBudget)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-gray-50 transition-all text-red-400"
+                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.TankFuelBudget)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
                         </div>
                         <div>
-                            <h3 class="text-sm font-semibold leading-6 text-gray-900">Tank Fuel Budget</h3>
-                            <p class="mt-1 text-sm text-gray-500">The rule for fuel budget.</p>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Tank Fuel Budget
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                The rule for fuel budget.
+                            </p>
                         </div>
                         <div class="grid grid-cols-2 space-x-4">
                             <FormInput
