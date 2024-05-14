@@ -4,7 +4,7 @@
             <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
                 <div
-                    v-if="!appStore.hasValidConfig && appStore.isMultiTenant && !tokens?.length"
+                    v-if="!appStore.hasValidConfig && isMultiTenant && !tokens?.length"
                     class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
                 >
                     <p class="font-bold">Initialization Guide</p>
@@ -12,7 +12,7 @@
                     <div>Create an API token</div>
                 </div>
                 <div class="flex flex-col space-y-8">
-                    <div v-if="appStore.isMultiTenant" class="flex flex-col space-y-4">
+                    <div v-if="isMultiTenant" class="flex flex-col space-y-4">
                         <CollapseCard
                             dusk-id="apiTokensTab"
                             title="Api tokens"
@@ -38,7 +38,11 @@
                                     class="truncate text-sm font-medium text-primary hover:text-primary-light"
                                 >
                                     <Tooltip :text="packg.version">
-                                        <a :href="packg.link" target="_blank" class="cursor-pointer capitalize">
+                                        <a
+                                            :href="packg.link"
+                                            target="_blank"
+                                            class="cursor-pointer capitalize text-light-content dark:text-dark-content"
+                                        >
                                             {{ formatName(packg.name) }}
                                         </a>
                                     </Tooltip>
@@ -50,9 +54,10 @@
 
                 <div class="flex flex-col space-y-4 mt-4">
                     <div class="flex justify-between">
-                        <h1 class="text-xl">Settings</h1>
+                        <h1 class="text-xl text-light-content-strong dark:text-dark-content-strong">Settings</h1>
                     </div>
-                    <SettingsResetPassword v-if="appStore.isMultiTenant" />
+                    <SettingsResetPassword v-if="isMultiTenant" />
+                    <SettingsChangeEmail v-if="isMultiTenant" />
                     <FormCheckbox
                         v-model="advancedMode"
                         name="advancedMode"
@@ -61,10 +66,8 @@
                         readmore="Advanced mode"
                     />
                     <div class="flex space-x-4">
-                        <Btn dusk="deleteBtn" v-if="appStore.isMultiTenant" @click="confirmModal = true"
-                            >Delete account</Btn
-                        >
-                        <Btn dusk="logoutBtn" v-if="appStore.isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
+                        <Btn dusk="deleteBtn" v-if="isMultiTenant" @click="confirmModal = true"> Delete account </Btn>
+                        <Btn dusk="logoutBtn" v-if="isMultiTenant" class="mr-auto" @click="logout">Logout</Btn>
                         <Btn dusk="resetBtn" v-else class="mr-auto" error @click="resetSettings">Reset Settings</Btn>
                     </div>
                 </div>
@@ -96,6 +99,7 @@ import Tooltip from '../Tooltip.vue';
 import { AuthApi } from '~/api/auth';
 import ConfirmModal from '../ConfirmModal.vue';
 import { ApiService } from '~/api';
+import SettingsChangeEmail from './SettingsChangeEmail.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -105,6 +109,8 @@ const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : t
 const confirmModal = ref(false);
 
 const tokens = computed(() => appStore.user?.apiTokens);
+
+const isMultiTenant = computed(() => appStore.isMultiTenant);
 
 const logout = async () => {
     await appStore.logout();

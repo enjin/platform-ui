@@ -16,6 +16,7 @@ return [
         'settings',
         'login',
         'register',
+        'marketplace',
         'forgot-password',
         'reset-password',
     ],

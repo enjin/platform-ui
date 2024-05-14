@@ -1,17 +1,21 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         @submit="showDisclaimer"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Retry Transactions</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Retry Transactions
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto" v-if="item?.ids">
             <div class="flex flex-1 flex-col justify-between">
-                <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                <div class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6">
                     <div class="space-y-6 pt-6 pb-5">
                         <div>
                             <div class="flex">
-                                <label class="block text-sm font-medium leading-6 text-gray-900">
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Transaction IDs <span class="text-red-500">&nbsp;*</span>
                                 </label>
                             </div>

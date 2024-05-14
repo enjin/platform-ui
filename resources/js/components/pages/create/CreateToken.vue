@@ -3,7 +3,7 @@
         <div class="flow-root max-w-3xl mx-auto">
             <div class="mb-4 flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl">Create Token</h1>
+                    <h1 class="text-2xl text-light-content-strong dark:text-dark-content-strong">Create Token</h1>
                 </div>
                 <div class="space-x-4 ml-auto">
                     <Btn dusk="simpleBtn" :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
@@ -11,11 +11,17 @@
                 </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createToken">
-                <div class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all"
+                >
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Token Details</h3>
+                                <h3
+                                    class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Token Details
+                                </h3>
                                 <Tooltip
                                     text="Creates a new token in a collection owned by you, the new token will be automatically
                                 minted to the specified recipient account/wallet"
@@ -48,25 +54,24 @@
                             readmore="Token ID"
                         />
                         <FormInput
+                            v-model="name"
+                            name="name"
+                            label="Name"
+                            description="The name of the token."
+                            required
+                        />
+                        <FormInput
                             v-model="imageUrl"
                             name="imageUrl"
                             label="Image URL"
                             class="w-full"
                             description="The URL of the image for the token."
-                            required
-                        />
-                        <FormInput
-                            v-model="name"
-                            name="name"
-                            label="Name"
-                            description="The name of the collection."
-                            required
                         />
                         <RichTextEditor
                             v-model="description"
                             name="description"
                             label="Description"
-                            description="The description of the collection."
+                            description="The description of the token."
                         />
                         <FormInput
                             v-model="recipient"
@@ -77,12 +82,15 @@
                             tooltip="Wallet Address"
                         />
                         <div>
-                            <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Token type</label>
+                            <label
+                                class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong mb-2"
+                                >Token type</label
+                            >
                             <div class="flex">
                                 <div
-                                    class="flex-1 px-4 py-8 border border-light-stroke-strong rounded-l-2xl cursor-pointer transition-all"
+                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-l-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong"
                                     :class="{
-                                        'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'nft',
+                                        'bg-light-surface-brand/30 !border-light-surface-brand': tokenType === 'nft',
                                     }"
                                     @click="tokenType = 'nft'"
                                     dusk="nftOption"
@@ -93,9 +101,9 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="flex-1 px-4 py-8 border border-light-stroke-strong rounded-r-2xl cursor-pointer transition-all"
+                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-r-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong"
                                     :class="{
-                                        'bg-light-surface-brand-alpha border-light-surface-brand': tokenType === 'ft',
+                                        'bg-light-surface-brand/30 !border-light-surface-brand': tokenType === 'ft',
                                     }"
                                     @click="tokenType = 'ft'"
                                     dusk="ftOption"
@@ -129,11 +137,19 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all"
+                >
                     <div class="space-y-6">
                         <div class="">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Token Royalty</h3>
-                            <p class="mt-1 text-sm text-gray-500">The market behavior for a token.</p>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Token Royalty
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                The market behavior for a token.
+                            </p>
                         </div>
                         <div class="mt-6">
                             <div class="flex flex-row space-x-4">
@@ -159,7 +175,9 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all"
+                >
                     <FormList
                         v-model="attributes"
                         label="Attributes"
@@ -171,12 +189,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Key </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute key.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Key
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">The attribute key.</p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Value </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute value.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Value
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                    The attribute value.
+                                </p>
                             </div>
                             <div class="w-5"></div>
                         </template>
@@ -186,7 +214,7 @@
                                     v-model="inputs.key"
                                     :name="`input__attribute-key-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                             <div class="flex-1">
@@ -194,17 +222,24 @@
                                     v-model="inputs.value"
                                     :name="`input__attribute-value-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                         </template>
                     </FormList>
                 </div>
 
-                <div v-if="isAdvanced" class="bg-white p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all">
+                <div
+                    v-if="isAdvanced"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all"
+                >
                     <div class="space-y-6">
                         <div class="">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Other Options</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Other Options
+                            </h3>
                         </div>
                         <div class="mt-6">
                             <div class="flex flex-col gap-6">
@@ -245,7 +280,7 @@
                         :to="{ name: 'platform.tokens' }"
                         type="button"
                         dusk="cancelBtn"
-                        class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
                         Cancel
                     </RouterLink>
@@ -326,7 +361,7 @@ const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
 
 const validation = yup.object({
-    imageUrl: stringRequiredSchema,
+    imageUrl: stringNotRequiredSchema,
     name: stringRequiredSchema,
     description: stringNotRequiredSchema,
     collectionId: collectionIdRequiredSchema,

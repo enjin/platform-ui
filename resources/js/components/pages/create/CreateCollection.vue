@@ -3,7 +3,9 @@
         <div class="flow-root max-w-3xl mx-auto">
             <div class="mb-4 flex items-center justify-between">
                 <div>
-                    <h1 class="text-xl font-medium md:text-2xl">Create Collection</h1>
+                    <h1 class="text-xl font-medium md:text-2xl text-light-content-strong dark:text-dark-content-strong">
+                        Create Collection
+                    </h1>
                 </div>
                 <div class="space-x-4 ml-auto">
                     <Btn dusk="simpleBtn" :primary="mode === 'simple'" @click="mode = 'simple'"> Simple </Btn>
@@ -11,11 +13,15 @@
                 </div>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createCollection">
-                <div class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
+                <div class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg">
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Collection Details</h3>
+                                <h3
+                                    class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Collection Details
+                                </h3>
                             </div>
                             <a
                                 href="https://docs.enjin.io/docs/first-steps-start-here#step-2-click-create-collection"
@@ -25,12 +31,18 @@
                             </a>
                         </div>
                         <FormInput
+                            v-model="name"
+                            name="name"
+                            label="Name"
+                            description="The name of the collection."
+                            required
+                        />
+                        <FormInput
                             v-model="imageUrl"
                             name="imageUrl"
                             label="Image URL"
                             class="w-full"
                             description="The URL of the image for the collection."
-                            required
                         />
                         <FormInput
                             v-model="bannerUrl"
@@ -38,13 +50,6 @@
                             name="bannerUrl"
                             label="Banner URL"
                             description="The URL of the banner image for the collection."
-                        />
-                        <FormInput
-                            v-model="name"
-                            name="name"
-                            label="Name"
-                            description="The name of the collection."
-                            required
                         />
                         <RichTextEditor
                             v-model="description"
@@ -54,10 +59,17 @@
                         />
                     </div>
                 </div>
-                <div v-if="isAdvanced" class="bg-light-surface-primary p-4 md:p-6 shadow rounded-lg">
+                <div
+                    v-if="isAdvanced"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg"
+                >
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Mint Policy</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Mint Policy
+                            </h3>
                             <Tooltip
                                 text="This section determines the rules pertaining to token supply and amount of tokens
                                 available to be minted on future interactions with this collection."
@@ -103,17 +115,25 @@
                     </div>
                 </div>
 
-                <div class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                >
                     <div class="space-y-6">
                         <div class="flex items-center">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Royalty</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Royalty
+                            </h3>
                             <Tooltip
                                 text="This section determines the rules which tokens and collections must follow when
                                 interacting with Marketplace on the blockchain."
                             >
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
-                            <p class="mt-1 text-sm text-gray-500"></p>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content"></p>
                         </div>
                         <div class="mt-6">
                             <div class="flex flex-row space-x-4 w-full">
@@ -142,7 +162,7 @@
 
                 <div
                     v-if="isAdvanced"
-                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
                     <FormList
                         v-model="explicitRoyaltyCurrencies"
@@ -157,14 +177,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Collection ID </label>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Collection ID
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                     Collection ID of the token that will be included as part of the royalty policy
                                 </p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Token ID </label>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Token ID
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                     Token ID that will be included as part of the royalty policy.
                                     <ReadMoreButton readmore="Token ID" dusk="tokenId" />
                                 </p>
@@ -193,7 +221,7 @@
 
                 <div
                     v-if="isAdvanced"
-                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
                     <FormList
                         v-model="attributes"
@@ -207,12 +235,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Key </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute key.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Key
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">The attribute key.</p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Value </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute value.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Value
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                    The attribute value.
+                                </p>
                             </div>
                             <div class="w-5"></div>
                         </template>
@@ -222,7 +260,7 @@
                                     v-model="inputs.key"
                                     :name="`input__attribute-key-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                             <div class="flex-1">
@@ -230,7 +268,7 @@
                                     v-model="inputs.value"
                                     :name="`input__attribute-value-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                         </template>
@@ -239,11 +277,15 @@
 
                 <div
                     v-if="isAdvanced"
-                    class="bg-light-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg transition-all sm:p-6"
                 >
                     <div class="space-y-6">
                         <div class="">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Other Options</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Other Options
+                            </h3>
                         </div>
                         <FormInput
                             v-model="idempotencyKey"
@@ -267,7 +309,7 @@
                     <RouterLink
                         :to="{ name: 'platform.collections' }"
                         type="button"
-                        class="rounded-md bg-light-surface-primary py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
                         Cancel
                     </RouterLink>
@@ -295,7 +337,13 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
 import { CollectionApi } from '~/api/collection';
 import ReadMoreButton from '~/components/ReadMoreButton.vue';
-import { addressNotRequiredSchema, booleanNotRequiredSchema, numberNotRequiredSchema } from '~/util/schemas';
+import {
+    addressNotRequiredSchema,
+    booleanNotRequiredSchema,
+    numberNotRequiredSchema,
+    stringNotRequiredSchema,
+    stringRequiredSchema,
+} from '~/util/schemas';
 import { TokenIdType } from '~/types/types.interface';
 import Tooltip from '~/components/Tooltip.vue';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
@@ -350,10 +398,10 @@ const explicitRoyaltyCurrencies: Ref<
 const isAdvanced = computed(() => mode.value === 'advanced');
 
 const validation = yup.object({
-    name: yup.string().required('Name is required'),
-    description: yup.string().nullable(),
-    imageUrl: yup.string().required('Image URL is required'),
-    bannerUrl: yup.string().nullable(),
+    name: stringRequiredSchema.typeError('Name is required'),
+    description: stringNotRequiredSchema,
+    imageUrl: stringNotRequiredSchema,
+    bannerUrl: stringNotRequiredSchema,
     maxTokenCount: numberNotRequiredSchema.typeError('Max token count must be a number'),
     maxTokenSupply: numberNotRequiredSchema.typeError('Max token supply must be a number'),
     forceSingleMint: booleanNotRequiredSchema,

@@ -140,4 +140,15 @@ export class AuthApi {
 
         return AuthApi.sendPlatfromRequest(data);
     }
+
+    static async updateUser(email: string) {
+        const data = {
+            query: mutations.UpdateUser,
+            variables: {
+                email,
+            },
+        };
+
+        return AuthApi.sendPlatfromRequest(data);
+    }
 }

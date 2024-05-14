@@ -1,7 +1,7 @@
 <template>
     <span
         :dusk="`btn__readmore-${dusk}`"
-        class="underline text-gray-400 cursor-pointer text-xs"
+        class="underline text-light-content dark:text-dark-content cursor-pointer text-xs"
         @click="sendReadmoreEvent"
     >
         Read more

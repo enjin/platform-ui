@@ -1,6 +1,6 @@
 <template>
     <div
-        class="mb-1 mt-4 sm:mt-8 bg-white px-4 sm:px-6 lg:px-8 shadow rounded-lg overflow-y-auto h-full transition-all"
+        class="mb-1 mt-4 sm:mt-8 bg-light-surface-primary dark:bg-dark-surface-primary px-4 sm:px-6 lg:px-8 shadow rounded-lg overflow-y-auto h-full transition-all"
     >
         <div class="mt-4 flow-root">
             <div class="sm:-mx-6 lg:-mx-8 transition-all">
@@ -16,12 +16,12 @@
                         >
                             <template #addon>
                                 <div
-                                    class="rounded-r-md border border-l-0 border-gray-300 inset-y-0 left-0 flex items-center"
+                                    class="rounded-r-md border border-l-0 border-light-stroke-strong dark:border-dark-stroke-strong inset-y-0 left-0 flex items-center"
                                 >
                                     <select
                                         name="searchCodeType"
                                         v-model="searchCodeType"
-                                        class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm"
+                                        class="h-full rounded-r-md border-0 bg-transparent py-0 pl-3 pr-7 text-light-content dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm cursor-pointer"
                                     >
                                         <option v-for="codeType in codeTypes" :key="codeType">
                                             {{ codeType }}
@@ -56,20 +56,24 @@
                     <div class="relative">
                         <div
                             v-if="selectedBeams.length > 0"
-                            class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-white sm:left-12"
+                            class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-light-surface-primary dark:bg-dark-surface-primary sm:left-12"
                         >
                             <Btn dusk="expireAllBtn" class="!px-2 !py-1 text-sm animate-fade-in" @click="expireSelectedBeams"
                                 >{{ `Expire ${selectedBeams.length > 1 ? 'All' : ''} ` }}
                             </Btn>
                             <Btn dusk="exportBtn" class="!px-2 !py-1 text-sm animate-fade-in" @click="exportSelectedBeams">Export</Btn>
                         </div>
-                        <table id="beamsTable" v-if="beams.items?.length" class="min-w-full divide-y divide-gray-300">
+                        <table
+                            id="beamsTable"
+                            v-if="beams.items?.length"
+                            class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        >
                             <thead>
                                 <tr>
                                     <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
                                         <input
                                             type="checkbox"
-                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary transition-all"
+                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary transition-all bg-light-surface-background dark:bg-dark-surface-background"
                                             :checked="isChecked"
                                             :indeterminate="indeterminate"
                                             @change="checkedChange"
@@ -78,33 +82,45 @@
                                     </th>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3 truncate"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate"
                                     >
                                         Beam Id
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Code
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Name
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         End
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 truncate"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong truncate"
                                     >
                                         Is Claimable
                                     </th>
                                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white">
+                            <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                                 <tr
                                     v-for="beam in beams.items"
                                     :key="beam.id"
-                                    :class="[checkBeamIncluded(beam) && 'bg-gray-50']"
+                                    :class="[
+                                        checkBeamIncluded(beam) &&
+                                            'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50',
+                                    ]"
                                 >
                                     <td class="relative px-7 sm:w-12 sm:px-6">
                                         <div
@@ -113,13 +129,13 @@
                                         ></div>
                                         <input
                                             type="checkbox"
-                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary transition-all"
+                                            class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-light-stroke-strong dark:border-dark-stroke-strong text-primary focus:ring-primary transition-all bg-light-surface-background dark:bg-dark-surface-background"
                                             :value="beam"
                                             v-model="selectedBeams"
                                         />
                                     </td>
                                     <td
-                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3"
+                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                     >
                                         <span
                                             class="cursor-pointer"
@@ -128,16 +144,24 @@
                                             {{ `#${beam.id}` }}
                                         </span>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ shortCode(beam.code) }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ beam.name }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ new Date(beam.end).toLocaleString() }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ beam.isClaimable }}
                                     </td>
                                     <td
@@ -373,7 +397,7 @@ const loadMoreApi = async () => {
         return DTOFactory.forSingleUseCodes(res);
     } else {
         const res = await BeamApi.getBeams({
-            codes: [searchInput.value],
+            ...formatData(searchInput.value ? { codes: [searchInput.value] } : {}),
             after: beams.value.cursor,
         });
 

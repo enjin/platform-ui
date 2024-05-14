@@ -1,10 +1,14 @@
 <template>
     <Form ref="formRef" class="space-y-6" :validation-schema="createValidation">
-        <div class="bg-white px-4 py-5 sm:p-6 rounded-b-lg">
+        <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 sm:p-6 rounded-b-lg">
             <div class="space-y-6">
                 <div class="md:col-span-1">
-                    <h3 class="text-base font-semibold leading-6 text-gray-900">Token Details</h3>
-                    <p class="mt-1 text-sm text-gray-500">
+                    <h3
+                        class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                    >
+                        Token Details
+                    </h3>
+                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                         Enter all the details regarding the tokens that you are adding in this Enjin Beam
                     </p>
                 </div>
@@ -53,12 +57,24 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900"> Key </label>
-                                    <p class="mt-1 text-sm text-gray-500">The attribute key.</p>
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
+                                        Key
+                                    </label>
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                        The attribute key.
+                                    </p>
                                 </div>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900"> Value </label>
-                                    <p class="mt-1 text-sm text-gray-500">The attribute value.</p>
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
+                                        Value
+                                    </label>
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                        The attribute value.
+                                    </p>
                                 </div>
                                 <div class="w-5"></div>
                             </template>
@@ -68,7 +84,7 @@
                                         v-model="inputs.key"
                                         :dusk="`input__attribute-key-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                                 <div class="flex-1">
@@ -76,7 +92,7 @@
                                         v-model="inputs.value"
                                         :dusk="`input__attribute-value-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                             </template>

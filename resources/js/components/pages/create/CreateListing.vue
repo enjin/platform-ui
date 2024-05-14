@@ -2,14 +2,20 @@
     <div class="px-4 sm:px-6 lg:px-8 py-4 pb-20 overflow-y-auto transition-all">
         <div class="flow-root space-y-4 pb-4 max-w-3xl mx-auto">
             <div class="mb-4">
-                <h1 class="text-xl md:text-2xl">Create Listing</h1>
+                <h1 class="text-xl md:text-2xl text-light-content-strong dark:text-dark-content-strong">
+                    Create Listing
+                </h1>
             </div>
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createListing">
-                <div class="bg-white px-4 py-5 shadow rounded-lg sm:p-6">
+                <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="space-y-6">
                         <div class="">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Parameters</h3>
-                            <p class="mt-1 text-sm text-gray-500">Places a sell order.</p>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Parameters
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">Places a sell order.</p>
                         </div>
                         <FormInput
                             v-model="account"
@@ -22,11 +28,11 @@
 
                         <div class="space-y-2">
                             <div>
-                                <h3 class="text-sm leading-6 text-gray-900">
+                                <h3 class="text-sm leading-6 text-light-content-strong dark:text-dark-content-strong">
                                     Make Asset ID
                                     <span class="text-red-500">&nbsp;*</span>
                                 </h3>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                     The collection and token ID of the asset being sold.
                                 </p>
                             </div>
@@ -55,11 +61,11 @@
 
                         <div v-if="enableTakeCollectionId" class="space-y-2 animate-fade-in">
                             <div>
-                                <h3 class="text-sm leading-6 text-gray-900">
+                                <h3 class="text-sm leading-6 text-light-content-strong dark:text-dark-content-strong">
                                     Take Asset ID
                                     <span class="text-red-500">&nbsp;*</span>
                                 </h3>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                     The collection and token ID of the asset being requested.
                                 </p>
                             </div>
@@ -136,7 +142,7 @@
                     <RouterLink
                         :to="{ name: 'platform.marketplace' }"
                         type="button"
-                        class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
                         Cancel
                     </RouterLink>

@@ -1,14 +1,16 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="setConsumption"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Set Consumption</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Set Consumption
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
-                <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                <div class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6">
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
                             v-model="tankId"
@@ -110,7 +112,7 @@ const formRef = ref();
 const validation = yup.object({
     tankId: stringRequiredSchema,
     ruleSetId: numberRequiredSchema.typeError('Rule Set ID must be a number'),
-    userId: stringRequiredSchema,
+    userId: stringNotRequiredSchema,
     totalConsumed: numberRequiredSchema.typeError('Total Consumed must be a number'),
     lastResetBlock: numberNotRequiredSchema.typeError('Last Reset Block must be a number'),
     idempotencyKey: stringNotRequiredSchema,
@@ -124,7 +126,7 @@ const setConsumption = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.setConsumption(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 ruleSetId: ruleSetId.value,
                 userId: userId.value,
                 totalConsumed: totalConsumed.value,

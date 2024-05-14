@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: ['./resources/js/**/*.vue', './resources/views/**/*.blade.php'],
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {

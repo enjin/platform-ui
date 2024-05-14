@@ -1,11 +1,15 @@
 <template>
     <div
-        class="mb-1 mt-4 sm:mt-8 bg-white px-4 sm:px-6 lg:px-8 shadow rounded-lg overflow-y-auto h-full transition-all"
+        class="mb-1 mt-4 sm:mt-8 bg-light-surface-primary dark:bg-dark-surface-primary px-4 sm:px-6 lg:px-8 shadow rounded-lg overflow-y-auto h-full transition-all"
     >
         <div class="mt-4 flow-root">
             <div class="sm:-mx-6 lg:-mx-8 transition-all">
                 <div class="gap-4 min-w-0 mb-2 py-2 sm:px-6 lg:px-8 transition-all">
-                    <h1 class="block text-sm font-medium leading-6 text-gray-900">Filters</h1>
+                    <h1
+                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                    >
+                        Filters
+                    </h1>
                     <div class="flex flex-wrap gap-4 mt-2">
                         <CollapseFilter
                             v-for="searchInput in searchInputs"
@@ -23,45 +27,70 @@
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                     :is-loading="isLoading"
                 >
-                    <table id="bidsTable" class="min-w-full divide-y divide-gray-300" v-if="bids.items?.length">
+                    <table
+                        id="bidsTable"
+                        class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                        v-if="bids.items?.length"
+                    >
                         <thead>
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3 truncate"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate"
                                 >
                                     Bid ID
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Price
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Bidder
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
                                     Listing
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white">
+                        <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
                                 v-for="(bid, idx) in bids.items"
                                 :key="bid.id"
-                                :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                :class="
+                                    idx % 2 === 0
+                                        ? undefined
+                                        : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                "
                             >
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
                                     <span class="cursor-pointer" @click="openModalSlide('DetailsBidSlideover', bid)">
                                         {{ `#${bid.id}` }}
                                     </span>
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ checkFormatPrice(bid.price, bid.listing, currencySymbol) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ addressShortHex(bid.bidder) }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
                                     {{ shortString(bid.listing.listingId) }}
                                 </td>
                                 <td

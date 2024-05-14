@@ -1,9 +1,12 @@
 <template>
     <div>
-        <label v-if="label" class="block text-sm font-medium leading-6 text-gray-900">
+        <label
+            v-if="label"
+            class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+        >
             {{ label }} <span v-if="required" class="text-red-500">&nbsp;*</span>
         </label>
-        <p class="mt-1 text-sm text-gray-500" v-if="description">{{ description }}</p>
+        <p class="mt-1 text-sm text-light-content dark:text-dark-content" v-if="description">{{ description }}</p>
         <input
             v-for="option in options"
             v-model="localModelValue"
@@ -16,18 +19,24 @@
             <template v-for="option in options" :key="option.value">
                 <div
                     :class="[
-                        hasValue(option.value) ? 'border-primary ring-2 ring-primary' : '',
-                        'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none transition-all',
+                        hasValue(option.value)
+                            ? 'ring-primary'
+                            : 'ring-light-stroke-strong dark:ring-dark-stroke-strong',
+                        'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
                     ]"
                     @click="updateCheckbox(option.value)"
                 >
                     <span class="flex flex-1">
                         <span class="flex">
-                            <span class="block text-sm font-medium text-gray-900 truncate">
+                            <span
+                                class="block text-sm font-medium text-light-content-strong dark:text-dark-content-strong truncate"
+                            >
                                 {{ option.label }}
                             </span>
                             <Tooltip class="!flex items-center" v-if="option.tooltip" :text="option.tooltip">
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </span>
                     </span>

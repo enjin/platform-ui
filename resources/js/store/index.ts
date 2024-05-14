@@ -39,9 +39,10 @@ export const useAppStore = defineStore('app', {
         allowResend: false,
         user: null,
         tokensCount: 0,
+        theme: 'light',
     }),
     persist: {
-        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount'],
+        paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount', 'theme'],
     },
     actions: {
         async init() {
@@ -252,7 +253,7 @@ export const useAppStore = defineStore('app', {
             if (this.navigations.find((nav) => nav.name === 'Marketplace')) return;
             this.navigations = [
                 ...this.navigations,
-                { name: 'Marketplace', to: { name: 'platform.marketplace' }, pos: 5 },
+                { name: 'Marketplace', to: { name: 'platform.marketplace.bids' }, pos: 5 },
             ].sort((a, b) => a.pos - b.pos);
         },
         setAdvancedMode(advanced: boolean) {
@@ -260,6 +261,9 @@ export const useAppStore = defineStore('app', {
         },
         setCollections(collections: string[]) {
             this.collections = collections;
+        },
+        setTheme(theme: 'dark' | 'light') {
+            this.theme = theme;
         },
     },
     getters: {

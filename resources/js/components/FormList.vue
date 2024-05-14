@@ -2,13 +2,17 @@
     <div class="space-y-4" :class="{ 'md:!flex md:!flex-col': flex }">
         <div class="" v-if="label || description">
             <div class="flex" v-if="label">
-                <h3 class="text-base font-semibold leading-6 text-gray-900">{{ label }}</h3>
+                <h3 class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong">
+                    {{ label }}
+                </h3>
                 <Tooltip class="!flex items-center" v-if="tooltip" :text="tooltip">
-                    <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                    <QuestionMarkCircleIcon
+                        class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                    />
                 </Tooltip>
             </div>
 
-            <p v-if="description" class="mt-1 text-sm text-gray-500">
+            <p v-if="description" class="mt-1 text-sm text-light-content dark:text-dark-content">
                 {{ description }}
                 <ReadMoreButton v-if="readmore" :readmore="readmore" :dusk="duskId" />
             </p>

@@ -3,7 +3,8 @@
         class="inline-flex rounded-md px-1 truncate"
         :class="{
             'bg-red-500 !text-white ': isError,
-            'bg-slate-200 text-slate-600': !isError,
+            'bg-light-surface-primary/60 dark:bg-dark-surface-primary/60 text-light-content-strong dark:text-dark-content-strong':
+                !isError,
         }"
     >
         <span
@@ -15,7 +16,7 @@
             v-if="closable"
             class="h-5 w-5 ml-auto my-auto cursor-pointer flex-shrink-0"
             :class="{
-                'text-gray-400': !isError,
+                'text-light-content dark:text-dark-content': !isError,
             }"
             @click="emit('remove')"
         />

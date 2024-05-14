@@ -1,57 +1,78 @@
 <template>
-    <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl" v-if="item">
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Claim Details</h3>
+    <div
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
+        v-if="item"
+    >
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Claim Details
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="pt-4 px-4 sm:px-6">
                     <img class="w-full rounded-md mx-auto" :src="item.image" />
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Claim ID</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.id }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Claim ID</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.id }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Claim Status</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.claimStatus ?? '-' }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Claim Status</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.claimStatus ?? '-' }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3" v-if="item.wallet?.account">
-                        <dt class="text-base font-medium text-gray-500">Wallet Claimed</dt>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Wallet Claimed</dt>
                         <Address :address="item.wallet?.account?.publicKey" />
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Code</dt>
-                        <dd class="mt-1 text-sm text-gray-900 break-words">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Code</dt>
+                        <dd
+                            class="flex items-center text-sm text-light-content-strong dark:text-dark-content-strong break-words"
+                        >
                             {{ item.code }}
                             <CopyTextIcon :text="item.code" />
                         </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Quantity</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.quantity }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Quantity</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.quantity }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Collection ID</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.collection?.collectionId }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Collection ID</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.collection?.collectionId }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Token ID</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.tokenId }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Token ID</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.tokenId }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Type</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ item.type }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Type</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.type }}
+                        </dd>
                     </div>
 
                     <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-gray-500">Claimed At</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ new Date(item.claimedAt).toLocaleString() }}</dd>
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Claimed At</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ new Date(item.claimedAt).toLocaleString() }}
+                        </dd>
                     </div>
                 </div>
             </div>

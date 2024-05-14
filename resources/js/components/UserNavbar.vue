@@ -1,5 +1,5 @@
 <template>
-    <Disclosure as="nav" class="bg-light-surface-primary shadow z-40">
+    <Disclosure as="nav" class="bg-light-surface-primary dark:bg-dark-surface-primary shadow z-40">
         <div class="px-4 sm:px-6 lg:px-8 transition-all">
             <div class="flex h-16 justify-between">
                 <div class="flex">
@@ -7,7 +7,7 @@
                     <div class="-ml-2 mr-2 space-x-2 flex items-center md:hidden animate-slide-in">
                         <DisclosureButton
                             v-if="(appStore.isMultiTenant && appStore.hasValidConfig) || !appStore.isMultiTenant"
-                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-light"
+                            class="inline-flex items-center justify-center rounded-md p-2 text-light-content dark:text-dark-content hover:bg-light-surface-background hover:dark:bg-dark-surface-background hover:text-light-content hover:dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-light"
                         >
                             <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
                             <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
@@ -25,8 +25,12 @@
                 </div>
                 <div v-if="appStore.loggedIn" class="flex items-center space-x-2 md:space-x-4">
                     <WalletConnectButton />
-                    <InformationCircleIcon class="h-6 w-6 text-gray-400 cursor-pointer" @click="openHelp" />
+                    <InformationCircleIcon
+                        class="h-6 w-6 text-light-content dark:text-dark-content cursor-pointer"
+                        @click="openHelp"
+                    />
                     <NotificationsList />
+                    <ThemeToggler />
                     <ProfileMenu />
                 </div>
             </div>
@@ -57,7 +61,8 @@ import DisclosureMenu from '~/components/DisclosureMenu.vue';
 import NotificationsList from '~/components/NotificationsList.vue';
 import Handbook from '~/components/Handbook.vue';
 import WalletConnectButton from '~/components/WalletConnectButton.vue';
-import CanaryEnjinLogo from './CanaryEnjinLogo.vue';
+import CanaryEnjinLogo from '~/components/CanaryEnjinLogo.vue';
+import ThemeToggler from '~/components/ThemeToggler.vue';
 
 const open = ref(false);
 const help = ref(false);

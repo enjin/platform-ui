@@ -1,14 +1,16 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="mutateFuelTank"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Mutate Fuel Tank</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Mutate Fuel Tank
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
-                <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                <div class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6">
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
                             v-model="tankId"
@@ -46,10 +48,12 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Whitelisted Callers
                                     </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The wallet accounts that are allowed to use the fuel tank.
                                     </p>
                                 </div>
@@ -61,14 +65,18 @@
                                         v-model="inputs.caller"
                                         :dusk="`input__caller-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                             </template>
                         </FormList>
                         <div>
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Require Token</h3>
-                            <p class="mt-1 text-sm text-gray-500">
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Require Token
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                 The wallet account must have a specific token in their wallet to use the fuel tank.
                             </p>
                         </div>
@@ -119,6 +127,12 @@ import { addressToPublicKey } from '~/util/address';
 import { TokenIdType } from '~/types/types.interface';
 import { useAppStore } from '~/store';
 import FormSelect from '~/components/FormSelect.vue';
+import {
+    booleanNotRequiredSchema,
+    booleanRequiredSchema,
+    stringNotRequiredSchema,
+    stringRequiredSchema,
+} from '~/util/schemas';
 
 const emit = defineEmits(['close']);
 
@@ -166,14 +180,18 @@ const removeCaller = (index: number) => {
 };
 
 const validation = yup.object({
-    tankId: yup.string().required(),
-    providesDeposit: yup.boolean().required(),
-    reservesExistentialDeposit: yup.boolean(),
-    reservesAccountCreationDeposit: yup.boolean(),
-    whitelistedCallers: yup.string().nullable(),
-    collectionId: yup.string().nullable(),
-    tokenId: yup.string().nullable(),
-    idempotencyKey: yup.string().nullable(),
+    tankId: stringRequiredSchema,
+    providesDeposit: booleanRequiredSchema,
+    reservesExistentialDeposit: booleanNotRequiredSchema,
+    reservesAccountCreationDeposit: booleanNotRequiredSchema,
+    whitelistedCallers: yup.array().of(
+        yup.object({
+            caller: stringRequiredSchema,
+        })
+    ),
+    collectionId: stringNotRequiredSchema,
+    tokenId: stringNotRequiredSchema,
+    idempotencyKey: stringNotRequiredSchema,
 });
 
 const mutateFuelTank = async () => {
@@ -184,13 +202,13 @@ const mutateFuelTank = async () => {
         isLoading.value = true;
         const res = await FuelTankApi.mutateFuelTank(
             formatData({
-                tankId: addressToPublicKey(tankId.value ?? ''),
+                tankId: addressToPublicKey(tankId.value!),
                 mutation: {
                     providesDeposit: providesDeposit.value,
                     reservesExistentialDeposit: reservesExistentialDeposit.value,
                     reservesAccountCreationDeposit: reservesAccountCreationDeposit.value,
                     accountRules: {
-                        whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller),
+                        whitelistedCallers: formatData(whitelistedCallers.value.map((item: any) => item.caller)),
                         requireToken: collectionId.value
                             ? {
                                   collectionId: collectionId.value,

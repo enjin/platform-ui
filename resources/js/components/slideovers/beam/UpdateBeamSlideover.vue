@@ -1,17 +1,19 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="updateBeam"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Update Beam</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Update Beam
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <div class="px-4 sm:px-6 pt-4 w-full rounded-md overflow-hidden">
                     <img class="w-full rounded-md" :src="item?.image" />
                 </div>
-                <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                <div class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6">
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
                             v-model="code"
@@ -96,6 +98,7 @@ const props = withDefaults(
             start: string;
             end: string;
             flags: string[];
+            claimConditions: { type: string; value: string }[];
         };
     }>(),
     {
@@ -135,11 +138,11 @@ const checkChanges = () => {
         description: description.value !== props.item?.description ? description.value : null,
         image: image.value !== props.item?.image ? image.value : null,
         start:
-            new Date(start.value).toString() !== new Date(props.item?.start ?? '').toString()
+            new Date(start.value).toString() !== new Date(props.item?.start!).toString()
                 ? new Date(start.value).toString()
                 : null,
         end:
-            new Date(end.value).toString() !== new Date(props.item?.end ?? '').toString()
+            new Date(end.value).toString() !== new Date(props.item?.end!).toString()
                 ? new Date(end.value).toString()
                 : null,
         flags:
@@ -151,6 +154,7 @@ const checkChanges = () => {
                       };
                   })
                 : null,
+        claimConditions: props.item?.claimConditions,
     };
 };
 

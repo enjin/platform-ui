@@ -1,11 +1,13 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="formAction"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Accounts</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Accounts
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
                 <RadioGroupButton
@@ -15,7 +17,10 @@
                     :items="actions"
                     :cols="actions.length"
                 />
-                <div class="divide-y divide-gray-200 px-4 sm:px-6" v-if="actionType !== 'list'">
+                <div
+                    class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6"
+                    v-if="actionType !== 'list'"
+                >
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
                             v-model="tankId"
@@ -35,8 +40,12 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900"> User ID </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
+                                        User ID
+                                    </label>
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The wallet account to be
                                         {{ actionType === 'add' ? 'added to' : 'removed from' }}
                                         the fuel tank.
@@ -50,7 +59,7 @@
                                         v-model="inputs.userId"
                                         :dusk="`input__user-id-${index + 1}`"
                                         type="text"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                             </template>
@@ -71,33 +80,44 @@
                         class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
                         :is-loading="isLoading"
                     >
-                        <table class="min-w-full divide-y divide-gray-300" v-if="accounts.items?.length">
+                        <table
+                            class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
+                            v-if="accounts.items?.length"
+                        >
                             <thead>
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                     >
                                         ID
                                     </th>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                     >
                                         Account
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white">
+                            <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                                 <tr
                                     v-for="(account, idx) in accounts.items"
                                     :key="idx"
-                                    :class="idx % 2 === 0 ? undefined : 'bg-gray-50'"
+                                    :class="
+                                        idx % 2 === 0
+                                            ? undefined
+                                            : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
+                                    "
                                 >
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ account.id }}
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    >
                                         {{ account.account }}
                                     </td>
                                 </tr>
@@ -192,7 +212,7 @@ const accounts: Ref<{
     items: [],
     cursor: null,
 });
-const tankId = ref(props.item?.tankId ?? '');
+const tankId = ref(props.item?.tankId!);
 const idempotencyKey = ref('');
 const formRef = ref();
 const paginatorRef = ref();
@@ -301,7 +321,7 @@ const closeSlide = () => {
 
 const getAccounts = async () => {
     try {
-        const res = await FuelTankApi.getAccounts(addressToPublicKey(tankId.value) ?? '');
+        const res = await FuelTankApi.getAccounts(addressToPublicKey(tankId.value)!);
         accounts.value = DTOFactory.forAccounts(res);
     } catch (e) {
         // Do nothing

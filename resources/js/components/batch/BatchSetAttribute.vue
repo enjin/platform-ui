@@ -2,17 +2,23 @@
     <div class="mt-4 flow-root">
         <div class="space-y-4 pb-4">
             <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBatch">
-                <div class="bg-white p-6 shadow rounded-lg">
+                <div class="bg-light-surface-primary dark:bg-dark-surface-primary p-6 shadow rounded-lg">
                     <div class="space-y-6">
                         <div class="flex items-center">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Batch Set Attribute</h3>
+                            <h3
+                                class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Batch Set Attribute
+                            </h3>
                             <Tooltip
                                 text="Use this to set multiple attributes on a collection or token in one transaction. Setting
                                 the continueOnFailure flag to true will allow all valid attributes to be set while
                                 skipping invalid attributes so they can be fixed and attempted again in another
                                 transaction."
                             >
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </div>
                         <FormSelect
@@ -49,7 +55,9 @@
                         />
                     </div>
                 </div>
-                <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
+                <div
+                    class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow sm:rounded-lg sm:p-6"
+                >
                     <FormList
                         v-model="attributes"
                         label="Attributes"
@@ -61,12 +69,22 @@
                     >
                         <template #headers>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Key </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute key.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Key
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">The attribute key.</p>
                             </div>
                             <div class="flex-1">
-                                <label class="block text-sm font-medium leading-6 text-gray-900"> Value </label>
-                                <p class="mt-1 text-sm text-gray-500">The attribute value.</p>
+                                <label
+                                    class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Value
+                                </label>
+                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                    The attribute value.
+                                </p>
                             </div>
                             <div class="w-5"></div>
                         </template>
@@ -76,7 +94,7 @@
                                     v-model="inputs.key"
                                     :dusk="`input__attribute-key-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                             <div class="flex-1">
@@ -84,7 +102,7 @@
                                     v-model="inputs.value"
                                     :dusk="`input__attribute-value-${index + 1}`"
                                     type="text"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                 />
                             </div>
                         </template>
@@ -94,7 +112,7 @@
                     <RouterLink
                         :to="{ name: 'platform.tokens' }"
                         type="button"
-                        class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
                         Cancel
                     </RouterLink>

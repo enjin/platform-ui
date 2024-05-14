@@ -16,5 +16,9 @@ export default `query GetBeam($code: String!, $account: String) {
         url
         payload
       }
+      claimConditions {
+        type
+        value
+      }
     }
 }`;

@@ -1,14 +1,16 @@
 <template>
     <Form
         ref="formRef"
-        class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
         @submit="mutateCollection"
     >
-        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-gray-900">Mutate Collection</h3>
+        <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
+            Mutate Collection
+        </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
-                <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                <div class="divide-y divide-light-stroke dark:divide-dark-stroke px-4 sm:px-6">
                     <div class="space-y-6 pt-6 pb-5">
                         <FormInput
                             v-model="collectionId"
@@ -56,14 +58,22 @@
                         >
                             <template #headers>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
                                         Collection ID
                                     </label>
-                                    <p class="mt-1 text-sm text-gray-500">The collection id of a multi token.</p>
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                        The collection id of a multi token.
+                                    </p>
                                 </div>
                                 <div class="flex-1">
-                                    <label class="block text-sm font-medium leading-6 text-gray-900"> Token ID </label>
-                                    <p class="mt-1 text-sm text-gray-500">
+                                    <label
+                                        class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
+                                        Token ID
+                                    </label>
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
                                         The token ID of a multi token.
                                         <ReadMoreButton readmore="Token ID" dusk="tokenId" />
                                     </p>
@@ -78,7 +88,7 @@
                                         type="number"
                                         min="0"
                                         oninput="validity.valid||(value=value.replace(/\D+/g, ''))"
-                                        class="block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        class="block w-full rounded-md border-0 py-2 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content placeholder:dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 bg-light-surface-background dark:bg-dark-surface-background"
                                     />
                                 </div>
                                 <div class="w-1/2">
