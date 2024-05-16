@@ -38,6 +38,7 @@
                             </Btn>
                         </div>
                         <table
+                            id="transactionsTable"
                             class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
                             v-if="transactions.items?.length"
                         >
