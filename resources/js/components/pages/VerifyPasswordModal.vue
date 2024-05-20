@@ -65,6 +65,7 @@ const confirm = async (recaptcha?: string) => {
     const res = await AuthApi.login(email, password.value, recaptcha);
     if (res.data.Login) {
         emit('confirm');
+        closeModal();
     } else {
         snackbar.error({
             title: 'Error',
