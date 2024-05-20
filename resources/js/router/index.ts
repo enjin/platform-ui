@@ -60,11 +60,8 @@ const routes = [
             requiresAuth: true,
             requiresToken: true,
         },
+        redirect: { name: 'platform.beams.list' },
         children: [
-            {
-                path: '',
-                redirect: { name: 'platform.beams.list' },
-            },
             {
                 path: 'list',
                 name: 'platform.beams.list',
@@ -94,11 +91,8 @@ const routes = [
             requiresAuth: true,
             requiresToken: true,
         },
+        redirect: { name: 'platform.marketplace.bids' },
         children: [
-            {
-                path: '',
-                redirect: { name: 'platform.marketplace.bids' },
-            },
             {
                 path: 'bids',
                 name: 'platform.marketplace.bids',

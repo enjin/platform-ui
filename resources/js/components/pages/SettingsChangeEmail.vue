@@ -31,6 +31,11 @@
         <div v-else>
             <Btn primary @click="enableReset = true" dusk="changeEmailBtn">Change Email</Btn>
         </div>
+        <VerifyPasswordModal
+            :is-open="verifyPasswordModal"
+            @closed="verifyPasswordModal = false"
+            @confirm="confirmChangeEmail"
+        />
     </div>
 </template>
 
@@ -44,6 +49,7 @@ import { snackbarErrors } from '~/util';
 import snackbar from '~/util/snackbar';
 import { Form } from 'vee-validate';
 import { useAppStore } from '~/store';
+import VerifyPasswordModal from './VerifyPasswordModal.vue';
 
 const appStore = useAppStore();
 
@@ -52,6 +58,7 @@ const newEmail = ref();
 const isLoading = ref(false);
 const formRef = ref();
 const enableReset = ref(false);
+const verifyPasswordModal = ref(false);
 
 const validation = yup.object().shape({
     newEmail: yup.string().email().required(),
@@ -65,9 +72,13 @@ const isValid = async () => {
 const changeEmail = async () => {
     if (!(await isValid())) return;
 
+    verifyPasswordModal.value = true;
+};
+
+const confirmChangeEmail = async (password) => {
     isLoading.value = true;
     try {
-        const res = await AuthApi.updateUser(newEmail.value);
+        const res = await AuthApi.updateUser(newEmail.value, password);
         if (res.data.UpdateUser) {
             snackbar.success({
                 title: 'Email changed',

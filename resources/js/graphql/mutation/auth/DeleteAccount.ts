@@ -1,3 +1,3 @@
-export default `mutation DeleteAccount {
-    DeleteAccount
+export default `mutation DeleteAccount($password: String!) {
+    DeleteAccount(password: $password)
 }`;
