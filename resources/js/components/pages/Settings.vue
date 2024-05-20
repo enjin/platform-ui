@@ -11,7 +11,7 @@
                     <p>Please complete these steps in order to use the platform:</p>
                     <div>Create an API token</div>
                 </div>
-                <div class="flex flex-col space-y-8">
+                <div class="flex flex-col space-y-4">
                     <div v-if="isMultiTenant" class="flex flex-col space-y-4">
                         <CollapseCard
                             dusk-id="apiTokensTab"
@@ -78,6 +78,11 @@
             title="Delete account"
             description="Your account will be deactivated and will be removed after 14 days, All active Beams or other pending platform actions will be permanently deleted. Do you want to delete your account?"
             @closed="confirmModal = false"
+            @confirm="verifyPasswordModal = true"
+        />
+        <VerifyPasswordModal
+            :is-open="verifyPasswordModal"
+            @closed="verifyPasswordModal = false"
             @confirm="deleteAccount"
         />
     </div>
@@ -100,6 +105,7 @@ import { AuthApi } from '~/api/auth';
 import ConfirmModal from '../ConfirmModal.vue';
 import { ApiService } from '~/api';
 import SettingsChangeEmail from './SettingsChangeEmail.vue';
+import VerifyPasswordModal from './VerifyPasswordModal.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -107,6 +113,7 @@ const appStore = useAppStore();
 const advancedMode = ref(appStore.advanced);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
 const confirmModal = ref(false);
+const verifyPasswordModal = ref(false);
 
 const tokens = computed(() => appStore.user?.apiTokens);
 
