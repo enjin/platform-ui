@@ -75,10 +75,10 @@ const changeEmail = async () => {
     verifyPasswordModal.value = true;
 };
 
-const confirmChangeEmail = async () => {
+const confirmChangeEmail = async (password) => {
     isLoading.value = true;
     try {
-        const res = await AuthApi.updateUser(newEmail.value);
+        const res = await AuthApi.updateUser(newEmail.value, password);
         if (res.data.UpdateUser) {
             snackbar.success({
                 title: 'Email changed',

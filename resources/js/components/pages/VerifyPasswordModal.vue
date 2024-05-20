@@ -64,7 +64,7 @@ const confirm = async (recaptcha?: string) => {
     const email = appStore.user?.email;
     const res = await AuthApi.login(email, password.value, recaptcha);
     if (res.data.Login) {
-        emit('confirm');
+        emit('confirm', password.value);
         closeModal();
     } else {
         snackbar.error({

@@ -134,8 +134,8 @@ const formatName = (name: string) => {
     return name.replaceAll('-', ' ');
 };
 
-const deleteAccount = async () => {
-    await AuthApi.deleteAccount();
+const deleteAccount = async (password) => {
+    await AuthApi.deleteAccount(password);
     appStore.clearLogin();
     await ApiService.reloadCsrf();
 };
