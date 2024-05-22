@@ -3,7 +3,7 @@
         class="inline-flex rounded-md px-1 truncate"
         :class="{
             'bg-red-500 !text-white ': isError,
-            'bg-light-surface-primary/60 dark:bg-dark-surface-primary/60 text-light-content-strong dark:text-dark-content-strong':
+            'bg-light-surface-background dark:bg-dark-surface-background text-light-content-strong dark:text-dark-content-strong':
                 !isError,
         }"
     >

@@ -58,7 +58,6 @@ export class MarketplaceApi {
         const data = {
             query: mutations.CreateListing,
             variables: {
-                account: createListingData.account,
                 makeAssetId: createListingData.makeAssetId,
                 takeAssetId: createListingData.takeAssetId,
                 amount: createListingData.amount,
@@ -118,6 +117,17 @@ export class MarketplaceApi {
                 idempotencyKey: placeBidData.idempotencyKey,
             },
         };
+
+        return MarketplaceApi.sendPlatfromRequest(data);
+    }
+
+    static async getCurrentBlock() {
+        const data = {
+            query: queries.GetBlocks,
+            variables: {
+                first: 1,
+            },
+        }
 
         return MarketplaceApi.sendPlatfromRequest(data);
     }

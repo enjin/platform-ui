@@ -1,5 +1,5 @@
 <template>
-    <Popover ref="popperRef" theme="dark" @open:popper="open = true" @close:popper="open = false">
+    <Popover ref="popperRef" :theme="useAppStore().theme" @open:popper="open = true" @close:popper="open = false">
         <template #activator>
             <Btn ref="btnOpenerRef" :class="open ? 'ring-1 ring-primary' : 'text-opacity-90'">
                 <span
@@ -61,6 +61,7 @@ import Chip from '~/components/Chip.vue';
 import FormInput from '~/components/FormInput.vue';
 import FormSelect from '~/components/FormSelect.vue';
 import Popover from '~/components/Popover.vue';
+import { useAppStore } from '~/store';
 
 const props = withDefaults(
     defineProps<{
