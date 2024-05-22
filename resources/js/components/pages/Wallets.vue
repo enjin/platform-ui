@@ -215,7 +215,7 @@ const getSearchInputs = () => {
     const inputs = {};
 
     searchInputs.value.forEach((input) => {
-        if (input.type === 'number') {
+        if (input.type === 'number' && input.value !== '') {
             inputs[input.name] = parseInt(input.value);
         } else {
             inputs[input.name] = input.value.trim();

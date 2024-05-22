@@ -19,6 +19,12 @@ export class DTOWalletFactory {
 
     public static forWallet(walletData: any): any {
         const wallet = walletData.data.GetWallet;
+        if (!wallet) {
+            return {
+                items: [],
+                cursor: null,
+            };
+        }
 
         return {
             items: [DTOWalletFactory.buildWallet(wallet)],
