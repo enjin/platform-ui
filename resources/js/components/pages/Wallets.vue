@@ -132,6 +132,7 @@ import FormInput from '~/components/FormInput.vue';
 import NoItems from '~/components/NoItems.vue';
 import { TransactionState } from '~/types/types.enums';
 import Btn from '../Btn.vue';
+import { useAppStore } from '~/store';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -305,7 +306,8 @@ const openTransactionSlide = async (transactionId: string) => {
     }, 600);
 };
 
-onMounted(() => {
+onMounted(async () => {
+    await useAppStore().initPromise;
     getWallets();
     loadMoreItemsWithObserver();
     events.on('transaction', openTransactionSlide);

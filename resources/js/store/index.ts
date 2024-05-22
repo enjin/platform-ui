@@ -40,6 +40,7 @@ export const useAppStore = defineStore('app', {
         user: null,
         tokensCount: 0,
         theme: 'light',
+        initPromise: null,
     }),
     persist: {
         paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount', 'theme'],
@@ -47,48 +48,52 @@ export const useAppStore = defineStore('app', {
     actions: {
         async init() {
             try {
-                this.setConfig();
+                // eslint-disable-next-line
+                this.initPromise = new Promise(async (resolve) => {
+                    this.setConfig();
 
-                if (!this.config.url) {
-                    return false;
-                }
-                if (!this.isMultiTenant && !this.config.authorization_token.length) {
-                    return false;
-                }
+                    if (!this.config.url) {
+                        return false;
+                    }
+                    if (!this.isMultiTenant && !this.config.authorization_token.length) {
+                        return false;
+                    }
+                    const urlConfig = await this.checkURL(this.config.url);
+                    this.config.network = urlConfig?.network;
+                    this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
+                        let link =
+                            urlConfig.url +
+                            '/graphiql/' +
+                            (key === 'enjin/platform-core' ? '' : key.replace('enjin/platform-', ''));
+                        if (key === 'enjin/platform-ui') link = '';
 
-                const urlConfig = await this.checkURL(this.config.url);
-                this.config.network = urlConfig?.network;
-                this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
-                    let link =
-                        urlConfig.url +
-                        '/graphiql/' +
-                        (key === 'enjin/platform-core' ? '' : key.replace('enjin/platform-', ''));
-                    if (key === 'enjin/platform-ui') link = '';
+                        return {
+                            name: key.replace('enjin/', ''),
+                            version: value.version,
+                            link,
+                        };
+                    });
 
-                    return {
-                        name: key.replace('enjin/', ''),
-                        version: value.version,
-                        link,
-                    };
+                    if (this.hasBeamPackage) {
+                        this.addBeamNavigation();
+                    }
+                    if (this.hasFuelTanksPackage) {
+                        this.addFuelTanksNavigation();
+                    }
+                    if (this.hasMarketplacePackage) {
+                        this.addMarketplaceNavigation();
+                    }
+
+                    if (this.loggedIn && this.hasMultiTenantPackage && this.config.tenant && !this.user) {
+                        await this.getUser();
+                    }
+
+                    await useConnectionStore().getSession();
+
+                    await this.fetchCollectionIds();
+
+                    resolve();
                 });
-
-                if (this.hasBeamPackage) {
-                    this.addBeamNavigation();
-                }
-                if (this.hasFuelTanksPackage) {
-                    this.addFuelTanksNavigation();
-                }
-                if (this.hasMarketplacePackage) {
-                    this.addMarketplaceNavigation();
-                }
-
-                if (this.loggedIn && this.hasMultiTenantPackage && this.config.tenant && !this.user) {
-                    await this.getUser();
-                }
-
-                await useConnectionStore().getSession();
-
-                return await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
                 if (this.config.tenant) {
@@ -105,7 +110,8 @@ export const useAppStore = defineStore('app', {
                 this.loggedIn = true;
             }
 
-            return await this.init();
+            this.init();
+            await this.initPromise;
         },
         setConfig() {
             if (appConfig?.tenant) {

@@ -13,6 +13,7 @@ export class BeamApi {
             variables: {
                 code: getBeamData.code,
                 account: getBeamData.account,
+                internal: getBeamData.internal,
             },
         };
 
@@ -26,6 +27,7 @@ export class BeamApi {
                 codes: getBeamsData.codes,
                 names: getBeamsData.names,
                 after: getBeamsData.after,
+                internal: getBeamsData.internal,
             },
         };
 
@@ -53,8 +55,9 @@ export class BeamApi {
             query: queries.GetSingleUseCodes,
             variables: {
                 code: getSingleUseCodesData.code,
-                after: getSingleUseCodesData.after,
                 first: 20,
+                after: getSingleUseCodesData.after,
+                internal: getSingleUseCodesData.internal,
             },
         };
 

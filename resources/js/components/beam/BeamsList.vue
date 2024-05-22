@@ -198,6 +198,9 @@ import NoItems from '~/components/NoItems.vue';
 import Btn from '~/components/Btn.vue';
 import { formatData, snackbarErrors } from '~/util';
 import { BeamApi } from '~/api/beam';
+import { useAppStore } from '~/store';
+
+const appStore = useAppStore();
 
 const isLoading = ref(false);
 const downloadLoading = ref(false);
@@ -242,6 +245,8 @@ const selectedBeams: Ref<
 const indeterminate = computed(
     () => selectedBeams.value.length > 0 && selectedBeams.value.length < beams.value.items.length
 );
+
+const isInternal = computed(() => !!appStore.hasMultiTenantPackage);
 
 const enablePagination = computed(() => searchInput.value === '');
 
@@ -309,7 +314,10 @@ const getSingleUseCode = async () => {
 const getBeamCodes = async () => {
     isLoading.value = true;
     try {
-        const res = await BeamApi.getBeams(formatData(searchInput.value ? { codes: [searchInput.value] } : {}));
+        const res = await BeamApi.getBeams({
+            ...formatData(searchInput.value ? { codes: [searchInput.value] } : {}),
+            internal: isInternal.value,
+        });
         beams.value = DTOFactory.forBeams(res);
     } catch (e) {
         beams.value.items = [];
@@ -351,6 +359,7 @@ const exportAllBeams = async () => {
         const res = await BeamApi.getSingleUseCodes({
             code: searchInput.value,
             first: beams.value.totalCount,
+            internal: isInternal.value,
         });
         const data = DTOFactory.forSingleUseCodes(res);
         downloadCSV(data.items.map((beam) => ({ code: beam.code, url: beam.qr.url, qr: beam.qr.payload })));
@@ -388,6 +397,7 @@ const loadMoreApi = async () => {
         const res = await BeamApi.getSingleUseCodes({
             code: searchInput.value,
             after: beams.value.cursor,
+            internal: isInternal.value,
         });
 
         return DTOFactory.forSingleUseCodes(res);
@@ -395,6 +405,7 @@ const loadMoreApi = async () => {
         const res = await BeamApi.getBeams({
             ...formatData(searchInput.value ? { codes: [searchInput.value] } : {}),
             after: beams.value.cursor,
+            internal: isInternal.value,
         });
 
         return DTOFactory.forBeams(res);
@@ -448,7 +459,8 @@ const openTransactionSlide = async (transactionId: string) => {
     }, 600);
 };
 
-onMounted(() => {
+onMounted(async () => {
+    await appStore.initPromise;
     getBeams();
     loadMoreItemsWithObserver();
     events.on('transaction', openTransactionSlide);
