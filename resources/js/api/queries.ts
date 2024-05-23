@@ -23,6 +23,7 @@ import GetAccounts from '~/graphql/query/fueltank/GetAccounts';
 import GetListings from '~/graphql/query/marketplace/GetListings';
 import GetBids from '~/graphql/query/marketplace/GetBids';
 import GetSales from '~/graphql/query/marketplace/GetSales';
+import GetBlocks from '~/graphql/query/marketplace/GetBlocks';
 
 export default {
     GetTransaction,
@@ -50,4 +51,5 @@ export default {
     GetListings,
     GetBids,
     GetSales,
+    GetBlocks,
 };

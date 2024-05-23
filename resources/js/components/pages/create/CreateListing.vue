@@ -17,14 +17,6 @@
                             </h3>
                             <p class="mt-1 text-sm text-light-content dark:text-dark-content">Places a sell order.</p>
                         </div>
-                        <FormInput
-                            v-model="account"
-                            name="account"
-                            label="Account"
-                            description="The seller account."
-                            required
-                            tooltip="Wallet Address"
-                        />
 
                         <div class="space-y-2">
                             <div>
@@ -71,15 +63,15 @@
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <FormInput
-                                    class="col-span-1"
                                     v-model="takeCollectionId"
+                                    class="col-span-1"
                                     name="takeCollectionId"
                                     placeholder="Collection ID"
                                     type="number"
                                 />
                                 <TokenIdInput
-                                    class="col-span-1"
                                     v-model="takeTokenId"
+                                    class="col-span-1"
                                     placeholder="Token ID"
                                     name="takeTokenId"
                                 />
@@ -105,25 +97,37 @@
                             :prefix="currencySymbol"
                         />
 
+                        <FormCheckbox
+                            v-model="enableAuction"
+                            name="enableAuction"
+                            label="Enable Auction"
+                            description="Use this option to enable an auction for the listing."
+                        />
+
                         <FormInput
+                            v-if="enableAuction"
+                            v-model="auctionDataStart"
+                            name="auctionDataStart"
+                            label="Auction Start Block"
+                            description="The block number the auction starts at."
+                            required
+                        />
+
+                        <FormInput
+                            v-if="enableAuction"
+                            v-model="auctionDataEnd"
+                            name="auctionDataEnd"
+                            label="Auction End Block"
+                            description="The block number the auction ends at."
+                            required
+                        />
+
+                        <FormInput
+                            v-if="appStore.advanced"
                             v-model="salt"
                             name="salt"
                             label="Salt"
                             description="Can be used to differentiate listings."
-                        />
-
-                        <FormInput
-                            v-model="auctionDataStart"
-                            name="auctionDataStart"
-                            label="Auction Data Start Block"
-                            description="The block number the auction starts at."
-                        />
-
-                        <FormInput
-                            v-model="auctionDataEnd"
-                            name="auctionDataEnd"
-                            label="Auction Data End Block"
-                            description="The block number the auction ends at."
                         />
 
                         <FormInput
@@ -154,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
@@ -165,12 +169,7 @@ import { currencySymbolByNetwork, formatData, formatToken, snackbarErrors } from
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
-import {
-    addressRequiredSchema,
-    numberRequiredSchema,
-    stringNotRequiredSchema,
-    stringRequiredSchema,
-} from '~/util/schemas';
+import { numberRequiredSchema, stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
 import { MarketplaceApi } from '~/api/marketplace';
 import FormSelect from '~/components/FormSelect.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
@@ -179,13 +178,13 @@ const router = useRouter();
 const appStore = useAppStore();
 
 const isLoading = ref(false);
-const account = ref();
 const amount = ref('');
 const price = ref('');
 const salt = ref('');
 const auctionDataStart = ref('');
 const auctionDataEnd = ref('');
 const enableTakeCollectionId = ref(false);
+const enableAuction = ref(false);
 const takeCollectionId = ref('0');
 const takeTokenId = ref({
     tokenId: '0',
@@ -203,22 +202,49 @@ const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.ne
 const collectionIds = computed(() => appStore.collections);
 
 const validation = yup.object({
-    account: addressRequiredSchema,
     amount: numberRequiredSchema.typeError('Amount must be a number'),
     price: numberRequiredSchema.typeError('Price must be a number'),
     salt: stringNotRequiredSchema.typeError('Salt must be a string'),
-    takeCollectionId: numberRequiredSchema.typeError('Collection ID is required'),
-    takeTokenId: stringRequiredSchema.required('Token ID is required'),
+    takeCollectionId: yup.string().when('enableTakeCollection', {
+        is: true,
+        then: () => numberRequiredSchema.typeError('Collection ID is required'),
+        otherwise: () => yup.string().notRequired(),
+    }),
+    takeTokenId: yup.string().when('enableTakeCollection', {
+        is: true,
+        then: () => stringRequiredSchema.typeError('Token ID is required'),
+        otherwise: () => yup.string().notRequired(),
+    }),
     makeCollectionId: numberRequiredSchema.typeError('Collection ID is required'),
     makeTokenId: stringRequiredSchema.required('Token ID is required'),
-    auctionDataStart: stringNotRequiredSchema.typeError('Auction Data Start Block must be a number'),
-    auctionDataEnd: stringNotRequiredSchema.typeError('Auction Data End Block must be a number'),
+    auctionDataStart: yup.string().when('enableAuction', {
+        is: true,
+        then: () => numberRequiredSchema.typeError('Auction Start Block must be a number'),
+        otherwise: () => yup.string().notRequired(),
+    }),
+    auctionDataEnd: yup.string().when('enableAuction', {
+        is: true,
+        then: () => numberRequiredSchema.typeError('Auction End Block must be a number'),
+        otherwise: () => yup.string().notRequired(),
+    }),
     idempotencyKey: stringNotRequiredSchema,
 });
 
 const isValid = async () => {
     await formRef.value.validate();
     return formRef.value.getMeta().valid;
+};
+
+const getCurrentBlock = async () => {
+    try {
+        const res = await MarketplaceApi.getCurrentBlock();
+        auctionDataStart.value = res.data?.GetBlocks?.edges[0].node.number;
+    } catch (e) {
+        snackbar.error({
+            title: 'Failed to get current block',
+            text: 'Please try again.',
+        });
+    }
 };
 
 const createListing = async () => {
@@ -229,7 +255,6 @@ const createListing = async () => {
 
         const res = await MarketplaceApi.createListing(
             formatData({
-                account: account.value,
                 amount: amount.value,
                 price: price.value,
                 salt: salt.value,
@@ -241,10 +266,12 @@ const createListing = async () => {
                     collectionId: takeCollectionId.value,
                     tokenId: formatToken(takeTokenId.value),
                 },
-                auctionData: {
-                    startBlock: auctionDataStart.value,
-                    endBlock: auctionDataEnd.value,
-                },
+                auctionData: enableAuction.value
+                    ? {
+                          startBlock: auctionDataStart.value,
+                          endBlock: auctionDataEnd.value,
+                      }
+                    : null,
                 idempotencyKey: idempotencyKey.value,
             })
         );
@@ -269,4 +296,16 @@ const createListing = async () => {
         isLoading.value = false;
     }
 };
+
+watch(
+    () => enableAuction.value,
+    () => {
+        if (enableAuction.value) {
+            getCurrentBlock();
+        } else {
+            auctionDataStart.value = '';
+            auctionDataEnd.value = '';
+        }
+    }
+);
 </script>
