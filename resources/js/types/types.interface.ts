@@ -25,6 +25,7 @@ export interface AppState {
     tokensCount: number;
     theme?: 'dark' | 'light';
     initPromise: Promise<void> | null;
+    internal: boolean;
 }
 
 export interface ConnectionState {

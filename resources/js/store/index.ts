@@ -41,6 +41,7 @@ export const useAppStore = defineStore('app', {
         tokensCount: 0,
         theme: 'light',
         initPromise: null,
+        internal: false,
     }),
     persist: {
         paths: ['url', 'authorization_token', 'loggedIn', 'advanced', 'provider', 'tokensCount', 'theme'],
@@ -58,7 +59,16 @@ export const useAppStore = defineStore('app', {
                     if (!this.isMultiTenant && !this.config.authorization_token.length) {
                         return false;
                     }
+
                     const urlConfig = await this.checkURL(this.config.url);
+                    try {
+                        const internalConfig = await ApiService.fetchInternalUrl(this.config.url);
+                        if (internalConfig) {
+                            this.internal = true;
+                        }
+                    } catch {
+                        this.internal = false;
+                    }
                     this.config.network = urlConfig?.network;
                     this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
                         let link =

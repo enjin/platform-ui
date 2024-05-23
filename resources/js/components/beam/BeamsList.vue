@@ -246,7 +246,7 @@ const indeterminate = computed(
     () => selectedBeams.value.length > 0 && selectedBeams.value.length < beams.value.items.length
 );
 
-const isInternal = computed(() => !!appStore.hasMultiTenantPackage);
+const isInternal = computed(() => appStore.internal);
 
 const enablePagination = computed(() => searchInput.value === '');
 
