@@ -1,4 +1,4 @@
-export default `query GetBeams($codes: [String!], $names: [String!], $after: String = null, $first: Int = 15) {
+export default `query GetBeams($codes: [String!], $names: [String!], $after: String = null, $first: Int = 15, $internal: Boolean = false) {
     GetBeams(codes: $codes, names: $names, after: $after, first: $first) {
       edges {
         node {
@@ -18,7 +18,7 @@ export default `query GetBeams($codes: [String!], $names: [String!], $after: Str
             url
             payload
           }
-          claimConditions {
+          claimConditions @include(if: $internal) {
             type
             value
           }

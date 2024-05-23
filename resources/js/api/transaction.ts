@@ -48,6 +48,18 @@ export class TransactionApi {
         return ApiService.sendPlatformRequest(data);
     }
 
+    static async getWallets(after?: string) {
+        const data = {
+            query: queries.GetWallets,
+            variables: {
+                first: 20,
+                after,
+            },
+        };
+
+        return ApiService.sendPlatformRequest(data);
+    }
+
     static async retryTransactions(retryTransactionsData: Record<string, unknown>) {
         const data = {
             query: mutations.RetryTransactions,

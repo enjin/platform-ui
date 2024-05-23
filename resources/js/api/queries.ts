@@ -5,6 +5,7 @@ import GetCollection from '~/graphql/query/GetCollection';
 import GetTokens from '~/graphql/query/GetTokens';
 import GetTransactions from '~/graphql/query/GetTransactions';
 import GetWallet from '~/graphql/query/GetWallet';
+import GetWallets from '~/graphql/query/GetWallets';
 
 import GetBeam from '~/graphql/query/beam/GetBeam';
 import GetBeams from '~/graphql/query/beam/GetBeams';
@@ -33,6 +34,7 @@ export default {
     GetTokens,
     GetTransactions,
     GetWallet,
+    GetWallets,
 
     GetBeam,
     GetBeams,

@@ -278,6 +278,7 @@ const closeModalSlide = () => {
 };
 
 (async () => {
+    await useAppStore().initPromise;
     await getSales();
 })();
 
