@@ -59,7 +59,7 @@
                                     description="The beam name."
                                     required
                                 />
-                                <FormInput
+                                <RichTextEditor
                                     v-model="description"
                                     name="description"
                                     description="The beam description."
@@ -138,6 +138,7 @@ import { useAppStore } from '~/store';
 import { BeamApi } from '~/api/beam';
 import { ClaimTokenValuesInterface } from '~/types/types.interface';
 import FormSelect from '~/components/FormSelect.vue';
+import RichTextEditor from '~/components/RichTextEditor.vue';
 
 const router = useRouter();
 const appStore = useAppStore();

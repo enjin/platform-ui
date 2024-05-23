@@ -140,6 +140,15 @@ export class ApiService {
         });
     }
 
+    static async fetchInternalUrl(url: URL) {
+        return ApiService.request({
+            url: `${url}.well-known/assetlinks.json`,
+            method: HttpMethods.GET,
+            credentials: undefined,
+            mode: import.meta.env.PROD ? 'cors' : undefined,
+        });
+    }
+
     static async freeze(freezeData: Record<string, unknown>) {
         const data = {
             query: mutations.Freeze,

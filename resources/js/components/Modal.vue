@@ -1,6 +1,6 @@
 <template>
     <TransitionRoot appear :show="isOpen" as="template">
-        <Dialog as="div" @close="close" class="relative z-50">
+        <Dialog as="div" @close="close as any" class="relative z-50">
             <TransitionChild
                 as="template"
                 enter="duration-300 ease-out"
@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel } from '@headlessui/vue';
 
-withDefaults(defineProps<{ isOpen: boolean; close: (_close: boolean) => void; width?: string }>(), {
+withDefaults(defineProps<{ isOpen: boolean; close: Function; width?: string }>(), {
     width: 'max-w-md',
 });
 </script>

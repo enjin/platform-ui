@@ -63,6 +63,7 @@ withDefaults(
 
 .light {
     @include light-mode;
+    --popper-theme-padding: 0;
     --popper-theme-border-radius: 0.5rem;
 }
 

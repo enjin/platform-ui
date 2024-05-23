@@ -119,6 +119,7 @@ import CollapseFilter from '~/components/CollapseFilter.vue';
 import NoItems from '~/components/NoItems.vue';
 import snackbar from '~/util/snackbar';
 import { BeamApi } from '~/api/beam';
+import { useAppStore } from '~/store';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -277,6 +278,7 @@ const closeModalSlide = () => {
 };
 
 (async () => {
+    await useAppStore().initPromise;
     await getClaims();
 })();
 

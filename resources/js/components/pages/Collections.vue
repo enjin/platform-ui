@@ -321,6 +321,7 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 (async () => {
+    await useAppStore().initPromise;
     await getCollections();
 })();
 

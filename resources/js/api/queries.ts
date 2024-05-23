@@ -5,6 +5,7 @@ import GetCollection from '~/graphql/query/GetCollection';
 import GetTokens from '~/graphql/query/GetTokens';
 import GetTransactions from '~/graphql/query/GetTransactions';
 import GetWallet from '~/graphql/query/GetWallet';
+import GetWallets from '~/graphql/query/GetWallets';
 
 import GetBeam from '~/graphql/query/beam/GetBeam';
 import GetBeams from '~/graphql/query/beam/GetBeams';
@@ -23,6 +24,7 @@ import GetAccounts from '~/graphql/query/fueltank/GetAccounts';
 import GetListings from '~/graphql/query/marketplace/GetListings';
 import GetBids from '~/graphql/query/marketplace/GetBids';
 import GetSales from '~/graphql/query/marketplace/GetSales';
+import GetBlocks from '~/graphql/query/marketplace/GetBlocks';
 
 export default {
     GetTransaction,
@@ -32,6 +34,7 @@ export default {
     GetTokens,
     GetTransactions,
     GetWallet,
+    GetWallets,
 
     GetBeam,
     GetBeams,
@@ -50,4 +53,5 @@ export default {
     GetListings,
     GetBids,
     GetSales,
+    GetBlocks,
 };

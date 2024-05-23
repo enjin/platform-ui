@@ -110,6 +110,7 @@
                     <NoItems v-else />
                 </LoadingContent>
                 <LoadingCircle v-if="isPaginationLoading" class="mx-auto py-4" />
+                <div ref="paginatorRef"></div>
             </div>
         </div>
         <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" />
@@ -117,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, Ref } from 'vue';
+import { ref, onMounted, Ref, computed } from 'vue';
 import { TransactionApi } from '~/api/transaction';
 import { DTOWalletFactory as DTOFactory } from '~/factory/wallet';
 import { addressShortHex } from '~/util/address';
@@ -132,6 +133,7 @@ import FormInput from '~/components/FormInput.vue';
 import NoItems from '~/components/NoItems.vue';
 import { TransactionState } from '~/types/types.enums';
 import Btn from '../Btn.vue';
+import { useAppStore } from '~/store';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -149,6 +151,9 @@ const wallets: Ref<{
 });
 const modalSlide = ref(false);
 const slideComponent = ref();
+const paginatorRef = ref();
+
+const enablePagination = computed(() => !isLoading.value);
 
 const searchInputs = ref([
     {
@@ -157,6 +162,7 @@ const searchInputs = ref([
         placeholder: 'Search by wallet ID',
         value: '',
         tooltip: 'The internal database ID of the wallet.',
+        type: 'number',
     },
     {
         name: 'externalId',
@@ -203,6 +209,7 @@ const searchChange = (e) => {
         debouncedSearch();
     } else {
         cancelSearch();
+        getWallets();
     }
 };
 
@@ -210,7 +217,11 @@ const getSearchInputs = () => {
     const inputs = {};
 
     searchInputs.value.forEach((input) => {
-        inputs[input.name] = input.value;
+        if (input.type === 'number' && input.value !== '') {
+            inputs[input.name] = parseInt(input.value);
+        } else {
+            inputs[input.name] = input.value.trim();
+        }
     });
 
     return inputs;
@@ -231,6 +242,48 @@ const getWallet = async () => {
     } finally {
         isLoading.value = false;
     }
+};
+
+const getWallets = async () => {
+    try {
+        isLoading.value = true;
+        const res = await TransactionApi.getWallets();
+        wallets.value = DTOFactory.forWallets(res);
+    } catch (e) {
+        if (snackbarErrors(e)) return;
+        snackbar.error({
+            title: 'Wallets',
+            text: 'Error while fetching wallets',
+        });
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+const loadMoreItemsWithObserver = () => {
+    const observer = new IntersectionObserver(
+        async (entries) => {
+            if (entries[0].isIntersecting) {
+                if (!enablePagination.value) return;
+                try {
+                    if (!wallets.value.cursor || isPaginationLoading.value) return;
+                    isPaginationLoading.value = true;
+                    const res = await TransactionApi.getWallets(wallets.value.cursor);
+                    const data = DTOFactory.forWallets(res);
+                    wallets.value = { items: [...wallets.value.items, ...data.items], cursor: data.cursor };
+                    isPaginationLoading.value = false;
+                } catch (error) {
+                    isPaginationLoading.value = false;
+                }
+            }
+        },
+        {
+            root: null,
+            rootMargin: '0px',
+            threshold: 1.0,
+        }
+    );
+    observer.observe(paginatorRef.value);
 };
 
 const openModalSlide = (componentName: string, wallet?: any) => {
@@ -254,7 +307,10 @@ const openTransactionSlide = async (transactionId: string) => {
     }, 600);
 };
 
-onMounted(() => {
+onMounted(async () => {
+    await useAppStore().initPromise;
+    getWallets();
+    loadMoreItemsWithObserver();
     events.on('transaction', openTransactionSlide);
 });
 </script>

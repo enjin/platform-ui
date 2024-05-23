@@ -1,4 +1,4 @@
-export default `query GetSingleUseCodes($code: String!, $after: String = null, $first: Int = 15) {
+export default `query GetSingleUseCodes($code: String!, $after: String = null, $first: Int = 15, $internal: Boolean = false) {
     GetSingleUseCodes(
       code: $code
       after: $after
@@ -31,6 +31,10 @@ export default `query GetSingleUseCodes($code: String!, $after: String = null, $
             }
             image
             flags
+            claimConditions @include(if: $internal) {
+              type
+              value
+            }
           }
         }
       }

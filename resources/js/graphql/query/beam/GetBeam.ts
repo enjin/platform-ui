@@ -1,4 +1,4 @@
-export default `query GetBeam($code: String!, $account: String) {
+export default `query GetBeam($code: String!, $account: String, $internal: Boolean = false) {
     GetBeam(code: $code, account: $account) {
       id
       code
@@ -16,7 +16,7 @@ export default `query GetBeam($code: String!, $account: String) {
         url
         payload
       }
-      claimConditions {
+      claimConditions @include(if: $internal) {
         type
         value
       }

@@ -133,19 +133,23 @@ export class AuthApi {
         return AuthApi.sendPlatfromRequest(data);
     }
 
-    static async deleteAccount() {
+    static async deleteAccount(password: string) {
         const data = {
             query: mutations.DeleteAccount,
+            varaiables: {
+                password,
+            },
         };
 
         return AuthApi.sendPlatfromRequest(data);
     }
 
-    static async updateUser(email: string) {
+    static async updateUser(email: string, password: string) {
         const data = {
             query: mutations.UpdateUser,
             variables: {
                 email,
+                password,
             },
         };
 

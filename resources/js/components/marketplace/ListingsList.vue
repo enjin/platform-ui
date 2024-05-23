@@ -343,6 +343,7 @@ const closeModalSlide = () => {
 };
 
 (async () => {
+    await useAppStore().initPromise;
     await getListings();
 })();
 

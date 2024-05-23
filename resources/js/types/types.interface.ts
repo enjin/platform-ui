@@ -24,6 +24,8 @@ export interface AppState {
     user: any;
     tokensCount: number;
     theme?: 'dark' | 'light';
+    initPromise: Promise<void> | null;
+    internal: boolean;
 }
 
 export interface ConnectionState {

@@ -150,6 +150,7 @@ import { FuelTankApi } from '~/api/fueltank';
 import { formatData } from '~/util';
 import Btn from '../Btn.vue';
 import { TransactionState } from '~/types/types.enums';
+import { useAppStore } from '~/store';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -328,6 +329,7 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 (async () => {
+    await useAppStore().initPromise;
     await getFuelTanks();
 })();
 
