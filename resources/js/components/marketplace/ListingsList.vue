@@ -26,7 +26,7 @@
                     </div>
                     <div class="flex gap-2 sm:px-6 lg:px-8 py-2 mb-2 items-end">
                         <RouterLink :to="{ name: 'platform.create.listing' }">
-                            <Btn primary> Create Listing </Btn>
+                            <Btn dusk="createBtn" primary> Create Listing </Btn>
                         </RouterLink>
                     </div>
                 </div>
@@ -35,6 +35,7 @@
                     :is-loading="isLoading"
                 >
                     <table
+                        id="listingsTable"
                         class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
                         v-if="listings.items?.length"
                     >

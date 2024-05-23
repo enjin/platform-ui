@@ -26,6 +26,7 @@
             >
                 <template #dp-input="{ value }">
                     <input
+                        :name="name"
                         type="text"
                         :value="value"
                         :placeholder="placeholder"

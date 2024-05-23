@@ -28,8 +28,8 @@
             </div>
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
-            <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Retry</Btn>
+            <Btn dusk="cancelBtn" @click="closeSlide">Cancel</Btn>
+            <Btn dusk="retryBtn" :loading="isLoading" :disabled="isLoading" primary is-submit>Retry</Btn>
         </div>
     </Form>
     <ConfirmModal

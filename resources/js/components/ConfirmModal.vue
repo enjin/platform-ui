@@ -13,8 +13,8 @@
         </div>
 
         <div class="flex justify-end space-x-4 mt-6">
-            <Btn @click="closeModal">Cancel</Btn>
-            <Btn primary @click="confirm">Confirm</Btn>
+            <Btn dusk="cancelBtn" @click="closeModal">Cancel</Btn>
+            <Btn dusk="confirmBtn" primary @click="confirm">Confirm</Btn>
         </div>
     </Modal>
 </template>

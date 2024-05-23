@@ -28,6 +28,7 @@
                     :is-loading="isLoading"
                 >
                     <table
+                        id="salesTable"
                         class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
                         v-if="sales.items?.length"
                     >

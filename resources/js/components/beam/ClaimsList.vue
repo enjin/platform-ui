@@ -29,6 +29,7 @@
                     :is-loading="isLoading"
                 >
                     <table
+                        id="claimsTable"
                         class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
                         v-if="claims.items?.length"
                     >

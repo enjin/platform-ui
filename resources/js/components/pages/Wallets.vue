@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="flex md:px-6 lg:px-8 py-2 mb-2 items-end">
-                        <Btn primary @click="openModalSlide('TransferBalanceSlideover')"> Transfer Balance </Btn>
+                        <Btn dusk="transferBtn" primary @click="openModalSlide('TransferBalanceSlideover')"> Transfer Balance </Btn>
                     </div>
                 </div>
 
@@ -28,6 +28,7 @@
                     :is-loading="isLoading"
                 >
                     <table
+                        id="walletsTable"
                         class="min-w-full divide-y divide-light-stroke dark:divide-dark-stroke"
                         v-if="wallets.items?.length"
                     >

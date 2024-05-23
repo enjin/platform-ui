@@ -22,6 +22,7 @@
                             autocomplete="off"
                             @change="query = $event.target.value"
                             @click="openSelect"
+                            :name="name"
                         />
                         <ComboboxButton ref="comboButtonRef" class="absolute inset-y-0 right-0 flex items-center pr-2">
                             <ChevronUpDownIcon

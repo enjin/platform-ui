@@ -17,7 +17,7 @@
                                     </h3>
                                 </div>
                                 <a href="https://docs.enjin.io/docs/creating-a-fuel-tank" target="_blank">
-                                    <Btn primary> Documentation </Btn>
+                                    <Btn dusk="documentationBtn" primary> Documentation </Btn>
                                 </a>
                             </div>
                             <FormInput
@@ -47,13 +47,14 @@
                     </div>
                 </div>
 
-                <Btn class="!flex" @click="addItem" primary>Add Dispatch Rule</Btn>
+                <Btn dusk="addDispatchRuleBtn" class="!flex" @click="addItem" primary>Add Dispatch Rule</Btn>
 
                 <CollapseCard
                     v-for="(item, idx) in dispatchRules"
                     :key="idx"
                     class="animate-fade-in"
                     :title="`Dispatch Rule ${idx + 1}`"
+                    dusk="dispatchRuleCard"
                 >
                     <template #icon>
                         <CheckCircleIcon
@@ -69,7 +70,7 @@
                     <DispatchRuleForm v-model="item.values" :rule-id="idx" @validation="setValidation(idx, $event)" />
                 </CollapseCard>
 
-                <CollapseCard title="Account Rules" :actions="false">
+                <CollapseCard title="Account Rules" :actions="false" dusk="accountRulesCard">
                     <template #icon>
                         <Tooltip text="The fuel tank account rules.">
                             <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />

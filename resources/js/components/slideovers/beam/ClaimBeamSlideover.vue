@@ -21,8 +21,8 @@
                         </div>
                         <QrcodeVue ref="qrCodeRef" :value="item.qr.payload" :size="272" class="mx-auto" />
                         <div class="flex space-x-3 justify-center">
-                            <Btn class="font-normal" @click="saveImage" primary>Save image</Btn>
-                            <Btn class="font-normal" @click="copyLink" primary>Copy link</Btn>
+                            <Btn dusk="saveImageBtn" class="font-normal" @click="saveImage" primary>Save image</Btn>
+                            <Btn dusk="copyLinkBtn" class="font-normal" @click="copyLink" primary>Copy link</Btn>
                         </div>
                     </div>
                 </div>

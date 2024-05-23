@@ -10,6 +10,7 @@
                 :class="{ 'border border-red-400': !item.valid, 'border border-green-400': item.valid }"
                 class="animate-fade-in"
                 :title="`Beam Asset ${idx + 1}`"
+                :duskId="`tab${idx+ 1 }`"
             >
                 <template #icon>
                     <CheckCircleIcon class="ml-2 my-auto h-5 w-5 text-green-400" aria-hidden="true" v-if="item.valid" />
@@ -37,7 +38,7 @@
                                 </h3>
                             </div>
                             <a href="https://docs.enjin.io/docs/creating-an-enjin-beam" target="_blank">
-                                <Btn primary> Documentation </Btn>
+                                <Btn primary dusk="documentationBtn"> Documentation </Btn>
                             </a>
                         </div>
                         <div class="mt-5 md:col-span-2 md:mt-0">
