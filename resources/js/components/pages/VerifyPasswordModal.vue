@@ -31,8 +31,8 @@
         </div>
 
         <div class="flex justify-end space-x-4 mt-6">
-            <Btn @click="closeModal">Cancel</Btn>
-            <Btn primary @click="verifyCaptcha">Confirm</Btn>
+            <Btn dusk="passwordCancelBtn" @click="closeModal">Cancel</Btn>
+            <Btn dusk="passwordConfirmBtn" primary @click="verifyCaptcha">Confirm</Btn>
         </div>
     </Modal>
 </template>
