@@ -32,34 +32,24 @@ import { DialogTitle } from '@headlessui/vue';
 import Btn from '~/components/Btn.vue';
 import Modal from '~/components/Modal.vue';
 import FormInput from '../FormInput.vue';
-import { ref } from 'vue';
-import { useAppStore } from '~/store';
-import { AuthApi } from '~/api/auth';
-import snackbar from '~/util/snackbar';
+import { onUnmounted, ref } from 'vue';
 
 const props = defineProps<{ isOpen: boolean }>();
 
 const emit = defineEmits(['closed', 'confirm']);
 
-const appStore = useAppStore();
-
 const password = ref();
 
 const confirm = async () => {
-    const email = appStore.user?.email;
-    const res = await AuthApi.updateUser(email, password.value);
-    if (res.data.Login) {
-        emit('confirm', password.value);
-        closeModal();
-    } else {
-        snackbar.error({
-            title: 'Error',
-            text: 'Invalid password',
-        });
-    }
+    emit('confirm', password.value);
+    closeModal();
 };
 
 const closeModal = () => {
     emit('closed');
 };
+
+onUnmounted(() => {
+    password.value = '';
+});
 </script>
