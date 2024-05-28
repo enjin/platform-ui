@@ -187,7 +187,7 @@ export const useAppStore = defineStore('app', {
                 const res = await CollectionApi.getCollectionsIds(totalCount);
                 const collectionsData = res.data.GetCollections;
                 if (collectionsData.pageInfo.hasNextPage) {
-                    await this.fetchCollectionIds(collectionsData.totalCount);
+                    await this.fetchCollectionIds(collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount);
                 } else {
                     this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
                 }
