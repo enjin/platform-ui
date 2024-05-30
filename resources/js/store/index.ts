@@ -51,6 +51,10 @@ export const useAppStore = defineStore('app', {
             try {
                 // eslint-disable-next-line
                 this.initPromise = new Promise(async (resolve) => {
+                    if (this.config.network) {
+                        return;
+                    }
+
                     this.setConfig();
 
                     if (!this.config.url) {
@@ -280,6 +284,9 @@ export const useAppStore = defineStore('app', {
         },
         setTheme(theme: 'dark' | 'light') {
             this.theme = theme;
+        },
+        clearInitPromise() {
+            this.initPromise = null;
         },
     },
     getters: {
