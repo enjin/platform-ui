@@ -343,6 +343,7 @@ const openTransactionSlide = async (transactionId: string) => {
 
 onMounted(async () => {
     await useAppStore().initPromise;
+    useAppStore().clearInitPromise();
     getTokens();
     loadMoreTokensWithObserver();
     events.on('transaction', openTransactionSlide);

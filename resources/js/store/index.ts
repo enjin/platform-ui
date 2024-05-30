@@ -281,6 +281,9 @@ export const useAppStore = defineStore('app', {
         setTheme(theme: 'dark' | 'light') {
             this.theme = theme;
         },
+        clearInitPromise() {
+            this.initPromise = null;
+        }
     },
     getters: {
         hasValidConfig(state: AppState) {
