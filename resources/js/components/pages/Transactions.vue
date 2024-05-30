@@ -551,6 +551,7 @@ const closeModalSlide = () => {
 
 (async () => {
     await useAppStore().initPromise;
+    useAppStore().clearInitPromise();
     getTransactions();
 })();
 
