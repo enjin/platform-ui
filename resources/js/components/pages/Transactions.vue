@@ -220,7 +220,6 @@ import SignTransaction from '../SignTransaction.vue';
 import { TransactionApi } from '~/api/transaction';
 import DropdownMenu from '../DropdownMenu.vue';
 import ConfirmModal from '../ConfirmModal.vue';
-import { useAppStore } from '~/store';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -550,8 +549,6 @@ const closeModalSlide = () => {
 };
 
 (async () => {
-    await useAppStore().initPromise;
-    useAppStore().clearInitPromise();
     getTransactions();
 })();
 

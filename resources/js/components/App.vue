@@ -39,8 +39,8 @@ const initialTheme = () => {
     }
 };
 
-(() => {
-    appStore.init();
+(async () => {
+    await appStore.init();
     initialTheme();
 
     if (window.bootstrap?.name) {

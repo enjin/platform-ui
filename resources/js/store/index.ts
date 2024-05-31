@@ -50,64 +50,60 @@ export const useAppStore = defineStore('app', {
         async init() {
             try {
                 // eslint-disable-next-line
-                this.initPromise = new Promise(async (resolve) => {
-                    if (this.config.network) {
-                        return;
+                if (this.config.network) {
+                    return;
+                }
+
+                this.setConfig();
+
+                if (!this.config.url) {
+                    return false;
+                }
+                if (!this.isMultiTenant && !this.config.authorization_token.length) {
+                    return false;
+                }
+
+                const urlConfig = await this.checkURL(this.config.url);
+                try {
+                    const internalConfig = await ApiService.fetchInternalUrl(this.config.url);
+                    if (internalConfig) {
+                        this.internal = true;
                     }
+                } catch {
+                    this.internal = false;
+                }
+                this.config.network = urlConfig?.network;
+                this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
+                    let link =
+                        urlConfig.url +
+                        '/graphiql/' +
+                        (key === 'enjin/platform-core' ? '' : key.replace('enjin/platform-', ''));
+                    if (key === 'enjin/platform-ui') link = '';
 
-                    this.setConfig();
-
-                    if (!this.config.url) {
-                        return false;
-                    }
-                    if (!this.isMultiTenant && !this.config.authorization_token.length) {
-                        return false;
-                    }
-
-                    const urlConfig = await this.checkURL(this.config.url);
-                    try {
-                        const internalConfig = await ApiService.fetchInternalUrl(this.config.url);
-                        if (internalConfig) {
-                            this.internal = true;
-                        }
-                    } catch {
-                        this.internal = false;
-                    }
-                    this.config.network = urlConfig?.network;
-                    this.config.packages = Object.entries(urlConfig.packages).map(([key, value]: any[]) => {
-                        let link =
-                            urlConfig.url +
-                            '/graphiql/' +
-                            (key === 'enjin/platform-core' ? '' : key.replace('enjin/platform-', ''));
-                        if (key === 'enjin/platform-ui') link = '';
-
-                        return {
-                            name: key.replace('enjin/', ''),
-                            version: value.version,
-                            link,
-                        };
-                    });
-
-                    if (this.hasBeamPackage) {
-                        this.addBeamNavigation();
-                    }
-                    if (this.hasFuelTanksPackage) {
-                        this.addFuelTanksNavigation();
-                    }
-                    if (this.hasMarketplacePackage) {
-                        this.addMarketplaceNavigation();
-                    }
-
-                    if (this.loggedIn && this.hasMultiTenantPackage && this.config.tenant && !this.user) {
-                        await this.getUser();
-                    }
-
-                    await useConnectionStore().getSession();
-
-                    await this.fetchCollectionIds();
-
-                    resolve();
+                    return {
+                        name: key.replace('enjin/', ''),
+                        version: value.version,
+                        link,
+                    };
                 });
+
+                if (this.hasBeamPackage) {
+                    this.addBeamNavigation();
+                }
+                if (this.hasFuelTanksPackage) {
+                    this.addFuelTanksNavigation();
+                }
+                if (this.hasMarketplacePackage) {
+                    this.addMarketplaceNavigation();
+                }
+
+                if (this.loggedIn && this.hasMultiTenantPackage && this.config.tenant && !this.user) {
+                    await this.getUser();
+                }
+
+                await useConnectionStore().getSession();
+
+                await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
                 if (this.config.tenant) {

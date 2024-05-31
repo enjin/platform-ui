@@ -464,8 +464,6 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 onMounted(async () => {
-    await appStore.initPromise;
-    useAppStore().clearInitPromise();
     getBeams();
     loadMoreItemsWithObserver();
     events.on('transaction', openTransactionSlide);

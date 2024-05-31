@@ -159,7 +159,6 @@ import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
 import NoItems from '~/components/NoItems.vue';
 import Btn from '~/components/Btn.vue';
-import { useAppStore } from '~/store';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -342,8 +341,6 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 onMounted(async () => {
-    await useAppStore().initPromise;
-    useAppStore().clearInitPromise();
     getTokens();
     loadMoreTokensWithObserver();
     events.on('transaction', openTransactionSlide);
