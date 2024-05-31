@@ -152,9 +152,7 @@ const login = async (recaptcha?: string) => {
 
             return;
         }
-        appStore.init();
-        await appStore.initPromise;
-        appStore.clearInitPromise();
+        await appStore.init();
         if (appStore.loggedIn) {
             snackbar.success({ title: 'Logged in successfully', save: false });
             if (appStore.hasValidConfig) {
