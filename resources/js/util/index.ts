@@ -97,10 +97,11 @@ export const formatPriceFromENJ = (price: any) => {
 
 export const checkFormatPrice = (price, listing, currency) => {
     if (
-        listing.makeAssetId.collectionId !== '0' ||
+        listing &&
+        (listing.makeAssetId.collectionId !== '0' ||
         listing.makeAssetId.tokenId !== '0' ||
         listing.takeAssetId.tokenId !== '0' ||
-        listing.takeAssetId.collectionId !== '0'
+        listing.takeAssetId.collectionId !== '0')
     ) {
         return `${formatPriceFromENJ(price)?.toLocaleString('en-US', {
             maximumFractionDigits: 18,
