@@ -38,7 +38,13 @@
                                     scope="col"
                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
-                                    CollectionId
+                                    Name
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
+                                    ID
                                 </th>
                                 <th
                                     scope="col"
@@ -77,6 +83,11 @@
                                         : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
                                 "
                             >
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
+                                    {{ getCollectionName(collection) }}
+                                </td>
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
@@ -146,6 +157,7 @@ import { snackbarErrors } from '~/util';
 import Btn from '~/components/Btn.vue';
 import { TransactionState } from '~/types/types.enums';
 import { useRoute, useRouter } from 'vue-router';
+import { ApiService } from '~/api';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -269,6 +281,29 @@ const getCollections = async () => {
         });
     } finally {
         isLoading.value = false;
+    }
+};
+
+const getCollectionName = async (collection) => {
+    const uri = collection.attributes.find((attr) => attr.key === 'uri')?.value;
+    if (uri) {
+        return await fetchUri(uri);
+    }
+
+    return collection.attributes.find((attr) => attr.key === 'name')?.value || '-';
+};
+
+const fetchUri = async (uri) => {
+    try {
+        const res = await ApiService.fetchUrl(uri);
+        const json = JSON.parse(res);
+        if (json.name) {
+            return json.name;
+        }
+
+        return '-';
+    } catch (e) {
+        return '-';
     }
 };
 

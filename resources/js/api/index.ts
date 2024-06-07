@@ -131,7 +131,7 @@ export class ApiService {
         });
     }
 
-    static async fetchURL(url: URL) {
+    static async fetchPlatformURL(url: URL) {
         return ApiService.request({
             url: `${url}.well-known/enjin-platform.json`,
             method: HttpMethods.GET,
@@ -146,6 +146,15 @@ export class ApiService {
             method: HttpMethods.GET,
             credentials: undefined,
             mode: import.meta.env.PROD ? 'cors' : undefined,
+        });
+    }
+
+    static async fetchUrl(url: string) {
+        return ApiService.request({
+            url: url,
+            method: HttpMethods.GET,
+            credentials: undefined,
+            mode: undefined,
         });
     }
 
