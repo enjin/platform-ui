@@ -398,12 +398,14 @@ const simpleAttributes = () => {
         },
         {
             key: 'media',
-            value: JSON.stringify([
-                {
-                    url: imageUrl.value,
-                    type: imageType.value,
-                },
-            ]),
+            value: imageUrl.value
+                ? JSON.stringify([
+                      {
+                          url: imageUrl.value,
+                          type: imageType.value,
+                      },
+                  ])
+                : '',
         },
     ].filter((a) => a.value !== '');
 };
@@ -441,7 +443,10 @@ const createToken = async () => {
                         isCurrency: isCurrency.value,
                     },
                     listingForbidden: listingForbidden.value,
-                    attributes: [...simpleAttributes(), attributes.value.filter((a) => a.key !== '' && a.value !== '')],
+                    attributes: [
+                        ...simpleAttributes(),
+                        ...attributes.value.filter((a) => a.key !== '' && a.value !== ''),
+                    ],
                 },
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
