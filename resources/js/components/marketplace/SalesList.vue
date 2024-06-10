@@ -52,12 +52,6 @@
                                 >
                                     Bidder
                                 </th>
-                                <th
-                                    scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
-                                >
-                                    Listing
-                                </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
@@ -89,11 +83,6 @@
                                     {{ addressShortHex(sale.bidder) }}
                                 </td>
                                 <td
-                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
-                                >
-                                    {{ shortString(sale.listing.listingId) }}
-                                </td>
-                                <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
                                     <DropdownMenu
@@ -121,7 +110,7 @@ import LoadingCircle from '~/components/LoadingCircle.vue';
 import LoadingContent from '~/components/LoadingContent.vue';
 import debounce from 'lodash/debounce';
 import { addressShortHex } from '~/util/address';
-import { checkFormatPrice, currencySymbolByNetwork, formatData, shortString, snackbarErrors } from '~/util';
+import { checkFormatPrice, currencySymbolByNetwork, formatData, snackbarErrors } from '~/util';
 import DropdownMenu from '~/components/DropdownMenu.vue';
 import Slideover from '~/components/Slideover.vue';
 import CollapseFilter from '~/components/CollapseFilter.vue';
@@ -155,13 +144,6 @@ const searchInputs = ref([
         name: 'accounts',
         label: 'Accounts',
         placeholder: 'Search by account',
-        value: [],
-        type: 'text',
-    },
-    {
-        name: 'listingIds',
-        label: 'Listing IDs',
-        placeholder: 'Search by listing ID',
         value: [],
         type: 'text',
     },

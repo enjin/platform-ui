@@ -34,13 +34,6 @@
                             {{ item.amount }}
                         </dd>
                     </div>
-
-                    <div class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Listing</dt>
-                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words">
-                            {{ item.listing.listingId }}
-                        </dd>
-                    </div>
                 </div>
             </div>
         </div>
