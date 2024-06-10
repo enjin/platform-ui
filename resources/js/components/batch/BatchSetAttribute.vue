@@ -1,7 +1,13 @@
 <template>
     <div class="mt-4 flow-root">
         <div class="space-y-4 pb-4">
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBatch">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createBatch"
+            >
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary p-6 shadow rounded-lg">
                     <div class="space-y-6">
                         <div class="flex items-center">
@@ -182,9 +188,18 @@ const removeAttributeItem = (index: number) => {
     attributes.value.splice(index, 1);
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createBatch = async () => {
     await formRef.value.validate();
-    if (!formRef.value.getMeta().valid) return;
+    if (!formRef.value.getMeta().valid) {
+        return;
+    }
 
     try {
         isLoading.value = true;

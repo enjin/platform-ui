@@ -10,7 +10,7 @@
                 :class="{ 'border border-red-400': !item.valid, 'border border-green-400': item.valid }"
                 class="animate-fade-in"
                 :title="`Beam Asset ${idx + 1}`"
-                :duskId="`tab${idx+ 1 }`"
+                :duskId="`tab${idx + 1}`"
             >
                 <template #icon>
                     <CheckCircleIcon class="ml-2 my-auto h-5 w-5 text-green-400" aria-hidden="true" v-if="item.valid" />
@@ -26,7 +26,13 @@
             </CollapseCard>
             <Btn class="!flex" @click="addItem" primary>Add Asset</Btn>
 
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBeam">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createBeam"
+            >
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
@@ -218,9 +224,18 @@ const validateForms = async () => {
     await formRef.value.validate();
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createBeam = async () => {
     await validateForms();
-    if (!isAllValid.value) return;
+    if (!isAllValid.value) {
+        return;
+    }
     try {
         isLoading.value = true;
         const res = await BeamApi.createBeam(

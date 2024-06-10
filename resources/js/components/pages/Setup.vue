@@ -11,7 +11,13 @@
         </div>
         <div class="mt-8 mx-auto w-full sm:max-w-md">
             <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-8 shadow sm:rounded-lg sm:px-10">
-                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="setupAccount">
+                <Form
+                    ref="formRef"
+                    class="space-y-6"
+                    :validation-schema="validation"
+                    @invalid-submit="invalidSubmit"
+                    @submit="setupAccount"
+                >
                     <FormInput
                         v-model="url"
                         label="Enjin Platform URL"
@@ -69,9 +75,18 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const setupAccount = async () => {
     try {
-        if (!(await isValid())) return;
+        if (!(await isValid())) {
+            return;
+        }
         isLoading.value = true;
 
         if (window.location.protocol === 'https:' && url.value?.protocol === 'http:') {

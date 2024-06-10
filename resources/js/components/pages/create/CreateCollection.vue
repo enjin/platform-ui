@@ -12,7 +12,13 @@
                     <Btn dusk="advancedBtn" :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
                 </div>
             </div>
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createCollection">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createCollection"
+            >
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg">
                     <div class="space-y-6">
                         <div class="flex justify-between items-center">
@@ -474,8 +480,17 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createCollection = async () => {
-    if (!(await isValid())) return;
+    if (!(await isValid())) {
+        return;
+    }
 
     try {
         isLoading.value = true;

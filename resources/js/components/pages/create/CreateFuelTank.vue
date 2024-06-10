@@ -4,7 +4,13 @@
             <div class="mb-4">
                 <h1 class="text-2xl text-light-content-strong dark:text-dark-content-strong">Create Fuel Tank</h1>
             </div>
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createFueltank">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createFueltank"
+            >
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="">
                         <div class="space-y-6">
@@ -244,9 +250,18 @@ const validateForms = async () => {
     await formRef.value.validate();
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createFueltank = async () => {
     await validateForms();
-    if (!isAllValid.value) return;
+    if (!isAllValid.value) {
+        return;
+    }
 
     try {
         isLoading.value = true;
