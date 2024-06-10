@@ -10,7 +10,7 @@
                 :class="{ 'border border-red-400': !item.valid, 'border border-green-400': item.valid }"
                 class="animate-fade-in"
                 :title="`Beam Asset ${idx + 1}`"
-                :duskId="`tab${idx+ 1 }`"
+                :duskId="`tab${idx + 1}`"
             >
                 <template #icon>
                     <CheckCircleIcon class="ml-2 my-auto h-5 w-5 text-green-400" aria-hidden="true" v-if="item.valid" />
@@ -18,7 +18,7 @@
                 </template>
                 <template #actions>
                     <XMarkIcon
-                        class="h-5 w-5 cursor-pointer text-light-content dark:text-dark-content"
+                        class="h-5 w-5 cursor-pointer text-light-content-strong dark:text-dark-content-strong"
                         @click="removeItem(idx)"
                     />
                 </template>

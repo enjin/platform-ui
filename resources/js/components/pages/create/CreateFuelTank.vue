@@ -30,8 +30,15 @@
                             <MultiCheckbox
                                 v-model="flags"
                                 name="flags"
+                                :options="depositFlags"
+                                label="Deposit option"
+                                cols-class="grid-cols-1 md:!grid-cols-2"
+                            />
+                            <MultiCheckbox
+                                v-model="flags"
+                                name="flags"
                                 :options="fuelFlags"
-                                label="Options"
+                                label="User account management"
                                 cols-class="grid-cols-1 md:!grid-cols-2"
                             />
                             <FormInput
@@ -65,7 +72,10 @@
                         <XCircleIcon class="ml-2 my-auto h-5 w-5 text-red-400" aria-hidden="true" v-else />
                     </template>
                     <template #actions>
-                        <XMarkIcon class="h-5 w-5 cursor-pointer" @click="removeItem(idx)" />
+                        <XMarkIcon
+                            class="h-5 w-5 cursor-pointer text-light-content-strong dark:text-dark-content-strong"
+                            @click="removeItem(idx)"
+                        />
                     </template>
                     <DispatchRuleForm v-model="item.values" :rule-id="idx" @validation="setValidation(idx, $event)" />
                 </CollapseCard>
@@ -151,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, Ref } from 'vue';
+import { ref, computed, Ref, watch } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
@@ -199,16 +209,19 @@ const isAllValid = computed(() => {
     );
 });
 
-const fuelFlags = ref([
+const depositFlags = ref([
     {
         label: 'Provide Deposit',
         value: 'provideDeposit',
         tooltip: 'The flag for deposit.',
     },
+]);
+
+const fuelFlags = ref([
     {
-        label: 'Reserve Existential Deposit',
-        value: 'reserveExistentialDeposit',
-        tooltip: 'The flag for existential deposit.',
+        label: 'Account management',
+        value: 'accountManagement',
+        tooltip: 'This option will set the account management to Some',
     },
     {
         label: 'Reserve Account Creation Deposit',
@@ -254,8 +267,9 @@ const createFueltank = async () => {
             formatData({
                 name: name.value,
                 providesDeposit: flags.value.includes('provideDeposit'),
-                reservesExistentialDeposit: flags.value.includes('reserveExistentialDeposit'),
-                reservesAccountCreationDeposit: flags.value.includes('reserveAccountCreationDeposit'),
+                reservesAccountCreationDeposit: flags.value.includes('accountManagement')
+                    ? flags.value.includes('reserveAccountCreationDeposit')
+                    : null,
                 accountRules: {
                     whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller),
                     requireToken: collectionId.value
@@ -290,4 +304,13 @@ const createFueltank = async () => {
         isLoading.value = false;
     }
 };
+
+watch(
+    () => flags.value,
+    () => {
+        if (flags.value.includes('reserveAccountCreationDeposit')) {
+            flags.value.push('accountManagement');
+        }
+    }
+);
 </script>
