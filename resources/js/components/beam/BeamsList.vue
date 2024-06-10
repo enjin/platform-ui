@@ -317,6 +317,7 @@ const getSingleUseCode = async () => {
 
 const getBeamCodes = async () => {
     isLoading.value = true;
+    await appStore.fetchInternal();
     try {
         const res = await BeamApi.getBeams({
             ...formatData(searchInput.value ? { codes: [searchInput.value] } : {}),

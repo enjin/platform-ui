@@ -197,6 +197,16 @@ export const useAppStore = defineStore('app', {
 
             return true;
         },
+        async fetchInternal() {
+            try {
+                const internalConfig = await ApiService.fetchInternalUrl(this.config.url!);
+                if (internalConfig) {
+                    this.internal = true;
+                }
+            } catch {
+                this.internal = false;
+            }
+        },
         async login(email: string, password: string, recaptcha?: string) {
             const res = await AuthApi.login(email, password, recaptcha);
             if (!res.data.Login) {
