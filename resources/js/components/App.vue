@@ -40,8 +40,8 @@ const initialTheme = () => {
 };
 
 (async () => {
-    await appStore.init();
     initialTheme();
+    await appStore.init();
 
     if (window.bootstrap?.name) {
         return;

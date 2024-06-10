@@ -11,7 +11,7 @@
             <span v-if="!signing">Select an account to sign the transaction</span>
             <span v-else>Signing</span>
         </DialogTitle>
-        <div class="flex flex-col space-y-2 mt-4 relative">
+        <div class="flex flex-col space-y-2 mt-4 relative text-light-content-strong dark:text-dark-content-strong">
             <div v-if="signing">
                 <span>
                     <span> Address: </span>
