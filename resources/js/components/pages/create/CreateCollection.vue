@@ -439,7 +439,7 @@ const simpleAttributes = () => {
         },
         {
             key: 'media',
-            value: JSON.stringify(media),
+            value: media.length ? JSON.stringify(media) : '',
         },
     ].filter((a) => a.value !== '');
 };
@@ -499,7 +499,7 @@ const createCollection = async () => {
                         collectionId: a.collectionId,
                         tokenId: formatToken(a.tokenId),
                     })),
-                attributes: [...simpleAttributes(), attributes.value.filter((a) => a.key !== '' && a.value !== '')],
+                attributes: [...simpleAttributes(), ...attributes.value.filter((a) => a.key !== '' && a.value !== '')],
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })
