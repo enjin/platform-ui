@@ -86,7 +86,7 @@
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
-                                    {{ getCollectionName(collection) }}
+                                    {{ collectionNames[collection.collectionId] }}
                                 </td>
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
@@ -180,6 +180,7 @@ const paginatorRef = ref();
 const modalSlide = ref(false);
 const slideComponent = ref();
 const searchInput = ref('');
+const collectionNames = ref<{ [key: string]: string }[]>([]);
 
 const route = useRoute();
 const router = useRouter();
@@ -272,6 +273,7 @@ const getCollections = async () => {
     try {
         const res = await CollectionApi.getCollections();
         collections.value = DTOFactory.forCollections(res);
+        setCollectionNames();
     } catch (e) {
         collections.value.items = [];
         if (snackbarErrors(e)) return;
@@ -291,6 +293,18 @@ const getCollectionName = async (collection) => {
     }
 
     return collection.attributes.find((attr) => attr.key === 'name')?.value || '-';
+};
+
+const setCollectionNames = async () => {
+    collections.value.items.map(async (item) => {
+        if (collectionNames.value[`${item.collectionId}`]) {
+            return item;
+        }
+        const name = await getCollectionName(item);
+        collectionNames.value = { ...collectionNames.value, [`${item.collectionId}`]: name };
+
+        return item;
+    });
 };
 
 const fetchUri = async (uri) => {
@@ -318,6 +332,7 @@ const loadMoreCollectionsWithObserver = () => {
                     const res = await CollectionApi.getCollections(collections.value.cursor);
                     const data = DTOFactory.forCollections(res);
                     collections.value = { items: [...collections.value.items, ...data.items], cursor: data.cursor };
+                    setCollectionNames();
                     isPaginationLoading.value = false;
                 } catch (error) {
                     isPaginationLoading.value = false;

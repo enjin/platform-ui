@@ -100,7 +100,7 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
                                 >
-                                    {{ tokenNames[token.tokenId] }}
+                                    {{ tokenNames[`${token.collection.collectionId}-${token.tokenId}`] }}
                                 </td>
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
@@ -286,11 +286,14 @@ const searchTokensChange = (e) => {
 
 const setTokenNames = async () => {
     tokens.value.items.map(async (item) => {
+        if (tokenNames.value[`${item.collection.collectionId}-${item.tokenId}`]) {
+            return item;
+        }
         const name = await getTokenName(item);
-        tokenNames.value = ;
-    });
+        tokenNames.value = { ...tokenNames.value, [`${item.collection.collectionId}-${item.tokenId}`]: name };
 
-    console.log(tokenNames.value);
+        return item;
+    });
 };
 
 const getTokens = async () => {
@@ -326,6 +329,7 @@ const loadMoreTokensWithObserver = () => {
                     );
                     const data = DTOFactory.forTokens(res);
                     tokens.value = { items: [...tokens.value.items, ...data.items], cursor: data.cursor };
+                    setTokenNames();
                     isPaginationLoading.value = false;
                 } catch (error) {
                     isPaginationLoading.value = false;
