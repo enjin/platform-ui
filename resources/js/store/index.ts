@@ -213,7 +213,7 @@ export const useAppStore = defineStore('app', {
                 if (res.errors.length) {
                     throw res.errors;
                 }
-                throw [{ field: 'Login error', message: 'cInvalid credentials' }];
+                throw [{ field: 'Login error', message: 'Invalid credentials' }];
             }
 
             await ApiService.reloadCsrf();
