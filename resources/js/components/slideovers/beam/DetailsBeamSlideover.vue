@@ -70,11 +70,11 @@
                         </dd>
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3" v-if="item.flags.length">
+                    <div class="space-y-2 pt-4 pb-3" v-if="item.flags?.length">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Flags</dt>
                         <Chip v-for="flag in item.flags" :key="flag" :text="flag" :closable="false" class="mr-2" />
                     </div>
-                    <div class="space-y-2 pt-4 pb-3" v-if="item.claimConditions.length">
+                    <div class="space-y-2 pt-4 pb-3" v-if="item.claimConditions?.length">
                         <dt class="text-base font-medium text-gray-500">Conditions</dt>
                         <Chip
                             v-for="condition in item.claimConditions"

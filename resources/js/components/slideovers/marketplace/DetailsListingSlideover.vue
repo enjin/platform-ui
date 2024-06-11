@@ -20,7 +20,9 @@
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Make Asset ID
                             <Tooltip text="The collection and token ID of the asset being sold.">
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
@@ -35,7 +37,9 @@
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Take Asset ID
                             <Tooltip text="The collection and token ID of the asset being requested.">
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
@@ -69,7 +73,9 @@
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Minimum take value
                             <Tooltip text="The minimum value of the take asset received for the sale to be a success.">
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">

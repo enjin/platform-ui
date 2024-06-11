@@ -13,7 +13,7 @@
                         <div class="space-y-2 pb-3">
                             <dt class="text-base font-medium text-light-content dark:text-dark-content">Code</dt>
                             <dd
-                                class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong break-words"
+                                class="mt-1 flex items-center text-sm text-light-content-strong dark:text-dark-content-strong break-words"
                             >
                                 {{ item.code }}
                                 <CopyTextIcon :text="item.code" />
