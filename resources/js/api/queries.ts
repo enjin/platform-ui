@@ -8,9 +8,12 @@ import GetWallet from '~/graphql/query/GetWallet';
 import GetWallets from '~/graphql/query/GetWallets';
 
 import GetBeam from '~/graphql/query/beam/GetBeam';
+import GetBeamInternal from '~/graphql/query/beam/GetBeamInternal';
 import GetBeams from '~/graphql/query/beam/GetBeams';
+import GetBeamsInternal from '~/graphql/query/beam/GetBeamsInternal';
 import GetClaims from '~/graphql/query/beam/GetClaims';
 import GetSingleUseCodes from '~/graphql/query/beam/GetSingleUseCodes';
+import GetSingleUseCodesInternal from '~/graphql/query/beam/GetSingleUseCodesInternal';
 
 import Login from '~/graphql/query/auth/Login';
 import LoginRecaptcha from '~/graphql/query/auth/LoginRecaptcha';
@@ -37,9 +40,12 @@ export default {
     GetWallets,
 
     GetBeam,
+    GetBeamInternal,
     GetBeams,
+    GetBeamsInternal,
     GetClaims,
     GetSingleUseCodes,
+    GetSingleUseCodesInternal,
 
     Login,
     LoginRecaptcha,

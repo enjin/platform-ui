@@ -58,10 +58,18 @@
                             v-if="selectedBeams.length > 0"
                             class="absolute left-14 top-0 flex h-12 items-center space-x-3 bg-light-surface-primary dark:bg-dark-surface-primary sm:left-12"
                         >
-                            <Btn dusk="expireAllBtn" class="!px-2 !py-1 text-sm animate-fade-in" @click="expireSelectedBeams"
+                            <Btn
+                                dusk="expireAllBtn"
+                                class="!px-2 !py-1 text-sm animate-fade-in"
+                                @click="expireSelectedBeams"
                                 >{{ `Expire ${selectedBeams.length > 1 ? 'All' : ''} ` }}
                             </Btn>
-                            <Btn dusk="exportBtn" class="!px-2 !py-1 text-sm animate-fade-in" @click="exportSelectedBeams">Export</Btn>
+                            <Btn
+                                dusk="exportBtn"
+                                class="!px-2 !py-1 text-sm animate-fade-in"
+                                @click="exportSelectedBeams"
+                                >Export</Btn
+                            >
                         </div>
                         <table
                             id="beamsTable"

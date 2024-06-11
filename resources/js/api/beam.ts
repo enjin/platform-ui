@@ -9,11 +9,10 @@ export class BeamApi {
 
     static async getBeam(getBeamData: Record<string, unknown>) {
         const data = {
-            query: queries.GetBeam,
+            query: getBeamData.internal ? queries.GetBeamInternal : queries.GetBeam,
             variables: {
                 code: getBeamData.code,
                 account: getBeamData.account,
-                internal: getBeamData.internal,
             },
         };
 
@@ -22,12 +21,11 @@ export class BeamApi {
 
     static async getBeams(getBeamsData: Record<string, unknown>) {
         const data = {
-            query: queries.GetBeams,
+            query: getBeamsData.internal ? queries.GetBeamsInternal : queries.GetBeams,
             variables: {
                 codes: getBeamsData.codes,
                 names: getBeamsData.names,
                 after: getBeamsData.after,
-                internal: getBeamsData.internal,
             },
         };
 
@@ -52,7 +50,7 @@ export class BeamApi {
 
     static async getSingleUseCodes(getSingleUseCodesData: Record<string, unknown>) {
         const data = {
-            query: queries.GetSingleUseCodes,
+            query: getSingleUseCodesData.internal ? queries.GetSingleUseCodesInternal : queries.GetSingleUseCodes,
             variables: {
                 code: getSingleUseCodesData.code,
                 first: 20,
