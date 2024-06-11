@@ -160,7 +160,7 @@ export const useAppStore = defineStore('app', {
         async checkURL(url: URL) {
             try {
                 if (url) {
-                    const urlConfig = await ApiService.fetchURL(url);
+                    const urlConfig = await ApiService.fetchPlatformURL(url);
                     if (urlConfig) return urlConfig;
 
                     throw 'The URL is not valid';

@@ -52,7 +52,13 @@
                                     scope="col"
                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
-                                    Token ID
+                                    Name
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                >
+                                    ID
                                 </th>
                                 <th
                                     scope="col"
@@ -91,6 +97,11 @@
                                         : 'bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50'
                                 "
                             >
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
+                                    {{ tokenNames[`${token.collection.collectionId}-${token.tokenId}`] }}
+                                </td>
                                 <td
                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-content-strong dark:text-dark-content-strong sm:pl-3"
                                 >
@@ -159,6 +170,7 @@ import snackbar, { events } from '~/util/snackbar';
 import FormInput from '~/components/FormInput.vue';
 import NoItems from '~/components/NoItems.vue';
 import Btn from '~/components/Btn.vue';
+import { ApiService } from '~/api';
 
 const isLoading = ref(false);
 const isPaginationLoading = ref(false);
@@ -186,6 +198,7 @@ const searchTokensInput = ref({
     tokenId: '',
     tokenType: TokenIdSelectType.Integer,
 });
+const tokenNames = ref<{ [key: string]: string }[]>([]);
 
 const enablePagination = computed(() => searchTokensInput.value.tokenId === '');
 
@@ -271,11 +284,24 @@ const searchTokensChange = (e) => {
     }
 };
 
+const setTokenNames = async () => {
+    tokens.value.items.map(async (item) => {
+        if (tokenNames.value[`${item.collection.collectionId}-${item.tokenId}`]) {
+            return item;
+        }
+        const name = await getTokenName(item);
+        tokenNames.value = { ...tokenNames.value, [`${item.collection.collectionId}-${item.tokenId}`]: name };
+
+        return item;
+    });
+};
+
 const getTokens = async () => {
     try {
         isLoading.value = true;
         const res = await TokenApi.getTokens(searchCollectionInput.value, formatTokens([searchTokensInput.value]));
         tokens.value = DTOFactory.forTokens(res);
+        setTokenNames();
     } catch (e) {
         tokens.value.items = [];
         if (snackbarErrors(e)) return;
@@ -303,6 +329,7 @@ const loadMoreTokensWithObserver = () => {
                     );
                     const data = DTOFactory.forTokens(res);
                     tokens.value = { items: [...tokens.value.items, ...data.items], cursor: data.cursor };
+                    setTokenNames();
                     isPaginationLoading.value = false;
                 } catch (error) {
                     isPaginationLoading.value = false;
@@ -338,6 +365,29 @@ const openTransactionSlide = async (transactionId: string) => {
     setTimeout(() => {
         openModalSlide('DetailsTransactionSlideover', { id: transactionId, state: TransactionState.PENDING });
     }, 600);
+};
+
+const getTokenName = async (token): Promise<string> => {
+    const uri = token.attributes.find((attr) => attr.key === 'uri')?.value;
+    if (uri) {
+        return await fetchUri(uri);
+    }
+
+    return token.attributes.find((attr) => attr.key === 'name')?.value || '-';
+};
+
+const fetchUri = async (uri) => {
+    try {
+        const res = await ApiService.fetchUrl(uri);
+        const json = JSON.parse(res);
+        if (json.name) {
+            return json.name;
+        }
+
+        return '-';
+    } catch (e) {
+        return '-';
+    }
 };
 
 onMounted(async () => {
