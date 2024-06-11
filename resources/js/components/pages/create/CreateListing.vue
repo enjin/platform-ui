@@ -6,7 +6,13 @@
                     Create Listing
                 </h1>
             </div>
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createListing">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createListing"
+            >
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="space-y-6">
                         <div class="">
@@ -247,8 +253,17 @@ const getCurrentBlock = async () => {
     }
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createListing = async () => {
-    if (!(await isValid())) return;
+    if (!(await isValid())) {
+        return;
+    }
 
     try {
         isLoading.value = true;

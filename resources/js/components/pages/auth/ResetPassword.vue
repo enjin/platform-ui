@@ -11,7 +11,13 @@
         </div>
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-8 shadow sm:rounded-lg sm:px-10">
-                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="resetPassword">
+                <Form
+                    ref="formRef"
+                    class="space-y-6"
+                    :validation-schema="validation"
+                    @invalid-submit="invalidSubmit"
+                    @submit="resetPassword"
+                >
                     <FormInput
                         v-model="email"
                         label="Email"
@@ -89,8 +95,17 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const resetPassword = async () => {
-    if (!(await isValid())) return;
+    if (!(await isValid())) {
+        return;
+    }
 
     isLoading.value = true;
     try {

@@ -3,6 +3,7 @@
         ref="formRef"
         class="flex h-full flex-col divide-y divide-light-stroke dark:divide-dark-stroke bg-light-surface-primary dark:bg-dark-surface-primary shadow-xl"
         :validation-schema="validation"
+        @invalid-submit="invalidSubmit"
         @submit="dispatchFuelTank"
     >
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
@@ -194,9 +195,18 @@ const removeVariable = (index: number) => {
     variables.value.splice(index, 1);
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const dispatchFuelTank = async () => {
     await formRef.value?.validate();
-    if (!formRef.value?.getMeta().valid) return;
+    if (!formRef.value?.getMeta().valid) {
+        return;
+    }
 
     try {
         isLoading.value = true;

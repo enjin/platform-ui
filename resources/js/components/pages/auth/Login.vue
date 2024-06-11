@@ -18,7 +18,13 @@
         </div>
         <div class="mt-4 mx-auto w-full sm:max-w-md">
             <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-8 shadow sm:rounded-lg sm:px-10">
-                <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="verifyCaptcha">
+                <Form
+                    ref="formRef"
+                    class="space-y-6"
+                    :validation-schema="validation"
+                    @invalid-submit="invalidSubmit"
+                    @submit="verifyCaptcha"
+                >
                     <FormInput
                         v-model="email"
                         label="Email address"
@@ -139,6 +145,13 @@ const verifyCaptcha = () => {
     }
 
     captchaRef.value.execute();
+};
+
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
 };
 
 const login = async (recaptcha?: string) => {

@@ -10,7 +10,13 @@
                     <Btn dusk="advancedBtn" :primary="mode === 'advanced'" @click="mode = 'advanced'"> Advanced </Btn>
                 </div>
             </div>
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createToken">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createToken"
+            >
                 <div
                     class="bg-light-surface-primary dark:bg-dark-surface-primary p-4 md:p-6 shadow rounded-lg sm:p-6 transition-all"
                 >
@@ -410,8 +416,17 @@ const simpleAttributes = () => {
     ].filter((a) => a.value !== '');
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createToken = async () => {
-    if (!(await isValid())) return;
+    if (!(await isValid())) {
+        return;
+    }
 
     try {
         isLoading.value = true;

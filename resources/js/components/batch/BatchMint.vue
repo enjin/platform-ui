@@ -1,7 +1,13 @@
 <template>
     <div class="mt-4 flow-root">
         <div class="space-y-6 pb-4">
-            <Form ref="formRef" class="space-y-6" :validation-schema="validation" @submit="createBatch">
+            <Form
+                ref="formRef"
+                class="space-y-6"
+                :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
+                @submit="createBatch"
+            >
                 <div
                     class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow sm:rounded-lg sm:p-6"
                 >
@@ -166,9 +172,18 @@ const isAllValid = computed(() => {
     );
 });
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const createBatch = async () => {
     await formRef.value.validate();
-    if (!isAllValid.value) return;
+    if (!isAllValid.value) {
+        return;
+    }
 
     try {
         isLoading.value = true;

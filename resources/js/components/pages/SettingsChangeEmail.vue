@@ -6,6 +6,7 @@
                 ref="formRef"
                 class="space-y-6"
                 :validation-schema="validation"
+                @invalid-submit="invalidSubmit"
                 @submit="changeEmail"
             >
                 <FormInput
@@ -69,8 +70,17 @@ const isValid = async () => {
     return formRef.value.getMeta().valid;
 };
 
+const invalidSubmit = () => {
+    snackbar.error({
+        title: 'Form validation',
+        text: 'Please verify that all the fields are valid',
+    });
+};
+
 const changeEmail = async () => {
-    if (!(await isValid())) return;
+    if (!(await isValid())) {
+        return;
+    }
 
     verifyPasswordModal.value = true;
 };
