@@ -1,4 +1,4 @@
-export default `query GetCollections($after: String, $first: Int) {
+export default `query GetCollectionsIds($after: String, $first: Int) {
     GetCollections(after: $after, first: $first) {
         edges {
             node {

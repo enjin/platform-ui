@@ -26,7 +26,7 @@
                                     text="Creates a new token in a collection owned by you, the new token will be automatically
                                 minted to the specified recipient account/wallet"
                                 >
-                                    <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                                    <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content" />
                                 </Tooltip>
                             </div>
                             <a

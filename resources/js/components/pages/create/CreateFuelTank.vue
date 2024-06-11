@@ -83,7 +83,7 @@
                 <CollapseCard title="Account Rules" :actions="false" dusk="accountRulesCard">
                     <template #icon>
                         <Tooltip text="The fuel tank account rules.">
-                            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer" />
+                            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content" />
                         </Tooltip>
                     </template>
                     <div class="space-y-6 p-6">
