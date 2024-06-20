@@ -137,7 +137,6 @@ const formatName = (name: string) => {
 const deleteAccount = async (password) => {
     await AuthApi.deleteAccount(password);
     appStore.clearLogin();
-    await ApiService.reloadCsrf();
 };
 
 watch(
