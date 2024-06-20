@@ -9,9 +9,9 @@
                 https://github.com/enjin/wallet-daemon</a
             >
             and an overview can be found here:
-            <a href="https://docs.enjin.io/enjin-platform/wallet-daemon" target="_blank" class="text-primary">
-                https://docs.enjin.io/enjin-platform/wallet-daemon</a
-            >
+            <a href="https://docs.enjin.io/docs/wallet-daemon" target="_blank" class="text-primary">
+                https://docs.enjin.io/docs/wallet-daemon
+            </a>
         </p>
         <div class="flex items-end space-x-4 mt-4">
             <FormInput
