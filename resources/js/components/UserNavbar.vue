@@ -15,12 +15,20 @@
 
                         <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
                         <EnjinLogo v-else class="h-8 w-auto" />
-                        <span class="text-sm md:text-lg font-semibold ml-2">{{ pageTitle() }}</span>
+                        <span
+                            class="text-sm md:text-lg font-semibold ml-2 text-light-content-strong dark:text-dark-content-strong"
+                        >
+                            {{ pageTitle() }}
+                        </span>
                     </div>
                     <div v-if="appStore.isMultiTenant && !appStore.hasValidConfig" class="hidden md:flex items-center">
                         <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
                         <EnjinLogo v-else class="h-8 w-auto" />
-                        <span class="text-sm md:text-lg font-semibold ml-2">{{ pageTitle() }}</span>
+                        <span
+                            class="text-sm md:text-lg font-semibold ml-2 text-light-content-strong dark:text-dark-content-strong"
+                        >
+                            {{ pageTitle() }}
+                        </span>
                     </div>
                 </div>
                 <div v-if="appStore.loggedIn" class="flex items-center space-x-2 md:space-x-4">

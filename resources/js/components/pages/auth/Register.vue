@@ -66,7 +66,7 @@
                     </div>
                 </Form>
             </div>
-            <p class="text-sm text-center px-8 pt-4">
+            <p class="text-sm text-center px-8 pt-4 text-light-content-strong dark:text-dark-content-strong">
                 By proceeding, you agree with the
                 <a href="https://enjin.io/terms-of-service" target="_blank" class="text-primary"> Terms of Service </a>
                 and our
