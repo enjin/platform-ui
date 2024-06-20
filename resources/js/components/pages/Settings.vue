@@ -103,7 +103,6 @@ import CollapseCard from '../CollapseCard.vue';
 import Tooltip from '../Tooltip.vue';
 import { AuthApi } from '~/api/auth';
 import ConfirmModal from '../ConfirmModal.vue';
-import { ApiService } from '~/api';
 import SettingsChangeEmail from './SettingsChangeEmail.vue';
 import VerifyPasswordModal from './VerifyPasswordModal.vue';
 
