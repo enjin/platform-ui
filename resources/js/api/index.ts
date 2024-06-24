@@ -248,6 +248,7 @@ export class ApiService {
             variables: {
                 recipient: transferBalanceData.recipient,
                 amount: transferBalanceData.amount,
+                signingAccount: transferBalanceData.signingAccount,
                 keepAlive: transferBalanceData.keepAlive,
                 idempotencyKey: transferBalanceData.idempotencyKey,
                 skipValidation: transferBalanceData.skipValidation,

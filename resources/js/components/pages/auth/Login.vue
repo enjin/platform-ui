@@ -11,7 +11,7 @@
         </div>
         <div
             v-if="allowResend"
-            class="flex justify-between p-4 text-sm items-center w-full sm:max-w-md bg-green-300 bg-opacity-20 rounded-lg"
+            class="flex justify-between p-4 text-sm items-center w-full sm:max-w-md bg-green-300 bg-opacity-20 rounded-lg text-light-content-strong dark:text-dark-content-strong"
         >
             <span class="font-medium">Did not receive a verification email ?</span>
             <Btn primary @click="resendVerification">Resend</Btn>

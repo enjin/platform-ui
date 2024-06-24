@@ -31,6 +31,13 @@
                             :prefix="currencySymbol"
                         />
                         <FormInput
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The signing wallet for this transaction. Defaults to wallet daemon."
+                            tooltip="Wallet Address"
+                        />
+                        <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
@@ -76,6 +83,7 @@ import snackbar from '~/util/snackbar';
 import { currencySymbolByNetwork, formatData, formatPriceToENJ, snackbarErrors } from '~/util';
 import { useAppStore } from '~/store';
 import {
+    addressNotRequiredSchema,
     addressRequiredSchema,
     booleanNotRequiredSchema,
     numberRequiredSchema,
@@ -87,6 +95,7 @@ const emit = defineEmits(['close']);
 const isLoading = ref(false);
 const recipient = ref('');
 const amount = ref('');
+const signingAccount = ref('');
 const idempotencyKey = ref('');
 const keepAlive = ref(false);
 const skipValidation = ref(false);
@@ -97,6 +106,7 @@ const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().conf
 const validation = yup.object({
     recipient: addressRequiredSchema,
     amount: numberRequiredSchema.typeError('Amount must be a number').min(0),
+    signingAccount: addressNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
     keepALive: booleanNotRequiredSchema,
     skipValidation: booleanNotRequiredSchema,
@@ -121,6 +131,7 @@ const transfer = async () => {
             formatData({
                 recipient: recipient.value,
                 amount: formatPriceToENJ(amount.value) ?? null,
+                signingAccount: signingAccount.value,
                 keepAlive: keepAlive.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
