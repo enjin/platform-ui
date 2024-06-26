@@ -103,6 +103,7 @@ import CollapseCard from '../CollapseCard.vue';
 import Tooltip from '../Tooltip.vue';
 import { AuthApi } from '~/api/auth';
 import ConfirmModal from '../ConfirmModal.vue';
+import { ApiService } from '~/api';
 import SettingsChangeEmail from './SettingsChangeEmail.vue';
 import VerifyPasswordModal from './VerifyPasswordModal.vue';
 
@@ -136,6 +137,7 @@ const formatName = (name: string) => {
 const deleteAccount = async (password) => {
     await AuthApi.deleteAccount(password);
     appStore.clearLogin();
+    await ApiService.reloadCsrf();
 };
 
 watch(
