@@ -216,7 +216,6 @@ export const useAppStore = defineStore('app', {
                 throw [{ field: 'Login error', message: 'Invalid credentials' }];
             }
 
-            await ApiService.reloadCsrf();
             if (this.config.tenant) {
                 await this.getUser();
                 if (!this.user.isVerified) {
@@ -233,7 +232,6 @@ export const useAppStore = defineStore('app', {
             this.loggedIn = false;
             await AuthApi.logout();
             this.clearLogin();
-            await ApiService.reloadCsrf();
         },
         clearLogin() {
             this.user = null;

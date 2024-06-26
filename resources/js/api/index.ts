@@ -38,7 +38,6 @@ export class ApiService {
     }): Promise<any> {
         let body: string | null = null;
         const fullUrl = url;
-        const csrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         if (Object.keys(data).length > 0) {
             body = JSON.stringify(data);
@@ -46,8 +45,6 @@ export class ApiService {
 
         if (!useAppStore().isMultiTenant) {
             headers.Authorization = useAppStore().config.authorization_token;
-        } else {
-            headers['X-CSRF-TOKEN'] = csrf;
         }
 
         const resp = await fetch(fullUrl, {
@@ -63,9 +60,7 @@ export class ApiService {
         });
 
         if (resp.status === 419 && nest && useAppStore().isMultiTenant) {
-            if (await this.reloadCsrf()) {
-                return this.request({ url, method, data, headers });
-            }
+            return this.request({ url, method, data, headers });
         }
 
         if (resp.status === 204) {
