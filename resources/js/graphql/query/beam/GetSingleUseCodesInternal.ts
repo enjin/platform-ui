@@ -31,6 +31,10 @@ export default `query GetSingleUseCodes($code: String!, $after: String = null, $
             }
             image
             flags
+            claimConditions {
+              type
+              value
+            }
           }
         }
       }

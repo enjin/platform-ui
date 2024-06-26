@@ -18,6 +18,10 @@ export default `query GetBeams($codes: [String!], $names: [String!], $after: Str
             url
             payload
           }
+          claimConditions {
+            type
+            value
+          }
         }
       }
       pageInfo {
