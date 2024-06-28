@@ -111,7 +111,7 @@ import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey, publicKeyToAddress } from '~/util/address';
-import { formatData, formatToken, parseFormatedTokenId } from '~/util';
+import { formatData, formatToken, parseFormatedTokenId, validateToken } from '~/util';
 import { TokenIdSelectType } from '~/types/types.enums';
 import { TransferValuesInterface } from '~/types/types.interface';
 import TokenIdInput from '~/components/TokenIdInput.vue';
@@ -128,6 +128,7 @@ import {
 import { useAppStore } from '~/store';
 import Tooltip from '~/components/Tooltip.vue';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
+import snackbar from '~/util/snackbar';
 
 const emit = defineEmits(['update:modelValue', 'validation']);
 
@@ -216,6 +217,17 @@ watch(
     () => hasChanged.value,
     async () => {
         await formRef.value.validate();
+        if (
+            (transferType.value === 'simple' && !validateToken(simpleTokenId.value)) ||
+            (transferType.value === 'operator' && !validateToken(operatorTokenId.value))
+        ) {
+            snackbar.error({
+                title: 'Token ID',
+                text: 'Token ID is invalid',
+            });
+            return;
+        }
+
         setTimeout(() => {
             emit('validation', validForm.value);
             emit('update:modelValue', hasChanged.value);
