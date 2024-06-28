@@ -250,6 +250,9 @@ export const useAppStore = defineStore('app', {
             this.user.apiTokens = this.user.apiTokens.filter((token) => token.name !== name);
             this.tokensCount = this.user.apiTokens.length;
         },
+        async updateUserAccount(address: string) {
+            await AuthApi.updateUserAccount(address);
+        },
         setURL(url: string) {
             this.url = new URL(url);
             this.config.url = new URL(url);

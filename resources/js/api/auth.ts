@@ -155,4 +155,15 @@ export class AuthApi {
 
         return AuthApi.sendPlatfromRequest(data);
     }
+
+    static async updateUserAccount(address: string) {
+        const data = {
+            query: mutations.UpdateUser,
+            variables: {
+                address,
+            },
+        };
+
+        return AuthApi.sendPlatfromRequest(data);
+    }
 }
