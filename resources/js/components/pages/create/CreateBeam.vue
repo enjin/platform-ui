@@ -234,6 +234,10 @@ const invalidSubmit = () => {
 const createBeam = async () => {
     await validateForms();
     if (!isAllValid.value) {
+        snackbar.error({
+            title: 'Form validation',
+            text: 'Please verify that all the fields are valid',
+        });
         return;
     }
     try {
