@@ -63,7 +63,7 @@
 import { DialogTitle } from '@headlessui/vue';
 import Btn from './Btn.vue';
 import Modal from './Modal.vue';
-import { addressShortHex } from '~/util/address';
+import { addressShortHex, publicKeyToAddress } from '~/util/address';
 import { useTransactionStore } from '~/store/transaction';
 import { ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
@@ -116,6 +116,11 @@ const selectAccount = async (account) => {
         isLoading.value = true;
         await connectionStore.setAccount(account);
         signing.value = true;
+
+        // Update user wallet account if multi-tenant
+        if (useAppStore().isMultiTenant) {
+            await useAppStore().updateUserAccount(publicKeyToAddress(account.address));
+        }
         const res = await transactionStore.signTransaction(props.transaction);
         if (res) {
             emit('success');
