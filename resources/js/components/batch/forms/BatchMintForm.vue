@@ -222,7 +222,7 @@ import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey, publicKeyToAddress } from '~/util/address';
-import { formatData, formatToken, getMediaTypeFromUrl, parseFormatedTokenId } from '~/util';
+import { formatData, formatToken, getMediaTypeFromUrl, parseFormatedTokenId, validateToken } from '~/util';
 import { TokenCapType, TokenIdSelectType } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import FormList from '~/components/FormList.vue';
@@ -239,6 +239,7 @@ import {
     stringRequiredSchema,
 } from '~/util/schemas';
 import RichTextEditor from '~/components/RichTextEditor.vue';
+import snackbar from '~/util/snackbar';
 
 const emit = defineEmits(['update:modelValue', 'validation']);
 
@@ -405,6 +406,17 @@ watch(
     () => hasChanged.value,
     async () => {
         await formRef.value?.validate();
+        if (
+            (mintType.value === 'create' && !validateToken(createTokenId.value)) ||
+            (mintType.value === 'mint' && !validateToken(mintTokenId.value))
+        ) {
+            snackbar.error({
+                title: 'Token ID',
+                text: 'Token ID is invalid',
+            });
+            return;
+        }
+
         setTimeout(() => {
             emit('validation', validForm.value);
             emit('update:modelValue', hasChanged.value);

@@ -60,6 +60,19 @@ export const formatToken = (tokenData: TokenIdType) => {
     };
 };
 
+export const validateToken = (tokenId) => {
+    switch (tokenId.tokenType) {
+        case TokenIdSelectType.Integer:
+            return Number.isInteger(parseInt(tokenId.tokenId));
+        case TokenIdSelectType.StringId:
+        case TokenIdSelectType.Erc1155:
+        case TokenIdSelectType.Hash:
+            return tokenId.tokenId.length > 0;
+        default:
+            return false;
+    }
+};
+
 export const parseFormatedTokenId = (
     tokenData: {
         [key: string]: { [key: string]: string | number } & (string | number);

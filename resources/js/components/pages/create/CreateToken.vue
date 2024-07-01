@@ -32,7 +32,9 @@
                                     text="Creates a new token in a collection owned by you, the new token will be automatically
                                 minted to the specified recipient account/wallet"
                                 >
-                                    <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content" />
+                                    <QuestionMarkCircleIcon
+                                        class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                    />
                                 </Tooltip>
                             </div>
                             <a
@@ -307,7 +309,7 @@ import { useRouter } from 'vue-router';
 import FormInput from '~/components/FormInput.vue';
 import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey } from '~/util/address';
-import { formatData, formatToken, snackbarErrors } from '~/util';
+import { formatData, formatToken, snackbarErrors, validateToken } from '~/util';
 import { TokenCapType, TokenIdSelectType } from '~/types/types.enums';
 import FormList from '~/components/FormList.vue';
 import TokenIdInput from '~/components/TokenIdInput.vue';
@@ -423,8 +425,18 @@ const invalidSubmit = () => {
     });
 };
 
+
+
 const createToken = async () => {
     if (!(await isValid())) {
+        return;
+    }
+
+    if (!validateToken(tokenId.value)) {
+        snackbar.error({
+            title: 'Token ID',
+            text: 'Token ID is invalid',
+        });
         return;
     }
 
