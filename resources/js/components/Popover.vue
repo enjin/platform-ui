@@ -3,7 +3,6 @@
         :arrow="arrow"
         :class="theme"
         :block="block"
-        :hover="hover"
         :show="show"
         :offset-distance="offsetDistance"
         :placement="(placement as any)"
@@ -61,10 +60,22 @@ withDefaults(
     --popper-theme-text-color: #000;
 }
 
+@mixin dark-mode {
+    @include base-style;
+}
+
 .light {
     @include light-mode;
     --popper-theme-padding: 0;
     --popper-theme-border-radius: 0.5rem;
+}
+
+.dark {
+    @include dark-mode;
+    --popper-theme-padding: 0;
+    --popper-theme-border-radius: 0.5rem;
+    --popper-theme-border-width: 2px;
+    --popper-theme-border-color: hsl(0, 0%, 15%);
 }
 
 .mobile {

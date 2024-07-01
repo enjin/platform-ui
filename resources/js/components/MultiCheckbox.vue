@@ -21,7 +21,7 @@
                     :class="[
                         hasValue(option.value)
                             ? 'ring-primary'
-                            : 'ring-light-stroke-strong dark:ring-dark-stroke-strong',
+                            : 'ring-light-stroke-strong',
                         'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
                     ]"
                     @click="updateCheckbox(option.value)"
@@ -40,13 +40,6 @@
                             </Tooltip>
                         </span>
                     </span>
-                    <span
-                        :class="[
-                            hasValue(option.value) ? '' : 'border-2',
-                            'pointer-events-none absolute -inset-px rounded-lg transition-all',
-                        ]"
-                        aria-hidden="true"
-                    />
                 </div>
             </template>
         </div>
@@ -60,7 +53,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 
 const props = withDefaults(
     defineProps<{
-        label: string;
+        label?: string;
         description?: string;
         options: { label: string; value: string; tooltip?: string }[];
         modelValue: string[];

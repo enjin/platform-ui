@@ -40,11 +40,17 @@
                                 label="Deposit option"
                                 cols-class="grid-cols-1 md:!grid-cols-2"
                             />
+                            <Toggle
+                                v-model:toggle="accountManagement"
+                                class="mt-4"
+                                label="Account Management"
+                                tooltip="When enabled, users can add or remove their own accounts from the fuel tank. If disabled, only the fuel tank owner can manage accounts."
+                            />
                             <MultiCheckbox
+                                v-if="accountManagement"
                                 v-model="flags"
                                 name="flags"
                                 :options="fuelFlags"
-                                label="User account management"
                                 cols-class="grid-cols-1 md:!grid-cols-2"
                             />
                             <FormInput
@@ -89,7 +95,9 @@
                 <CollapseCard title="Account Rules" :actions="false" dusk="accountRulesCard">
                     <template #icon>
                         <Tooltip text="The fuel tank account rules.">
-                            <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content" />
+                            <QuestionMarkCircleIcon
+                                class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                            />
                         </Tooltip>
                     </template>
                     <div class="space-y-6 p-6">
@@ -187,6 +195,7 @@ import FormList from '~/components/FormList.vue';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
 import MultiCheckbox from '~/components/MultiCheckbox.vue';
 import Tooltip from '~/components/Tooltip.vue';
+import Toggle from '~/components/Toggle.vue';
 
 const router = useRouter();
 
@@ -202,6 +211,7 @@ const tokenId = ref({
 const idempotencyKey = ref('');
 const dispatchRules: Ref<{ valid: boolean; values: DispatchRulesValuesInterface }[]> = ref([]);
 const flags: Ref<string[]> = ref([]);
+const accountManagement = ref(false);
 
 const validation = yup.object({
     name: yup.string().nullable().required(),
@@ -219,20 +229,17 @@ const depositFlags = ref([
     {
         label: 'Provide Deposit',
         value: 'provideDeposit',
-        tooltip: 'The flag for deposit.',
+        tooltip:
+            'When enabled, the fuel tank will cover storage deposits for operations that require it. If disabled, users will need to provide their own deposits.',
     },
 ]);
 
 const fuelFlags = ref([
     {
-        label: 'Account management',
-        value: 'accountManagement',
-        tooltip: 'This option will set the account management to Some',
-    },
-    {
         label: 'Reserve Account Creation Deposit',
         value: 'reserveAccountCreationDeposit',
-        tooltip: 'The flag for account creation deposit.',
+        tooltip:
+            'When enabled, the fuel tank will cover the storage deposit required for creating user accounts within this fuel tank. If disabled, users will need to provide their own deposit for account creation.',
     },
 ]);
 
@@ -282,7 +289,7 @@ const createFueltank = async () => {
             formatData({
                 name: name.value,
                 providesDeposit: flags.value.includes('provideDeposit'),
-                reservesAccountCreationDeposit: flags.value.includes('accountManagement')
+                reservesAccountCreationDeposit: accountManagement.value
                     ? flags.value.includes('reserveAccountCreationDeposit')
                     : null,
                 accountRules: {
