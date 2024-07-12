@@ -56,7 +56,9 @@ const initialTheme = () => {
 })();
 
 onMounted(() => {
-    useConnectionStore().loadWallet();
+    setTimeout(() => {
+        useConnectionStore().loadWallet();
+    }, 500);
 });
 
 watch(

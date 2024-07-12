@@ -11,7 +11,7 @@
                     >{{ pageTitle() }}</span
                 >
             </div>
-            <div class="mt-5 flex flex-grow flex-col">
+            <div class="mt-4 flex flex-grow flex-col">
                 <nav class="flex-1" aria-label="Sidebar">
                     <RouterLink
                         v-for="item in navigations"

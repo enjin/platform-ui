@@ -48,7 +48,7 @@ export const useConnectionStore = defineStore('connection', {
         },
         async loadWallet() {
             if (this.provider) {
-                await this.connectWallet(this.provider, () => {});
+                await this.connectWallet(this.provider, () => {}, false);
                 if (!this.wallet) {
                     return;
                 }
@@ -56,13 +56,13 @@ export const useConnectionStore = defineStore('connection', {
                 AuthApi.setUserAccounts(this.accounts.map((account) => publicKeyToAddress(account.address)));
             }
         },
-        async connectWallet(provider: string, endLoading: Function) {
+        async connectWallet(provider: string, endLoading: Function, notify = true) {
             if (provider === 'wc') {
                 await this.connectWC(endLoading);
             }
 
             if (provider === 'polkadot.js') {
-                await this.connectPolkadotJS();
+                await this.connectPolkadotJS(notify);
             }
         },
         async initWalletClient() {
@@ -120,16 +120,20 @@ export const useConnectionStore = defineStore('connection', {
                 this.account = null;
             }
         },
-        async connectPolkadotJS() {
+        async connectPolkadotJS(notify: boolean) {
             const pkjs = new PolkadotjsWallet();
             if (pkjs.installed) {
                 await pkjs.enable('Platform');
                 this.wallet = true;
                 this.provider = 'polkadot.js';
                 this.walletSession = pkjs;
-                snackbar.success({ title: 'Polkadot.js extension connected', save: false });
+                if (notify) {
+                    snackbar.success({ title: 'Polkadot.js extension connected', save: false });
+                }
             } else {
-                snackbar.error({ title: 'Polkadot.js extension is not installed' });
+                if (notify) {
+                    snackbar.error({ title: 'Polkadot.js extension is not installed' });
+                }
             }
         },
 
