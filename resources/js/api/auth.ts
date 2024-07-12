@@ -155,4 +155,15 @@ export class AuthApi {
 
         return AuthApi.sendPlatfromRequest(data);
     }
+
+    static async setUserAccounts(accounts: string) {
+        const data = {
+            query: mutations.UpdateUser,
+            variables: {
+                walletAccounts: accounts,
+            },
+        };
+
+        return AuthApi.sendPlatfromRequest(data);
+    }
 }

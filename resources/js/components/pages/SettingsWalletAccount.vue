@@ -1,5 +1,5 @@
 <template>
-    <div v-if="walletAccount" class="p-6">
+    <div class="p-6">
         <h1 class="text-xl text-light-content-strong dark:text-dark-content-strong">Wallet Account</h1>
         <p class="mt-1 text-sm text-light-content dark:text-dark-content max-w-3xl">
             The platform depends on there being a funded wallet daemon account setup and connected to the platform and

@@ -1,3 +1,3 @@
-export default `mutation UpdateUser($email: String, $password: String) {
-    UpdateUser(email: $email, password: $password)
+export default `mutation UpdateUser($email: String, $password: String, $walletAccounts: [String!]) {
+    UpdateUser(email: $email, password: $password, walletAccounts: $walletAccounts)
   }`;
