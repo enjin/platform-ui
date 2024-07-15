@@ -112,9 +112,9 @@ export const checkFormatPrice = (price, listing, currency) => {
     if (
         listing &&
         (listing.makeAssetId.collectionId !== '0' ||
-        listing.makeAssetId.tokenId !== '0' ||
-        listing.takeAssetId.tokenId !== '0' ||
-        listing.takeAssetId.collectionId !== '0')
+            listing.makeAssetId.tokenId !== '0' ||
+            listing.takeAssetId.tokenId !== '0' ||
+            listing.takeAssetId.collectionId !== '0')
     ) {
         return `${formatPriceFromENJ(price)?.toLocaleString('en-US', {
             maximumFractionDigits: 18,

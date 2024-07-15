@@ -9,6 +9,8 @@ import { wcNamespaces, wcProjectId } from '~/util/constants';
 import { useAppStore } from '.';
 import snackbar from '~/util/snackbar';
 import { Web3Modal, Web3ModalConfig } from '@web3modal/standalone';
+import { AuthApi } from '~/api/auth';
+import { publicKeyToAddress } from '~/util/address';
 
 export const PrivacyPolicyLink = 'https://nft.io/legal/privacy-policy';
 export const TermsOfServiceLink = 'https://nft.io/legal/terms-of-service';
@@ -44,13 +46,23 @@ export const useConnectionStore = defineStore('connection', {
         getWeb3Modal() {
             return new Web3Modal(walletConnectWeb3modalConfig);
         },
-        async connectWallet(provider: string, endLoading: Function) {
+        async loadWallet() {
+            if (this.provider) {
+                await this.connectWallet(this.provider, () => {}, false);
+                if (!this.wallet) {
+                    return;
+                }
+                await this.getAccounts();
+                AuthApi.setUserAccounts(this.accounts.map((account) => publicKeyToAddress(account.address)));
+            }
+        },
+        async connectWallet(provider: string, endLoading: Function, notify = true) {
             if (provider === 'wc') {
                 await this.connectWC(endLoading);
             }
 
             if (provider === 'polkadot.js') {
-                await this.connectPolkadotJS();
+                await this.connectPolkadotJS(notify);
             }
         },
         async initWalletClient() {
@@ -108,16 +120,20 @@ export const useConnectionStore = defineStore('connection', {
                 this.account = null;
             }
         },
-        async connectPolkadotJS() {
+        async connectPolkadotJS(notify: boolean) {
             const pkjs = new PolkadotjsWallet();
             if (pkjs.installed) {
                 await pkjs.enable('Platform');
                 this.wallet = true;
                 this.provider = 'polkadot.js';
                 this.walletSession = pkjs;
-                snackbar.success({ title: 'Polkadot.js extension connected', save: false });
+                if (notify) {
+                    snackbar.success({ title: 'Polkadot.js extension connected', save: false });
+                }
             } else {
-                snackbar.error({ title: 'Polkadot.js extension is not installed' });
+                if (notify) {
+                    snackbar.error({ title: 'Polkadot.js extension is not installed' });
+                }
             }
         },
 
