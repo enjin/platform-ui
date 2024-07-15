@@ -73,11 +73,13 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import ScaleTransition from './ScaleTransition.vue';
 import snackbar from '~/util/snackbar';
 import { useConnectionStore } from '~/store/connection';
+import { publicKeyToAddress } from '~/util/address';
+import { AuthApi } from '~/api/auth';
 
 const connectionStore = useConnectionStore();
 
 const loading = ref(false);
-const showAccountsModal = ref(false);
+
 const walletName = computed(() => {
     if (connectionStore.provider === 'wc') {
         return 'Enjin Wallet';
@@ -96,9 +98,9 @@ const connectWallet = async (provider: string) => {
         await connectionStore.connectWallet(provider, () => {
             loading.value = false;
         });
-        if (connectionStore.accounts) {
-            showAccountsModal.value = true;
-        }
+        await connectionStore.getAccounts();
+        const accounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address))
+        AuthApi.setUserAccounts(accounts);
     } catch {
         snackbar.error({ title: 'Failed to connect the wallet' });
     } finally {

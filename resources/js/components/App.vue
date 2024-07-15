@@ -22,8 +22,9 @@ import SideNavbar from '~/components/SideNavbar.vue';
 import SupportButton from '~/components/SupportButton.vue';
 import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
-import { computed, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useConnectionStore } from '~/store/connection';
 
 const appStore = useAppStore();
 const router = useRouter();
@@ -53,6 +54,12 @@ const initialTheme = () => {
         document.title = 'Enjin Platform';
     }
 })();
+
+onMounted(() => {
+    setTimeout(() => {
+        useConnectionStore().loadWallet();
+    }, 500);
+});
 
 watch(
     () => appStore.theme,
