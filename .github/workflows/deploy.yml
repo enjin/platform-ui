@@ -1,11 +1,11 @@
 name: Build App
 on:
-  pull_request:
-    paths-ignore:
-      - '**.md'
-  push:
-    paths-ignore:
-      - '**.md'
+    pull_request:
+        paths-ignore:
+            - '**.md'
+    push:
+        paths-ignore:
+            - '**.md'
 
 jobs:
     build:
@@ -21,8 +21,8 @@ jobs:
               run: npm install
             - name: Copy config.json
               run: |
-                cp ./resources/js/config.json.example ./resources/js/config.json
-            - name: Build static project
+                  cp ./resources/js/config.json.default ./resources/js/config.json
+            - name: Build project
               run: npm run prod-laravel
             - name: Archive build artifacts
               uses: actions/upload-artifact@v2
