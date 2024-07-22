@@ -160,7 +160,7 @@ const login = async (recaptcha?: string) => {
     isLoading.value = true;
     try {
         if (!(await appStore.login(email.value, password.value, recaptcha))) {
-            snackbar.error({ title: 'Invalid username or password' });
+            snackbar.error({ title: 'Invalid email address or password.', text: "Please try again." });
             isLoading.value = false;
 
             return;
@@ -184,8 +184,8 @@ const login = async (recaptcha?: string) => {
             });
         } else {
             snackbar.error({
-                title: 'An error occurred while logging in.',
-                text: 'Please try again.',
+                title: 'An unexpected error has occurred.',
+                text: 'Please try again, or if the error persists contact support',
             });
         }
     } finally {
