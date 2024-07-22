@@ -57,7 +57,9 @@ const initialTheme = () => {
 
 onMounted(() => {
     setTimeout(() => {
-        useConnectionStore().loadWallet();
+        if (appStore.loggedIn && useConnectionStore().wallet) {
+            useConnectionStore().loadWallet();
+        }
     }, 500);
 });
 
