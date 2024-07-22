@@ -7,5 +7,6 @@ export default `query User {
         name
       }
       account
+      walletAccounts
     }
   }`;
