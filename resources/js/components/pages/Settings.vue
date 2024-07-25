@@ -15,7 +15,7 @@
                     <div v-if="isMultiTenant" class="flex flex-col space-y-4">
                         <CollapseCard
                             dusk-id="apiTokensTab"
-                            title="Api tokens"
+                            title="API Tokens"
                             :actions="false"
                             :isOpen="!appStore.hasValidConfig"
                         >
@@ -29,7 +29,7 @@
                             </div>
                         </CollapseCard>
                     </div>
-                    <CollapseCard dusk-id="linksTab" title="Helpful links" :actions="false">
+                    <CollapseCard dusk-id="linksTab" title="Helpful Links" :actions="false">
                         <div>
                             <div class="flex flex-col space-y-4 p-6">
                                 <p
