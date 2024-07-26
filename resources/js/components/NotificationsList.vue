@@ -49,7 +49,9 @@
                             </div>
                         </MenuItem>
                         <div v-if="notifications.length === 0" class="my-6">
-                            <p class="text-center text-sm">No notifications</p>
+                            <p class="text-center text-sm text-light-content-strong dark:text-dark-content-strong">
+                                No notifications
+                            </p>
                         </div>
                     </div>
 

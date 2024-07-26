@@ -157,4 +157,26 @@ export class CollectionApi {
 
         return ApiService.sendPlatformRequest(data);
     }
+
+    static async trackCollection(collectionId: string) {
+        const data = {
+            query: mutations.TrackCollection,
+            variables: {
+                chainIds: [parseInt(collectionId)],
+            },
+        };
+
+        return ApiService.sendPlatformRequest(data);
+    }
+
+    static async untrackCollection(collectionId: string) {
+        const data = {
+            query: mutations.UntrackCollection,
+            variables: {
+                chainIds: [parseInt(collectionId)],
+            },
+        };
+
+        return ApiService.sendPlatformRequest(data);
+    }
 }
