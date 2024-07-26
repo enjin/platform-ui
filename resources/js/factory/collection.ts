@@ -7,7 +7,7 @@ export class DTOCollectionFactory {
         const accounts: string[] = useAppStore().user?.walletAccounts ?? [];
         let tracked = false;
         if (accounts.length && useAppStore().isMultiTenant) {
-            tracked = !accounts.some((account) => account === collection.owner.account.publicKey);
+            tracked = !accounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
         }
 
         return {
