@@ -18,7 +18,14 @@
                         </div>
                     </div>
                     <div class="flex space-x-4 md:px-6 lg:px-8 py-2 mb-2 items-end">
-                        <Btn dusk="trackCollectionBtn" primary @click="trackModal = true">Track</Btn>
+                        <Btn
+                            v-if="useAppStore().isMultiTenant"
+                            dusk="trackCollectionBtn"
+                            primary
+                            @click="trackModal = true"
+                        >
+                            Track
+                        </Btn>
                         <RouterLink :to="{ name: 'platform.create.collection' }">
                             <Btn dusk="createCollectionBtn" primary> Create Collection </Btn>
                         </RouterLink>
@@ -123,7 +130,7 @@
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
                                     <DropdownMenu
-                                        v-if="collection.tracked"
+                                        v-if="!collection.tracked"
                                         :actions="actions"
                                         @clicked="($event) => openModalSlide($event, collection)"
                                     />
@@ -181,6 +188,7 @@ const collections: Ref<{
             totalCount: number;
         };
         frozen: boolean;
+        tracked?: boolean;
     }[];
     cursor: string | null;
 }> = ref({

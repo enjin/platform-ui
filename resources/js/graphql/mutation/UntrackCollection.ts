@@ -1,3 +1,3 @@
-export default `mutation removeFromTracked($type: ModelType!, $chainIds: [BigInt!]!) {
-    RemoveFromTracked(type:$type, chainIds:$chainIds)
+export default `mutation removeFromTracked($type: ModelType! = COLLECTION, $chainIds: [BigInt!]!) {
+    RemoveFromTracked(type: $type, chainIds: $chainIds)
 }`;

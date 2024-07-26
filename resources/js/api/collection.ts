@@ -162,7 +162,7 @@ export class CollectionApi {
         const data = {
             query: mutations.TrackCollection,
             variables: {
-                collectionId,
+                chainIds: [parseInt(collectionId)],
             },
         };
 
@@ -173,7 +173,7 @@ export class CollectionApi {
         const data = {
             query: mutations.UntrackCollection,
             variables: {
-                collectionId,
+                chainIds: [parseInt(collectionId)],
             },
         };
 
