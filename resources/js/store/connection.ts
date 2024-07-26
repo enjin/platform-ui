@@ -53,7 +53,9 @@ export const useConnectionStore = defineStore('connection', {
                     return;
                 }
                 await this.getAccounts();
-                AuthApi.setUserAccounts(this.accounts.map((account) => publicKeyToAddress(account.address)));
+                if (useAppStore().isMultiTenant) {
+                    AuthApi.setUserAccounts(this.accounts.map((account) => publicKeyToAddress(account.address)));
+                }
             }
         },
         async connectWallet(provider: string, endLoading: Function, notify = true) {

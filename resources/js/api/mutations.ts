@@ -5,6 +5,8 @@ import MutateCollection from '~/graphql/mutation/collection/MutateCollection';
 import DestroyCollection from '~/graphql/mutation/collection/DestroyCollection';
 import RemoveCollectionAttribute from '~/graphql/mutation/collection/RemoveCollectionAttribute';
 import SetCollectionAttribute from '~/graphql/mutation/collection/SetCollectionAttribute';
+import TrackCollection from '~/graphql/mutation/TrackCollection';
+import UntrackCollection from '~/graphql/mutation/UntrackCollection';
 
 import CreateToken from '~/graphql/mutation/token/CreateToken';
 import MintToken from '~/graphql/mutation/token/MintToken';
@@ -75,6 +77,8 @@ export default {
     DestroyCollection,
     RemoveCollectionAttribute,
     SetCollectionAttribute,
+    TrackCollection,
+    UntrackCollection,
 
     CreateToken,
     MintToken,
