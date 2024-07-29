@@ -23,7 +23,7 @@
             >
                 {{ walletAccount }}
             </label>
-            <span v-else-if="userWalletAccounts.length" class="text-lg font-bold text-light-content-strong dark:text-dark-content-strong">
+            <span v-if="userWalletAccounts.length" class="text-lg font-bold text-light-content-strong dark:text-dark-content-strong">
                 Connected Wallets
             </span>
             <label
