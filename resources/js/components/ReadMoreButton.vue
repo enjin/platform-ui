@@ -17,6 +17,10 @@ const props = defineProps<{
 }>();
 
 const sendReadmoreEvent = () => {
-    events.emit('readmore', props.readmore);
+    if (props.readmore && props.readmore.includes('http')) {
+        window.open(props.readmore, '_blank');
+    } else {
+        events.emit('readmore', props.readmore);
+    }
 };
 </script>
