@@ -98,7 +98,7 @@
                                 "
                             >
                                 <td
-                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    class="whitespace-nowrap px-3 py-4 text-sm font-medium text-light-content-strong dark:text-dark-content-strong"
                                 >
                                     {{ tokenNames[`${token.collection.collectionId}-${token.tokenId}`] }}
                                 </td>
