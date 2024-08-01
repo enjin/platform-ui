@@ -366,7 +366,7 @@ const fetchUri = async (uri) => {
         }
 
         return '-';
-    } catch (e) {
+    } catch {
         return '-';
     }
 };
