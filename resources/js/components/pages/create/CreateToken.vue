@@ -269,6 +269,46 @@
                         <div class="mt-6">
                             <div class="flex flex-col gap-6">
                                 <FormCheckbox
+                                    v-model="infuseEnj"
+                                    name="infuseEnj"
+                                    label="Infuse ENJ"
+                                    description="Use this option to infuse ENJ into the token."
+                                    readmore="https://support.nft.io/hc/en-gb/articles/20436178520594"
+                                />
+                                <div v-if="infuseEnj" class="space-y-4">
+                                    <FormInput
+                                        v-model="infuseAmount"
+                                        name="infuseAmount"
+                                        label="ENJ Infusion"
+                                        description="Enter the amount of ENJ you wish to infuse in each unit."
+                                        type="number"
+                                        required
+                                    />
+                                    <FormSelect
+                                        v-model="infuseAccess"
+                                        name="infuseAccess"
+                                        label="Infusion Access"
+                                        description=""
+                                        :options="['Only Me', 'Everyone']"
+                                    />
+                                    <template v-if="tokenType === 'ft'">
+                                        <FormInput
+                                            v-model="itemsInfuse"
+                                            name="itemsInfuse"
+                                            label="Number of items"
+                                            type="number"
+                                            required
+                                        />
+                                        <FormInput
+                                            v-model="totalInfuseAmount"
+                                            name="totalIbfuseAmount"
+                                            label="Total infuse amount"
+                                            type="number"
+                                            disabled
+                                        />
+                                    </template>
+                                </div>
+                                <FormCheckbox
                                     v-model="listingForbidden"
                                     name="listingForbidden"
                                     label="Listing Forbidden"
@@ -369,7 +409,12 @@ const tokenId = ref({
 });
 const initialSupply = ref(1);
 const capAmount = ref();
+const infuseAmount = ref();
 const isCurrency = ref(false);
+const infuseEnj = ref(false);
+const infuseAccess = ref('Only Me');
+const itemsInfuse = ref()
+const totalInfuseAmount = ref()
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const listingForbidden = ref(false);
