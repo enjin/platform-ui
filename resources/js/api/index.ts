@@ -27,6 +27,7 @@ export class ApiService {
         credentials = 'omit',
         mode = 'cors',
         nest = true,
+        auth = true,
     }: {
         url: string;
         data?: Record<string, unknown>;
@@ -35,6 +36,7 @@ export class ApiService {
         credentials?: 'omit' | 'same-origin' | 'include';
         mode?: 'cors' | 'no-cors' | 'same-origin' | 'navigate';
         nest?: boolean;
+        auth?: boolean;
     }): Promise<any> {
         let body: string | null = null;
         const fullUrl = url;
@@ -44,10 +46,12 @@ export class ApiService {
             body = JSON.stringify(data);
         }
 
-        if (!useAppStore().isMultiTenant) {
-            headers.Authorization = useAppStore().config.authorization_token;
-        } else {
-            headers['X-CSRF-TOKEN'] = csrf;
+        if (auth) {
+            if (!useAppStore().isMultiTenant) {
+                headers.Authorization = useAppStore().config.authorization_token;
+            } else {
+                headers['X-CSRF-TOKEN'] = csrf;
+            }
         }
 
         const resp = await fetch(fullUrl, {
@@ -155,6 +159,7 @@ export class ApiService {
             method: HttpMethods.GET,
             credentials: undefined,
             mode: undefined,
+            auth: false,
         });
     }
 

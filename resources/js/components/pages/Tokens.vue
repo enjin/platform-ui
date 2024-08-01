@@ -98,7 +98,7 @@
                                 "
                             >
                                 <td
-                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                    class="whitespace-nowrap px-3 py-4 text-sm font-medium text-light-content-strong dark:text-dark-content-strong"
                                 >
                                     {{ tokenNames[`${token.collection.collectionId}-${token.tokenId}`] }}
                                 </td>
@@ -379,9 +379,8 @@ const getTokenName = async (token): Promise<string> => {
 const fetchUri = async (uri) => {
     try {
         const res = await ApiService.fetchUrl(uri);
-        const json = JSON.parse(res);
-        if (json.name) {
-            return json.name;
+        if (res.name) {
+            return res.name;
         }
 
         return '-';
