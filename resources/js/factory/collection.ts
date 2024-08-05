@@ -5,15 +5,23 @@ import { publicKeyToAddress } from '~/util/address';
 
 export class DTOCollectionFactory {
     public static buildCollection(collection: any) {
-        const accounts: string[] = useAppStore().user?.walletAccounts ?? [];
+        const appStore = useAppStore();
+        const connectionStore = useConnectionStore();
+
+        const accounts: string[] = appStore.user?.walletAccounts ?? [];
         let tracked = false;
 
-        if (accounts.length && useAppStore().isMultiTenant) {
+        if (accounts.length && appStore.isMultiTenant) {
             tracked = !accounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
-        } else if (useAppStore().config.daemon) {
-            tracked = !(useAppStore().config.daemon === publicKeyToAddress(collection.owner.account.publicKey));
-        } else if (useConnectionStore().accounts?.length) {
-            const accounts = useConnectionStore().accounts.map((account) => publicKeyToAddress(account.address));
+            if (!tracked) {
+                tracked =
+                    publicKeyToAddress(appStore.user?.account) ===
+                    publicKeyToAddress(collection.owner.account.publicKey);
+            }
+        } else if (appStore.config.daemon) {
+            tracked = !(appStore.config.daemon === publicKeyToAddress(collection.owner.account.publicKey));
+        } else if (connectionStore.accounts?.length) {
+            const accounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
             tracked = !accounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
         }
 
