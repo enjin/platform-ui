@@ -216,6 +216,8 @@ export const useConnectionStore = defineStore('connection', {
                 const accounts = await this.walletSession.getAccounts();
                 this.accounts = accounts;
             }
+
+            return this.accounts;
         },
     },
 });
