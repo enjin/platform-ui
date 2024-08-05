@@ -18,14 +18,7 @@
                         </div>
                     </div>
                     <div class="flex space-x-4 md:px-6 lg:px-8 py-2 mb-2 items-end">
-                        <Btn
-                            v-if="useAppStore().isMultiTenant"
-                            dusk="trackCollectionBtn"
-                            primary
-                            @click="trackModal = true"
-                        >
-                            Track
-                        </Btn>
+                        <Btn dusk="trackCollectionBtn" primary @click="trackModal = true"> Track </Btn>
                         <RouterLink :to="{ name: 'platform.create.collection' }">
                             <Btn dusk="createCollectionBtn" primary> Create Collection </Btn>
                         </RouterLink>

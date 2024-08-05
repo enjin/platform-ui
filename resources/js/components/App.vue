@@ -56,11 +56,12 @@ const initialTheme = () => {
 })();
 
 onMounted(() => {
-    setTimeout(() => {
+    setTimeout(async () => {
         if (appStore.loggedIn && useConnectionStore().wallet) {
-            useConnectionStore().loadWallet();
+            await useConnectionStore().loadWallet();
+            await useConnectionStore().getAccounts();
         }
-    }, 500);
+    }, 1000);
 });
 
 watch(
