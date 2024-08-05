@@ -96,9 +96,10 @@
                             >
                             <div class="flex">
                                 <div
-                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-l-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong"
+                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-l-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong text-center"
                                     :class="{
-                                        'bg-light-surface-brand/30 !border-light-surface-brand': tokenType === 'nft',
+                                        'text-light-content-brand dark:text-dark-content-brand !border-light-surface-brand':
+                                            tokenType === 'nft',
                                     }"
                                     @click="tokenType = 'nft'"
                                     dusk="nftOption"
@@ -109,9 +110,10 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-r-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong"
+                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-r-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong text-center"
                                     :class="{
-                                        'bg-light-surface-brand/30 !border-light-surface-brand': tokenType === 'ft',
+                                        'text-light-content-brand dark:text-dark-content-brand !border-light-surface-brand':
+                                            tokenType === 'ft',
                                     }"
                                     @click="tokenType = 'ft'"
                                     dusk="ftOption"
@@ -124,24 +126,38 @@
                                 </div>
                             </div>
                         </div>
-                        <FormInput
-                            v-show="tokenType === 'ft'"
-                            v-model="initialSupply"
-                            name="initialSupply"
-                            label="Initial Supply"
-                            description="The initial supply of tokens to mint to the specified recipient. Must not exceed the token maximum supply if set."
-                            type="number"
-                            tooltip="Number of items to be minted when this item is first created. If this is below maximum supply, users can mint more of this item in the future."
-                        />
-                        <FormInput
-                            v-if="tokenType === 'ft'"
-                            v-model="capAmount"
-                            name="capAmount"
-                            label="Maximum Supply"
-                            tooltip="Once this limit is reached, minting of additional items will not be allowed."
-                            placeholder="Unlimited"
-                            type="number"
-                        />
+                        <template v-if="tokenType === 'ft'">
+                            <FormInput
+                                v-model="initialSupply"
+                                name="initialSupply"
+                                label="Initial Supply"
+                                description="The initial supply of tokens to mint to the specified recipient. Must not exceed the token maximum supply if set."
+                                type="number"
+                                tooltip="Number of items to be minted when this item is first created. If this is below maximum supply, users can mint more of this item in the future."
+                            />
+                            <InputHeader
+                                label="Supply Cap"
+                                description="Set the maximum supply for your token."
+                                readmore="https://support.enjin.io/hc/en-gb/articles/19114269858834"
+                                tooltip="Learn more about the different supply types here"
+                            />
+                            <div class="flex space-x-4 w-full">
+                                <FormSelect
+                                    v-model="capType"
+                                    :options="capTypes"
+                                    name="capType"
+                                    label="Supply Cap Type"
+                                    class="flex-1"
+                                />
+                                <FormInput
+                                    v-if="capType === TokenCapType.COLLAPSING_SUPPLY"
+                                    v-model="capAmount"
+                                    name="capAmount"
+                                    label="Max Supply"
+                                    type="number"
+                                />
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -329,6 +345,7 @@ import {
 import Tooltip from '~/components/Tooltip.vue';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 import RichTextEditor from '~/components/RichTextEditor.vue';
+import InputHeader from '~/components/InputHeader.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -340,6 +357,7 @@ const imageType = ref();
 const name = ref('');
 const description = ref('');
 const tokenType = ref('nft');
+const capType = ref(TokenCapType.INFINITE);
 
 //Advanced
 const collectionId = ref('');
@@ -364,6 +382,8 @@ const attributes = ref([
         value: '',
     },
 ]);
+
+const capTypes = [TokenCapType.INFINITE, TokenCapType.COLLAPSING_SUPPLY, TokenCapType.SINGLE_MINT];
 
 const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
@@ -424,8 +444,6 @@ const invalidSubmit = () => {
         text: 'Please verify that all the fields are valid',
     });
 };
-
-
 
 const createToken = async () => {
     if (!(await isValid())) {
