@@ -32,6 +32,7 @@ export enum TokenCapType {
     SINGLE_MINT = 'SINGLE_MINT',
     SUPPLY = 'SUPPLY',
     INFINITE = 'INFINITE',
+    COLLAPSING_SUPPLY = 'COLLAPSING_SUPPLY',
 }
 
 export enum FreezeStateType {
