@@ -4,6 +4,7 @@
         :class="theme"
         :block="block"
         :show="show"
+        :hover="hover"
         :offset-distance="offsetDistance"
         :placement="(placement as any)"
         z-index="30"
