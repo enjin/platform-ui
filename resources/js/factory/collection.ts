@@ -8,6 +8,8 @@ export class DTOCollectionFactory {
         let tracked = false;
         if (accounts.length && useAppStore().isMultiTenant) {
             tracked = !accounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
+        } else if (useAppStore().config.daemon) {
+            tracked = !(useAppStore().config.daemon === publicKeyToAddress(collection.owner.account.publicKey));
         }
 
         return {
