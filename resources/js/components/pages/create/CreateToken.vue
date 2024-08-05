@@ -316,7 +316,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
@@ -357,7 +357,7 @@ const imageType = ref();
 const name = ref('');
 const description = ref('');
 const tokenType = ref('nft');
-const capType = ref(TokenCapType.INFINITE);
+const capType = ref(TokenCapType.SINGLE_MINT);
 
 //Advanced
 const collectionId = ref('');
@@ -469,12 +469,7 @@ const createToken = async () => {
                     tokenId: formatToken(tokenId.value),
                     initialSupply: initialSupply.value,
                     cap: {
-                        type:
-                            tokenType.value === 'ft'
-                                ? capAmount.value > 0
-                                    ? TokenCapType.SUPPLY
-                                    : TokenCapType.INFINITE
-                                : TokenCapType.SINGLE_MINT,
+                        type: capType.value,
                         amount: capAmount.value,
                     },
                     behavior: {
@@ -529,4 +524,15 @@ const addAttributeItem = () => {
 const removeAttributeItem = (index: number) => {
     attributes.value.splice(index, 1);
 };
+
+watch(
+    () => tokenType.value,
+    () => {
+        if (tokenType.value === 'nft') {
+            capType.value = TokenCapType.SINGLE_MINT;
+        } else {
+            capType.value = TokenCapType.INFINITE;
+        }
+    }
+);
 </script>
