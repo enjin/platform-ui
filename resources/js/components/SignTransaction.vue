@@ -27,6 +27,12 @@
                     {{ `${feeCost} ${currencySymbolByNetwork(useAppStore().config.network)}` }}
                 </span>
             </div>
+            <div v-if="deposit" class="inline-flex space-x-1 mb-2">
+                <span> Deposit fee: </span>
+                <span class="font-bold animate-fade-in">
+                    {{ `${deposit} ${currencySymbolByNetwork(useAppStore().config.network)}` }}
+                </span>
+            </div>
             <div v-if="loadingApi" class="py-20 animate-fade-in">
                 <LoadingCircle class="my-auto text-primary" :size="42" />
             </div>
@@ -82,6 +88,7 @@ const emit = defineEmits(['success']);
 const isLoading = ref(false);
 const showAccountsModal = ref(false);
 const feeCost = ref();
+const deposit = ref();
 const loadingApi = ref(false);
 const signing = ref(false);
 
@@ -100,6 +107,7 @@ const signTransaction = async () => {
         connectionStore.getAccounts();
         await transactionStore.init();
         feeCost.value = formatPriceFromENJ(props.transaction.fee)?.toFixed(5);
+        deposit.value = formatPriceFromENJ(props.transaction.deposit)?.toFixed(5);
         loadingApi.value = false;
     } catch (e) {
         snackbar.error({ title: 'Failed to sign transaction' });
