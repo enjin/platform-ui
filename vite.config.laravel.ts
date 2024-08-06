@@ -10,9 +10,6 @@ const path = require('path');
 
 // @ts-ignore
 export default defineConfig({
-    define: {
-        'process.env': process.env,
-    },
     plugins: [
         dynamicImport({
             viteIgnore: () => true,
