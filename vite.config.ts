@@ -7,8 +7,8 @@ import eslint from 'vite-plugin-eslint';
 const path = require('path');
 
 export default defineConfig({
-    define: {
-        'process.env': process.env,
+    server: {
+        port: 5174
     },
     plugins: [
         dynamicImport({
