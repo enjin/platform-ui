@@ -8,7 +8,7 @@ export class DTOCollectionFactory {
         const appStore = useAppStore();
         const connectionStore = useConnectionStore();
 
-        const accounts: string[] = appStore.user?.walletAccounts ?? [];
+        const accounts: string[] = [];
         if (appStore.user?.account) {
             accounts.push(publicKeyToAddress(appStore.user?.account));
         }
@@ -19,6 +19,9 @@ export class DTOCollectionFactory {
 
         if (connectionStore.accounts?.length) {
             const walletAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
+            accounts.push(...walletAccounts);
+        } else if (appStore.user?.walletAccounts?.lengths) {
+            const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
             accounts.push(...walletAccounts);
         }
 
