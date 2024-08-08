@@ -57,11 +57,11 @@ const initialTheme = () => {
 
 onMounted(() => {
     setTimeout(async () => {
-        if (appStore.loggedIn && useConnectionStore().wallet) {
+        if (appStore.loggedIn && useConnectionStore().provider) {
             await useConnectionStore().loadWallet();
             await useConnectionStore().getAccounts();
         }
-    }, 1000);
+    }, 500);
 });
 
 watch(
