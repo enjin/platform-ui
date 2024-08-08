@@ -122,18 +122,16 @@
                                 <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
-                                    <DropdownMenu
-                                        v-if="!collection.tracked"
-                                        :actions="actions"
-                                        @clicked="($event) => openModalSlide($event, collection)"
+                                    <LoadingCircle
+                                        class="mx-3 h-5 w-5"
+                                        v-if="loadingAction === collection.collectionId"
                                     />
-                                    <Btn
+                                    <DropdownMenu
                                         v-else
-                                        dusk="untrackCollectionBtn"
-                                        @click="untrackCollection(collection.collectionId)"
-                                    >
-                                        Untrack
-                                    </Btn>
+                                        :actions="actions(collection)"
+                                        @clicked="($event) => openModalSlide($event, collection)"
+                                        @loading="loadingAction = collection.collectionId"
+                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -194,54 +192,74 @@ const trackModal = ref(false);
 const slideComponent = ref();
 const searchInput = ref('');
 const collectionNames = ref<{ [key: string]: string }[]>([]);
+const loadingAction = ref<string | null>(null);
 
 const route = useRoute();
 const router = useRouter();
 
 const enablePagination = computed(() => searchInput.value === '');
 
-const actions = [
-    {
-        key: 'details',
-        name: 'Details',
-        component: 'DetailsCollectionSlideover',
-    },
-    {
-        key: 'approve',
-        name: 'Approve',
-        component: 'ApproveCollectionSlideover',
-    },
-    {
-        key: 'unapprove',
-        name: 'Unapprove',
-        component: 'UnapproveCollectionSlideover',
-    },
-    {
-        key: 'freeze',
-        name: 'Freeze',
-        component: 'FreezeSlideover',
-    },
-    {
-        key: 'thaw',
-        name: 'Thaw',
-        component: 'ThawSlideover',
-    },
-    {
-        key: 'mutate',
-        name: 'Mutate',
-        component: 'MutateCollectionSlideover',
-    },
-    {
-        key: 'attributes',
-        name: 'Attributes',
-        component: 'AttributesCollectionSlideover',
-    },
-    {
-        key: 'destroy',
-        name: 'Destroy',
-        component: 'DestroyCollectionSlideover',
-    },
-];
+const actions = (collection) => {
+    if (collection.tracked) {
+        return [
+            {
+                key: 'details',
+                name: 'Details',
+                component: 'DetailsCollectionSlideover',
+            },
+            {
+                key: 'untrack',
+                name: 'Untrack',
+                action: () => {
+                    untrackCollection(collection.collectionId);
+                },
+            },
+        ];
+    }
+
+    return [
+        {
+            key: 'details',
+            name: 'Details',
+            component: 'DetailsCollectionSlideover',
+        },
+        {
+            key: 'approve',
+            name: 'Approve',
+            component: 'ApproveCollectionSlideover',
+        },
+        {
+            key: 'unapprove',
+            name: 'Unapprove',
+            component: 'UnapproveCollectionSlideover',
+        },
+        {
+            key: 'freeze',
+            name: 'Freeze',
+            component: 'FreezeSlideover',
+        },
+        {
+            key: 'thaw',
+            name: 'Thaw',
+            component: 'ThawSlideover',
+        },
+        {
+            key: 'mutate',
+            name: 'Mutate',
+            component: 'MutateCollectionSlideover',
+        },
+        {
+            key: 'attributes',
+            name: 'Attributes',
+            component: 'AttributesCollectionSlideover',
+        },
+        {
+            key: 'destroy',
+            name: 'Destroy',
+            component: 'DestroyCollectionSlideover',
+        },
+    ];
+};
 
 const debouncedSearch = debounce(async () => {
     if (searchInput.value) {
@@ -384,13 +402,29 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 const trackCollection = async (collectionId: string) => {
-    await CollectionApi.trackCollection(collectionId);
-    await getCollections();
+    try {
+        await CollectionApi.trackCollection(collectionId);
+        await getCollections();
+    } catch {
+        snackbar.info({
+            title: 'Tracking',
+            text: 'Tracking the collection failed',
+        });
+    }
 };
 
 const untrackCollection = async (collectionId: string) => {
-    await CollectionApi.untrackCollection(collectionId);
-    await getCollections();
+    try {
+        await CollectionApi.untrackCollection(collectionId);
+        await getCollections();
+    } catch {
+        snackbar.info({
+            title: 'Untracking',
+            text: 'Untracking the collection failed',
+        });
+    } finally {
+        loadingAction.value = null;
+    }
 };
 
 (async () => {
