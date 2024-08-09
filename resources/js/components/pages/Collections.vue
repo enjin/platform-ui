@@ -126,7 +126,7 @@
                                         v-if="collection.tracked"
                                         text="Tracked"
                                         :closable="false"
-                                        class="!bg-blue-400 !bg-opacity-80 !text-white"
+                                        class="absolute right-16 top-3 !bg-blue-400 !bg-opacity-80 !text-white"
                                     />
                                     <LoadingCircle
                                         class="mx-3 h-5 w-5"
@@ -154,7 +154,7 @@
             key="cancel"
             :is-open="untrackModal"
             title="Untrack Collection"
-            description="Are you sure you want to untrack this collection? it will be removed from your collections list and you will have to add it again"
+            description="Are you sure you want to untrack this collection? It will be removed from your collections' list and you will have to add it again."
             @closed="closeUntrackModal"
             @confirm="untrackCollection"
         />
@@ -427,6 +427,11 @@ const trackCollection = async (collectionId: string) => {
     try {
         await CollectionApi.trackCollection(collectionId);
         await getCollections();
+        snackbar.success({
+            title: 'Tracking',
+            text: 'Collection tracked successfully',
+            save: false,
+        });
     } catch {
         snackbar.info({
             title: 'Tracking',
@@ -447,6 +452,11 @@ const untrackCollection = async () => {
             return;
         } else {
             await getCollections();
+            snackbar.success({
+                title: 'Untracking',
+                text: 'Collection untracked successfully',
+                save: false,
+            });
         }
     } catch {
         snackbar.info({
