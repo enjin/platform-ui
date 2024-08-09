@@ -13,7 +13,7 @@ export class DTOCollectionFactory {
             accounts.push(publicKeyToAddress(appStore.user?.account));
         }
 
-        if (appStore.config.daemon) {
+        if (appStore.config.daemon && !appStore.isMultiTenant) {
             accounts.push(publicKeyToAddress(appStore.config.daemon));
         }
 
