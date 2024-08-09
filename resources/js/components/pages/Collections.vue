@@ -122,6 +122,12 @@
                                 <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
+                                    <Chip
+                                        v-if="collection.tracked"
+                                        text="Tracked"
+                                        :closable="false"
+                                        class="!bg-blue-400 !bg-opacity-80 !text-white"
+                                    />
                                     <LoadingCircle
                                         class="mx-3 h-5 w-5"
                                         v-if="loadingAction === collection.collectionId"
@@ -144,6 +150,14 @@
         </div>
         <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" />
         <TrackCollectionModal :is-open="trackModal" @confirm="trackCollection" @closed="trackModal = false" />
+        <ConfirmModal
+            key="cancel"
+            :is-open="untrackModal"
+            title="Untrack Collection"
+            description="Are you sure you want to untrack this collection? it will be removed from your collections list and you will have to add it again"
+            @closed="closeUntrackModal"
+            @confirm="untrackCollection"
+        />
     </div>
 </template>
 
@@ -167,6 +181,8 @@ import { TransactionState } from '~/types/types.enums';
 import { useRoute, useRouter } from 'vue-router';
 import { ApiService } from '~/api';
 import TrackCollectionModal from '../TrackCollectionModal.vue';
+import ConfirmModal from '../ConfirmModal.vue';
+import Chip from '../Chip.vue';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -188,6 +204,7 @@ const collections: Ref<{
 });
 const paginatorRef = ref();
 const modalSlide = ref(false);
+const untrackModal = ref(false);
 const trackModal = ref(false);
 const slideComponent = ref();
 const searchInput = ref('');
@@ -211,7 +228,7 @@ const actions = (collection) => {
                 key: 'untrack',
                 name: 'Untrack',
                 action: () => {
-                    untrackCollection(collection.collectionId);
+                    untrackModal.value = true;
                 },
             },
         ];
@@ -393,6 +410,11 @@ const closeModalSlide = () => {
     }, 500);
 };
 
+const closeUntrackModal = () => {
+    untrackModal.value = false;
+    loadingAction.value = null;
+};
+
 const openTransactionSlide = async (transactionId: string) => {
     if (modalSlide.value) closeModalSlide();
 
@@ -413,10 +435,19 @@ const trackCollection = async (collectionId: string) => {
     }
 };
 
-const untrackCollection = async (collectionId: string) => {
+const untrackCollection = async () => {
     try {
-        await CollectionApi.untrackCollection(collectionId);
-        await getCollections();
+        untrackModal.value = false;
+        const res = await CollectionApi.untrackCollection(loadingAction.value!);
+        if (!res.data.RemoveFromTracked) {
+            snackbar.info({
+                title: 'Untracking',
+                text: 'Untracking the collection failed',
+            });
+            return;
+        } else {
+            await getCollections();
+        }
     } catch {
         snackbar.info({
             title: 'Untracking',
