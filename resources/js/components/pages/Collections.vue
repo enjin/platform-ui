@@ -122,18 +122,22 @@
                                 <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
-                                    <DropdownMenu
-                                        v-if="!collection.tracked"
-                                        :actions="actions"
-                                        @clicked="($event) => openModalSlide($event, collection)"
+                                    <Chip
+                                        v-if="collection.tracked"
+                                        text="Tracked"
+                                        :closable="false"
+                                        class="!bg-blue-400 !bg-opacity-80 !text-white"
                                     />
-                                    <Btn
+                                    <LoadingCircle
+                                        class="mx-3 h-5 w-5"
+                                        v-if="loadingAction === collection.collectionId"
+                                    />
+                                    <DropdownMenu
                                         v-else
-                                        dusk="untrackCollectionBtn"
-                                        @click="untrackCollection(collection.collectionId)"
-                                    >
-                                        Untrack
-                                    </Btn>
+                                        :actions="actions(collection)"
+                                        @clicked="($event) => openModalSlide($event, collection)"
+                                        @loading="loadingAction = collection.collectionId"
+                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -146,6 +150,14 @@
         </div>
         <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" />
         <TrackCollectionModal :is-open="trackModal" @confirm="trackCollection" @closed="trackModal = false" />
+        <ConfirmModal
+            key="cancel"
+            :is-open="untrackModal"
+            title="Untrack Collection"
+            description="Are you sure you want to untrack this collection? it will be removed from your collections list and you will have to add it again"
+            @closed="closeUntrackModal"
+            @confirm="untrackCollection"
+        />
     </div>
 </template>
 
@@ -169,6 +181,8 @@ import { TransactionState } from '~/types/types.enums';
 import { useRoute, useRouter } from 'vue-router';
 import { ApiService } from '~/api';
 import TrackCollectionModal from '../TrackCollectionModal.vue';
+import ConfirmModal from '../ConfirmModal.vue';
+import Chip from '../Chip.vue';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -190,58 +204,79 @@ const collections: Ref<{
 });
 const paginatorRef = ref();
 const modalSlide = ref(false);
+const untrackModal = ref(false);
 const trackModal = ref(false);
 const slideComponent = ref();
 const searchInput = ref('');
 const collectionNames = ref<{ [key: string]: string }[]>([]);
+const loadingAction = ref<string | null>(null);
 
 const route = useRoute();
 const router = useRouter();
 
 const enablePagination = computed(() => searchInput.value === '');
 
-const actions = [
-    {
-        key: 'details',
-        name: 'Details',
-        component: 'DetailsCollectionSlideover',
-    },
-    {
-        key: 'approve',
-        name: 'Approve',
-        component: 'ApproveCollectionSlideover',
-    },
-    {
-        key: 'unapprove',
-        name: 'Unapprove',
-        component: 'UnapproveCollectionSlideover',
-    },
-    {
-        key: 'freeze',
-        name: 'Freeze',
-        component: 'FreezeSlideover',
-    },
-    {
-        key: 'thaw',
-        name: 'Thaw',
-        component: 'ThawSlideover',
-    },
-    {
-        key: 'mutate',
-        name: 'Mutate',
-        component: 'MutateCollectionSlideover',
-    },
-    {
-        key: 'attributes',
-        name: 'Attributes',
-        component: 'AttributesCollectionSlideover',
-    },
-    {
-        key: 'destroy',
-        name: 'Destroy',
-        component: 'DestroyCollectionSlideover',
-    },
-];
+const actions = (collection) => {
+    if (collection.tracked) {
+        return [
+            {
+                key: 'details',
+                name: 'Details',
+                component: 'DetailsCollectionSlideover',
+            },
+            {
+                key: 'untrack',
+                name: 'Untrack',
+                action: () => {
+                    untrackModal.value = true;
+                },
+            },
+        ];
+    }
+
+    return [
+        {
+            key: 'details',
+            name: 'Details',
+            component: 'DetailsCollectionSlideover',
+        },
+        {
+            key: 'approve',
+            name: 'Approve',
+            component: 'ApproveCollectionSlideover',
+        },
+        {
+            key: 'unapprove',
+            name: 'Unapprove',
+            component: 'UnapproveCollectionSlideover',
+        },
+        {
+            key: 'freeze',
+            name: 'Freeze',
+            component: 'FreezeSlideover',
+        },
+        {
+            key: 'thaw',
+            name: 'Thaw',
+            component: 'ThawSlideover',
+        },
+        {
+            key: 'mutate',
+            name: 'Mutate',
+            component: 'MutateCollectionSlideover',
+        },
+        {
+            key: 'attributes',
+            name: 'Attributes',
+            component: 'AttributesCollectionSlideover',
+        },
+        {
+            key: 'destroy',
+            name: 'Destroy',
+            component: 'DestroyCollectionSlideover',
+        },
+    ];
+};
 
 const debouncedSearch = debounce(async () => {
     if (searchInput.value) {
@@ -375,6 +410,11 @@ const closeModalSlide = () => {
     }, 500);
 };
 
+const closeUntrackModal = () => {
+    untrackModal.value = false;
+    loadingAction.value = null;
+};
+
 const openTransactionSlide = async (transactionId: string) => {
     if (modalSlide.value) closeModalSlide();
 
@@ -384,13 +424,38 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 const trackCollection = async (collectionId: string) => {
-    await CollectionApi.trackCollection(collectionId);
-    await getCollections();
+    try {
+        await CollectionApi.trackCollection(collectionId);
+        await getCollections();
+    } catch {
+        snackbar.info({
+            title: 'Tracking',
+            text: 'Tracking the collection failed',
+        });
+    }
 };
 
-const untrackCollection = async (collectionId: string) => {
-    await CollectionApi.untrackCollection(collectionId);
-    await getCollections();
+const untrackCollection = async () => {
+    try {
+        untrackModal.value = false;
+        const res = await CollectionApi.untrackCollection(loadingAction.value!);
+        if (!res.data.RemoveFromTracked) {
+            snackbar.info({
+                title: 'Untracking',
+                text: 'Untracking the collection failed',
+            });
+            return;
+        } else {
+            await getCollections();
+        }
+    } catch {
+        snackbar.info({
+            title: 'Untracking',
+            text: 'Untracking the collection failed',
+        });
+    } finally {
+        loadingAction.value = null;
+    }
 };
 
 (async () => {
