@@ -22,7 +22,7 @@
                                     : 'text-light-content dark:text-dark-content ',
                                 'flex justify-between px-4 py-2 text-sm transition-all',
                             ]"
-                            @click="emitAction(action.component)"
+                            @click="emitAction(action)"
                         >
                             <span>{{ action.name }}</span>
                         </div>
@@ -41,13 +41,19 @@ import ScaleTransition from '~/components/ScaleTransition.vue';
 defineProps<{
     actions: {
         name: string;
-        component: string;
+        component?: string;
+        action?: Function;
     }[];
 }>();
 
-const emit = defineEmits(['clicked']);
+const emit = defineEmits(['clicked', 'loading']);
 
-const emitAction = (type: string) => {
-    emit('clicked', type);
+const emitAction = (action) => {
+    if (action.component) {
+        emit('clicked', action.component);
+    } else if (action.action) {
+        emit('loading');
+        action.action();
+    }
 };
 </script>

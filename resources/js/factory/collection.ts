@@ -8,21 +8,27 @@ export class DTOCollectionFactory {
         const appStore = useAppStore();
         const connectionStore = useConnectionStore();
 
-        const accounts: string[] = appStore.user?.walletAccounts ?? [];
-        let tracked = false;
+        const accounts: string[] = [];
+        if (appStore.user?.account) {
+            accounts.push(publicKeyToAddress(appStore.user?.account));
+        }
 
-        if (accounts.length && appStore.isMultiTenant) {
-            tracked = !accounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
-            if (!tracked) {
-                tracked =
-                    publicKeyToAddress(appStore.user?.account) ===
-                    publicKeyToAddress(collection.owner.account.publicKey);
-            }
-        } else if (appStore.config.daemon) {
-            tracked = !(appStore.config.daemon === publicKeyToAddress(collection.owner.account.publicKey));
-        } else if (connectionStore.accounts?.length) {
-            const accounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
-            tracked = !accounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
+        if (appStore.config.daemon) {
+            accounts.push(publicKeyToAddress(appStore.config.daemon));
+        }
+
+        if (connectionStore.accounts?.length) {
+            const walletAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
+            accounts.push(...walletAccounts);
+        } else if (appStore.user?.walletAccounts?.lengths) {
+            const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
+            accounts.push(...walletAccounts);
+        }
+
+        const uniqueAccounts = [...new Set(accounts)];
+        let tracked = false;
+        if (uniqueAccounts.length) {
+            tracked = !uniqueAccounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
         }
 
         return {
