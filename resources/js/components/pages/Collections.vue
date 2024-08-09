@@ -427,6 +427,11 @@ const trackCollection = async (collectionId: string) => {
     try {
         await CollectionApi.trackCollection(collectionId);
         await getCollections();
+        snackbar.success({
+            title: 'Tracking',
+            text: 'Collection tracked successfully',
+            save: false,
+        });
     } catch {
         snackbar.info({
             title: 'Tracking',
@@ -447,6 +452,11 @@ const untrackCollection = async () => {
             return;
         } else {
             await getCollections();
+            snackbar.success({
+                title: 'Untracking',
+                text: 'Collection untracked successfully',
+                save: false,
+            });
         }
     } catch {
         snackbar.info({
