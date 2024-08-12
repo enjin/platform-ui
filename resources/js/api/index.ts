@@ -25,7 +25,7 @@ export class ApiService {
         headers = {},
         method = HttpMethods.POST,
         credentials = 'omit',
-        mode = 'cors',
+        mode,
         nest = true,
     }: {
         url: string;
@@ -44,20 +44,24 @@ export class ApiService {
             body = JSON.stringify(data);
         }
 
-        if (!useAppStore().isMultiTenant) {
-            headers.Authorization = useAppStore().config.authorization_token;
-        } else {
-            headers['X-CSRF-TOKEN'] = csrf;
+        if (mode) {
+            if (!useAppStore().isMultiTenant) {
+                headers.Authorization = useAppStore().config.authorization_token;
+            } else if (mode) {
+                headers['X-CSRF-TOKEN'] = csrf;
+            }
         }
+
+        headers = {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            ...headers,
+        };
 
         const resp = await fetch(fullUrl, {
             method,
             body,
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                ...headers,
-            } as HeadersInit,
+            headers: headers as HeadersInit,
             credentials,
             mode,
         });
@@ -97,6 +101,7 @@ export class ApiService {
                 url: `${appStore.config.url}graphql${schema}`,
                 data,
                 credentials: appStore.isMultiTenant ? 'include' : 'omit',
+                mode: 'cors',
             })
                 .then((res) => {
                     resolve(res);
