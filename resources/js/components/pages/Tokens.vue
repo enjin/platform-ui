@@ -379,9 +379,8 @@ const getTokenName = async (token): Promise<string> => {
 const fetchUri = async (uri) => {
     try {
         const res = await ApiService.fetchUrl(uri);
-        const json = JSON.parse(res);
-        if (json.name) {
-            return json.name;
+        if (res.name) {
+            return res.name;
         }
 
         return '-';
