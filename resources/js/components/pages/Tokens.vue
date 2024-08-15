@@ -256,13 +256,13 @@ const actions = [
 ];
 
 const debouncedSearch = debounce(async () => {
-    if (searchCollectionInput.value !== '') {
+    if (searchCollectionInput.value) {
         await getTokens();
     }
 }, 1000);
 
 const cancelSearch = (input) => {
-    input.value = '';
+    input.value = undefined;
     debouncedSearch.cancel();
 };
 
@@ -271,6 +271,7 @@ const searchCollectionChange = (e) => {
         debouncedSearch();
     } else {
         cancelSearch(searchCollectionInput);
+        getTokens();
     }
 };
 
