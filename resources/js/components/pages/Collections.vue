@@ -335,12 +335,16 @@ const getCollections = async () => {
 };
 
 const getCollectionName = async (collection) => {
+    if (collection.attributes.find((attr) => attr.key === 'name')?.value) {
+        return collection.attributes.find((attr) => attr.key === 'name')?.value;
+    }
+
     const uri = collection.attributes.find((attr) => attr.key === 'uri')?.value;
     if (uri) {
         return await fetchUri(uri);
     }
 
-    return collection.attributes.find((attr) => attr.key === 'name')?.value || '-';
+    return '-';
 };
 
 const setCollectionNames = async () => {

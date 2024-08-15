@@ -368,12 +368,16 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 const getTokenName = async (token): Promise<string> => {
+    if (token.attributes.find((attr) => attr.key === 'name')?.value) {
+        return token.attributes.find((attr) => attr.key === 'name')?.value;
+    }
+
     const uri = token.attributes.find((attr) => attr.key === 'uri')?.value;
     if (uri) {
         return await fetchUri(uri);
     }
 
-    return token.attributes.find((attr) => attr.key === 'name')?.value || '-';
+    return '-';
 };
 
 const fetchUri = async (uri) => {
