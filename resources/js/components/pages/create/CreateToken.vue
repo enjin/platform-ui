@@ -98,7 +98,7 @@
                                 <div
                                     class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-l-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong text-center"
                                     :class="{
-                                        'text-light-content-brand dark:text-dark-content-brand !border-light-surface-brand':
+                                        '!text-light-content-brand dark:!text-dark-content-brand !border-light-surface-brand':
                                             tokenType === 'nft',
                                     }"
                                     @click="tokenType = 'nft'"
@@ -112,7 +112,7 @@
                                 <div
                                     class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-r-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong text-center"
                                     :class="{
-                                        'text-light-content-brand dark:text-dark-content-brand !border-light-surface-brand':
+                                        '!text-light-content-brand dark:!text-dark-content-brand !border-light-surface-brand':
                                             tokenType === 'ft',
                                     }"
                                     @click="tokenType = 'ft'"
@@ -150,7 +150,7 @@
                                     class="flex-1"
                                 />
                                 <FormInput
-                                    v-if="capType === TokenCapType.COLLAPSING_SUPPLY"
+                                    v-if="capType === TokenCapType.COLLAPSING_SUPPLY || capType === TokenCapType.SUPPLY"
                                     v-model="capAmount"
                                     name="capAmount"
                                     label="Max Supply"
@@ -383,7 +383,10 @@ const attributes = ref([
     },
 ]);
 
-const capTypes = [TokenCapType.INFINITE, TokenCapType.COLLAPSING_SUPPLY, TokenCapType.SINGLE_MINT];
+const capTypes =
+    appStore.config.network === 'canary'
+        ? [TokenCapType.INFINITE, TokenCapType.COLLAPSING_SUPPLY, TokenCapType.SINGLE_MINT]
+        : [TokenCapType.INFINITE, TokenCapType.SUPPLY, TokenCapType.SINGLE_MINT];
 
 const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
