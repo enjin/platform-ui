@@ -256,13 +256,13 @@ const actions = [
 ];
 
 const debouncedSearch = debounce(async () => {
-    if (searchCollectionInput.value !== '') {
+    if (searchCollectionInput.value) {
         await getTokens();
     }
 }, 1000);
 
 const cancelSearch = (input) => {
-    input.value = '';
+    input.value = undefined;
     debouncedSearch.cancel();
 };
 
@@ -271,6 +271,7 @@ const searchCollectionChange = (e) => {
         debouncedSearch();
     } else {
         cancelSearch(searchCollectionInput);
+        getTokens();
     }
 };
 
@@ -368,12 +369,16 @@ const openTransactionSlide = async (transactionId: string) => {
 };
 
 const getTokenName = async (token): Promise<string> => {
+    if (token.attributes.find((attr) => attr.key === 'name')?.value) {
+        return token.attributes.find((attr) => attr.key === 'name')?.value;
+    }
+
     const uri = token.attributes.find((attr) => attr.key === 'uri')?.value;
     if (uri) {
         return await fetchUri(uri);
     }
 
-    return token.attributes.find((attr) => attr.key === 'name')?.value || '-';
+    return '-';
 };
 
 const fetchUri = async (uri) => {

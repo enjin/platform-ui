@@ -52,6 +52,9 @@
                     <slot name="addon" />
                 </div>
             </div>
+            <div v-if="$slots.errorText" class="text-xs">
+                <slot name="errorText" />
+            </div>
         </Field>
     </div>
 </template>
