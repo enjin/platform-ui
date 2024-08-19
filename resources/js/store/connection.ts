@@ -9,8 +9,6 @@ import { wcNamespaces, wcProjectId } from '~/util/constants';
 import { useAppStore } from '.';
 import snackbar from '~/util/snackbar';
 import { Web3Modal, Web3ModalConfig } from '@web3modal/standalone';
-import { AuthApi } from '~/api/auth';
-import { publicKeyToAddress } from '~/util/address';
 
 export const PrivacyPolicyLink = 'https://nft.io/legal/privacy-policy';
 export const TermsOfServiceLink = 'https://nft.io/legal/terms-of-service';
@@ -45,24 +43,6 @@ export const useConnectionStore = defineStore('connection', {
     actions: {
         getWeb3Modal() {
             return new Web3Modal(walletConnectWeb3modalConfig);
-        },
-        async loadWallet() {
-            if (this.provider) {
-                await this.connectWallet(this.provider, () => {}, false);
-                if (!this.wallet) {
-                    return;
-                }
-                await this.getAccounts();
-                if (useAppStore().isMultiTenant) {
-                    const walletAccounts = useAppStore().user?.walletAccounts?.map((account) =>
-                        publicKeyToAddress(account)
-                    );
-                    const localAccounts = this.accounts.map((account) => publicKeyToAddress(account.address));
-                    const uniqueAccounts = [...new Set([...walletAccounts, ...localAccounts])];
-
-                    AuthApi.setUserAccounts(uniqueAccounts);
-                }
-            }
         },
         async connectWallet(provider: string, endLoading: Function, notify = true) {
             if (provider === 'wc') {

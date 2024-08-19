@@ -19,7 +19,9 @@
                         </div>
                     </div>
                     <div class="flex md:px-6 lg:px-8 py-2 mb-2 items-end">
-                        <Btn dusk="transferBtn" primary @click="openModalSlide('TransferBalanceSlideover')"> Transfer Balance </Btn>
+                        <Btn dusk="transferBtn" primary @click="openModalSlide('TransferBalanceSlideover')">
+                            Transfer Balance
+                        </Btn>
                     </div>
                 </div>
 

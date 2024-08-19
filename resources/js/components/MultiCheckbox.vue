@@ -19,9 +19,7 @@
             <template v-for="option in options" :key="option.value">
                 <div
                     :class="[
-                        hasValue(option.value)
-                            ? 'ring-primary'
-                            : 'ring-light-stroke-strong',
+                        hasValue(option.value) ? 'ring-primary' : 'ring-light-stroke-strong',
                         'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
                     ]"
                     @click="updateCheckbox(option.value)"
