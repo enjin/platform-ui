@@ -54,7 +54,13 @@ export const useConnectionStore = defineStore('connection', {
                 }
                 await this.getAccounts();
                 if (useAppStore().isMultiTenant) {
-                    AuthApi.setUserAccounts(this.accounts.map((account) => publicKeyToAddress(account.address)));
+                    const walletAccounts = useAppStore().user?.walletAccounts?.map((account) =>
+                        publicKeyToAddress(account)
+                    );
+                    const localAccounts = this.accounts.map((account) => publicKeyToAddress(account.address));
+                    const uniqueAccounts = [...new Set([...walletAccounts, ...localAccounts])];
+
+                    AuthApi.setUserAccounts(uniqueAccounts);
                 }
             }
         },

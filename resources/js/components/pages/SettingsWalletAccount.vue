@@ -16,20 +16,23 @@
         <div class="flex flex-col space-y-4 mt-4">
             <label
                 v-if="walletAccount"
-                class="text-light-content dark:text-dark-content bg-light-surface-background dark:bg-dark-surface-background text-sm rounded-md mr-auto p-2 cursor-pointer"
+                class="text-light-content dark:text-dark-content bg-light-surface-background dark:bg-dark-surface-background hover:text-white hover:bg-light-surface-brand text-sm rounded-md mr-auto p-2 cursor-pointer transition-all"
                 name="walletAccount"
                 disabled
                 @click="copyText(walletAccount)"
             >
                 {{ walletAccount }}
             </label>
-            <span v-if="userWalletAccounts.length" class="text-lg font-bold text-light-content-strong dark:text-dark-content-strong">
+            <span
+                v-if="userWalletAccounts.length"
+                class="text-lg font-bold text-light-content-strong dark:text-dark-content-strong"
+            >
                 Connected Wallets
             </span>
             <label
                 v-for="account in userWalletAccounts"
                 :key="account"
-                class="text-light-content dark:text-dark-content bg-light-surface-background dark:bg-dark-surface-background hover:bg-light-surface-brand text-sm rounded-md mr-auto p-2 cursor-pointer"
+                class="text-light-content dark:text-dark-content bg-light-surface-background dark:bg-dark-surface-background hover:text-white hover:bg-light-surface-brand text-sm rounded-md mr-auto p-2 cursor-pointer transition-all"
                 name="walletAccount"
                 disabled
                 @click="copyText(account)"

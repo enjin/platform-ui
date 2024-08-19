@@ -20,7 +20,8 @@ export class DTOCollectionFactory {
         if (connectionStore.accounts?.length) {
             const walletAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
             accounts.push(...walletAccounts);
-        } else if (appStore.user?.walletAccounts?.lengths) {
+        }
+        if (appStore.user?.walletAccounts?.lengths) {
             const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
             accounts.push(...walletAccounts);
         }
@@ -28,7 +29,9 @@ export class DTOCollectionFactory {
         const uniqueAccounts = [...new Set(accounts)];
         let tracked = false;
         if (uniqueAccounts.length) {
-            tracked = !uniqueAccounts.find((account) => account === publicKeyToAddress(collection.owner.account.publicKey));
+            tracked = !uniqueAccounts.find(
+                (account) => account === publicKeyToAddress(collection.owner.account.publicKey)
+            );
         }
 
         return {
