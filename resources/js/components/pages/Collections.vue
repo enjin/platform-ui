@@ -9,9 +9,9 @@
                         <div class="relative rounded-md shadow-sm">
                             <FormInput
                                 v-model="searchInput"
-                                type="number"
                                 name="searchInput"
                                 label="Collection ID"
+                                type="number"
                                 placeholder="Search by collection ID"
                                 @input-change="searchChange"
                             />
@@ -126,7 +126,7 @@
                                         v-if="collection.tracked"
                                         text="Tracked"
                                         :closable="false"
-                                        class="absolute right-16 top-3 !bg-blue-400 !bg-opacity-80 !text-white"
+                                        class="!bg-blue-400 !bg-opacity-80 !text-white"
                                     />
                                     <LoadingCircle
                                         class="mx-3 h-5 w-5"
@@ -292,6 +292,7 @@ const cancelSearch = () => {
 
 const searchChange = (e) => {
     if (e.target.value) {
+        debouncedSearch.cancel();
         debouncedSearch();
     } else {
         cancelSearch();
@@ -335,12 +336,16 @@ const getCollections = async () => {
 };
 
 const getCollectionName = async (collection) => {
+    if (collection.attributes.find((attr) => attr.key === 'name')?.value) {
+        return collection.attributes.find((attr) => attr.key === 'name')?.value;
+    }
+
     const uri = collection.attributes.find((attr) => attr.key === 'uri')?.value;
     if (uri) {
         return await fetchUri(uri);
     }
 
-    return collection.attributes.find((attr) => attr.key === 'name')?.value || '-';
+    return '-';
 };
 
 const setCollectionNames = async () => {
