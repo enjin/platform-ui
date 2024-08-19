@@ -21,7 +21,7 @@ export class DTOCollectionFactory {
             const walletAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
             accounts.push(...walletAccounts);
         }
-        if (appStore.user?.walletAccounts?.lengths) {
+        if (appStore.user?.walletAccounts?.length) {
             const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
             accounts.push(...walletAccounts);
         }
