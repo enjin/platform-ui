@@ -8,8 +8,7 @@
         </DialogTitle>
         <div class="mt-2 space-y-4">
             <p class="text-sm text-light-content dark:text-dark-content">
-                Enter a collection ID to track it.
-                This will enable platform interactions like querying its tokens.
+                Enter a collection ID to track it. This will enable platform interactions like querying its tokens.
             </p>
             <FormInput
                 v-model="collectionId"
