@@ -156,7 +156,7 @@ export class AuthApi {
         return AuthApi.sendPlatfromRequest(data);
     }
 
-    static async setUserAccounts(accounts: string) {
+    static async setUserAccounts(accounts: string[]) {
         const data = {
             query: mutations.UpdateUser,
             variables: {

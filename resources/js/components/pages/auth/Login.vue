@@ -160,7 +160,7 @@ const login = async (recaptcha?: string) => {
     isLoading.value = true;
     try {
         if (!(await appStore.login(email.value, password.value, recaptcha))) {
-            snackbar.error({ title: 'Invalid email address or password.', text: "Please try again." });
+            snackbar.error({ title: 'Invalid email address or password.', text: 'Please try again.' });
             isLoading.value = false;
 
             return;

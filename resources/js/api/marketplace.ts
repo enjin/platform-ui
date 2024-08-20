@@ -127,7 +127,7 @@ export class MarketplaceApi {
             variables: {
                 first: 1,
             },
-        }
+        };
 
         return MarketplaceApi.sendPlatfromRequest(data);
     }

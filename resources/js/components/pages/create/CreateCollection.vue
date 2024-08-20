@@ -80,7 +80,9 @@
                                 text="This section determines the rules pertaining to token supply and amount of tokens
                                 available to be minted on future interactions with this collection."
                             >
-                                <QuestionMarkCircleIcon class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content" />
+                                <QuestionMarkCircleIcon
+                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                />
                             </Tooltip>
                         </div>
                         <FormInput
