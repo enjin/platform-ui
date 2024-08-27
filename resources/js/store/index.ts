@@ -210,10 +210,11 @@ export const useAppStore = defineStore('app', {
         async login(email: string, password: string, recaptcha?: string) {
             const res = await AuthApi.login(email, password, recaptcha);
             if (!res.data.Login) {
-                if (res.errors.length) {
+                if (res.errors?.length) {
                     throw res.errors;
                 }
-                throw [{ field: 'Login error', message: 'Invalid credentials' }];
+
+                return false;
             }
 
             await ApiService.reloadCsrf();
