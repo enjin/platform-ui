@@ -186,7 +186,8 @@
                                 />
                                 <FormInput
                                     v-model="beneficiaryPercentage"
-                                    class="w-[100px] !mr-[40px] flex flex-col justify-between"
+                                    class="w-[100px] flex flex-col justify-between"
+                                    input-class="w-full"
                                     name="beneficiaryPercentage"
                                     label="Percentage"
                                     tooltip="The percentage of royalties the beneficiary will receive from Marketplace interactions."
