@@ -13,9 +13,19 @@
                             @click="close(notification.id)"
                             class="pointer-events-auto flex w-full max-w-md rounded-lg bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5"
                         >
-                            <div class="w-0 flex-1 p-4">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 pt-0.5">
+                            <div class="w-0 flex-1 p-4 relative overflow-hidden rounded-lg">
+                                <div
+                                    class="absolute w-8 h-8 left-2 top-4 blur-xl"
+                                    :class="{
+                                        'bg-green-300': notification.type === NotificationType.Success,
+                                        'bg-blue-300': notification.type === NotificationType.Info,
+                                        'bg-red-300': notification.type === NotificationType.Error,
+                                    }"
+                                ></div>
+                                <div class="flex items-center z-10 relative">
+                                    <div
+                                        class="flex-shrink-0 p-1 bg-light-surface-primary dark:bg-dark-surface-primary rounded-lg shadow-sm"
+                                    >
                                         <CheckCircleIcon
                                             v-if="notification.type === NotificationType.Success"
                                             class="h-6 w-6 text-green-400"
@@ -48,8 +58,8 @@
                                 </div>
                             </div>
                             <div
-                                class="flex border-l border-light-stroke dark:border-dark-stroke"
                                 v-if="notification.event"
+                                class="flex border-l border-light-stroke dark:border-dark-stroke"
                             >
                                 <button
                                     type="button"

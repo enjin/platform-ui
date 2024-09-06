@@ -40,8 +40,9 @@
                             <FormInput
                                 v-model="beneficiaryPercentage"
                                 name="beneficiaryPercentage"
+                                class="w-[100px] flex flex-col justify-between"
+                                input-class="w-full"
                                 label="Percentage"
-                                class="w-[100px] !mr-[40px] flex flex-col justify-between"
                                 tooltip="The amount of royalty the beneficiary receives in percentage."
                                 type="number"
                                 :min="0"
