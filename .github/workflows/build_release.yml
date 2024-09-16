@@ -1,0 +1,48 @@
+name: Upload Release Asset
+on:
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    build:
+        name: Upload Release Asset
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '18'
+                  cache: 'npm'
+            - name: Install dependencies
+              run: npm install
+            - name: Copy config.json
+              run: |
+                  cp ./resources/js/config.json.default ./resources/js/config.json
+            - name: Build project
+              run: npm run prod-laravel
+            - name: Install zip
+              uses: montudor/action-zip@v1
+            - name: Zip output
+              run: zip -qq -r build.zip public/build
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: Release ${{ github.ref }}
+                  draft: false
+                  prerelease: false
+            - name: Upload Release Asset
+              id: upload-release-asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./build.zip
+                  asset_name: build.zip
+                  asset_content_type: application/zip
