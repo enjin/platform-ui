@@ -98,7 +98,13 @@ const connectionStore = useConnectionStore();
 const signTransaction = async () => {
     try {
         if (!connectionStore.provider) {
-            snackbar.error({ title: 'Please connect your wallet to sign' });
+            snackbar.error({
+                title: 'You must configure a wallet to sign a transaction, ',
+                link: {
+                    text: 'Configure Wallet',
+                    to: 'platform.user.settings',
+                },
+            });
 
             return;
         }

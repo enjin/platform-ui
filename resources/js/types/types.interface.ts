@@ -50,6 +50,7 @@ export interface NotificationInfo {
     type: NotificationType;
     text: string;
     date: string;
+    event?: string;
 }
 
 export interface TokenIdType {
