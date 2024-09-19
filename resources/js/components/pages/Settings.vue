@@ -4,52 +4,43 @@
             <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
                 <div
-                    v-if="!appStore.hasValidConfig && isMultiTenant && !tokens?.length"
+                    v-if="!showInitialSetup"
                     class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
                 >
-                    <p class="font-bold">Initialization Guide</p>
-                    <p>Please complete these steps in order to use the platform:</p>
-                    <div>Create an API token</div>
+                    <p class="font-bold">Configuring Your Wallet</p>
+                    <p>
+                        To interact with the Enjin Platform, you need a wallet to sign your transactions. You can do
+                        this:
+                    </p>
+                    <ul class="list-disc py-4 px-6">
+                        <li>
+                            <span class="font-bold">Manually: </span>Using a wallet app like
+                            <a class="underline" target="_blank" href="https://enjin.io/technology/wallet"
+                                >Enjin Wallet (mobile)</a
+                            >
+                            or
+                            <a class="underline" target="_blank" href="https://polkadot.js.org/extension/"
+                                >Polkadot{.js} browser extension (desktop)</a
+                            >
+                        </li>
+                        <li>
+                            <span class="font-bold">Automatically: </span>Using a
+                            <a class="underline" target="_blank" href="https://docs.enjin.io/docs/using-wallet-daemon"
+                                >Daemon Wallet</a
+                            >, which automatically signs requests as long as its running.
+                        </li>
+                    </ul>
+                    <p>
+                        You can choose to configure either or both based on your needs. For detailed instructions on
+                        setting up a Daemon wallet,
+                        <a class="underline" target="_blank" href="https://docs.enjin.io/docs/using-wallet-daemon"
+                            >visit our docs</a
+                        >.
+                    </p>
                 </div>
                 <div class="flex flex-col space-y-4">
-                    <div v-if="isMultiTenant" class="flex flex-col space-y-4">
-                        <CollapseCard
-                            dusk-id="apiTokensTab"
-                            title="API Tokens"
-                            :actions="false"
-                            :isOpen="!appStore.hasValidConfig"
-                        >
-                            <div>
-                                <SettingsApiTokens />
-                            </div>
-                        </CollapseCard>
-                        <CollapseCard dusk-id="walletTab" title="Wallet Account" :actions="false">
-                            <div>
-                                <SettingsWalletAccount />
-                            </div>
-                        </CollapseCard>
-                    </div>
-                    <CollapseCard dusk-id="linksTab" title="Helpful Links" :actions="false">
-                        <div>
-                            <div class="flex flex-col space-y-4 p-6">
-                                <p
-                                    v-for="(packg, idx) in appStore.config.packages.filter((p) => p.link)"
-                                    :key="idx"
-                                    class="truncate text-sm font-medium text-primary hover:text-primary-light"
-                                >
-                                    <Tooltip :text="packg.version">
-                                        <a
-                                            :href="packg.link"
-                                            target="_blank"
-                                            class="cursor-pointer capitalize text-light-content dark:text-dark-content"
-                                        >
-                                            {{ formatName(packg.name) }}
-                                        </a>
-                                    </Tooltip>
-                                </p>
-                            </div>
-                        </div>
-                    </CollapseCard>
+                    <SettingsWalletApp />
+                    <SettingsWalletDaemon />
                 </div>
 
                 <div class="flex flex-col space-y-4 mt-4">
@@ -97,15 +88,13 @@ import FormCheckbox from '~/components/FormCheckbox.vue';
 import snackbar from '~/util/snackbar';
 import LoadingCircle from '../LoadingCircle.vue';
 import SettingsResetPassword from './SettingsResetPassword.vue';
-import SettingsWalletAccount from './SettingsWalletAccount.vue';
-import SettingsApiTokens from './SettingsApiTokens.vue';
-import CollapseCard from '../CollapseCard.vue';
-import Tooltip from '../Tooltip.vue';
 import { AuthApi } from '~/api/auth';
 import ConfirmModal from '../ConfirmModal.vue';
 import { ApiService } from '~/api';
 import SettingsChangeEmail from './SettingsChangeEmail.vue';
 import VerifyPasswordModal from './VerifyPasswordModal.vue';
+import SettingsWalletApp from './SettingsWalletApp.vue';
+import SettingsWalletDaemon from './SettingsWalletDaemon.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -116,7 +105,7 @@ const confirmModal = ref(false);
 const verifyPasswordModal = ref(false);
 
 const tokens = computed(() => appStore.user?.apiTokens);
-
+const showInitialSetup = computed(() => !appStore.hasValidConfig && isMultiTenant.value && !tokens.value?.length);
 const isMultiTenant = computed(() => appStore.isMultiTenant);
 
 const logout = async () => {
@@ -128,10 +117,6 @@ const logout = async () => {
 const resetSettings = () => {
     appStore.resetSettings();
     router.push({ name: 'platform.setup' });
-};
-
-const formatName = (name: string) => {
-    return name.replaceAll('-', ' ');
 };
 
 const deleteAccount = async (password) => {

@@ -5,9 +5,9 @@
                 id="wallet-connect-button"
                 class="flex items-center space-x-2 rounded-md bg-primary py-1 px-2 md:py-2 md:px-3 text-sm font-semibold shadow-sm outline-none focus:outline-none focus:ring-0 focus:ring-offset-1 text-white transition-all"
             >
-                <WalletIcon class="h-6 w-6" />
+                <WalletIcon v-if="props.icon" class="h-6 w-6" />
                 <LoadingCircle v-if="loading" class="!text-white" />
-                <span v-else class="hidden sm:block">{{ walletSession ? walletName : 'Connect wallet' }}</span>
+                <span v-else class="hidden sm:block">{{ walletSession ? walletName : props.title }}</span>
             </MenuButton>
         </div>
         <ScaleTransition>
@@ -76,6 +76,17 @@ import { useConnectionStore } from '~/store/connection';
 import { publicKeyToAddress } from '~/util/address';
 import { AuthApi } from '~/api/auth';
 import { useAppStore } from '~/store';
+
+const props = withDefaults(
+    defineProps<{
+        title?: string;
+        icon?: boolean;
+    }>(),
+    {
+        title: 'Connect wallet',
+        icon: true,
+    }
+);
 
 const connectionStore = useConnectionStore();
 

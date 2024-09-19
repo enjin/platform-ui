@@ -24,8 +24,6 @@ export function initAuthGuard(router: Router) {
                 next({ name: 'platform.auth.login' });
             } else if (to.name == 'platform.auth.login' && isLoggedIn) {
                 next({ name: 'platform.collections' });
-            } else if (to.name == 'platform.collections' && !validConfig) {
-                next({ name: 'platform.user.settings' });
             }
         } else {
             if (requiresAuth && !isLoggedIn) {

@@ -49,11 +49,13 @@ const props = withDefaults(
         actions?: boolean;
         isOpen?: boolean;
         duskId?: string;
+        collapsible?: boolean;
     }>(),
     {
         actions: true,
         isOpen: false,
         duskId: '',
+        collapsible: true,
     }
 );
 

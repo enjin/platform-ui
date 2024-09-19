@@ -6,22 +6,13 @@
                     <!-- Mobile menu button -->
                     <div class="-ml-2 mr-2 space-x-2 flex items-center md:hidden animate-slide-in">
                         <DisclosureButton
-                            v-if="(appStore.isMultiTenant && appStore.hasValidConfig) || !appStore.isMultiTenant"
+                            v-if="appStore.loggedIn"
                             class="inline-flex items-center justify-center rounded-md p-2 text-light-content dark:text-dark-content hover:bg-light-surface-background hover:dark:bg-dark-surface-background hover:text-light-content hover:dark:text-dark-content focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-light"
                         >
                             <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
                             <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
                         </DisclosureButton>
 
-                        <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
-                        <EnjinLogo v-else class="h-8 w-auto" />
-                        <span
-                            class="text-sm md:text-lg font-semibold ml-2 text-light-content-strong dark:text-dark-content-strong"
-                        >
-                            {{ pageTitle() }}
-                        </span>
-                    </div>
-                    <div v-if="appStore.isMultiTenant && !appStore.hasValidConfig" class="hidden md:flex items-center">
                         <CanaryEnjinLogo v-if="canaryHost" class="h-8 w-auto" />
                         <EnjinLogo v-else class="h-8 w-auto" />
                         <span
