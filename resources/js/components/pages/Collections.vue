@@ -178,7 +178,6 @@ import NoItems from '~/components/NoItems.vue';
 import { snackbarErrors } from '~/util';
 import Btn from '~/components/Btn.vue';
 import { TransactionState } from '~/types/types.enums';
-import { useRoute, useRouter } from 'vue-router';
 import { ApiService } from '~/api';
 import TrackCollectionModal from '../TrackCollectionModal.vue';
 import ConfirmModal from '../ConfirmModal.vue';
@@ -211,8 +210,7 @@ const searchInput = ref('');
 const collectionNames = ref<{ [key: string]: string }[]>([]);
 const loadingAction = ref<string | null>(null);
 
-const route = useRoute();
-const router = useRouter();
+const appStore = useAppStore();
 
 const enablePagination = computed(() => searchInput.value === '');
 
@@ -303,7 +301,7 @@ const setCollectionIds = () => {
     const ids = collections.value?.items.map((collection) => {
         return collection.collectionId;
     });
-    useAppStore().setCollections(ids);
+    appStore.setCollections(ids);
 };
 
 const getCollection = async () => {
@@ -480,15 +478,6 @@ onMounted(() => {
     loadMoreCollectionsWithObserver();
     events.on('transaction', openTransactionSlide);
 });
-
-watch(
-    () => useAppStore().user,
-    () => {
-        if (useAppStore().isMultiTenant && !useAppStore().hasValidConfig && route.meta.requiresToken) {
-            router.push({ name: 'platform.user.settings' });
-        }
-    }
-);
 
 watch(() => collections.value, setCollectionIds);
 </script>

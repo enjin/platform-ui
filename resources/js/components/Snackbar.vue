@@ -28,6 +28,12 @@ const notifications: Ref<
         type: NotificationType;
         event: string;
         timeout: number;
+        link?: {
+            text: string;
+            to: {
+                name: string;
+            };
+        };
     }[]
 > = ref([]);
 

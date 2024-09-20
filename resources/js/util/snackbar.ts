@@ -11,11 +11,15 @@ interface NotificationParams {
     time?: number;
     event?: string;
     save?: boolean;
+    link?: {
+        text: string;
+        to: string;
+    };
 }
 
 export default {
     notify(
-        params: { title: string; text: string; type: NotificationType; event?: string },
+        params: { title: string; text: string; link: any; type: NotificationType; event?: string },
         time = 3000,
         save: boolean
     ) {
@@ -32,16 +36,17 @@ export default {
                 type: params.type,
                 text: params.text.length > 0 ? params.text : params.title,
                 date: new Date().toISOString(),
+                event: params.event,
             });
         }
     },
-    success({ title, text = '', time = 5000, event, save = true }: NotificationParams) {
-        this.notify({ title, text, type: NotificationType.Success, event }, time, save);
+    success({ title, link, text = '', time = 5000, event, save = true }: NotificationParams) {
+        this.notify({ title, text, link, type: NotificationType.Success, event }, time, save);
     },
-    info({ title, text = '', time = 5000, save = false }: NotificationParams) {
-        this.notify({ title, text, type: NotificationType.Info }, time, save);
+    info({ title, link, text = '', time = 5000, save = false }: NotificationParams) {
+        this.notify({ title, text, link, type: NotificationType.Info }, time, save);
     },
-    error({ title, text = '', time = 5000, save = false }: NotificationParams) {
-        this.notify({ title, text, type: NotificationType.Error }, time, save);
+    error({ title, link, text = '', time = 5000, save = false }: NotificationParams) {
+        this.notify({ title, text, link, type: NotificationType.Error }, time, save);
     },
 };

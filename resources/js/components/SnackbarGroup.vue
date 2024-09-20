@@ -49,8 +49,17 @@
                                             {{ notification.title }}
                                         </p>
                                         <p
+                                            v-if="notification.link"
                                             class="mt-1 text-sm text-light-content dark:text-dark-content break-words"
-                                            v-if="notification.text"
+                                        >
+                                            {{ notification.text }}
+                                            <RouterLink :to="{ name: notification.link.to }" class="underline">
+                                                {{ notification.link.text }}
+                                            </RouterLink>
+                                        </p>
+                                        <p
+                                            v-else-if="notification.text"
+                                            class="mt-1 text-sm text-light-content dark:text-dark-content break-words"
                                         >
                                             {{ notification.text }}
                                         </p>

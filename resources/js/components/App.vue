@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex flex-row bg-light-surface-background dark:bg-dark-surface-background">
-        <SideNavbar v-if="appStore.hasValidConfig" />
+        <SideNavbar v-if="appStore.loggedIn" />
         <SnackbarGroup />
         <SupportButton />
 
@@ -23,11 +23,10 @@ import SupportButton from '~/components/SupportButton.vue';
 import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
 import { computed, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const appStore = useAppStore();
 const router = useRouter();
-const route = useRoute();
 
 const canaryHost = computed(() => appStore.config.network === 'canary');
 
@@ -65,15 +64,6 @@ watch(
     () => appStore.loggedIn,
     () => {
         if (!appStore.loggedIn) router.push({ name: 'platform.auth.login' });
-    }
-);
-
-watch(
-    () => appStore.user,
-    () => {
-        if (appStore.isMultiTenant && !appStore.hasValidConfig && route.meta.requiresToken) {
-            router.push({ name: 'platform.user.settings' });
-        }
     }
 );
 </script>

@@ -20,11 +20,11 @@
                         class="max-h-80 overflow-y-auto divide-y divide-light-stroke dark:divide-dark-stroke scrollbar-hide"
                     >
                         <MenuItem
-                            class="group flex flex-row justify-between overflow-hidden"
-                            as="div"
-                            @click.prevent=""
                             v-for="item in notifications"
                             :key="item.id"
+                            class="group flex flex-row justify-between overflow-hidden"
+                            as="div"
+                            @click.prevent="transactionRedirect(item)"
                         >
                             <div :class="[notificationColor(item.type), 'mr-2 w-0.5 flex-shrink-0']"></div>
                             <div class="flex flex-col flex-1 py-2 flex-shrink-0">
@@ -66,6 +66,8 @@
                 </MenuItems>
             </ScaleTransition>
         </Menu>
+
+        <Slideover :open="modalSlide" @close="closeModalSlide" :item="slideComponent" />
     </div>
 </template>
 
@@ -75,12 +77,18 @@ import ScaleTransition from './ScaleTransition.vue';
 import { useAppStore } from '~/store';
 import { useNotificationsStore } from '~/store/notifications';
 import { BellIcon, TrashIcon } from '@heroicons/vue/24/outline';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { NotificationType } from '~/types/types.enums';
 import Tooltip from './Tooltip.vue';
+import { NotificationInfo } from '~/types/types.interface';
+import Slideover from './Slideover.vue';
+import { TransactionApi } from '~/api/transaction';
 
 const appStore = useAppStore();
 const notificationsStore = useNotificationsStore();
+
+const modalSlide = ref(false);
+const slideComponent = ref();
 
 const notifications = computed(() => notificationsStore.notifications);
 
@@ -115,6 +123,40 @@ const removeNotification = (id) => {
 
 const clearAll = () => {
     notificationsStore.clearAll();
+};
+
+const getTransaction = async (id) => {
+    const res = await TransactionApi.getTransaction(id);
+
+    return res.data.GetTransaction;
+};
+
+const transactionRedirect = async (item: NotificationInfo) => {
+    let transactionId;
+    if (item.event) {
+        transactionId = item.event;
+    } else if (item.text.includes('id ')) {
+        const id = item.text.match(/\d+/)?.[0];
+        transactionId = id;
+    }
+
+    if (transactionId) {
+        const res = await getTransaction(transactionId);
+        openModalSlide('DetailsTransactionSlideover', res);
+    }
+};
+
+const closeModalSlide = () => {
+    modalSlide.value = false;
+    setTimeout(() => {
+        slideComponent.value = null;
+    }, 500);
+};
+
+const openModalSlide = (componentName: string, transaction) => {
+    let componentPath = 'common';
+    slideComponent.value = { componentName, componentPath, ...transaction };
+    modalSlide.value = true;
 };
 </script>
 
