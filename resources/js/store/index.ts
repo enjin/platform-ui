@@ -119,8 +119,7 @@ export const useAppStore = defineStore('app', {
             if (!this.isMultiTenant) {
                 this.loggedIn = true;
             }
-
-            this.init();
+            await this.init();
             await this.initPromise;
         },
         setConfig() {
