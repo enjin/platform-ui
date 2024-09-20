@@ -7,7 +7,6 @@ export interface AppState {
     advanced: boolean;
     config: {
         url?: URL;
-        authorization_token: string;
         route: string;
         network: string;
         packages: { name: string; version: string; link?: string }[];
