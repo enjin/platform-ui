@@ -6,6 +6,7 @@ use Enjin\PlatformUi\Console\InstallPlatformUi;
 use Enjin\PlatformUi\Console\RebuildPlatformUi;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Illuminate\Support\Facades\File;
 
 class PlatformUiServiceProvider extends PackageServiceProvider
 {
@@ -36,9 +37,20 @@ class PlatformUiServiceProvider extends PackageServiceProvider
 
     public function defineAssetPublishing()
     {
+        $this->clearPlatformUIAssets();
+
         $this->publishes([
             __DIR__ . '/../public' => public_path('vendor/platform-ui'),
             __DIR__ . '/../public/images' => public_path('images'),
         ], ['platform-ui-assets']);
+    }
+
+    public function clearPlatformUIAssets()
+    {
+        $path = public_path('vendor/platform-ui');
+
+        if (File::exists($path)) {
+            File::deleteDirectory($path);
+        }
     }
 }
