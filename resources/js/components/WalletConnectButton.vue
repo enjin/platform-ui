@@ -114,8 +114,9 @@ const connectWallet = async (provider: string) => {
         const localAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
         const walletAccounts = useAppStore().user?.walletAccounts?.map((account) => publicKeyToAddress(account)) ?? [];
         const uniqueAccounts = [...new Set([...walletAccounts, ...localAccounts])];
-
-        AuthApi.setUserAccounts(uniqueAccounts);
+        if (useAppStore().isMultiTenant) {
+            AuthApi.setUserAccounts(uniqueAccounts);
+        }
     } catch {
         snackbar.error({ title: 'Failed to connect the wallet' });
     } finally {
