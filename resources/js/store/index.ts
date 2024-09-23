@@ -102,7 +102,6 @@ export const useAppStore = defineStore('app', {
                 }
 
                 await useConnectionStore().getSession();
-
                 await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
@@ -173,16 +172,18 @@ export const useAppStore = defineStore('app', {
                 this.tokensCount = res.data.User?.apiTokens.length;
             }
         },
-        async fetchCollectionIds(totalCount?: number) {
+        async fetchCollectionIds(totalCount?: number, after?: string) {
             if (!this.loggedIn) return false;
-
             try {
                 this.newCollection = false;
 
-                const res = await CollectionApi.getCollectionsIds(totalCount);
+                const res = await CollectionApi.getCollectionsIds(totalCount, after);
                 const collectionsData = res.data.GetCollections;
                 if (collectionsData.pageInfo.hasNextPage) {
-                    await this.fetchCollectionIds(collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount);
+                    await this.fetchCollectionIds(
+                        collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount,
+                        collectionsData.pageInfo.endCursor
+                    );
                 } else {
                     const accounts = useConnectionStore().getTrackableAccounts();
                     this.collections = [
