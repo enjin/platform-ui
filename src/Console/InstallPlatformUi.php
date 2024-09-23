@@ -4,6 +4,7 @@ namespace Enjin\PlatformUi\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class InstallPlatformUi extends Command
 {
@@ -15,6 +16,7 @@ class InstallPlatformUi extends Command
     public function handle()
     {
         $this->resetJSON();
+        $this->clearPlatformUIAssets();
 
         $this->askForInput('Do you want to enable multi-tenancy? (yes/no)', 'MULTI_TENANCY_VALUE', 'false', 'tenant');
         $route = $this->askForInput('Please enter the default route path? (optional)', 'ROUTE_VALUE', '', 'route');
@@ -108,5 +110,14 @@ class InstallPlatformUi extends Command
                 $appConfig
             )
         );
+    }
+
+    public function clearPlatformUIAssets()
+    {
+        $path = public_path('vendor/platform-ui');
+
+        if (File::exists($path)) {
+            File::deleteDirectory($path);
+        }
     }
 }

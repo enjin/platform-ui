@@ -18,7 +18,6 @@ export const useAppStore = defineStore('app', {
         advanced: false,
         config: {
             url: undefined,
-            authorization_token: '',
             route: '',
             network: '',
             packages: [],
@@ -59,7 +58,7 @@ export const useAppStore = defineStore('app', {
                 if (!this.config.url) {
                     return false;
                 }
-                if (!this.isMultiTenant && !this.config.authorization_token.length) {
+                if (!this.isMultiTenant && !this.authorization_token) {
                     return false;
                 }
 
@@ -119,8 +118,7 @@ export const useAppStore = defineStore('app', {
             if (!this.isMultiTenant) {
                 this.loggedIn = true;
             }
-
-            this.init();
+            await this.init();
             await this.initPromise;
         },
         setConfig() {
@@ -132,10 +130,6 @@ export const useAppStore = defineStore('app', {
                 this.config.url = parseConfigURL(window?.bootstrap?.url);
             } else {
                 this.config.url = this.url;
-            }
-
-            if (!this.config.tenant) {
-                this.config.authorization_token = this.authorization_token;
             }
 
             if (window.bootstrap?.daemon) {
@@ -254,10 +248,6 @@ export const useAppStore = defineStore('app', {
         setURL(url: string) {
             this.url = new URL(url);
             this.config.url = new URL(url);
-        },
-        setAuthorizationToken(authorization_token: string) {
-            this.authorization_token = authorization_token;
-            this.config.authorization_token = authorization_token;
         },
         resetSettings() {
             this.$reset();
