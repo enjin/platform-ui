@@ -6,6 +6,7 @@ import appConfig from '~/config.json';
 import { defineStore } from 'pinia';
 import snackbar from '~/util/snackbar';
 import { useConnectionStore } from './connection';
+import { publicKeyToAddress } from '~/util/address';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -101,7 +102,6 @@ export const useAppStore = defineStore('app', {
                 }
 
                 await useConnectionStore().getSession();
-
                 await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
@@ -172,18 +172,30 @@ export const useAppStore = defineStore('app', {
                 this.tokensCount = res.data.User?.apiTokens.length;
             }
         },
-        async fetchCollectionIds(totalCount?: number) {
+        async fetchCollectionIds(totalCount?: number, after?: string) {
             if (!this.loggedIn) return false;
-
             try {
                 this.newCollection = false;
 
-                const res = await CollectionApi.getCollectionsIds(totalCount);
+                const res = await CollectionApi.getCollectionsIds(totalCount, after);
                 const collectionsData = res.data.GetCollections;
                 if (collectionsData.pageInfo.hasNextPage) {
-                    await this.fetchCollectionIds(collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount);
+                    await this.fetchCollectionIds(
+                        collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount,
+                        collectionsData.pageInfo.endCursor
+                    );
                 } else {
-                    this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
+                    const accounts = await useConnectionStore().getTrackableAccounts();
+                    this.collections = [
+                        ...this.collections,
+                        ...collectionsData.edges
+                            .filter(async (collection: any) => {
+                                return accounts.find(
+                                    (account) => account === publicKeyToAddress(collection.owner.account.publicKey)
+                                );
+                            })
+                            .map((collection: any) => collection.node.collectionId),
+                    ];
                 }
             } catch {
                 return false;
