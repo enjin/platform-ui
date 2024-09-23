@@ -48,13 +48,6 @@
                         />
                         <FormCheckbox
                             v-if="useAppStore().advanced"
-                            v-model="keepAlive"
-                            name="keepAlive"
-                            label="Keep Alive"
-                            description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
-                        />
-                        <FormCheckbox
-                            v-if="useAppStore().advanced"
                             v-model="skipValidation"
                             name="skipValidation"
                             label="Skip validation"
@@ -97,7 +90,6 @@ const recipient = ref('');
 const amount = ref('');
 const signingAccount = ref('');
 const idempotencyKey = ref('');
-const keepAlive = ref(false);
 const skipValidation = ref(false);
 const formRef = ref();
 
@@ -132,7 +124,6 @@ const transfer = async () => {
                 recipient: recipient.value,
                 amount: formatPriceToENJ(amount.value) ?? null,
                 signingAccount: signingAccount.value,
-                keepAlive: keepAlive.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })
