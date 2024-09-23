@@ -28,13 +28,6 @@
                         <Address :address="item.owner" />
                     </div>
 
-                    <div v-if="item.unitPrice" class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Unit Price</dt>
-                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
-                            {{ formatPriceFromENJ(item.unitPrice) }} {{ currencySymbol }}
-                        </dd>
-                    </div>
-
                     <div class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Is Currency</dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
@@ -54,15 +47,6 @@
                             <dt class="text-base font-medium text-light-content dark:text-dark-content">Cap Supply</dt>
                             <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
                                 {{ item.capSupply }}
-                            </dd>
-                        </div>
-
-                        <div class="space-y-2">
-                            <dt class="text-base font-medium text-light-content dark:text-dark-content">
-                                Minimum Balance
-                            </dt>
-                            <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
-                                {{ item.minimumBalance }}
                             </dd>
                         </div>
                     </div>
@@ -142,11 +126,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import Address from '~/components/Address.vue';
 import CopyTextIcon from '~/components/CopyTextIcon.vue';
-import { useAppStore } from '~/store';
-import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 import Royalty from '~/util/royalty';
 
 defineProps<{
@@ -154,11 +135,9 @@ defineProps<{
         tokenId: string;
         collectionId: string;
         owner: string;
-        unitPrice: string;
         isCurrency: boolean;
         supply: string;
         capSupply: string;
-        minimumBalance: string;
         isFrozen: boolean;
         attributes: {
             key: string;
@@ -173,6 +152,4 @@ defineProps<{
         };
     };
 }>();
-
-const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
 </script>
