@@ -158,11 +158,12 @@ export class CollectionApi {
         return ApiService.sendPlatformRequest(data);
     }
 
-    static async trackCollection(collectionId: string) {
+    static async trackCollection(collectionId: string, hotSync: boolean = false) {
         const data = {
             query: mutations.TrackCollection,
             variables: {
                 chainIds: [parseInt(collectionId)],
+                hotSync,
             },
         };
 
