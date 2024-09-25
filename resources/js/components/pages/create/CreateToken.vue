@@ -301,8 +301,8 @@
                                         />
                                         <FormInput
                                             v-model="totalInfuseAmount"
-                                            name="totalIbfuseAmount"
-                                            label="Total infuse amount"
+                                            name="totalInfuseAmount"
+                                            label="Total Infuse Amount"
                                             type="number"
                                             disabled
                                         />
@@ -413,8 +413,8 @@ const infuseAmount = ref();
 const isCurrency = ref(false);
 const infuseEnj = ref(false);
 const infuseAccess = ref('Only Me');
-const itemsInfuse = ref()
-const totalInfuseAmount = ref()
+const itemsInfuse = ref();
+const totalInfuseAmount = ref();
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const listingForbidden = ref(false);
