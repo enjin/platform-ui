@@ -48,7 +48,7 @@ export class ApiService {
 
         if (auth) {
             if (!useAppStore().isMultiTenant) {
-                headers.Authorization = useAppStore().config.authorization_token;
+                headers.Authorization = useAppStore().authorization_token;
             } else {
                 headers['X-CSRF-TOKEN'] = csrf;
             }
