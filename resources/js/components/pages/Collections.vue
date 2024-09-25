@@ -427,7 +427,8 @@ const openTransactionSlide = async (transactionId: string) => {
 
 const trackCollection = async (collectionId: string) => {
     try {
-        await CollectionApi.trackCollection(collectionId);
+        const hotSync = !appStore.isMultiTenant;
+        await CollectionApi.trackCollection(collectionId, hotSync);
         await getCollections();
         snackbar.success({
             title: 'Tracking',
@@ -435,10 +436,12 @@ const trackCollection = async (collectionId: string) => {
             save: false,
         });
     } catch {
-        snackbar.info({
+        snackbar.error({
             title: 'Tracking',
             text: 'Tracking the collection failed',
         });
+    } finally {
+        trackModal.value = false;
     }
 };
 
