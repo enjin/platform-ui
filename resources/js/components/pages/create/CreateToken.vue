@@ -399,7 +399,11 @@ const validation = yup.object({
     collectionId: collectionIdRequiredSchema,
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
-    initialSupply: numberRequiredSchema.typeError('Initial Supply must be a number').min(1),
+    initialSupply: yup.number().when({
+        is: () => tokenType.value === 'ft',
+        then: () => numberRequiredSchema.typeError('Initial Supply must be a number').min(1),
+        otherwise: () => numberNotRequiredSchema,
+    }),
     capAmount: numberNotRequiredSchema,
     beneficiaryAddress: addressNotRequiredSchema,
     beneficiaryPercentage: yup.number().when('beneficiaryAddress', {
