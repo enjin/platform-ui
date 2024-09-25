@@ -82,6 +82,13 @@
                             description="The description of the token."
                         />
                         <FormInput
+                            v-model="symbol"
+                            name="symbol"
+                            label="Symbol"
+                            description="The symbol of the token."
+                            required
+                        />
+                        <FormInput
                             v-model="recipient"
                             name="recipient"
                             label="Recipient"
@@ -412,6 +419,7 @@ const capAmount = ref();
 const infuseAmount = ref();
 const isCurrency = ref(false);
 const infuseEnj = ref(false);
+const symbol = ref('');
 const infuseAccess = ref('Only Me');
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
@@ -443,6 +451,7 @@ const validation = yup.object({
     imageUrl: stringNotRequiredSchema,
     name: stringRequiredSchema,
     description: stringNotRequiredSchema,
+    symbol: stringRequiredSchema,
     collectionId: collectionIdRequiredSchema,
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
@@ -548,6 +557,10 @@ const createToken = async () => {
                         ...simpleAttributes(),
                         ...attributes.value.filter((a) => a.key !== '' && a.value !== ''),
                     ],
+                    metadata: {
+                        name: name.value,
+                        symbol: symbol.value,
+                    },
                 },
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
