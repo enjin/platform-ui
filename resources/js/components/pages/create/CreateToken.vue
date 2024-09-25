@@ -293,14 +293,14 @@
                                     />
                                     <template v-if="tokenType === 'ft'">
                                         <FormInput
-                                            v-model="itemsInfuse"
+                                            v-model="initialSupply"
                                             name="itemsInfuse"
                                             label="Number of items"
                                             type="number"
-                                            required
+                                            disabled
                                         />
                                         <FormInput
-                                            v-model="totalInfuseAmount"
+                                            :value="totalInfuseAmountComputed"
                                             name="totalInfuseAmount"
                                             label="Total Infuse Amount"
                                             type="number"
@@ -413,8 +413,6 @@ const infuseAmount = ref();
 const isCurrency = ref(false);
 const infuseEnj = ref(false);
 const infuseAccess = ref('Only Me');
-const itemsInfuse = ref();
-const totalInfuseAmount = ref();
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const listingForbidden = ref(false);
@@ -436,6 +434,10 @@ const capTypes =
 
 const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
+
+const totalInfuseAmountComputed = computed(() => {
+    return initialSupply.value * infuseAmount.value;
+});
 
 const validation = yup.object({
     imageUrl: stringNotRequiredSchema,
@@ -536,6 +538,12 @@ const createToken = async () => {
                         isCurrency: isCurrency.value,
                     },
                     listingForbidden: listingForbidden.value,
+                    ...(infuseEnj.value
+                        ? {
+                              infusion: totalInfuseAmountComputed.value,
+                              anyoneCanInfuse: infuseAccess.value === 'Everyone',
+                          }
+                        : {}),
                     attributes: [
                         ...simpleAttributes(),
                         ...attributes.value.filter((a) => a.key !== '' && a.value !== ''),
