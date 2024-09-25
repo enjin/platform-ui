@@ -21,7 +21,7 @@
 
         <div class="flex justify-end space-x-4 mt-6">
             <Btn dusk="trackCancelBtn" @click="closeModal">Cancel</Btn>
-            <Btn dusk="trackConfirmBtn" primary @click="confirm">Track</Btn>
+            <Btn dusk="trackConfirmBtn" primary :loading="loading" :disabled="loading" @click="confirm">Track</Btn>
         </div>
     </Modal>
 </template>
@@ -31,24 +31,27 @@ import { DialogTitle } from '@headlessui/vue';
 import Btn from '~/components/Btn.vue';
 import Modal from '~/components/Modal.vue';
 import FormInput from './FormInput.vue';
-import { onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps<{ isOpen: boolean }>();
 
 const emit = defineEmits(['closed', 'confirm']);
 
 const collectionId = ref();
+const loading = ref(false);
 
 const confirm = async () => {
+    loading.value = true;
     emit('confirm', collectionId.value);
-    closeModal();
 };
 
 const closeModal = () => {
+    collectionId.value = '';
     emit('closed');
 };
 
-onUnmounted(() => {
+onMounted(() => {
     collectionId.value = '';
+    loading.value = false;
 });
 </script>
