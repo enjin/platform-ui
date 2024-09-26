@@ -71,6 +71,7 @@ const props = withDefaults(
         type?: string;
         min?: number;
         modelValue?: number | string | null;
+        value?: number | string | null;
         disabled?: boolean;
         prefix?: string;
         name: string;
@@ -109,10 +110,10 @@ const inputChange = (e: Event) => {
 
 const localModelValue = computed({
     get() {
-        return props.modelValue;
+        return props.modelValue ?? props.value;
     },
     set(value) {
-        if (localModelValue.value !== value) {
+        if (value && localModelValue.value !== value) {
             emit('update:modelValue', value);
         }
     },
