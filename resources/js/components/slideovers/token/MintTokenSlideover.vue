@@ -92,7 +92,6 @@ import {
     addressRequiredSchema,
     booleanNotRequiredSchema,
     collectionIdRequiredSchema,
-    numberNotRequiredSchema,
     numberRequiredSchema,
     stringNotRequiredSchema,
     stringRequiredSchema,
@@ -130,7 +129,6 @@ const validation = yup.object({
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
     amount: numberRequiredSchema.typeError('Amount must be a number'),
-    unitPrice: numberNotRequiredSchema.min(0.01).typeError('Unit price must be a number'),
     idempotencyKey: stringNotRequiredSchema,
     skipValidation: booleanNotRequiredSchema,
 });

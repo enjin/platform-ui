@@ -82,6 +82,13 @@
                             description="The description of the token."
                         />
                         <FormInput
+                            v-model="symbol"
+                            name="symbol"
+                            label="Symbol"
+                            description="The symbol of the token."
+                            required
+                        />
+                        <FormInput
                             v-model="recipient"
                             name="recipient"
                             label="Recipient"
@@ -269,6 +276,46 @@
                         <div class="mt-6">
                             <div class="flex flex-col gap-6">
                                 <FormCheckbox
+                                    v-model="infuseEnj"
+                                    name="infuseEnj"
+                                    label="Infuse ENJ"
+                                    description="Use this option to infuse ENJ into the token."
+                                    readmore="https://support.nft.io/hc/en-gb/articles/20436178520594"
+                                />
+                                <div v-if="infuseEnj" class="space-y-4">
+                                    <FormInput
+                                        v-model="infuseAmount"
+                                        name="infuseAmount"
+                                        label="ENJ Infusion"
+                                        description="Enter the amount of ENJ you wish to infuse in each unit."
+                                        type="number"
+                                        required
+                                    />
+                                    <FormSelect
+                                        v-model="infuseAccess"
+                                        name="infuseAccess"
+                                        label="Infusion Access"
+                                        description=""
+                                        :options="['Only Me', 'Everyone']"
+                                    />
+                                    <template v-if="tokenType === 'ft'">
+                                        <FormInput
+                                            v-model="initialSupply"
+                                            name="itemsInfuse"
+                                            label="Number of items"
+                                            type="number"
+                                            disabled
+                                        />
+                                        <FormInput
+                                            :value="totalInfuseAmountComputed"
+                                            name="totalInfuseAmount"
+                                            label="Total Infuse Amount"
+                                            type="number"
+                                            disabled
+                                        />
+                                    </template>
+                                </div>
+                                <FormCheckbox
                                     v-model="listingForbidden"
                                     name="listingForbidden"
                                     label="Listing Forbidden"
@@ -369,7 +416,11 @@ const tokenId = ref({
 });
 const initialSupply = ref(1);
 const capAmount = ref();
+const infuseAmount = ref();
 const isCurrency = ref(false);
+const infuseEnj = ref(false);
+const symbol = ref('');
+const infuseAccess = ref('Only Me');
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const listingForbidden = ref(false);
@@ -392,10 +443,15 @@ const capTypes =
 const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
 
+const totalInfuseAmountComputed = computed(() => {
+    return initialSupply.value * infuseAmount.value;
+});
+
 const validation = yup.object({
     imageUrl: stringNotRequiredSchema,
     name: stringRequiredSchema,
     description: stringNotRequiredSchema,
+    symbol: stringRequiredSchema,
     collectionId: collectionIdRequiredSchema,
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
@@ -491,10 +547,20 @@ const createToken = async () => {
                         isCurrency: isCurrency.value,
                     },
                     listingForbidden: listingForbidden.value,
+                    ...(infuseEnj.value
+                        ? {
+                              infusion: totalInfuseAmountComputed.value,
+                              anyoneCanInfuse: infuseAccess.value === 'Everyone',
+                          }
+                        : {}),
                     attributes: [
                         ...simpleAttributes(),
                         ...attributes.value.filter((a) => a.key !== '' && a.value !== ''),
                     ],
+                    metadata: {
+                        name: name.value,
+                        symbol: symbol.value,
+                    },
                 },
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
