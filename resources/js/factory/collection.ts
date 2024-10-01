@@ -1,39 +1,8 @@
-import { useAppStore } from '~/store';
-import { useConnectionStore } from '~/store/connection';
 import { FreezeType } from '~/types/types.enums';
 import { publicKeyToAddress } from '~/util/address';
 
 export class DTOCollectionFactory {
     public static buildCollection(collection: any) {
-        const appStore = useAppStore();
-        const connectionStore = useConnectionStore();
-
-        const accounts: string[] = [];
-        if (appStore.user?.account) {
-            accounts.push(publicKeyToAddress(appStore.user?.account));
-        }
-
-        if (appStore.config.daemon && !appStore.isMultiTenant) {
-            accounts.push(publicKeyToAddress(appStore.config.daemon));
-        }
-
-        if (connectionStore.accounts?.length) {
-            const walletAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
-            accounts.push(...walletAccounts);
-        }
-        if (appStore.user?.walletAccounts?.length) {
-            const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
-            accounts.push(...walletAccounts);
-        }
-
-        const uniqueAccounts = [...new Set(accounts)];
-        let tracked = false;
-        if (uniqueAccounts.length) {
-            tracked = !uniqueAccounts.find(
-                (account) => account === publicKeyToAddress(collection.owner.account.publicKey)
-            );
-        }
-
         return {
             ...collection,
             royalty: {
@@ -42,7 +11,6 @@ export class DTOCollectionFactory {
             },
             owner: publicKeyToAddress(collection.owner.account.publicKey),
             freezeType: FreezeType.COLLECTION,
-            tracked,
         };
     }
 

@@ -183,7 +183,19 @@ export const useAppStore = defineStore('app', {
                 if (collectionsData.pageInfo.hasNextPage) {
                     await this.fetchCollectionIds(collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount);
                 } else {
-                    this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
+                    const accounts = useConnectionStore().getTrackableAccounts();
+                    this.collections = [
+                        ...this.collections,
+                        ...collectionsData.edges
+                            .filter(async (collection: any) => {
+                                return accounts.find(
+                                    (account) => account === publicKeyToAddress(collection.owner?.account.publicKey)
+                                );
+                            })
+                            .map((collection: any) => collection.node.collectionId),
+                    ];
+                    // clear duplicates
+                    this.collections = Array.from(new Set(this.collections));
                 }
             } catch {
                 return false;

@@ -182,6 +182,7 @@ import { ApiService } from '~/api';
 import TrackCollectionModal from '../TrackCollectionModal.vue';
 import ConfirmModal from '../ConfirmModal.vue';
 import Chip from '../Chip.vue';
+import { useConnectionStore } from '~/store/connection';
 
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
@@ -211,6 +212,7 @@ const collectionNames = ref<{ [key: string]: string }[]>([]);
 const loadingAction = ref<string | null>(null);
 
 const appStore = useAppStore();
+const connectionStore = useConnectionStore();
 
 const enablePagination = computed(() => searchInput.value === '');
 
@@ -309,6 +311,8 @@ const getCollection = async () => {
     try {
         const res = await CollectionApi.getCollection(searchInput.value);
         collections.value = DTOFactory.forCollection(res);
+        setTrackableCollections();
+        setCollectionNames();
     } catch (e) {
         collections.value.items = [];
     } finally {
@@ -320,6 +324,7 @@ const getCollections = async () => {
     try {
         const res = await CollectionApi.getCollections();
         collections.value = DTOFactory.forCollections(res);
+        setTrackableCollections();
         setCollectionNames();
     } catch (e) {
         collections.value.items = [];
@@ -382,6 +387,7 @@ const loadMoreCollectionsWithObserver = () => {
                     const res = await CollectionApi.getCollections(collections.value.cursor);
                     const data = DTOFactory.forCollections(res);
                     collections.value = { items: [...collections.value.items, ...data.items], cursor: data.cursor };
+                    setTrackableCollections();
                     setCollectionNames();
                     isPaginationLoading.value = false;
                 } catch (error) {
@@ -473,6 +479,20 @@ const untrackCollection = async () => {
     }
 };
 
+const checkCollectionOwnership = (collection, accounts) => {
+    return !accounts.find((account) => account === collection.owner);
+};
+
+const setTrackableCollections = async () => {
+    await connectionStore.getAccounts();
+    const uniqueAccounts = connectionStore.getTrackableAccounts();
+    collections.value.items.map((collection) => {
+        collection.tracked = checkCollectionOwnership(collection, uniqueAccounts);
+
+        return collection;
+    });
+};
+
 (async () => {
     await getCollections();
 })();
@@ -483,6 +503,16 @@ onMounted(() => {
 });
 
 watch(() => collections.value, setCollectionIds);
+
+watch(
+    () => connectionStore.wallet,
+    async () => {
+        if (connectionStore.wallet) {
+            await connectionStore.getAccounts();
+            setTrackableCollections();
+        }
+    }
+);
 </script>
 
 <style lang="scss" scoped>

@@ -189,7 +189,7 @@ export const useConnectionStore = defineStore('connection', {
                     return;
                 }
 
-                const accounts = Object.values(this.walletSession.namespaces)
+                const accounts = Object.values(this.walletSession?.namespaces)
                     .map((namespace: any) => namespace.accounts)
                     .flat()
                     .map((account) => {
@@ -199,11 +199,31 @@ export const useConnectionStore = defineStore('connection', {
                     });
                 this.accounts = accounts;
             } else if (this.provider === 'polkadot.js') {
-                const accounts = await this.walletSession.getAccounts();
+                const accounts = await this.walletSession?.getAccounts();
                 this.accounts = accounts;
             }
 
             return this.accounts;
+        },
+        getTrackableAccounts() {
+            const appStore = useAppStore();
+            const accounts: string[] = [];
+            if (appStore.user?.account) {
+                accounts.push(publicKeyToAddress(appStore.user?.account));
+            }
+            if (appStore.config.daemon && !appStore.isMultiTenant) {
+                accounts.push(publicKeyToAddress(appStore.config.daemon));
+            }
+            if (this.accounts?.length) {
+                const walletAccounts = this.accounts.map((account) => publicKeyToAddress(account.address));
+                accounts.push(...walletAccounts);
+            }
+            if (appStore.user?.walletAccounts?.length) {
+                const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
+                accounts.push(...walletAccounts);
+            }
+
+            return [...new Set(accounts)];
         },
     },
 });
