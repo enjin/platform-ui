@@ -30,7 +30,7 @@ export const useAppStore = defineStore('app', {
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
             { name: 'Tokens', to: { name: 'platform.tokens' }, pos: 2 },
-            { name: 'Transactions', to: { name: 'platform.transactions' }, pos: 6 },
+            { name: 'Transactions', to: { name: 'platform.transactions' }, count: true, pos: 6 },
             { name: 'Wallets', to: { name: 'platform.wallets' }, pos: 7 },
         ],
         collections: [],

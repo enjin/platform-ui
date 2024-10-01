@@ -19,7 +19,13 @@
                         :to="item.to"
                         class="text-light-content dark:text-dark-content hover:bg-light-surface-background hover:dark:bg-dark-surface-background hover:text-light-content-selected hover:dark:text-dark-content-selected group flex items-center px-4 py-3 font-medium transition-all"
                     >
-                        <span class="flex-1">{{ item.name }}</span>
+                        <span class="">{{ item.name }}</span>
+                        <span
+                            v-if="item.count && transactionsCount > 0"
+                            class="text-xs font-normal ml-4 rounded-full text-light-content-brand dark:text-dark-content-brand bg-light-surface-brand-alpha p-1 w-6 h-6 flex items-center justify-center animate-fade-in"
+                        >
+                            {{ transactionsCount }}
+                        </span>
                     </RouterLink>
                 </nav>
             </div>
@@ -92,14 +98,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useAppStore } from '~/store';
 import EnjinLogo from '~/components/EnjinLogo.vue';
 import CanaryEnjinLogo from '~/components/CanaryEnjinLogo.vue';
+import { TransactionApi } from '~/api/transaction';
+import { DTOTransactionFactory as DTOFactory } from '~/factory/transaction';
 
 const navigations = computed(() => useAppStore().navigations);
 
 const canaryHost = computed(() => useAppStore().config.network === 'canary');
+
+const transactionsCount = ref(0);
+
+const loadTransactions = async () => {
+    const res = await TransactionApi.getTransactions({ first: 500 });
+    transactionsCount.value = DTOFactory.getPendingTransactionsCount(res.data);
+};
 
 const pageTitle = () => {
     if (window.bootstrap?.name) {
@@ -112,6 +127,10 @@ const pageTitle = () => {
         return 'Platform';
     }
 };
+
+onMounted(() => {
+    loadTransactions();
+});
 </script>
 
 <style lang="scss" scoped>
