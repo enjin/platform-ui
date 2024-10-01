@@ -6,6 +6,7 @@ import appConfig from '~/config.json';
 import { defineStore } from 'pinia';
 import snackbar from '~/util/snackbar';
 import { useConnectionStore } from './connection';
+import { publicKeyToAddress } from '~/util/address';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);

@@ -9,6 +9,7 @@ import { wcNamespaces, wcProjectId } from '~/util/constants';
 import { useAppStore } from '.';
 import snackbar from '~/util/snackbar';
 import { Web3Modal, Web3ModalConfig } from '@web3modal/standalone';
+import { publicKeyToAddress } from '~/util/address';
 
 export const PrivacyPolicyLink = 'https://nft.io/legal/privacy-policy';
 export const TermsOfServiceLink = 'https://nft.io/legal/terms-of-service';
