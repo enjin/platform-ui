@@ -6,6 +6,7 @@ import appConfig from '~/config.json';
 import { defineStore } from 'pinia';
 import snackbar from '~/util/snackbar';
 import { useConnectionStore } from './connection';
+import { publicKeyToAddress } from '~/util/address';
 
 const parseConfigURL = (url: string): URL => {
     return new URL(url);
@@ -29,7 +30,7 @@ export const useAppStore = defineStore('app', {
         navigations: [
             { name: 'Collections', to: { name: 'platform.collections' }, pos: 1 },
             { name: 'Tokens', to: { name: 'platform.tokens' }, pos: 2 },
-            { name: 'Transactions', to: { name: 'platform.transactions' }, pos: 6 },
+            { name: 'Transactions', to: { name: 'platform.transactions' }, count: true, pos: 6 },
             { name: 'Wallets', to: { name: 'platform.wallets' }, pos: 7 },
         ],
         collections: [],
@@ -183,7 +184,19 @@ export const useAppStore = defineStore('app', {
                 if (collectionsData.pageInfo.hasNextPage) {
                     await this.fetchCollectionIds(collectionsData.totalCount > 500 ? 500 : collectionsData.totalCount);
                 } else {
-                    this.collections = collectionsData.edges.map((collection: any) => collection.node.collectionId);
+                    const accounts = useConnectionStore().getTrackableAccounts();
+                    this.collections = [
+                        ...this.collections,
+                        ...collectionsData.edges
+                            .filter(async (collection: any) => {
+                                return accounts.find(
+                                    (account) => account === publicKeyToAddress(collection.owner?.account.publicKey)
+                                );
+                            })
+                            .map((collection: any) => collection.node.collectionId),
+                    ];
+                    // clear duplicates
+                    this.collections = Array.from(new Set(this.collections));
                 }
             } catch {
                 return false;

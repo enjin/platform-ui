@@ -3,10 +3,7 @@
         <div class="mt-4 flow-root">
             <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
-                <div
-                    v-if="!showInitialSetup"
-                    class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white"
-                >
+                <div class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white">
                     <p class="font-bold">Configuring Your Wallet</p>
                     <p>
                         To interact with the Enjin Platform, you need a wallet to sign your transactions. You can do
@@ -104,8 +101,6 @@ const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : t
 const confirmModal = ref(false);
 const verifyPasswordModal = ref(false);
 
-const tokens = computed(() => appStore.user?.apiTokens);
-const showInitialSetup = computed(() => !appStore.hasValidConfig && isMultiTenant.value && !tokens.value?.length);
 const isMultiTenant = computed(() => appStore.isMultiTenant);
 
 const logout = async () => {

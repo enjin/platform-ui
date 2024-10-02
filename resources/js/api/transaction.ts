@@ -27,7 +27,7 @@ export class TransactionApi {
                 results: getTransactionsData.results,
                 accounts: getTransactionsData.accounts,
                 after: getTransactionsData.after,
-                first: 20,
+                first: getTransactionsData.first ?? 20,
             },
         };
 

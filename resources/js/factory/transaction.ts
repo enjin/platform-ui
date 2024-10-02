@@ -27,4 +27,11 @@ export class DTOTransactionFactory {
 
         return DTOTransactionFactory.buildTransaction(transaction);
     }
+
+    public static getPendingTransactionsCount(transactionsData: any): number {
+        const transactions = transactionsData.GetTransactions;
+        const total = transactions.edges.filter((transaction) => transaction.node.state === 'PENDING').length;
+
+        return total;
+    }
 }

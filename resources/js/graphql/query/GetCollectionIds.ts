@@ -3,6 +3,11 @@ export default `query GetCollectionsIds($after: String, $first: Int) {
         edges {
             node {
                 collectionId
+                owner {
+                    account {
+                        publicKey
+                    }
+                }
             }
             cursor
         }
