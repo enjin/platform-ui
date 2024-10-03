@@ -106,7 +106,7 @@
                             >
                                 {{ walletAccount }}
                             </label>
-                            <template v-if="!isMultiTenant">
+                            <template v-if="isMultiTenant">
                                 <p class="text-sm">
                                     To configure a new Daemon wallet, you'll need to create an API token. This token
                                     will be used to authenticate your Daemon wallet with your Platform account.
