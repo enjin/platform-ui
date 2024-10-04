@@ -22,6 +22,19 @@ export default `query GetCollections($after: String, $first: Int) {
                     value
                 }
                 network
+                maxTokenCount
+                maxTokenSupply
+                forceCollapsingSupply
+                totalInfusion
+                totalDeposit
+                creationDeposit {
+                    depositor {
+                        account {
+                            publicKey
+                        }
+                    }
+                    amount
+                }
                 tokens {
                     totalCount
                 }

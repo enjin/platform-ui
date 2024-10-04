@@ -1,0 +1,30 @@
+name: eslint
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+
+jobs:
+    tests:
+        name: Eslint & Prettier
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+            
+            - name: Install dependencies
+              run: npm install
+            
+            - name: Run Pretty
+              run: npm run pretty:check
+            
+            - name: Run Eslint
+              run: npm run lint

@@ -39,6 +39,20 @@
                         </dd>
                     </div>
 
+                    <div class="space-y-2 pt-4 pb-3">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Total Infusion</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ formatPriceFromENJ(item.totalInfusion) }}
+                        </dd>
+                    </div>
+
+                    <div class="space-y-2 pt-4 pb-3">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Total Deposit</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ formatPriceFromENJ(item.totalDeposit) }}
+                        </dd>
+                    </div>
+
                     <div class="space-y-2 pt-4 pb-3" v-if="item.tokens?.totalCount">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Total tokens</dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
@@ -102,6 +116,7 @@
 
 <script setup lang="ts">
 import Address from '~/components/Address.vue';
+import { formatPriceFromENJ } from '~/util';
 import Royalty from '~/util/royalty';
 
 defineProps<{
@@ -109,6 +124,8 @@ defineProps<{
         collectionId: string;
         owner: string;
         frozen: boolean;
+        totalInfusion: string;
+        totalDeposit: string;
         tokens: {
             totalCount: number;
         };

@@ -20,6 +20,19 @@ export default `query GetCollection($collectionId: BigInt!) {
             value
         }
         network
+        maxTokenCount
+        maxTokenSupply
+        forceCollapsingSupply
+        totalInfusion
+        totalDeposit
+        creationDeposit {
+            depositor {
+                account {
+                    publicKey
+                }
+            }
+            amount
+        }
         tokens {
             totalCount
         }

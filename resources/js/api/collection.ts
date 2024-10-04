@@ -15,11 +15,12 @@ export class CollectionApi {
         return ApiService.sendPlatformRequest(data);
     }
 
-    static async getCollectionsIds(first: number = 20) {
+    static async getCollectionsIds(first: number = 20, after?: string) {
         const data = {
             query: queries.GetCollectionIds,
             variables: {
                 first,
+                after,
             },
         };
 

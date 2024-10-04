@@ -1,9 +1,8 @@
-export default `mutation TransferBalance($recipient: String!, $amount: BigInt!, $signingAccount: String, $keepAlive: Boolean = false, $idempotencyKey: String, $skipValidation: Boolean = false) {
-    TransferBalance(
+export default `mutation TransferAllowDeath($recipient: String!, $amount: BigInt!, $signingAccount: String, $idempotencyKey: String, $skipValidation: Boolean = false) {
+    TransferAllowDeath(
       recipient: $recipient
       amount: $amount
       signingAccount: $signingAccount
-      keepAlive: $keepAlive
       idempotencyKey: $idempotencyKey
       skipValidation: $skipValidation
     ) {

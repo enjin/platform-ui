@@ -11,8 +11,6 @@ export default `query GetTokens($collectionId: BigInt, $tokenIds: [EncodableToke
                 isFrozen
                 supply
                 capSupply
-                minimumBalance
-                unitPrice
                 attributeCount
                 attributes {
                     key
