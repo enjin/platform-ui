@@ -382,6 +382,8 @@ const beneficiaryPercentage = ref(0);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 
+const hasMintPolicy = computed(() => !isInfiniteCount.value || !isInfiniteSupply.value);
+
 const attributes = ref([
     {
         key: '',
@@ -500,11 +502,13 @@ const createCollection = async () => {
 
         const res = await CollectionApi.createCollection(
             formatData({
-                mintPolicy: {
-                    maxTokenCount: isInfiniteCount.value ? null : maxTokenCount.value,
-                    maxTokenSupply: isInfiniteSupply.value ? null : maxTokenSupply.value,
-                    forceCollapsingSupply: forceCollapsingSupply.value,
-                },
+                mintPolicy: hasMintPolicy.value
+                    ? {
+                          maxTokenCount: isInfiniteCount.value ? null : maxTokenCount.value,
+                          maxTokenSupply: isInfiniteSupply.value ? null : maxTokenSupply.value,
+                          forceCollapsingSupply: forceCollapsingSupply.value,
+                      }
+                    : null,
                 marketPolicy: beneficiaryAddress.value
                     ? {
                           beneficiary: addressToPublicKey(beneficiaryAddress.value) ?? null,
