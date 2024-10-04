@@ -6,9 +6,9 @@
                     <div>
                         <div class="space-y-3">
                             <div class="flex space-x-4 items-center">
-                                <span class="text-light-content dark:text-dark-content text-sm"
-                                    >You are connected with {{ walletName }}</span
-                                >
+                                <span class="text-light-content dark:text-dark-content text-sm">
+                                    You are connected with {{ walletName }}
+                                </span>
                                 <button
                                     id="wallet-connect-button__disconnect"
                                     class="flex items-center space-x-2 rounded-md bg-primary py-1 px-2 md:py-2 md:px-3 text-sm font-semibold shadow-sm outline-none focus:outline-none focus:ring-0 focus:ring-offset-1 text-white transition-all"
@@ -27,16 +27,17 @@
                             </p>
                         </div>
                         <div class="flex flex-col space-y-4 mt-4">
-                            <label
-                                v-for="account in userWalletAccounts"
-                                :key="account"
-                                class="text-light-content dark:text-dark-content bg-light-surface-background dark:bg-dark-surface-background hover:text-white hover:bg-light-surface-brand text-sm rounded-md mr-auto p-2 cursor-pointer transition-all"
-                                name="walletAccount"
-                                disabled
-                                @click="copyText(account)"
-                            >
-                                {{ account }}
-                            </label>
+                            <template v-if="loadingAccounts">
+                                <LoadingCircle class="mt-4" :size="42" />
+                            </template>
+                            <template v-else>
+                                <WalletAppItem
+                                    v-for="item in userWalletAccounts"
+                                    :key="item.account"
+                                    :account="item.account"
+                                    :enabled="item.enabled"
+                                />
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -54,29 +55,21 @@
 </template>
 
 <script lang="ts" setup>
-import snackbar from '~/util/snackbar';
 import CollapseCard from '../CollapseCard.vue';
-import { computed, watch } from 'vue';
-import { useAppStore } from '~/store';
+import { computed, ref, watch } from 'vue';
 import { useConnectionStore } from '~/store/connection';
 import WalletConnectButton from '../WalletConnectButton.vue';
-import { publicKeyToAddress } from '~/util/address';
+import WalletAppItem from './WalletAppItem.vue';
+import LoadingCircle from '../LoadingCircle.vue';
 
-const appStore = useAppStore();
 const connectionStore = useConnectionStore();
 
+const loadingAccounts = ref(false);
+
 const connected = computed(() => connectionStore.wallet);
-const userWalletAccounts = computed(
-    () =>
-        appStore.user?.walletAccounts || connectionStore.accounts?.map((account) => publicKeyToAddress(account.address))
-);
+const userWalletAccounts = computed(() => connectionStore.getWalletAccounts());
 
 const originUrl = window.location.origin;
-
-const copyText = (text: string) => {
-    navigator.clipboard.writeText(text);
-    snackbar.info({ title: 'Copied to clipboard!' });
-};
 
 const disconnectWallet = async () => {
     await connectionStore.disconnectWallet();
@@ -92,9 +85,11 @@ const walletName = computed(() => {
     return '';
 });
 
-watch(connected, () => {
+watch(connected, async () => {
     if (connected.value) {
-        connectionStore.getAccounts();
+        loadingAccounts.value = true;
+        await connectionStore.getAccounts();
+        loadingAccounts.value = false;
     }
 });
 </script>
