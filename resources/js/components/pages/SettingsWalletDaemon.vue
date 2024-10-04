@@ -24,21 +24,13 @@
                             <div class="text-sm">
                                 <span> API Token was successfully created. Token: </span>
                                 <CopyTextIcon
-                                    v-if="tokens[0].plainTextToken"
+                                    v-if="creationFlowToken"
                                     ref="copyIconRef"
                                     class="cursor-pointer inline-flex"
-                                    :text="
-                                        tokens[0].plainTextToken.substring(
-                                            tokens[0].plainTextToken?.indexOf('|') + 1 ?? 0
-                                        )
-                                    "
+                                    :text="creationFlowToken.substring(creationFlowToken?.indexOf('|') + 1 ?? 0)"
                                 >
                                     <span class="truncate text-light-content-brand dark:text-dark-content-brand">
-                                        {{
-                                            tokens[0].plainTextToken?.substring(
-                                                tokens[0].plainTextToken?.indexOf('|') + 1 ?? 0
-                                            )
-                                        }}
+                                        {{ creationFlowToken?.substring(creationFlowToken?.indexOf('|') + 1 ?? 0) }}
                                     </span>
                                 </CopyTextIcon>
                             </div>
@@ -83,15 +75,18 @@
                                         Check wallet account
                                     </Btn>
                                 </div>
-                                <p v-else class="text-sm">
-                                    Setup complete! Daemon Wallet account
-                                    <span class="text-light-content-brand dark:text-dark-content-brand">
-                                        {{ walletAccount }}
-                                    </span>
-                                    is now configured with your Enjin Platform account. As long as the Daemon Wallet is
-                                    running, it will be used to automatically sign and broadcast all platform requests
-                                    to the blockchain.
-                                </p>
+                                <div v-else>
+                                    <p class="text-sm">
+                                        Setup complete! Daemon Wallet account
+                                        <span class="text-light-content-brand dark:text-dark-content-brand">
+                                            {{ walletAccount }}
+                                        </span>
+                                        is now configured with your Enjin Platform account. As long as the Daemon Wallet
+                                        is running, it will be used to automatically sign and broadcast all platform
+                                        requests to the blockchain.
+                                    </p>
+                                    <Btn primary class="mx-auto mt-4" @click="cancelCreationFlow">Continue</Btn>
+                                </div>
                             </Transition>
                         </div>
                         <div v-else class="flex flex-col space-y-4">
@@ -106,12 +101,12 @@
                             >
                                 {{ walletAccount }}
                             </label>
-                            <template v-if="!isMultiTenant">
+                            <template v-if="isMultiTenant">
                                 <p class="text-sm">
                                     To configure a new Daemon wallet, you'll need to create an API token. This token
                                     will be used to authenticate your Daemon wallet with your Platform account.
                                 </p>
-                                <div v-if="tokens.length">
+                                <div v-if="tokens.length" class="flex flex-col">
                                     <span class="text-xl mb-4">My API Tokens</span>
                                     <div class="grid grid-cols-1 gap-4">
                                         <div
@@ -227,6 +222,7 @@ const confirmModal = ref(false);
 const confirmModalName = ref();
 const creationFlow = ref(false);
 const loadingUser = ref(false);
+const creationFlowToken = ref('');
 
 const tokens = computed(() => appStore.user?.apiTokens ?? []);
 
@@ -236,6 +232,11 @@ const walletAccount = computed(() =>
 const operational = computed(() => walletAccount.value);
 const isMultiTenant = computed(() => appStore.isMultiTenant);
 const tooltipText = computed(() => (operational.value ? 'Operational' : 'Not configured'));
+
+const cancelCreationFlow = () => {
+    creationFlow.value = false;
+    creationFlowToken.value = '';
+};
 
 const revokeToken = async () => {
     if (!confirmModalName.value) return;
@@ -270,6 +271,10 @@ const createApiToken = async () => {
             enableTokenCreate.value = false;
             tokenName.value = '';
             snackbar.info({ title: 'Token generated', text: `Your token ${tokenName.value} has been generated.` });
+            if (tokens.value.length === 1) {
+                creationFlowToken.value = tokens.value[0].plainTextToken;
+                creationFlow.value = true;
+            }
         } catch (e: any) {
             if (snackbarErrors(e)) return;
             snackbar.error({ title: 'Token generation failed', text: e.message });
@@ -287,6 +292,11 @@ const copyText = (text: string) => {
 const refreshWalletAccount = async () => {
     loadingUser.value = true;
     await appStore.getUser();
+    if (walletAccount.value) {
+        snackbar.success({ title: 'Wallet account found', text: 'Your daemon wallet account is ready to use.' });
+    } else {
+        snackbar.error({ title: 'Wallet account not found', text: 'Please configure your daemon wallet.' });
+    }
     loadingUser.value = false;
 };
 
