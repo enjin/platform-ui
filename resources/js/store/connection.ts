@@ -228,16 +228,16 @@ export const useConnectionStore = defineStore('connection', {
             return [...new Set(accounts)];
         },
         getWalletAccounts() {
-            let accounts =
-                useAppStore().user?.walletAccounts ||
-                this.accounts?.map((account) => publicKeyToAddress(account.address));
+            let accounts = this.accounts?.map((account) => {
+                return { ...account, address: publicKeyToAddress(account.address) };
+            });
             try {
                 accounts = accounts?.map((account) => {
-                    if (this.disabledAccounts?.find((disabled) => disabled === account)) {
-                        return { account, enabled: false };
+                    if (this.disabledAccounts?.find((disabled) => disabled === account.address)) {
+                        return { ...account, enabled: false };
                     }
 
-                    return { account, enabled: true };
+                    return { ...account, enabled: true };
                 });
             } catch {
                 //

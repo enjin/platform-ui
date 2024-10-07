@@ -95,7 +95,7 @@ const signing = ref(false);
 const transactionStore = useTransactionStore();
 const connectionStore = useConnectionStore();
 
-const walletAccounts = computed(() => connectionStore.getWalletAccounts());
+const walletAccounts = computed(() => connectionStore.getWalletAccounts().filter((account) => account.enabled));
 
 const signTransaction = async () => {
     try {

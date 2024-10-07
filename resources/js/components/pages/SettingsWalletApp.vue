@@ -33,8 +33,8 @@
                             <template v-else>
                                 <WalletAppItem
                                     v-for="item in userWalletAccounts"
-                                    :key="item.account"
-                                    :account="item.account"
+                                    :key="item.address"
+                                    :account="item.address"
                                     :enabled="item.enabled"
                                 />
                             </template>
