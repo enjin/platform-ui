@@ -124,7 +124,7 @@ export const useAppStore = defineStore('app', {
         },
         setConfig() {
             if (appConfig?.tenant) {
-                this.config.tenant = appConfig.tenant === 'true';
+                this.config.tenant = appConfig.tenant == 'true';
             }
 
             if (window?.bootstrap?.url) {
