@@ -38,7 +38,7 @@
             </div>
             <div v-else-if="!loadingApi && !signing" class="flex flex-col space-y-2 animate-fade-in">
                 <div
-                    v-for="account in connectionStore.accounts"
+                    v-for="account in walletAccounts"
                     :key="account.address"
                     class="px-4 py-3 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4"
                     @click="selectAccount(account)"
@@ -51,7 +51,7 @@
                         </span>
                     </div>
                 </div>
-                <div v-if="!connectionStore.accounts?.length" class="text-center">
+                <div v-if="!walletAccounts.length" class="text-center">
                     <span class="text-sm text-light-content dark:text-dark-content">
                         No accounts found. Please connect your wallet.
                     </span>
@@ -71,7 +71,7 @@ import Btn from './Btn.vue';
 import Modal from './Modal.vue';
 import { addressShortHex } from '~/util/address';
 import { useTransactionStore } from '~/store/transaction';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
 import Identicon from './Identicon.vue';
@@ -94,6 +94,8 @@ const signing = ref(false);
 
 const transactionStore = useTransactionStore();
 const connectionStore = useConnectionStore();
+
+const walletAccounts = computed(() => connectionStore.getWalletAccounts().filter((account) => account.enabled));
 
 const signTransaction = async () => {
     try {

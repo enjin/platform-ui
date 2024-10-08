@@ -423,12 +423,13 @@ const validation = yup.object({
 });
 
 const simpleAttributes = () => {
-    const media = [
-        {
+    const media: { [key: string]: string }[] = [];
+    if (imageUrl.value) {
+        media.push({
             url: imageUrl.value,
             type: imageType.value,
-        },
-    ];
+        });
+    }
 
     if (bannerUrl.value) {
         media.push({

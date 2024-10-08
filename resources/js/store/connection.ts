@@ -37,9 +37,10 @@ export const useConnectionStore = defineStore('connection', {
         walletSession: null,
         account: null,
         accounts: null,
+        disabledAccounts: [],
     }),
     persist: {
-        paths: ['provider'],
+        paths: ['provider', 'disabledAccounts'],
     },
     actions: {
         getWeb3Modal() {
@@ -225,6 +226,34 @@ export const useConnectionStore = defineStore('connection', {
             }
 
             return [...new Set(accounts)];
+        },
+        getWalletAccounts() {
+            let accounts = this.accounts?.map((account) => {
+                return { ...account, address: publicKeyToAddress(account.address) };
+            });
+            try {
+                accounts = accounts?.map((account) => {
+                    if (this.disabledAccounts?.find((disabled) => disabled === account.address)) {
+                        return { ...account, enabled: false };
+                    }
+
+                    return { ...account, enabled: true };
+                });
+            } catch {
+                //
+            }
+
+            return accounts;
+        },
+        enableWalletAccount(account: string) {
+            if (!this.disabledAccounts) {
+                this.disabledAccounts = [];
+            }
+            if (!this.disabledAccounts.find((disabled) => disabled === account)) {
+                this.disabledAccounts.push(account);
+            } else {
+                this.disabledAccounts = this.disabledAccounts.filter((disabled) => disabled !== account);
+            }
         },
     },
 });

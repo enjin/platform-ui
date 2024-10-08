@@ -34,6 +34,7 @@ export interface ConnectionState {
     walletSession: any;
     account: any;
     accounts: any;
+    disabledAccounts: any;
 }
 
 export interface TransactionState {
