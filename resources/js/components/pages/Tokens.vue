@@ -239,6 +239,11 @@ const actions = [
         component: 'MutateTokenSlideover',
     },
     {
+        key: 'infuse',
+        name: 'Infuse',
+        component: 'InfuseTokenSlideover',
+    },
+    {
         key: 'transfer',
         name: 'Transfer',
         component: 'TransferTokenSlideover',
