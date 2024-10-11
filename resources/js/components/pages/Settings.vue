@@ -1,40 +1,9 @@
 <template>
     <div class="px-4 sm:px-6 lg:px-8 overflow-y-auto transition-all pb-14 max-w-4xl mx-auto w-full">
-        <div class="mt-4 flow-root">
+        <div class="mt-4 flow-root relative">
             <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
-                <div class="flex flex-col mb-6 w-full transition-all rounded-md bg-[#0284c7] p-3 text-white">
-                    <p class="font-bold">Configuring Your Wallet</p>
-                    <p>
-                        To interact with the Enjin Platform, you need a wallet to sign your transactions. You can do
-                        this:
-                    </p>
-                    <ul class="list-disc py-4 px-6">
-                        <li>
-                            <span class="font-bold">Manually: </span>Using a wallet app like
-                            <a class="underline" target="_blank" href="https://enjin.io/technology/wallet"
-                                >Enjin Wallet (mobile)</a
-                            >
-                            or
-                            <a class="underline" target="_blank" href="https://polkadot.js.org/extension/"
-                                >Polkadot{.js} browser extension (desktop)</a
-                            >
-                        </li>
-                        <li>
-                            <span class="font-bold">Automatically: </span>Using a
-                            <a class="underline" target="_blank" href="https://docs.enjin.io/docs/using-wallet-daemon"
-                                >Daemon Wallet</a
-                            >, which automatically signs requests as long as its running.
-                        </li>
-                    </ul>
-                    <p>
-                        You can choose to configure either or both based on your needs. For detailed instructions on
-                        setting up a Daemon wallet,
-                        <a class="underline" target="_blank" href="https://docs.enjin.io/docs/using-wallet-daemon"
-                            >visit our docs</a
-                        >.
-                    </p>
-                </div>
+                <SettingsHelp />
                 <div class="flex flex-col space-y-4">
                     <SettingsWalletApp />
                     <SettingsWalletDaemon />
@@ -92,6 +61,7 @@ import SettingsChangeEmail from './SettingsChangeEmail.vue';
 import VerifyPasswordModal from './VerifyPasswordModal.vue';
 import SettingsWalletApp from './SettingsWalletApp.vue';
 import SettingsWalletDaemon from './SettingsWalletDaemon.vue';
+import SettingsHelp from './SettingsHelp.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
