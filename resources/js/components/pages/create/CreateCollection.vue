@@ -114,11 +114,10 @@
                             description="With this option selected tokens in this collection will have an infinite supply."
                         />
                         <FormCheckbox
-                            v-model="forceSingleMint"
-                            name="forceSingleMint"
-                            label="Force Single Mint"
-                            description="Set whether the tokens in this collection will be minted as SingleMint
-                                            types. This would indicate the tokens in this collection are NFTs."
+                            v-model="forceCollapsingSupply"
+                            name="forceCollapsingSupply"
+                            label="Force Collapsing Supply"
+                            description="Set whether the tokens in this collection will be minted as SingleMint types. This would indicate the tokens in this collection are NFTs."
                         />
                     </div>
                 </div>
@@ -377,11 +376,13 @@ const maxTokenCount = ref();
 const maxTokenSupply = ref();
 const isInfiniteSupply = ref(true);
 const isInfiniteCount = ref(true);
-const forceSingleMint = ref(false);
+const forceCollapsingSupply = ref(false);
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
+
+const hasMintPolicy = computed(() => !isInfiniteCount.value || !isInfiniteSupply.value);
 
 const attributes = ref([
     {
@@ -413,7 +414,7 @@ const validation = yup.object({
     bannerUrl: stringNotRequiredSchema,
     maxTokenCount: numberNotRequiredSchema.typeError('Max token count must be a number'),
     maxTokenSupply: numberNotRequiredSchema.typeError('Max token supply must be a number'),
-    forceSingleMint: booleanNotRequiredSchema,
+    forceCollapsingSupply: booleanNotRequiredSchema,
     beneficiaryAddress: addressNotRequiredSchema,
     beneficiaryPercentage: yup.number().when('beneficiaryAddress', {
         is: (val) => val !== '' && val !== null,
@@ -501,11 +502,13 @@ const createCollection = async () => {
 
         const res = await CollectionApi.createCollection(
             formatData({
-                mintPolicy: {
-                    maxTokenCount: isInfiniteCount.value ? null : maxTokenCount.value,
-                    maxTokenSupply: isInfiniteSupply.value ? null : maxTokenSupply.value,
-                    forceSingleMint: forceSingleMint.value,
-                },
+                mintPolicy: hasMintPolicy.value
+                    ? {
+                          maxTokenCount: isInfiniteCount.value ? null : maxTokenCount.value,
+                          maxTokenSupply: isInfiniteSupply.value ? null : maxTokenSupply.value,
+                          forceCollapsingSupply: forceCollapsingSupply.value,
+                      }
+                    : null,
                 marketPolicy: beneficiaryAddress.value
                     ? {
                           beneficiary: addressToPublicKey(beneficiaryAddress.value) ?? null,

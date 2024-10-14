@@ -18,6 +18,7 @@ import OperatorTransferToken from '~/graphql/mutation/token/OperatorTransferToke
 import SimpleTransferToken from '~/graphql/mutation/token/SimpleTransferToken';
 import RemoveTokenAttribute from '~/graphql/mutation/token/RemoveTokenAttribute';
 import SetTokenAttribute from '~/graphql/mutation/token/SetTokenAttribute';
+import InfuseToken from '~/graphql/mutation/token/InfuseToken';
 
 import RemoveAllAttributes from '~/graphql/mutation/RemoveAllAttributes';
 import Freeze from '~/graphql/mutation/Freeze';
@@ -90,6 +91,7 @@ export default {
     OperatorTransferToken,
     RemoveTokenAttribute,
     SetTokenAttribute,
+    InfuseToken,
 
     RemoveAllAttributes,
     Freeze,

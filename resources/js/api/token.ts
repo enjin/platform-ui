@@ -186,4 +186,20 @@ export class TokenApi {
 
         return ApiService.sendPlatformRequest(data);
     }
+
+    static async infuseToken(infuseTokenData: Record<string, unknown>) {
+        const data = {
+            query: mutations.InfuseToken,
+            variables: {
+                collectionId: infuseTokenData.collectionId,
+                tokenId: infuseTokenData.tokenId,
+                amount: infuseTokenData.amount,
+                signingAccount: infuseTokenData.signingAccount,
+                idempotencyKey: infuseTokenData.idempotencyKey,
+                skipValidation: infuseTokenData.skipValidation,
+            },
+        };
+
+        return ApiService.sendPlatformRequest(data);
+    }
 }
