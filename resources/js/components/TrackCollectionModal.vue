@@ -31,7 +31,7 @@ import { DialogTitle } from '@headlessui/vue';
 import Btn from '~/components/Btn.vue';
 import Modal from '~/components/Modal.vue';
 import FormInput from './FormInput.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps<{ isOpen: boolean }>();
 
@@ -54,4 +54,14 @@ onMounted(() => {
     collectionId.value = '';
     loading.value = false;
 });
+
+watch(
+    () => props.isOpen,
+    (isOpen) => {
+        if (!isOpen) {
+            collectionId.value = '';
+            loading.value = false;
+        }
+    }
+);
 </script>
