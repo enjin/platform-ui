@@ -82,13 +82,6 @@
                             description="The description of the token."
                         />
                         <FormInput
-                            v-model="symbol"
-                            name="symbol"
-                            label="Symbol"
-                            description="The symbol of the token."
-                            required
-                        />
-                        <FormInput
                             v-model="recipient"
                             name="recipient"
                             label="Recipient"
@@ -328,6 +321,18 @@
                                     description="If the token is a currency."
                                 />
                                 <FormInput
+                                    v-model="symbol"
+                                    name="symbol"
+                                    label="Symbol"
+                                    description="The symbol of the token."
+                                />
+                                <FormInput
+                                    v-model="decimalsCount"
+                                    name="decimals"
+                                    label="Decimal count"
+                                    description="The number of decimal places for the token."
+                                />
+                                <FormInput
                                     v-model="idempotencyKey"
                                     name="idempotencyKey"
                                     label="Idempotency Key"
@@ -420,6 +425,7 @@ const infuseAmount = ref();
 const isCurrency = ref(false);
 const infuseEnj = ref(false);
 const symbol = ref('');
+const decimalsCount = ref(0);
 const infuseAccess = ref('Only Me');
 const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
@@ -451,7 +457,8 @@ const validation = yup.object({
     imageUrl: stringNotRequiredSchema,
     name: stringRequiredSchema,
     description: stringNotRequiredSchema,
-    symbol: stringRequiredSchema,
+    symbol: stringNotRequiredSchema,
+    decimalsCount: numberNotRequiredSchema,
     collectionId: collectionIdRequiredSchema,
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
@@ -560,6 +567,7 @@ const createToken = async () => {
                     metadata: {
                         name: name.value,
                         symbol: symbol.value,
+                        decimalCount: decimalsCount.value,
                     },
                 },
                 idempotencyKey: idempotencyKey.value,
