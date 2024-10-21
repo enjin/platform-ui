@@ -3,10 +3,10 @@
         <div class="mt-4 flow-root relative">
             <LoadingCircle v-if="loading" class="mt-40" :size="44" />
             <template v-else>
-                <SettingsHelp />
+                <SettingsHelp v-model:help="showHelp" />
                 <div class="flex flex-col space-y-4">
                     <SettingsWalletApp />
-                    <SettingsWalletDaemon />
+                    <SettingsWalletDaemon v-model:help="showHelp" />
                 </div>
 
                 <div class="flex flex-col space-y-4 mt-4">
@@ -62,6 +62,7 @@ import VerifyPasswordModal from './VerifyPasswordModal.vue';
 import SettingsWalletApp from './SettingsWalletApp.vue';
 import SettingsWalletDaemon from './SettingsWalletDaemon.vue';
 import SettingsHelp from './SettingsHelp.vue';
+import { publicKeyToAddress } from '~/util/address';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -70,6 +71,12 @@ const advancedMode = ref(appStore.advanced);
 const loading = ref(appStore.user || !appStore.hasMultiTenantPackage ? false : true);
 const confirmModal = ref(false);
 const verifyPasswordModal = ref(false);
+
+const walletAccount = computed(() =>
+    appStore.isMultiTenant ? publicKeyToAddress(appStore.user?.account) : appStore.config.daemon
+);
+
+const showHelp = ref(walletAccount.value);
 
 const isMultiTenant = computed(() => appStore.isMultiTenant);
 
