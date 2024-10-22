@@ -104,6 +104,16 @@ const routes = [
                 component: () => import('../components/marketplace/ListingsList.vue'),
             },
             {
+                path: 'offers',
+                name: 'platform.marketplace.offers',
+                component: () => import('../components/marketplace/OffersList.vue'),
+            },
+            {
+                path: 'counter-offers',
+                name: 'platform.marketplace.counter-offers',
+                component: () => import('../components/marketplace/CounterOffersList.vue'),
+            },
+            {
                 path: 'sales',
                 name: 'platform.marketplace.sales',
                 component: () => import('../components/marketplace/SalesList.vue'),

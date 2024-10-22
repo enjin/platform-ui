@@ -53,7 +53,7 @@
                         <FormCheckbox
                             v-model="enableTakeCollectionId"
                             name="enableTakeCollection"
-                            label="Enable offer"
+                            label="Ask for item"
                             description="Use this option to enable offering a different asset in exchange for the asset being sold."
                         />
 
