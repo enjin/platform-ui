@@ -34,13 +34,6 @@
                         type="number"
                         required
                     />
-                    <FormCheckbox
-                        v-if="useAppStore().advanced"
-                        v-model="simpleKeepAlive"
-                        name="simpleKeepAlive"
-                        label="Keep Alive"
-                        description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
-                    />
                 </div>
             </div>
             <div class="rounded-b-lg p-6 pt-0" v-else>
@@ -90,13 +83,6 @@
                         description="The amount to transfer."
                         type="number"
                         required
-                    />
-                    <FormCheckbox
-                        v-if="useAppStore().advanced"
-                        v-model="operatorKeepAlive"
-                        name="operatorKeepAlive"
-                        label="Keep Alive"
-                        description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
                     />
                 </div>
             </div>
@@ -165,8 +151,6 @@ const operatorTokenId = ref(
 );
 const simpleAmount = ref(props.modelValue.simpleParams?.amount ?? 1);
 const operatorAmount = ref(props.modelValue.operatorParams?.amount ?? 1);
-const simpleKeepAlive = ref(props.modelValue.simpleParams?.keepAlive ?? false);
-const operatorKeepAlive = ref(props.modelValue.operatorParams?.keepAlive ?? false);
 const operatorSource = ref(props.modelValue.operatorParams?.source!);
 
 const validForm = computed(() => formRef.value.getMeta().valid);
@@ -178,7 +162,6 @@ const operatorValidation = yup.object({
     operatorTokenId: stringRequiredSchema.typeError('Token ID is required'),
     operatorAmount: numberRequiredSchema.typeError('Amount must be a number'),
     operatorSource: stringRequiredSchema,
-    operatorKeepAlive: booleanNotRequiredSchema,
 });
 
 const simpleValidation = yup.object({
@@ -186,7 +169,6 @@ const simpleValidation = yup.object({
     transferType: stringNotRequiredSchema,
     simpleTokenId: stringRequiredSchema.typeError('Token ID is required'),
     simpleAmount: numberRequiredSchema.typeError('Amount must be a number'),
-    simpleKeepAlive: booleanRequiredSchema,
 });
 
 const hasChanged = computed(() =>
@@ -198,7 +180,6 @@ const hasChanged = computed(() =>
                 ? {
                       tokenId: formatToken(simpleTokenId.value),
                       amount: simpleAmount.value,
-                      keepAlive: simpleKeepAlive.value,
                   }
                 : null,
         operatorParams:
@@ -207,7 +188,6 @@ const hasChanged = computed(() =>
                       tokenId: formatToken(operatorTokenId.value),
                       source: addressToPublicKey(operatorSource.value),
                       amount: operatorAmount.value,
-                      keepAlive: operatorKeepAlive.value,
                   }
                 : null,
     })
