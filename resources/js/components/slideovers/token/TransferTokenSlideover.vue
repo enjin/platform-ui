@@ -60,12 +60,6 @@
                             type="number"
                             required
                         />
-                        <FormCheckbox
-                            v-model="keepAlive"
-                            name="keepAlive"
-                            label="Keep Alive"
-                            description="If true, the transaction will fail if the balance drops below the minimum requirement. Defaults to False."
-                        />
                         <FormInput
                             v-model="signingAccount"
                             name="signingAccount"
@@ -146,7 +140,6 @@ const collectionId = ref(props.item?.collectionId);
 const recipient = ref('');
 const source = ref('');
 const amount = ref();
-const keepAlive = ref(false);
 const signingAccount = ref('');
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
@@ -164,7 +157,6 @@ const validation = yup.object({
     recipient: addressRequiredSchema,
     amount: numberRequiredSchema.min(1),
     source: stringNotRequiredSchema,
-    keepAlive: booleanNotRequiredSchema,
     signingAccount: stringNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
     skipValidation: booleanNotRequiredSchema,
@@ -193,7 +185,6 @@ const transferToken = async () => {
                     tokenId: formatToken(tokenId.value),
                     source: source.value,
                     amount: amount.value,
-                    keepAlive: keepAlive.value,
                 },
                 signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
