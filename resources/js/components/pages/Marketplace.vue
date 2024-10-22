@@ -26,6 +26,16 @@ const marketTypes = [
         value: 'ListingsList',
     },
     {
+        key: 'btn-offers',
+        label: 'Offers',
+        value: 'OffersList',
+    },
+    {
+        key: 'btn-counter-offers',
+        label: 'Counter Offers',
+        value: 'CounterOffersList',
+    },
+    {
         key: 'btn-sales',
         label: 'Sales',
         value: 'SalesList',
@@ -35,6 +45,8 @@ const marketTypes = [
 const martketRoutes = {
     BidsList: 'platform.marketplace.bids',
     ListingsList: 'platform.marketplace.listings',
+    OffersList: 'platform.marketplace.offers',
+    CounterOffersList: 'platform.marketplace.counter-offers',
     SalesList: 'platform.marketplace.sales',
 };
 
