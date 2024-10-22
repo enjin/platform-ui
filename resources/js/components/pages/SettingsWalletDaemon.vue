@@ -1,11 +1,16 @@
 <template>
     <CollapseCard dusk-id="walletDaemonTab" title="Daemon Wallet" :actions="false" :isOpen="true">
         <template #icon>
-            <div class="ml-2">
+            <div class="flex space-x-2 ml-2">
                 <Tooltip class="!flex items-center" :text="tooltipText">
                     <div v-if="operational" class="rounded-full w-3 h-3 bg-green-400"></div>
                     <div v-else class="rounded-full w-3 h-3 bg-red-500"></div>
                 </Tooltip>
+                <QuestionMarkCircleIcon
+                    class="m-2 w-5 h-5 cursor-pointer text-light-content dark:text-dark-content"
+                    stroke-width="36"
+                    @click.stop="showHelp = true"
+                />
             </div>
         </template>
         <div>
@@ -206,12 +211,14 @@ import { useAppStore } from '~/store';
 import snackbar from '~/util/snackbar';
 import { snackbarErrors } from '~/util';
 import FormInput from '../FormInput.vue';
-import { KeyIcon } from '@heroicons/vue/24/outline';
+import { KeyIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 import LoadingCircle from '../LoadingCircle.vue';
 import CopyTextIcon from '../CopyTextIcon.vue';
 import ConfirmModal from '../ConfirmModal.vue';
 import { publicKeyToAddress } from '~/util/address';
 import Tooltip from '../Tooltip.vue';
+
+const showHelp = defineModel<boolean>('help');
 
 const appStore = useAppStore();
 
