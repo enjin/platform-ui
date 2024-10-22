@@ -50,40 +50,6 @@
                             </div>
                         </div>
 
-                        <FormCheckbox
-                            v-model="enableTakeCollectionId"
-                            name="enableTakeCollection"
-                            label="Ask for item"
-                            description="Use this option to enable offering a different asset in exchange for the asset being sold."
-                        />
-
-                        <div v-if="enableTakeCollectionId" class="space-y-2 animate-fade-in">
-                            <div>
-                                <h3 class="text-sm leading-6 text-light-content-strong dark:text-dark-content-strong">
-                                    Take Asset ID
-                                    <span class="text-red-500">&nbsp;*</span>
-                                </h3>
-                                <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                    The collection and token ID of the asset being requested.
-                                </p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <FormInput
-                                    v-model="takeCollectionId"
-                                    class="col-span-1"
-                                    name="takeCollectionId"
-                                    placeholder="Collection ID"
-                                    type="number"
-                                />
-                                <TokenIdInput
-                                    v-model="takeTokenId"
-                                    class="col-span-1"
-                                    placeholder="Token ID"
-                                    name="takeTokenId"
-                                />
-                            </div>
-                        </div>
-
                         <FormInput
                             v-model="amount"
                             name="amount"
@@ -103,30 +69,14 @@
                             :prefix="currencySymbol"
                         />
 
-                        <FormCheckbox
-                            v-model="enableAuction"
-                            name="enableAuction"
-                            label="Enable Auction"
-                            description="Use this option to enable an auction for the listing."
-                        />
-
                         <FormInput
-                            v-if="enableAuction"
-                            v-model="auctionDataStart"
-                            name="auctionDataStart"
-                            label="Auction Start Block"
-                            description="The block number the auction starts at."
+                            v-model="expiration"
+                            name="expiration"
+                            label="Expiration"
+                            description="The expiration time for the offer."
                             required
                         />
-
-                        <FormInput
-                            v-if="enableAuction"
-                            v-model="auctionDataEnd"
-                            name="auctionDataEnd"
-                            label="Auction End Block"
-                            description="The block number the auction ends at."
-                            required
-                        />
+                        <span class="text-sm text-light-content">Current block: {{ currentBlock }}</span>
 
                         <FormInput
                             v-if="appStore.advanced"
@@ -164,21 +114,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
 import snackbar from '~/util/snackbar';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import FormInput from '~/components/FormInput.vue';
 import { currencySymbolByNetwork, formatData, formatToken, snackbarErrors } from '~/util';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { TokenIdSelectType } from '~/types/types.enums';
 import { useAppStore } from '~/store';
-import { numberRequiredSchema, stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
+import {
+    numberNotRequiredSchema,
+    numberRequiredSchema,
+    stringNotRequiredSchema,
+    stringRequiredSchema,
+} from '~/util/schemas';
 import { MarketplaceApi } from '~/api/marketplace';
 import FormSelect from '~/components/FormSelect.vue';
-import FormCheckbox from '~/components/FormCheckbox.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -187,15 +141,9 @@ const isLoading = ref(false);
 const amount = ref('');
 const price = ref('');
 const salt = ref('');
-const auctionDataStart = ref('');
-const auctionDataEnd = ref('');
-const enableTakeCollectionId = ref(false);
-const enableAuction = ref(false);
-const takeCollectionId = ref('0');
-const takeTokenId = ref({
-    tokenId: '0',
-    tokenType: TokenIdSelectType.Integer,
-});
+const expiration = ref();
+const currentBlock = ref();
+const blockInterval = ref();
 const makeCollectionId = ref('');
 const makeTokenId = ref({
     tokenId: '',
@@ -223,34 +171,13 @@ const validation = yup.object({
     }),
     makeCollectionId: numberRequiredSchema.typeError('Collection ID is required'),
     makeTokenId: stringRequiredSchema.required('Token ID is required'),
-    auctionDataStart: yup.string().when('enableAuction', {
-        is: true,
-        then: () => numberRequiredSchema.typeError('Auction Start Block must be a number'),
-        otherwise: () => yup.string().notRequired(),
-    }),
-    auctionDataEnd: yup.string().when('enableAuction', {
-        is: true,
-        then: () => numberRequiredSchema.typeError('Auction End Block must be a number'),
-        otherwise: () => yup.string().notRequired(),
-    }),
+    expiration: numberNotRequiredSchema.typeError('Expiration must be a number'),
     idempotencyKey: stringNotRequiredSchema,
 });
 
 const isValid = async () => {
     await formRef.value.validate();
     return formRef.value.getMeta().valid;
-};
-
-const getCurrentBlock = async () => {
-    try {
-        const res = await MarketplaceApi.getCurrentBlock();
-        auctionDataStart.value = res.data?.GetBlocks?.edges[0].node.number;
-    } catch (e) {
-        snackbar.error({
-            title: 'Failed to get current block',
-            text: 'Please try again.',
-        });
-    }
 };
 
 const invalidSubmit = () => {
@@ -267,7 +194,6 @@ const createListing = async () => {
 
     try {
         isLoading.value = true;
-
         const res = await MarketplaceApi.createListing(
             formatData({
                 amount: amount.value,
@@ -277,18 +203,11 @@ const createListing = async () => {
                     collectionId: makeCollectionId.value,
                     tokenId: formatToken(makeTokenId.value),
                 },
-                takeAssetId: {
-                    collectionId: takeCollectionId.value,
-                    tokenId: formatToken(takeTokenId.value),
-                },
                 listingData: {
-                    type: enableAuction.value ? 'AUCTION' : 'FIXED_PRICE',
-                    auctionParams: enableAuction.value
-                        ? {
-                              startBlock: auctionDataStart.value,
-                              endBlock: auctionDataEnd.value,
-                          }
-                        : undefined,
+                    type: 'OFFER',
+                    offerParams: {
+                        expiration: expiration.value ?? undefined,
+                    },
                 },
                 idempotencyKey: idempotencyKey.value,
             })
@@ -315,15 +234,26 @@ const createListing = async () => {
     }
 };
 
-watch(
-    () => enableAuction.value,
-    () => {
-        if (enableAuction.value) {
-            getCurrentBlock();
-        } else {
-            auctionDataStart.value = '';
-            auctionDataEnd.value = '';
-        }
+const getCurrentBlock = async () => {
+    try {
+        const res = await MarketplaceApi.getCurrentBlock();
+        currentBlock.value = res.data?.GetBlocks?.edges[0].node.number;
+    } catch (e) {
+        snackbar.error({
+            title: 'Failed to get current block',
+            text: 'Please try again.',
+        });
     }
-);
+};
+
+onMounted(() => {
+    getCurrentBlock();
+    blockInterval.value = setInterval(() => {
+        getCurrentBlock();
+    }, 12100);
+});
+
+onBeforeRouteLeave(() => {
+    clearInterval(blockInterval.value);
+});
 </script>

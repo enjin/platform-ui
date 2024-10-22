@@ -166,6 +166,15 @@ const routes = [
         },
     },
     {
+        path: '/create/offer',
+        name: 'platform.create.offer',
+        component: () => import('../components/pages/create/CreateOffer.vue'),
+        meta: {
+            requiresAuth: true,
+            requiresToken: true,
+        },
+    },
+    {
         path: '/create/batch',
         name: 'platform.create.batch',
         component: () => import('../components/pages/create/CreateBatch.vue'),
