@@ -95,7 +95,6 @@ import { ref, computed, watch } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
-import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey, publicKeyToAddress } from '~/util/address';
 import { formatData, formatToken, parseFormatedTokenId, validateToken } from '~/util';
 import { TokenIdSelectType } from '~/types/types.enums';
@@ -105,13 +104,10 @@ import RadioGroupButton from '~/components/RadioGroupButton.vue';
 import FadeTransition from '~/components/FadeTransition.vue';
 import {
     addressRequiredSchema,
-    booleanNotRequiredSchema,
-    booleanRequiredSchema,
     numberRequiredSchema,
     stringNotRequiredSchema,
     stringRequiredSchema,
 } from '~/util/schemas';
-import { useAppStore } from '~/store';
 import Tooltip from '~/components/Tooltip.vue';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 import snackbar from '~/util/snackbar';
