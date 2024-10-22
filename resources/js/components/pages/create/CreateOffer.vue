@@ -3,7 +3,7 @@
         <div class="flow-root space-y-4 pb-4 max-w-3xl mx-auto">
             <div class="mb-4">
                 <h1 class="text-xl md:text-2xl text-light-content-strong dark:text-dark-content-strong">
-                    Create Listing
+                    Create Offer
                 </h1>
             </div>
             <Form
@@ -11,7 +11,7 @@
                 class="space-y-6"
                 :validation-schema="validation"
                 @invalid-submit="invalidSubmit"
-                @submit="createListing"
+                @submit="createOffer"
             >
                 <div class="bg-light-surface-primary dark:bg-dark-surface-primary px-4 py-5 shadow rounded-lg sm:p-6">
                     <div class="space-y-6">
@@ -21,40 +21,76 @@
                             >
                                 Parameters
                             </h3>
-                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">Places a sell order.</p>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">Places an offer order.</p>
                         </div>
 
                         <div class="space-y-2">
                             <div>
                                 <h3 class="text-sm leading-6 text-light-content-strong dark:text-dark-content-strong">
-                                    Make Asset ID
+                                    Take Asset ID
                                     <span class="text-red-500">&nbsp;*</span>
                                 </h3>
                                 <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                    The collection and token ID of the asset being sold.
+                                    The collection and token ID of the asset being bought.
                                 </p>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
-                                <FormSelect
-                                    v-model="makeCollectionId"
-                                    name="makeCollectionId"
-                                    placeholder="Select a collection ID"
-                                    :options="collectionIds"
+                                <FormInput
+                                    v-model="takeCollectionId"
+                                    class="col-span-1"
+                                    name="takeCollectionId"
+                                    placeholder="Collection ID"
+                                    type="number"
                                 />
                                 <TokenIdInput
+                                    v-model="takeTokenId"
                                     class="col-span-1"
-                                    v-model="makeTokenId"
                                     placeholder="Token ID"
-                                    name="makeTokenId"
+                                    name="takeTokenId"
                                 />
                             </div>
+
+                            <FormCheckbox
+                                v-model="enableTakeCollectionId"
+                                name="enableTakeCollection"
+                                label="Ask for item"
+                                description="Use this option to enable offering a different asset in exchange for the asset being bought."
+                            />
+
+                            <template v-if="enableTakeCollectionId">
+                                <div>
+                                    <h3
+                                        class="text-sm leading-6 text-light-content-strong dark:text-dark-content-strong"
+                                    >
+                                        Make Asset ID
+                                        <span class="text-red-500">&nbsp;*</span>
+                                    </h3>
+                                    <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                        The collection and token ID of the asset being requested.
+                                    </p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <FormSelect
+                                        v-model="makeCollectionId"
+                                        name="makeCollectionId"
+                                        placeholder="Select a collection ID"
+                                        :options="collectionIds"
+                                    />
+                                    <TokenIdInput
+                                        v-model="makeTokenId"
+                                        name="makeTokenId"
+                                        class="col-span-1"
+                                        placeholder="Token ID"
+                                    />
+                                </div>
+                            </template>
                         </div>
 
                         <FormInput
                             v-model="amount"
                             name="amount"
                             label="Amount"
-                            description="The number of units being sold."
+                            description="The number of units being bought."
                             type="number"
                             required
                         />
@@ -68,16 +104,17 @@
                             required
                             :prefix="currencySymbol"
                         />
-
-                        <FormInput
-                            v-model="expiration"
-                            name="expiration"
-                            label="Expiration"
-                            description="The expiration time for the offer."
-                            required
-                        />
-                        <span class="text-sm text-light-content">Current block: {{ currentBlock }}</span>
-
+                        <Toggle v-model:toggle="enableExpiration" name="enableExpiration" label="Enable expiration" />
+                        <InputHeader description="Enable this option to set an expiration time for the offer." />
+                        <template v-if="enableExpiration">
+                            <FormInput
+                                v-model="expiration"
+                                name="expiration"
+                                label="Expiration"
+                                description="The block number the offer ends at."
+                            />
+                            <span class="text-sm text-light-content">Current block: {{ currentBlock }}</span>
+                        </template>
                         <FormInput
                             v-if="appStore.advanced"
                             v-model="salt"
@@ -100,7 +137,7 @@
 
                 <div class="flex space-x-3 justify-end">
                     <RouterLink
-                        :to="{ name: 'platform.marketplace' }"
+                        :to="{ name: 'platform.marketplace.offers' }"
                         type="button"
                         class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
@@ -133,6 +170,9 @@ import {
 } from '~/util/schemas';
 import { MarketplaceApi } from '~/api/marketplace';
 import FormSelect from '~/components/FormSelect.vue';
+import FormCheckbox from '~/components/FormCheckbox.vue';
+import Toggle from '~/components/Toggle.vue';
+import InputHeader from '~/components/InputHeader.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -144,9 +184,16 @@ const salt = ref('');
 const expiration = ref();
 const currentBlock = ref();
 const blockInterval = ref();
-const makeCollectionId = ref('');
-const makeTokenId = ref({
+const enableTakeCollectionId = ref(false);
+const enableExpiration = ref(false);
+const takeCollectionId = ref();
+const takeTokenId = ref({
     tokenId: '',
+    tokenType: TokenIdSelectType.Integer,
+});
+const makeCollectionId = ref('0');
+const makeTokenId = ref({
+    tokenId: '0',
     tokenType: TokenIdSelectType.Integer,
 });
 const idempotencyKey = ref('');
@@ -187,8 +234,17 @@ const invalidSubmit = () => {
     });
 };
 
-const createListing = async () => {
+const createOffer = async () => {
     if (!(await isValid())) {
+        return;
+    }
+
+    if (expiration.value && expiration.value < currentBlock.value) {
+        snackbar.error({
+            title: 'Expiration block',
+            text: 'Expiration block must be greater than the current block',
+        });
+
         return;
     }
 
@@ -217,17 +273,17 @@ const createListing = async () => {
 
         if (id) {
             snackbar.success({
-                title: 'Listing created',
-                text: `Listing created with transaction id ${id}`,
+                title: 'Offer created',
+                text: `Offer created with transaction id ${id}`,
                 event: id,
             });
-            router.push({ name: 'platform.marketplace.listings' });
+            router.push({ name: 'platform.marketplace.offers' });
         }
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
-            title: 'Listing creation',
-            text: 'Listing creation failed',
+            title: 'Offer creation',
+            text: 'Offer creation failed',
         });
     } finally {
         isLoading.value = false;

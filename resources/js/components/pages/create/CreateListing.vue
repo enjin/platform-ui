@@ -150,7 +150,7 @@
 
                 <div class="flex space-x-3 justify-end">
                     <RouterLink
-                        :to="{ name: 'platform.marketplace' }"
+                        :to="{ name: 'platform.marketplace.listings' }"
                         type="button"
                         class="rounded-md bg-light-surface-primary dark:bg-dark-surface-primary py-2 px-3 text-sm font-semibold text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong hover:bg-light-surface-background hover:dark:bg-dark-surface-background !bg-opacity-50"
                     >
