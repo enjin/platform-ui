@@ -4,7 +4,7 @@
         class="underline text-light-content dark:text-dark-content cursor-pointer text-xs"
         @click="sendReadmoreEvent"
     >
-        Read more
+        Learn more
     </span>
 </template>
 

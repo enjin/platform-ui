@@ -89,73 +89,27 @@
                             required
                             tooltip="Wallet Address"
                         />
-                        <div>
-                            <label
-                                class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong mb-2"
-                                >Token type</label
-                            >
-                            <div class="flex">
-                                <div
-                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-l-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong text-center"
-                                    :class="{
-                                        '!text-light-content-brand dark:!text-dark-content-brand !border-light-surface-brand':
-                                            tokenType === 'nft',
-                                    }"
-                                    @click="tokenType = 'nft'"
-                                    dusk="nftOption"
-                                >
-                                    <div class="font-bold text-lg">Non Fungible Token (NFT)</div>
-                                    <div class="text-xs mt-1">
-                                        Verifiably distinct and unique digital items. Recommended for collectibles.
-                                    </div>
-                                </div>
-                                <div
-                                    class="flex-1 px-4 py-8 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-r-2xl cursor-pointer transition-all text-light-content-strong dark:text-dark-content-strong text-center"
-                                    :class="{
-                                        '!text-light-content-brand dark:!text-dark-content-brand !border-light-surface-brand':
-                                            tokenType === 'ft',
-                                    }"
-                                    @click="tokenType = 'ft'"
-                                    dusk="ftOption"
-                                >
-                                    <div class="font-bold text-lg">Fungible Token (FT)</div>
-                                    <div class="text-xs mt-1">
-                                        Items that can have multiple copies. Recommended for gaming items, trading
-                                        cards, etc.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <template v-if="tokenType === 'ft'">
-                            <FormInput
-                                v-model="initialSupply"
-                                name="initialSupply"
-                                label="Initial Supply"
-                                description="The initial supply of tokens to mint to the specified recipient. Must not exceed the token maximum supply if set."
-                                type="number"
-                                tooltip="Number of items to be minted when this item is first created. If this is below maximum supply, users can mint more of this item in the future."
-                            />
+
+                        <FormInput v-model="quantity" :min="1" name="quantity" label="Quantity" type="number" />
+                        <Toggle v-model:toggle="maximumToggle" label="Set maximum" />
+                        <InputHeader
+                            class="!mt-2"
+                            description="Set the maximum supply for your token."
+                            readmore="https://support.enjin.io/hc/en-gb/articles/19114269858834-Token-supply-types"
+                        />
+                        <template v-if="maximumToggle">
+                            <FormInput v-model="maximum" :min="quantity" name="maximum" type="number" />
+                            <Toggle v-model:toggle="remintToggle" label="Allow re-mint" />
                             <InputHeader
-                                label="Supply Cap"
-                                description="Set the maximum supply for your token."
-                                readmore="https://support.enjin.io/hc/en-gb/articles/19114269858834"
-                                tooltip="Learn more about the different supply types here"
+                                class="!mt-2"
+                                description="Turn on to allow burned units to be re-minted."
+                                readmore="https://support.enjin.io/hc/en-gb/articles/19114269858834-Token-supply-types"
                             />
-                            <div class="flex space-x-4 w-full">
-                                <FormSelect
-                                    v-model="capType"
-                                    :options="capTypes"
-                                    name="capType"
-                                    label="Supply Cap Type"
-                                    class="flex-1"
-                                />
-                                <FormInput
-                                    v-if="capType === TokenCapType.COLLAPSING_SUPPLY || capType === TokenCapType.SUPPLY"
-                                    v-model="capAmount"
-                                    name="capAmount"
-                                    label="Max Supply"
-                                    type="number"
-                                />
+                            <div class="flex space-x-2 items-center px-4 py-2 border border-separate rounded-lg">
+                                <InformationCircleIcon class="h-5 w-5 text-primary" />
+                                <span class="text-sm text-light-content-strong dark:text-dark-content-strong">
+                                    {{ noteText }}
+                                </span>
                             </div>
                         </template>
                     </div>
@@ -291,22 +245,20 @@
                                         description=""
                                         :options="['Only Me', 'Everyone']"
                                     />
-                                    <template v-if="tokenType === 'ft'">
-                                        <FormInput
-                                            v-model="initialSupply"
-                                            name="itemsInfuse"
-                                            label="Number of items"
-                                            type="number"
-                                            disabled
-                                        />
-                                        <FormInput
-                                            :value="totalInfuseAmountComputed"
-                                            name="totalInfuseAmount"
-                                            label="Total Infuse Amount"
-                                            type="number"
-                                            disabled
-                                        />
-                                    </template>
+                                    <FormInput
+                                        v-model="quantity"
+                                        name="itemsInfuse"
+                                        label="Number of items"
+                                        type="number"
+                                        disabled
+                                    />
+                                    <FormInput
+                                        :value="totalInfuseAmountComputed"
+                                        name="totalInfuseAmount"
+                                        label="Total Infuse Amount"
+                                        type="number"
+                                        disabled
+                                    />
                                 </div>
                                 <FormCheckbox
                                     v-model="listingForbidden"
@@ -396,8 +348,9 @@ import {
     stringRequiredSchema,
 } from '~/util/schemas';
 import Tooltip from '~/components/Tooltip.vue';
-import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
+import { InformationCircleIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 import RichTextEditor from '~/components/RichTextEditor.vue';
+import Toggle from '~/components/Toggle.vue';
 import InputHeader from '~/components/InputHeader.vue';
 
 const router = useRouter();
@@ -409,8 +362,6 @@ const imageUrl = ref('');
 const imageType = ref();
 const name = ref('');
 const description = ref('');
-const tokenType = ref('nft');
-const capType = ref(TokenCapType.SINGLE_MINT);
 
 //Advanced
 const collectionId = ref('');
@@ -419,8 +370,6 @@ const tokenId = ref({
     tokenId: '',
     tokenType: TokenIdSelectType.Integer,
 });
-const initialSupply = ref(1);
-const capAmount = ref();
 const infuseAmount = ref();
 const isCurrency = ref(false);
 const infuseEnj = ref(false);
@@ -433,6 +382,10 @@ const listingForbidden = ref(false);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const formRef = ref();
+const quantity = ref(1);
+const maximumToggle = ref(false);
+const maximum = ref(1);
+const remintToggle = ref(false);
 
 const attributes = ref([
     {
@@ -441,16 +394,41 @@ const attributes = ref([
     },
 ]);
 
-const capTypes =
-    appStore.config.network === 'canary'
-        ? [TokenCapType.INFINITE, TokenCapType.COLLAPSING_SUPPLY, TokenCapType.SINGLE_MINT]
-        : [TokenCapType.INFINITE, TokenCapType.SUPPLY, TokenCapType.SINGLE_MINT];
-
 const collectionIds = computed(() => appStore.collections);
 const isAdvanced = computed(() => mode.value === 'advanced');
 
 const totalInfuseAmountComputed = computed(() => {
-    return initialSupply.value * infuseAmount.value;
+    return quantity.value * infuseAmount.value;
+});
+
+const capType = computed(() => {
+    if (maximumToggle.value) {
+        if (!remintToggle.value) {
+            return TokenCapType.COLLAPSING_SUPPLY;
+        } else {
+            return TokenCapType.SUPPLY;
+        }
+    } else {
+        return TokenCapType.INFINITE;
+    }
+});
+
+const computedItemText = computed(() => (quantity.value === 1 ? 'item' : 'items'));
+
+const noteText = computed(() => {
+    if (!maximumToggle.value) {
+        return `You are minting ${quantity.value} ${computedItemText.value} now. Additional or burned units can be minted.`;
+    } else if (!remintToggle.value) {
+        if (maximum.value === 1) {
+            return `You are minting a single NFT. Additional or burned units can’t be minted.`;
+        } else if (maximum.value != quantity.value) {
+            return `You are minting ${quantity.value} ${computedItemText.value} now with a max limit of ${maximum.value} units. Burned units can’t be re-minted.`;
+        } else {
+            return `You are minting ${quantity.value} items. Additional or burned units can’t be minted.`;
+        }
+    } else {
+        return `You are minting ${quantity.value} ${computedItemText.value} now with a max limit of ${maximum.value} units. Burned units can be re-minted.`;
+    }
 });
 
 const validation = yup.object({
@@ -462,12 +440,9 @@ const validation = yup.object({
     collectionId: collectionIdRequiredSchema,
     tokenId: stringRequiredSchema,
     recipient: addressRequiredSchema,
-    initialSupply: yup.number().when({
-        is: () => tokenType.value === 'ft',
-        then: () => numberRequiredSchema.typeError('Initial Supply must be a number').min(1),
-        otherwise: () => numberNotRequiredSchema,
-    }),
-    capAmount: numberNotRequiredSchema,
+    quantity: numberRequiredSchema.typeError('Quantity must be a number').min(1),
+    maximum: numberNotRequiredSchema,
+    remintToggle: booleanNotRequiredSchema,
     beneficiaryAddress: addressNotRequiredSchema,
     beneficiaryPercentage: yup.number().when('beneficiaryAddress', {
         is: (val) => val !== '' && val !== null,
@@ -538,10 +513,10 @@ const createToken = async () => {
                 collectionId: collectionId.value,
                 params: {
                     tokenId: formatToken(tokenId.value),
-                    initialSupply: initialSupply.value,
+                    initialSupply: quantity.value,
                     cap: {
                         type: capType.value,
-                        amount: capAmount.value,
+                        amount: maximum.value,
                     },
                     behavior: {
                         hasRoyalty:
@@ -608,12 +583,10 @@ const removeAttributeItem = (index: number) => {
 };
 
 watch(
-    () => tokenType.value,
+    () => quantity.value,
     () => {
-        if (tokenType.value === 'nft') {
-            capType.value = TokenCapType.SINGLE_MINT;
-        } else {
-            capType.value = TokenCapType.INFINITE;
+        if (quantity.value > maximum.value) {
+            maximum.value = quantity.value;
         }
     }
 );
