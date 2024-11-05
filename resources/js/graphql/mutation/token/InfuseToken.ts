@@ -1,5 +1,5 @@
 export default `mutation InfuseToken($collectionId: BigInt!, $tokenId: EncodableTokenIdInput!, $amount: BigInt!, $signingAccount: String, $idempotencyKey: String, $skipValidation: Boolean! = false) {
-    InfuseToken(
+    Infuse(
       collectionId: $collectionId
       tokenId: $tokenId
       amount: $amount
