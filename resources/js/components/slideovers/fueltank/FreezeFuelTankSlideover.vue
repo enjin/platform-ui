@@ -7,7 +7,7 @@
         @submit="freezeFuelTank"
     >
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
-            Freeze Fuel Tank
+            {{ props.item?.isFrozen ? 'Unfreeze' : 'Freeze' }} Fuel Tank
         </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
@@ -49,7 +49,7 @@
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Cancel</Btn>
-            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Freeze</Btn>
+            <Btn :loading="isLoading" :disabled="isLoading" primary is-submit>Confirm</Btn>
         </div>
     </Form>
 </template>
@@ -91,7 +91,7 @@ const props = withDefaults(
 
 const isLoading = ref(false);
 const tankId = ref(props.item?.tankId);
-const isFrozen = ref(false);
+const isFrozen = ref(props.item?.isFrozen ?? false);
 const ruleSetId = ref();
 const idempotencyKey = ref('');
 const formRef = ref();
@@ -131,8 +131,8 @@ const freezeFuelTank = async () => {
 
         if (id) {
             snackbar.success({
-                title: 'Fuel Tank freeze',
-                text: `Fuel Tank frozen with transaction id ${id}`,
+                title: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'} `,
+                text: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'} with transaction id ${id}`,
                 event: id,
             });
             closeSlide();
@@ -140,8 +140,8 @@ const freezeFuelTank = async () => {
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
-            title: 'Fuel Tank freeze',
-            text: 'Fuel Tank freeze failed',
+            title: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'}`,
+            text: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'} failed`,
         });
     } finally {
         isLoading.value = false;
