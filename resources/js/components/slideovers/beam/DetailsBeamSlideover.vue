@@ -70,6 +70,22 @@
                         </dd>
                     </div>
 
+                    <div class="space-y-2 pt-4 pb-3">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Claim limit</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.claimLimit }}
+                        </dd>
+                    </div>
+
+                    <div class="space-y-2 pt-4 pb-3">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">
+                            Claims Remaining
+                        </dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.claimsRemaining }}
+                        </dd>
+                    </div>
+
                     <div class="space-y-2 pt-4 pb-3" v-if="item.flags?.length">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Flags</dt>
                         <Chip v-for="flag in item.flags" :key="flag" :text="flag" :closable="false" class="mr-2" />
@@ -108,6 +124,8 @@ defineProps<{
         isClaimable: boolean;
         flags: string[];
         image: string;
+        claimLimit: number;
+        claimsRemaining: number;
         claimConditions: { type: string; value: string }[];
     };
 }>();

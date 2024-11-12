@@ -13,6 +13,12 @@ export default `query GetBeams($codes: [String!], $names: [String!], $after: Str
             collectionId
           }
           isClaimable
+          claimLimit
+          claimsRemaining
+          claimConditions {
+            type
+            value
+          }
           flags
           qr {
             url

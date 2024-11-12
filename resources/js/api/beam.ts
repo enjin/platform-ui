@@ -72,6 +72,7 @@ export class BeamApi {
                 start: createBeamData.start,
                 end: createBeamData.end,
                 flags: createBeamData.flags,
+                claimLimit: createBeamData.claimLimit,
                 collectionId: createBeamData.collectionId,
                 tokens: createBeamData.tokens,
             },
