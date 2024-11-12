@@ -95,6 +95,14 @@
                                     description="The claim period end date."
                                     required
                                 />
+                                <FormInput
+                                    v-model="claimLimit"
+                                    name="claimLimit"
+                                    label="Claim Limit"
+                                    description="Claim limit per token between 1 and 100."
+                                    type="number"
+                                    required
+                                />
                                 <MultiCheckbox
                                     v-model="flags"
                                     name="flags"
@@ -157,6 +165,7 @@ const description = ref('');
 const image = ref('');
 const start = ref(new Date());
 const end = ref(new Date());
+const claimLimit = ref(1);
 
 const flags = ref([]);
 
@@ -203,6 +212,7 @@ const validation = yup.object({
     start: yup.date().required(),
     end: yup.date().min(yup.ref('start')).required(),
     flags: yup.array().of(yup.string()),
+    claimLimit: yup.number().min(1).max(100).required(),
 });
 
 const addItem = () => {
@@ -250,6 +260,7 @@ const createBeam = async () => {
                 image: image.value,
                 start: new Date(start.value).toISOString(),
                 end: new Date(end.value).toISOString(),
+                claimLimit: claimLimit.value,
                 flags: flags.value.map((f) => {
                     return {
                         flag: f,

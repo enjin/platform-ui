@@ -13,7 +13,10 @@ export default `query GetBeam($code: String!, $account: String) {
       isClaimable
       claimLimit
       claimsRemaining
-      claimConditions
+      claimConditions {
+        type
+        value
+      }
       flags
       qr {
         url
