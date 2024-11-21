@@ -28,20 +28,17 @@
 
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { ApiService } from '~/api';
+import { useAppStore } from '~/store';
+
+const appStore = useAppStore();
 
 const show = ref(true);
-const banner = ref({
-    key: 'banner',
-    text: 'This is a banner',
-    link: 'https://google.com',
-    linkText: 'Read more',
-    dismissable: true,
-});
+const banner = ref();
 
 const enabled = computed(() => {
-    return true;
+    return banner.value && banner.value.enabled;
 });
 
 const closeBanner = () => {
@@ -63,13 +60,27 @@ const deleteOutdated = () => {
 };
 
 const fetchBanner = async () => {
-    const banners = await ApiService.getBanners();
-    console.log(banners);
+    try {
+        if (!appStore.loggedIn) {
+            return;
+        }
+        const resp = await ApiService.getBanners();
+        banner.value = resp.data.GetBanners[0];
+    } catch {
+        // Do nothing
+    }
 };
 
 (() => {
     fetchBanner();
 })();
+
+watch(
+    () => appStore.loggedIn,
+    () => {
+        fetchBanner();
+    }
+);
 </script>
 
 <style lang="scss" scoped>

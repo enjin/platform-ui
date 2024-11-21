@@ -1,7 +1,7 @@
 <template>
     <div class="h-full bg-light-surface-background dark:bg-dark-surface-background">
         <DynamicBanner />
-        <div class="flex flex-row">
+        <div class="flex flex-row h-full">
             <SideNavbar v-if="appStore.loggedIn" />
             <SnackbarGroup />
             <SupportButton />
