@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import { computed, ref } from 'vue';
+import { ApiService } from '~/api';
 
 const show = ref(true);
 const banner = ref({
@@ -62,7 +63,8 @@ const deleteOutdated = () => {
 };
 
 const fetchBanner = async () => {
-    console.log('fetching');
+    const banners = await ApiService.getBanners();
+    console.log(banners);
 };
 
 (() => {

@@ -28,6 +28,7 @@ import GetListings from '~/graphql/query/marketplace/GetListings';
 import GetBids from '~/graphql/query/marketplace/GetBids';
 import GetSales from '~/graphql/query/marketplace/GetSales';
 import GetBlocks from '~/graphql/query/marketplace/GetBlocks';
+import GetBanners from '~/graphql/query/GetBanners';
 
 export default {
     GetTransaction,
@@ -60,4 +61,5 @@ export default {
     GetBids,
     GetSales,
     GetBlocks,
+    GetBanners,
 };

@@ -2,6 +2,7 @@ import { HttpMethods } from '~/types/types.enums';
 import mutations from '~/api/mutations';
 import snackbar from '~/util/snackbar';
 import { useAppStore } from '~/store';
+import queries from './queries';
 
 export class ApiService {
     static async reloadCsrf() {
@@ -261,6 +262,14 @@ export class ApiService {
                 idempotencyKey: transferBalanceData.idempotencyKey,
                 skipValidation: transferBalanceData.skipValidation,
             },
+        };
+
+        return ApiService.sendPlatformRequest(data);
+    }
+
+    static async getBanners() {
+        const data = {
+            query: queries.GetBanners,
         };
 
         return ApiService.sendPlatformRequest(data);
