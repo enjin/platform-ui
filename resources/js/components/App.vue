@@ -1,16 +1,19 @@
 <template>
-    <div class="h-full flex flex-row bg-light-surface-background dark:bg-dark-surface-background">
-        <SideNavbar v-if="appStore.loggedIn" />
-        <SnackbarGroup />
-        <SupportButton />
+    <div class="h-full bg-light-surface-background dark:bg-dark-surface-background">
+        <DynamicBanner />
+        <div class="flex flex-row">
+            <SideNavbar v-if="appStore.loggedIn" />
+            <SnackbarGroup />
+            <SupportButton />
 
-        <div class="flex flex-col w-full overflow-hidden">
-            <UserNavbar />
-            <router-view v-slot="{ Component }">
-                <ScaleTransition>
-                    <component :is="Component" />
-                </ScaleTransition>
-            </router-view>
+            <div class="flex flex-col w-full overflow-hidden">
+                <UserNavbar />
+                <router-view v-slot="{ Component }">
+                    <ScaleTransition>
+                        <component :is="Component" />
+                    </ScaleTransition>
+                </router-view>
+            </div>
         </div>
     </div>
 </template>
@@ -24,6 +27,7 @@ import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
 import { computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import DynamicBanner from './DynamicBanner.vue';
 
 const appStore = useAppStore();
 const router = useRouter();
