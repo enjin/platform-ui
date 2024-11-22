@@ -61,9 +61,6 @@ const deleteOutdated = () => {
 
 const fetchBanner = async () => {
     try {
-        if (!appStore.loggedIn) {
-            return;
-        }
         const resp = await ApiService.getBanners();
         banner.value = resp.data.GetBanners[0];
     } catch {
@@ -74,13 +71,6 @@ const fetchBanner = async () => {
 (() => {
     fetchBanner();
 })();
-
-watch(
-    () => appStore.loggedIn,
-    () => {
-        fetchBanner();
-    }
-);
 </script>
 
 <style lang="scss" scoped>
