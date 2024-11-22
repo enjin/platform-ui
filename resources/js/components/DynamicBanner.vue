@@ -28,11 +28,8 @@
 
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { ApiService } from '~/api';
-import { useAppStore } from '~/store';
-
-const appStore = useAppStore();
 
 const show = ref(true);
 const banner = ref();
