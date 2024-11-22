@@ -35,7 +35,7 @@ const show = ref(true);
 const banner = ref();
 
 const enabled = computed(() => {
-    return banner.value && banner.value.enabled;
+    return banner.value && localStorage.getItem(banner.value.key) !== 'true';
 });
 
 const closeBanner = () => {
