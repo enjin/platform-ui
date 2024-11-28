@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 overflow-y-auto transition-all pb-14 max-w-4xl mx-auto w-full">
+    <div class="px-4 sm:px-6 lg:px-8 overflow-y-auto transition-all pb-14 max-w-4xl mx-auto w-full scrollbar-hide">
         <div class="mt-4 flow-root relative">
             <SettingsHelp v-model:help="showHelp" />
             <div class="flex flex-col space-y-4">
