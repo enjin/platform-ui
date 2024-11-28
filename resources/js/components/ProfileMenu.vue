@@ -16,12 +16,6 @@
                     v-if="appStore.loggedIn"
                     class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-light-stroke dark:divide-dark-stroke rounded-md bg-light-surface-primary dark:bg-dark-surface-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none pt-1"
                 >
-                    <div class="px-4 py-2" v-if="appStore.user">
-                        <p class="text-sm text-light-content dark:text-dark-content">Email</p>
-                        <p class="truncate text-sm font-medium text-light-content-strong dark:text-dark-content-strong">
-                            {{ appStore.user.email }}
-                        </p>
-                    </div>
                     <div class="px-4 py-2" v-if="appStore.config.url">
                         <p class="text-sm text-light-content dark:text-dark-content">URL</p>
                         <p class="truncate text-sm font-medium text-light-content-strong dark:text-dark-content-strong">

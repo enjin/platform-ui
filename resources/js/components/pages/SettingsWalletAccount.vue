@@ -23,22 +23,6 @@
             >
                 {{ walletAccount }}
             </label>
-            <span
-                v-if="userWalletAccounts.length"
-                class="text-lg font-bold text-light-content-strong dark:text-dark-content-strong"
-            >
-                Connected Wallets
-            </span>
-            <label
-                v-for="account in userWalletAccounts"
-                :key="account"
-                class="text-light-content dark:text-dark-content bg-light-surface-background dark:bg-dark-surface-background hover:text-white hover:bg-light-surface-brand text-sm rounded-md mr-auto p-2 cursor-pointer transition-all"
-                name="walletAccount"
-                disabled
-                @click="copyText(account)"
-            >
-                {{ account }}
-            </label>
         </div>
     </div>
 </template>
@@ -46,15 +30,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAppStore } from '~/store';
-import { publicKeyToAddress } from '~/util/address';
 import snackbar from '~/util/snackbar';
 
 const appStore = useAppStore();
 
-const walletAccount = computed(() =>
-    appStore.isMultiTenant ? publicKeyToAddress(appStore.user?.account) : appStore.config.daemon
-);
-const userWalletAccounts = computed(() => appStore.user?.walletAccounts || []);
+const walletAccount = computed(() => appStore.config.daemon);
 
 const copyText = (text: string) => {
     navigator.clipboard.writeText(text);

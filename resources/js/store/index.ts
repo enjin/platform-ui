@@ -1,6 +1,5 @@
 import { ApiService } from '~/api';
 import { AppState } from '~/types/types.interface';
-import { AuthApi } from '~/api/auth';
 import { CollectionApi } from '~/api/collection';
 import appConfig from '~/config.json';
 import { defineStore } from 'pinia';
@@ -59,7 +58,7 @@ export const useAppStore = defineStore('app', {
                 if (!this.config.url) {
                     return false;
                 }
-                if (!this.isMultiTenant && !this.authorization_token) {
+                if (!this.authorization_token) {
                     return false;
                 }
 
@@ -97,10 +96,6 @@ export const useAppStore = defineStore('app', {
                     this.addMarketplaceNavigation();
                 }
 
-                if (this.loggedIn && this.hasMultiTenantPackage && this.config.tenant && !this.user) {
-                    await this.getUser();
-                }
-
                 await useConnectionStore().getSession();
                 await this.fetchCollectionIds();
             } catch (error: any) {
@@ -115,9 +110,8 @@ export const useAppStore = defineStore('app', {
         async setupAccount({ url, authorization_token }: { url: URL; authorization_token: string }) {
             this.url = url;
             this.authorization_token = authorization_token;
-            if (!this.isMultiTenant) {
-                this.loggedIn = true;
-            }
+            this.loggedIn = true;
+
             await this.init();
             await this.initPromise;
         },
@@ -165,13 +159,6 @@ export const useAppStore = defineStore('app', {
                 throw 'The URL is not valid';
             }
         },
-        async getUser() {
-            const res = await AuthApi.getUser();
-            if (res.data.User) {
-                this.user = res.data.User;
-                this.tokensCount = res.data.User?.apiTokens.length;
-            }
-        },
         async fetchCollectionIds(totalCount?: number, after?: string) {
             if (!this.loggedIn) return false;
             try {
@@ -215,49 +202,9 @@ export const useAppStore = defineStore('app', {
                 this.internal = false;
             }
         },
-        async login(email: string, password: string, recaptcha?: string) {
-            const res = await AuthApi.login(email, password, recaptcha);
-            if (!res.data.Login) {
-                if (res.errors?.length) {
-                    throw res.errors;
-                }
-
-                return false;
-            }
-
-            await ApiService.reloadCsrf();
-            if (this.config.tenant) {
-                await this.getUser();
-                if (!this.user.isVerified) {
-                    this.allowResend = true;
-                    await this.logout();
-                    throw [{ field: 'Login error', message: 'Please verify your email address' }];
-                }
-            }
-            this.loggedIn = res.data.Login;
-
-            return res.data.Login;
-        },
-        async logout() {
-            this.loggedIn = false;
-            await AuthApi.logout();
-            this.clearLogin();
-            await ApiService.reloadCsrf();
-        },
         clearLogin() {
-            this.user = null;
             this.authorization_token = '';
             this.loggedIn = false;
-        },
-        async createApiToken(name: string) {
-            const res = await AuthApi.createApiToken(name);
-            this.user.apiTokens.push(res.data.CreateApiToken);
-            this.tokensCount = this.user.apiTokens.length;
-        },
-        async revokeToken(name: string) {
-            await AuthApi.revokeApiTokens([name]);
-            this.user.apiTokens = this.user.apiTokens.filter((token) => token.name !== name);
-            this.tokensCount = this.user.apiTokens.length;
         },
         setURL(url: string) {
             this.url = new URL(url);
@@ -302,14 +249,7 @@ export const useAppStore = defineStore('app', {
     },
     getters: {
         hasValidConfig(state: AppState) {
-            if (this.isMultiTenant) {
-                return state.loggedIn && state.tokensCount > 0;
-            }
-
             return state.loggedIn && state.config.url;
-        },
-        isMultiTenant(state: AppState) {
-            return state.config.tenant;
         },
         hasBeamPackage(state: AppState) {
             return state.config.packages.find((p) => p.name === 'platform-beam');
@@ -319,9 +259,6 @@ export const useAppStore = defineStore('app', {
         },
         hasMarketplacePackage(state: AppState) {
             return state.config.packages.find((p) => p.name === 'platform-marketplace');
-        },
-        hasMultiTenantPackage(state: AppState) {
-            return state.config.packages.find((p) => p.name === 'platform-multi-tenant');
         },
     },
 });

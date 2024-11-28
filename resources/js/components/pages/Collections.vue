@@ -433,8 +433,7 @@ const openTransactionSlide = async (transactionId: string) => {
 
 const trackCollection = async (collectionId: string) => {
     try {
-        const hotSync = !appStore.isMultiTenant;
-        await CollectionApi.trackCollection(collectionId, hotSync);
+        await CollectionApi.trackCollection(collectionId, true);
         await getCollections();
         snackbar.success({
             title: 'Tracking',

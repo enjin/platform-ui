@@ -25,7 +25,6 @@
                         input-class="block w-full rounded-md border-0 py-1.5 text-light-content-strong dark:text-dark-content-strong shadow-sm ring-1 ring-inset ring-light-stroke-strong dark:ring-dark-stroke-strong placeholder:text-light-content dark:text-dark-content focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                     />
                     <FormInput
-                        v-if="!appStore.isMultiTenant"
                         v-model="authorizationToken"
                         label="Authorization Token"
                         name="authorization"
@@ -101,11 +100,7 @@ const setupAccount = async () => {
             authorization_token: authorizationToken.value,
         });
 
-        if (appStore.isMultiTenant) {
-            router.push({ name: 'platform.auth.login' });
-        } else {
-            redirectToCollections();
-        }
+        redirectToCollections();
     } catch (e: any) {
         snackbar.error({ title: e.message || e });
     }

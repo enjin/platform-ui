@@ -210,18 +210,11 @@ export const useConnectionStore = defineStore('connection', {
         getTrackableAccounts() {
             const appStore = useAppStore();
             const accounts: string[] = [];
-            if (appStore.user?.account) {
-                accounts.push(publicKeyToAddress(appStore.user?.account));
-            }
-            if (appStore.config.daemon && !appStore.isMultiTenant) {
+            if (appStore.config.daemon) {
                 accounts.push(publicKeyToAddress(appStore.config.daemon));
             }
             if (this.accounts?.length) {
                 const walletAccounts = this.accounts.map((account) => publicKeyToAddress(account.address));
-                accounts.push(...walletAccounts);
-            }
-            if (appStore.user?.walletAccounts?.length) {
-                const walletAccounts = appStore.user?.walletAccounts?.map((account) => publicKeyToAddress(account));
                 accounts.push(...walletAccounts);
             }
 
