@@ -34,7 +34,7 @@
                             type="number"
                             name="amount"
                             label="Amount"
-                            description="The amount to burn."
+                            :description="`The amount to burn. Max amount is ${props.item?.supply}`"
                             required
                         />
                         <FormCheckbox
@@ -104,6 +104,7 @@ const props = withDefaults(
         item?: {
             tokenId: string;
             collectionId: number;
+            supply: number;
         };
     }>(),
     {
