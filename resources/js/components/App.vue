@@ -1,6 +1,5 @@
 <template>
     <div class="bg-light-surface-background dark:bg-dark-surface-background">
-        <DynamicBanner />
         <div class="flex flex-row h-screen">
             <SideNavbar v-if="appStore.loggedIn" />
             <SnackbarGroup />
@@ -27,7 +26,6 @@ import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
 import { computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import DynamicBanner from './DynamicBanner.vue';
 
 const appStore = useAppStore();
 const router = useRouter();
@@ -71,3 +69,14 @@ watch(
     }
 );
 </script>
+
+<style>
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>

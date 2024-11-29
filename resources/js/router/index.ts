@@ -191,27 +191,6 @@ const routes = [
         },
     },
     {
-        path: '/login',
-        name: 'platform.auth.login',
-        component: () => import('../components/pages/auth/Login.vue'),
-    },
-    {
-        path: '/register',
-        name: 'platform.auth.register',
-        component: () => import('../components/pages/auth/Register.vue'),
-    },
-    {
-        path: '/forgot-password',
-        name: 'platform.auth.forgot.password',
-        component: () => import('../components/pages/auth/RequestResetPassword.vue'),
-    },
-    {
-        path: '/reset-password/:token',
-        name: 'platform.auth.reset.password',
-        component: () => import('../components/pages/auth/ResetPassword.vue'),
-        props: true,
-    },
-    {
         path: '/:pathMatch(.*)*',
         name: 'platform.404',
         component: () => import('../components/pages/NotFound.vue'),

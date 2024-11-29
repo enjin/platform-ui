@@ -73,9 +73,6 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import ScaleTransition from './ScaleTransition.vue';
 import snackbar from '~/util/snackbar';
 import { useConnectionStore } from '~/store/connection';
-import { publicKeyToAddress } from '~/util/address';
-import { AuthApi } from '~/api/auth';
-import { useAppStore } from '~/store';
 
 const props = withDefaults(
     defineProps<{
@@ -110,13 +107,6 @@ const connectWallet = async (provider: string) => {
         await connectionStore.connectWallet(provider, () => {
             loading.value = false;
         });
-        await connectionStore.getAccounts();
-        const localAccounts = connectionStore.accounts.map((account) => publicKeyToAddress(account.address));
-        const walletAccounts = useAppStore().user?.walletAccounts?.map((account) => publicKeyToAddress(account)) ?? [];
-        const uniqueAccounts = [...new Set([...walletAccounts, ...localAccounts])];
-        if (useAppStore().isMultiTenant) {
-            AuthApi.setUserAccounts(uniqueAccounts);
-        }
     } catch {
         snackbar.error({ title: 'Failed to connect the wallet' });
     } finally {
