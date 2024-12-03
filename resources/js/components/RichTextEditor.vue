@@ -127,7 +127,7 @@ onMounted(() => {
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             @apply text-light-content dark:text-dark-content;
-            @apply border-light-stroke-strong dark:bg-dark-surface-background dark:border-dark-stroke-strong;
+            @apply border-light-stroke-strong dark:bg-dark-surface-primary dark:border-dark-stroke-strong;
 
             button:hover {
                 @apply bg-light-surface-background dark:bg-dark-surface-background;
@@ -144,7 +144,7 @@ onMounted(() => {
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
             @apply border-light-stroke-strong dark:border-dark-stroke-strong;
-            @apply bg-light-surface-primary dark:bg-dark-surface-primary;
+            @apply bg-light-surface-background dark:bg-dark-surface-background;
             @apply text-light-content dark:text-dark-content;
         }
 
