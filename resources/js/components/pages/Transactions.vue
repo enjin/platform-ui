@@ -55,37 +55,57 @@
                                     </th>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                        @click="sortTable('id')"
                                     >
                                         ID
+                                        <span v-if="sortKey === 'id'">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                        @click="sortTable('wallet')"
                                     >
                                         Wallet
+                                        <span v-if="sortKey === 'wallet'">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                        @click="sortTable('method')"
                                     >
                                         Method
+                                        <span v-if="sortKey === 'method'">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                        @click="sortTable('state')"
                                     >
                                         State
+                                        <span v-if="sortKey === 'state'">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                        class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                        @click="sortTable('result')"
                                     >
                                         Result
+                                        <span v-if="sortKey === 'result'">
+                                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                        </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-3 py-3.5 text-right text-sm font-semibold text-light-content-strong dark:text-dark-content-strong truncate"
+                                        class="px-3 py-3.5 text-right text-sm font-semibold text-light-content-strong dark:text-dark-content-strong truncate cursor-pointer"
                                     >
                                         Transaction ID
                                     </th>
@@ -93,7 +113,7 @@
                             </thead>
                             <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                                 <tr
-                                    v-for="transaction in transactions.items"
+                                    v-for="transaction in sortedTransactions"
                                     :key="transaction.id"
                                     :class="[
                                         selectedTransaction.includes(transaction.id) &&
@@ -243,7 +263,8 @@ const modalRetry = ref(false);
 const modalCancel = ref(false);
 const slideComponent = ref();
 const selectedTransaction: Ref<number[]> = ref([]);
-
+const sortKey = ref('');
+const sortOrder = ref('asc');
 const selectedId = ref(0);
 
 const indeterminate = computed(
@@ -338,6 +359,26 @@ const searchChanged = computed(() => {
 const debouncedSearch = debounce(async () => {
     await getTransactions();
 }, 1000);
+
+const sortedTransactions = computed(() => {
+    if (!sortKey.value) return transactions.value.items;
+    const sorted = [...transactions.value.items].sort((a, b) => {
+        const aValue = sortKey.value === 'id' ? parseInt(a.id.toString()) : a[sortKey.value];
+        const bValue = sortKey.value === 'id' ? parseInt(b.id.toString()) : b[sortKey.value];
+        if (sortOrder.value === 'asc') return aValue > bValue ? 1 : -1;
+        return aValue < bValue ? 1 : -1;
+    });
+    return sorted;
+});
+
+const sortTable = (key) => {
+    if (sortKey.value === key) {
+        sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const cancelSearch = () => {
     debouncedSearch.cancel();

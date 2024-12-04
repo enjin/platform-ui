@@ -43,52 +43,80 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate cursor-pointer"
+                                    @click="sortTable('id')"
                                 >
                                     ID
+                                    <span v-if="sortKey === 'id'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('listingId')"
                                 >
                                     Listing ID
+                                    <span v-if="sortKey === 'listingId'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('price')"
                                 >
                                     Price
+                                    <span v-if="sortKey === 'price'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('seller')"
                                 >
                                     Seller
+                                    <span v-if="sortKey === 'seller'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('sales')"
                                 >
                                     Sales
+                                    <span v-if="sortKey === 'sales'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('bids')"
                                 >
                                     Bids
+                                    <span v-if="sortKey === 'bids'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('state.__typename')"
                                 >
                                     State
+                                    <span v-if="sortKey === 'state.__typename'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
-                                v-for="(listing, idx) in listings.items"
+                                v-for="(listing, idx) in sortedListings"
                                 :key="listing.id"
                                 :class="
                                     idx % 2 === 0
@@ -174,6 +202,8 @@ import { MarketplaceApi } from '~/api/marketplace';
 import Btn from '../Btn.vue';
 import { useAppStore } from '~/store';
 
+const appStore = useAppStore();
+
 const isLoading = ref(true);
 const isPaginationLoading = ref(false);
 const listings: Ref<{
@@ -186,6 +216,8 @@ const listings: Ref<{
 const paginatorRef = ref();
 const modalSlide = ref(false);
 const slideComponent = ref();
+const sortKey = ref('');
+const sortOrder = ref('asc');
 
 const searchInputs = ref([
     {
@@ -217,9 +249,27 @@ const searchChanged = computed(() => {
     return searchInputs.value.reduce((total, input) => total + input.value.length, 0);
 });
 
-const appStore = useAppStore();
-
 const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
+
+const sortedListings = computed(() => {
+    if (!sortKey.value) return listings.value.items;
+    const sorted = [...listings.value.items].sort((a, b) => {
+        const aValue = sortKey.value === 'price' ? parseInt(a.price) : a[sortKey.value];
+        const bValue = sortKey.value === 'price' ? parseInt(b.price) : b[sortKey.value];
+        if (sortOrder.value === 'asc') return aValue > bValue ? 1 : -1;
+        return aValue < bValue ? 1 : -1;
+    });
+    return sorted;
+});
+
+const sortTable = (key) => {
+    if (sortKey.value === key) {
+        sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const actions = [
     {
