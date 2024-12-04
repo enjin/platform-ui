@@ -246,7 +246,12 @@ const createBeam = async () => {
     if (!isAllValid.value) {
         snackbar.error({
             title: 'Form validation',
-            text: 'Please verify that all the fields are valid',
+            text:
+                !tokens.value.length ||
+                (tokens.value.length &&
+                    !tokens.value.every((item: { valid: boolean; values: ClaimTokenValuesInterface }) => item.valid))
+                    ? 'Please make sure the beam assets are valid'
+                    : 'Please verify that all the fields are valid',
         });
         return;
     }
