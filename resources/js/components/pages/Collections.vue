@@ -240,7 +240,7 @@ const sortedCollections = computed(() => {
             sortKey.value === 'name'
                 ? collectionNames.value[a.collectionId]
                 : sortKey.value === 'id'
-                ? a.collectionId
+                ? parseInt(a.collectionId)
                 : sortKey.value === 'owner'
                 ? a.owner
                 : sortKey.value === 'attributes'
@@ -252,7 +252,7 @@ const sortedCollections = computed(() => {
             sortKey.value === 'name'
                 ? collectionNames.value[b.collectionId]
                 : sortKey.value === 'id'
-                ? b.collectionId
+                ? parseInt(b.collectionId)
                 : sortKey.value === 'owner'
                 ? b.owner
                 : sortKey.value === 'attributes'

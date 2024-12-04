@@ -296,7 +296,7 @@ const sortedTokens = computed(() => {
             sortKey.value === 'name'
                 ? tokenNames.value[`${a.collection.collectionId}-${a.tokenId}`]
                 : sortKey.value === 'id'
-                ? a.tokenId
+                ? parseInt(a.tokenId)
                 : sortKey.value === 'collectionId'
                 ? a.collection.collectionId
                 : sortKey.value === 'owner'
@@ -308,7 +308,7 @@ const sortedTokens = computed(() => {
             sortKey.value === 'name'
                 ? tokenNames.value[`${b.collection.collectionId}-${b.tokenId}`]
                 : sortKey.value === 'id'
-                ? b.tokenId
+                ? parseInt(b.tokenId)
                 : sortKey.value === 'collectionId'
                 ? b.collection.collectionId
                 : sortKey.value === 'owner'
