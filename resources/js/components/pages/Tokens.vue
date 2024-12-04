@@ -50,47 +50,71 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                    @click="sortTable('name')"
                                 >
                                     Name
+                                    <span v-if="sortKey === 'name'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                    @click="sortTable('id')"
                                 >
                                     ID
+                                    <span v-if="sortKey === 'id'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                    @click="sortTable('collectionId')"
                                 >
                                     Collection ID
+                                    <span v-if="sortKey === 'collectionId'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('owner')"
                                 >
                                     Owner
+                                    <span v-if="sortKey === 'owner'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('attributes')"
                                 >
                                     Attributes
+                                    <span v-if="sortKey === 'attributes'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('frozen')"
                                 >
                                     Frozen
+                                    <span v-if="sortKey === 'frozen'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
-                                v-for="(token, idx) in tokens.items"
-                                :key="token.tokenId"
+                                v-for="(token, idx) in sortedTokens"
+                                :key="idx"
                                 :class="
                                     idx % 2 === 0
                                         ? undefined
@@ -199,6 +223,8 @@ const searchTokensInput = ref({
     tokenType: TokenIdSelectType.Integer,
 });
 const tokenNames = ref<{ [key: string]: string }[]>([]);
+const sortKey = ref('');
+const sortOrder = ref('asc');
 
 const enablePagination = computed(() => searchTokensInput.value.tokenId === '');
 
@@ -260,11 +286,60 @@ const actions = [
     },
 ];
 
+const sortedTokens = computed(() => {
+    if (!sortKey.value) {
+        return tokens.value.items;
+    }
+
+    const sorted = [...tokens.value.items].sort((a, b) => {
+        const aValue =
+            sortKey.value === 'name'
+                ? tokenNames.value[`${a.collection.collectionId}-${a.tokenId}`]
+                : sortKey.value === 'id'
+                ? a.tokenId
+                : sortKey.value === 'collectionId'
+                ? a.collection.collectionId
+                : sortKey.value === 'owner'
+                ? a.owner
+                : sortKey.value === 'attributes'
+                ? a.attributeCount
+                : a.isFrozen;
+        const bValue =
+            sortKey.value === 'name'
+                ? tokenNames.value[`${b.collection.collectionId}-${b.tokenId}`]
+                : sortKey.value === 'id'
+                ? b.tokenId
+                : sortKey.value === 'collectionId'
+                ? b.collection.collectionId
+                : sortKey.value === 'owner'
+                ? b.owner
+                : sortKey.value === 'attributes'
+                ? b.attributeCount
+                : b.isFrozen;
+
+        if (sortOrder.value === 'asc') {
+            return aValue > bValue ? 1 : -1;
+        }
+
+        return aValue < bValue ? 1 : -1;
+    });
+    return sorted;
+});
+
 const debouncedSearch = debounce(async () => {
     if (searchCollectionInput.value) {
         await getTokens();
     }
 }, 1000);
+
+const sortTable = (key) => {
+    if (sortKey.value === key) {
+        sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const cancelSearch = (input) => {
     input.value = undefined;
