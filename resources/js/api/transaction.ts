@@ -48,11 +48,12 @@ export class TransactionApi {
         return ApiService.sendPlatformRequest(data);
     }
 
-    static async getWallets(after?: string) {
+    static async getWallets(after?: string, accounts?: string[]) {
         const data = {
             query: queries.GetWallets,
             variables: {
-                first: 20,
+                accounts,
+                first: accounts?.length ? undefined : 20,
                 after,
             },
         };
