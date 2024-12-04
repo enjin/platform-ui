@@ -1,5 +1,5 @@
-export default `query GetWallets($first: Int, $after: String) {
-    GetWallets(first: $first, after: $after) {
+export default `query GetWallets($first: Int, $after: String, $accounts: [String!]) {
+    GetWallets(first: $first, after: $after, accounts: $accounts) {
       edges {
         node {
           id

@@ -20,14 +20,14 @@
                     </span>
                 </span>
             </div>
-            <div class="inline-flex space-x-1 mb-2">
+            <div class="inline-flex space-x-1">
                 <span> Transaction fee: </span>
                 <LoadingCircle v-if="loadingApi" :size="20" class="my-auto text-primary" />
                 <span v-else class="font-bold animate-fade-in">
                     {{ `${feeCost} ${currencySymbolByNetwork(useAppStore().config.network)}` }}
                 </span>
             </div>
-            <div v-if="deposit" class="inline-flex space-x-1 mb-2">
+            <div v-if="deposit" class="inline-flex space-x-1 !mb-2">
                 <span> Deposit fee: </span>
                 <span class="font-bold animate-fade-in">
                     {{ `${deposit} ${currencySymbolByNetwork(useAppStore().config.network)}` }}
@@ -40,7 +40,7 @@
                 <div
                     v-for="account in walletAccounts"
                     :key="account.address"
-                    class="px-4 py-3 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4"
+                    class="px-4 py-3 border border-light-stroke-strong dark:border-dark-stroke-strong rounded-md cursor-pointer hover:bg-primary/20 transition-all flex items-center space-x-4 w-full"
                     @click="selectAccount(account)"
                 >
                     <Identicon :address="account.address" />
@@ -49,6 +49,13 @@
                         <span class="text-sm">
                             {{ addressShortHex(account.address) }}
                         </span>
+                    </div>
+                    <div class="!ml-auto">
+                        <LoadingCircle v-if="loadingBalance" />
+                        <template v-else>
+                            <span>{{ formatPriceFromENJ(account.balance)?.toFixed(5) ?? 0 }}&nbsp;</span>
+                            <span class="font-bold">{{ currencySymbol }}</span>
+                        </template>
                     </div>
                 </div>
                 <div v-if="!walletAccounts.length" class="text-center">
@@ -69,7 +76,7 @@
 import { DialogTitle } from '@headlessui/vue';
 import Btn from './Btn.vue';
 import Modal from './Modal.vue';
-import { addressShortHex } from '~/util/address';
+import { addressShortHex, addressToPublicKey } from '~/util/address';
 import { useTransactionStore } from '~/store/transaction';
 import { computed, ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
@@ -78,6 +85,8 @@ import Identicon from './Identicon.vue';
 import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 import { useConnectionStore } from '~/store/connection';
 import { useAppStore } from '~/store';
+import { TransactionApi } from '~/api/transaction';
+import { DTOWalletFactory as DTOFactory } from '~/factory/wallet';
 
 const props = defineProps<{
     transaction: any;
@@ -91,11 +100,14 @@ const feeCost = ref();
 const deposit = ref();
 const loadingApi = ref(false);
 const signing = ref(false);
+const loadingBalance = ref(false);
 
 const transactionStore = useTransactionStore();
 const connectionStore = useConnectionStore();
 
 const walletAccounts = computed(() => connectionStore.getWalletAccounts().filter((account) => account.enabled));
+
+const currencySymbol = computed(() => currencySymbolByNetwork(useAppStore().config.network));
 
 const signTransaction = async () => {
     try {
@@ -114,10 +126,12 @@ const signTransaction = async () => {
         loadingApi.value = true;
         connectionStore.getAccounts();
         await transactionStore.init();
+        fetchAccountsBalance();
         feeCost.value = formatPriceFromENJ(props.transaction.fee)?.toFixed(5);
         deposit.value = formatPriceFromENJ(props.transaction.deposit)?.toFixed(5);
         loadingApi.value = false;
     } catch (e) {
+        console.log(e);
         snackbar.error({ title: 'Failed to sign transaction' });
         loadingApi.value = false;
     }
@@ -142,6 +156,26 @@ const selectAccount = async (account) => {
         isLoading.value = false;
         showAccountsModal.value = false;
         signing.value = false;
+    }
+};
+
+const fetchAccountsBalance = async () => {
+    try {
+        loadingBalance.value = true;
+        const addresses = walletAccounts.value.map((account) => addressToPublicKey(account.address));
+        const res = await TransactionApi.getWallets('', addresses);
+        let wallets = DTOFactory.forWallets(res);
+        wallets = wallets.items.map((wallet) => {
+            return {
+                account: wallet.account,
+                balance: wallet.balances.free,
+            };
+        });
+        connectionStore.setAccountsBalance(wallets);
+    } catch {
+        snackbar.error({ title: 'Failed to fetch accounts balance' });
+    } finally {
+        loadingBalance.value = false;
     }
 };
 </script>

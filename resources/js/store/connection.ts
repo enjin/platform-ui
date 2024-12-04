@@ -248,5 +248,14 @@ export const useConnectionStore = defineStore('connection', {
                 this.disabledAccounts = this.disabledAccounts.filter((disabled) => disabled !== account);
             }
         },
+        setAccountsBalance(accounts: any) {
+            this.accounts = this.accounts?.map((account) => {
+                const balance = accounts.find(
+                    (balance: any) => balance.account === publicKeyToAddress(account.address)
+                );
+
+                return { ...account, balance: balance?.balance };
+            });
+        },
     },
 });
