@@ -82,7 +82,7 @@ import { computed, ref } from 'vue';
 import LoadingCircle from './LoadingCircle.vue';
 import snackbar from '~/util/snackbar';
 import Identicon from './Identicon.vue';
-import { currencySymbolByNetwork, formatPriceFromENJ, formatPriceToENJ } from '~/util';
+import { currencySymbolByNetwork, formatPriceFromENJ } from '~/util';
 import { useConnectionStore } from '~/store/connection';
 import { useAppStore } from '~/store';
 import { TransactionApi } from '~/api/transaction';
