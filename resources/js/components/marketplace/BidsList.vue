@@ -36,34 +36,50 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 truncate cursor-pointer"
+                                    @click="sortTable('id')"
                                 >
                                     Bid ID
+                                    <span v-if="sortKey === 'id'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('price')"
                                 >
                                     Price
+                                    <span v-if="sortKey === 'price'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('bidder')"
                                 >
                                     Bidder
+                                    <span v-if="sortKey === 'bidder'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('listing.listingId')"
                                 >
                                     Listing
+                                    <span v-if="sortKey === 'listing.listingId'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
-                                v-for="(bid, idx) in bids.items"
+                                v-for="(bid, idx) in sortedBids"
                                 :key="bid.id"
                                 :class="
                                     idx % 2 === 0
@@ -142,7 +158,8 @@ const bids: Ref<{
 const paginatorRef = ref();
 const modalSlide = ref(false);
 const slideComponent = ref();
-
+const sortKey = ref('');
+const sortOrder = ref('asc');
 const searchInputs = ref([
     {
         name: 'ids',
@@ -172,6 +189,26 @@ const enablePagination = computed(() => !isLoading.value);
 const searchChanged = computed(() => {
     return searchInputs.value.reduce((total, input) => total + input.value.length, 0);
 });
+
+const sortedBids = computed(() => {
+    if (!sortKey.value) return bids.value.items;
+    const sorted = [...bids.value.items].sort((a, b) => {
+        const aValue = sortKey.value === 'price' ? parseInt(a.price) : a[sortKey.value];
+        const bValue = sortKey.value === 'price' ? parseInt(b.price) : b[sortKey.value];
+        if (sortOrder.value === 'asc') return aValue > bValue ? 1 : -1;
+        return aValue < bValue ? 1 : -1;
+    });
+    return sorted;
+});
+
+const sortTable = (key) => {
+    if (sortKey.value === key) {
+        sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const appStore = useAppStore();
 
