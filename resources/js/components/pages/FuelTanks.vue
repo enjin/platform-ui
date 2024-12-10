@@ -41,40 +41,60 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                    @click="sortTable('tankId')"
                                 >
                                     Tank ID
+                                    <span v-if="sortKey === 'tankId'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('name')"
                                 >
                                     Name
+                                    <span v-if="sortKey === 'name'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('accounts')"
                                 >
                                     Accounts
+                                    <span v-if="sortKey === 'accounts'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('owner')"
                                 >
                                     Owner
+                                    <span v-if="sortKey === 'owner'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('frozen')"
                                 >
                                     Frozen
+                                    <span v-if="sortKey === 'frozen'">
+                                        {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                                    </span>
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
-                                v-for="(fueltank, idx) in fueltanks.items"
+                                v-for="(fueltank, idx) in sortedFuelTanks"
                                 :key="fueltank.tankId"
                                 :class="
                                     idx % 2 === 0
@@ -183,6 +203,8 @@ const searchInputs = ref([
         value: [],
     },
 ]);
+const sortKey = ref('');
+const sortOrder = ref('asc');
 
 const enablePagination = computed(() => !isLoading.value);
 
@@ -233,9 +255,54 @@ const actions = [
     },
 ];
 
+const sortedFuelTanks = computed(() => {
+    if (!sortKey.value) {
+        return fueltanks.value.items;
+    }
+
+    const sorted = [...fueltanks.value.items].sort((a, b) => {
+        const aValue =
+            sortKey.value === 'tankId'
+                ? a.tankId
+                : sortKey.value === 'name'
+                ? a.name
+                : sortKey.value === 'accounts'
+                ? a.accountCount
+                : sortKey.value === 'owner'
+                ? a.owner
+                : a.isFrozen;
+        const bValue =
+            sortKey.value === 'tankId'
+                ? b.tankId
+                : sortKey.value === 'name'
+                ? b.name
+                : sortKey.value === 'accounts'
+                ? b.accountCount
+                : sortKey.value === 'owner'
+                ? b.owner
+                : b.isFrozen;
+        if (sortOrder.value === 'asc') {
+            return aValue > bValue ? 1 : -1;
+        }
+
+        return aValue < bValue ? 1 : -1;
+    });
+
+    return sorted;
+});
+
 const debouncedSearch = debounce(async () => {
     await getFuelTanks();
 }, 500);
+
+const sortTable = (key) => {
+    if (sortKey.value === key) {
+        sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const cancelSearch = () => {
     debouncedSearch.cancel();

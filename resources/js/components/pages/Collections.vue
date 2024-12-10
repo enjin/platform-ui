@@ -37,46 +37,58 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                    @click="sortTable('name')"
                                 >
                                     Name
+                                    <span v-if="sortKey === 'name'"> {{ sortOrder === 'asc' ? '↑' : '↓' }} </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong sm:pl-3 cursor-pointer"
+                                    @click="sortTable('id')"
                                 >
                                     ID
+                                    <span v-if="sortKey === 'id'"> {{ sortOrder === 'asc' ? '↑' : '↓' }} </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('owner')"
                                 >
                                     Owner
+                                    <span v-if="sortKey === 'owner'"> {{ sortOrder === 'asc' ? '↑' : '↓' }} </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('attributes')"
                                 >
                                     Attributes
+                                    <span v-if="sortKey === 'attributes'"> {{ sortOrder === 'asc' ? '↑' : '↓' }} </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('tokens')"
                                 >
                                     Tokens
+                                    <span v-if="sortKey === 'tokens'"> {{ sortOrder === 'asc' ? '↑' : '↓' }} </span>
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong cursor-pointer"
+                                    @click="sortTable('frozen')"
                                 >
                                     Frozen
+                                    <span v-if="sortKey === 'frozen'"> {{ sortOrder === 'asc' ? '↑' : '↓' }} </span>
                                 </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-light-surface-primary dark:bg-dark-surface-primary">
                             <tr
-                                v-for="(collection, idx) in collections.items"
+                                v-for="(collection, idx) in sortedCollections"
                                 :key="collection.collectionId"
                                 :class="
                                     idx % 2 === 0
@@ -210,11 +222,59 @@ const slideComponent = ref();
 const searchInput = ref('');
 const collectionNames = ref<{ [key: string]: string }[]>([]);
 const loadingAction = ref<string | null>(null);
+const sortKey = ref('');
+const sortOrder = ref('asc');
 
 const appStore = useAppStore();
 const connectionStore = useConnectionStore();
 
 const enablePagination = computed(() => searchInput.value === '');
+
+const sortedCollections = computed(() => {
+    if (!sortKey.value) {
+        return collections.value.items;
+    }
+
+    const sorted = [...collections.value.items].sort((a, b) => {
+        const aValue =
+            sortKey.value === 'name'
+                ? collectionNames.value[a.collectionId]
+                : sortKey.value === 'id'
+                ? parseInt(a.collectionId)
+                : sortKey.value === 'owner'
+                ? a.owner
+                : sortKey.value === 'attributes'
+                ? a.attributes.length
+                : sortKey.value === 'tokens'
+                ? a.tokens?.totalCount
+                : a.frozen;
+        const bValue =
+            sortKey.value === 'name'
+                ? collectionNames.value[b.collectionId]
+                : sortKey.value === 'id'
+                ? parseInt(b.collectionId)
+                : sortKey.value === 'owner'
+                ? b.owner
+                : sortKey.value === 'attributes'
+                ? b.attributes.length
+                : sortKey.value === 'tokens'
+                ? b.tokens?.totalCount
+                : b.frozen;
+        if (sortOrder.value === 'asc') return aValue > bValue ? 1 : -1;
+        return aValue < bValue ? 1 : -1;
+    });
+
+    return sorted;
+});
+
+const sortTable = (key) => {
+    if (sortKey.value === key) {
+        sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const actions = (collection) => {
     if (collection.tracked) {
