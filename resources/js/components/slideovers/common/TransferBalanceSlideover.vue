@@ -129,7 +129,7 @@ const transfer = async () => {
             })
         );
 
-        const id = res.data?.TransferBalance?.id;
+        const id = res.data?.TransferAllowDeath?.id;
 
         if (id) {
             snackbar.success({
