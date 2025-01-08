@@ -28,7 +28,6 @@
                         label="Image URL"
                         class="w-full"
                         description="The URL of the image for the token."
-                        required
                     />
                     <FormInput
                         v-model="name"
