@@ -360,6 +360,9 @@ const searchChange = (e) => {
 };
 
 const setCollectionIds = () => {
+    if (searchInput.value) {
+        return;
+    }
     const ids = collections.value?.items.map((collection) => {
         return collection.collectionId;
     });
