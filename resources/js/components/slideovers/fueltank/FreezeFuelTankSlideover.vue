@@ -7,7 +7,7 @@
         @submit="freezeFuelTank"
     >
         <h3 class="text-xl font-semibold px-4 sm:px-6 py-4 text-light-content-strong dark:text-dark-content-strong">
-            {{ props.item?.isFrozen ? 'Unfreeze' : 'Freeze' }} Fuel Tank
+            {{ props.item?.isFrozen ? 'Thaw' : 'Freeze' }} Fuel Tank
         </h3>
         <div class="h-0 flex-1 overflow-y-auto">
             <div class="flex flex-1 flex-col justify-between">
@@ -20,12 +20,6 @@
                             description="The wallet address of the fuel tank."
                             disabled
                             required
-                        />
-                        <FormCheckbox
-                            v-model="isFrozen"
-                            name="isFrozen"
-                            label="Is Frozen"
-                            description="The flag for frozen state."
                         />
                         <FormInput
                             v-model="ruleSetId"
@@ -63,15 +57,9 @@ import Btn from '~/components/Btn.vue';
 import snackbar from '~/util/snackbar';
 import { formatData, snackbarErrors } from '~/util';
 import { FuelTankApi } from '~/api/fueltank';
-import FormCheckbox from '~/components/FormCheckbox.vue';
 import { addressToPublicKey } from '~/util/address';
 import { useAppStore } from '~/store';
-import {
-    booleanRequiredSchema,
-    numberNotRequiredSchema,
-    stringNotRequiredSchema,
-    stringRequiredSchema,
-} from '~/util/schemas';
+import { numberNotRequiredSchema, stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
 
 const emit = defineEmits(['close']);
 
@@ -98,7 +86,6 @@ const formRef = ref();
 
 const validation = yup.object({
     tankId: stringRequiredSchema,
-    isFrozen: booleanRequiredSchema,
     ruleSetId: numberNotRequiredSchema.typeError('Rule Set ID must be a number'),
     idempotencyKey: stringNotRequiredSchema,
 });
@@ -121,7 +108,7 @@ const freezeFuelTank = async () => {
         const res = await FuelTankApi.scheduleMutateFreezeState(
             formatData({
                 tankId: addressToPublicKey(tankId.value!),
-                isFrozen: isFrozen.value,
+                isFrozen: !isFrozen.value,
                 ruleSetId: ruleSetId.value,
                 idempotencyKey: idempotencyKey.value,
             })
@@ -131,8 +118,8 @@ const freezeFuelTank = async () => {
 
         if (id) {
             snackbar.success({
-                title: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'} `,
-                text: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'} with transaction id ${id}`,
+                title: `Fuel Tank ${props.item?.isFrozen ? 'Thaw' : 'Freeze'} `,
+                text: `Fuel Tank ${props.item?.isFrozen ? 'Thaw' : 'Freeze'} with transaction id ${id}`,
                 event: id,
             });
             closeSlide();
@@ -140,8 +127,8 @@ const freezeFuelTank = async () => {
     } catch (e) {
         if (snackbarErrors(e)) return;
         snackbar.error({
-            title: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'}`,
-            text: `Fuel Tank ${props.item?.isFrozen ? 'Unfreeze' : 'Freeze'} failed`,
+            title: `Fuel Tank ${props.item?.isFrozen ? 'Thaw' : 'Freeze'}`,
+            text: `Fuel Tank ${props.item?.isFrozen ? 'Thaw' : 'Freeze'} failed`,
         });
     } finally {
         isLoading.value = false;

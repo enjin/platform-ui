@@ -33,7 +33,7 @@
                         </dd>
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3">
+                    <div v-if="item.reservesExistentialDeposit" class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Reserves Existential Deposit
                         </dt>
@@ -42,7 +42,7 @@
                         </dd>
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3">
+                    <div v-if="item.reservesAccountCreationDeposit" class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Reserves Account Creation Deposit
                         </dt>
@@ -51,7 +51,7 @@
                         </dd>
                     </div>
 
-                    <div class="space-y-2 pt-4 pb-3">
+                    <div v-if="item.providesDeposit" class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Provides Deposit
                         </dt>
