@@ -128,7 +128,7 @@ const formRef = ref();
 const validation = yup.object({
     tokenId: stringRequiredSchema,
     collectionId: collectionIdRequiredSchema,
-    amount: numberRequiredSchema,
+    amount: numberRequiredSchema.min(1).typeError('Amount must be a number'),
     keepAlive: booleanNotRequiredSchema,
     removeTokenStorage: booleanNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,

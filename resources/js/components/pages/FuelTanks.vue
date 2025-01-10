@@ -250,7 +250,7 @@ const actions = [
     },
     {
         key: 'freeze',
-        name: 'Freeze / Unfreeze',
+        name: 'Freeze / Thaw',
         component: 'FreezeFuelTankSlideover',
     },
 ];

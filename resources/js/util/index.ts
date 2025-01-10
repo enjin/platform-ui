@@ -63,7 +63,7 @@ export const formatToken = (tokenData: TokenIdType) => {
 export const validateToken = (tokenId) => {
     switch (tokenId.tokenType) {
         case TokenIdSelectType.Integer:
-            return Number.isInteger(parseInt(tokenId.tokenId));
+            return /^[0-9]+$/.test(tokenId.tokenId);
         case TokenIdSelectType.StringId:
         case TokenIdSelectType.Erc1155:
         case TokenIdSelectType.Hash:

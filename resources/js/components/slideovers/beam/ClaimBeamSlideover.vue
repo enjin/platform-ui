@@ -19,7 +19,7 @@
                                 <CopyTextIcon :text="item.code" />
                             </dd>
                         </div>
-                        <QrcodeVue ref="qrCodeRef" :value="item.qr.payload" :size="272" class="mx-auto" />
+                        <img :src="item.qr.url" alt="QR code" class="mx-auto w-[220px]" />
                         <div class="flex space-x-3 justify-center">
                             <Btn dusk="saveImageBtn" class="font-normal" @click="saveImage" primary>Save image</Btn>
                             <Btn dusk="copyLinkBtn" class="font-normal" @click="copyLink" primary>Copy link</Btn>
@@ -35,7 +35,6 @@
 import { ref } from 'vue';
 import Btn from '~/components/Btn.vue';
 import snackbar from '~/util/snackbar';
-import QrcodeVue from 'qrcode.vue';
 import CopyTextIcon from '~/components/CopyTextIcon.vue';
 
 const props = withDefaults(
