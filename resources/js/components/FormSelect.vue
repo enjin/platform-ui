@@ -154,5 +154,5 @@ const openSelect = () => {
 
 onMounted(() => {
     localModelValue.value = 'ALL';
-})
+});
 </script>
