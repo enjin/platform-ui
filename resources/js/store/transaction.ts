@@ -45,8 +45,8 @@ export const useTransactionStore = defineStore('transaction', {
             const blockHash = genesisHash.toHex(); // For immortal transactions the blockhash needs to be the genesis
 
             const payloadToSign: SignerPayloadJSON = {
-                specVersion: runtime.specVersion.toString(),
-                transactionVersion: runtime.transactionVersion.toString(),
+                specVersion: runtime.specVersion.toHex(),
+                transactionVersion: runtime.transactionVersion.toHex(),
                 address: address,
                 blockHash: blockHash,
                 blockNumber: '0x00',

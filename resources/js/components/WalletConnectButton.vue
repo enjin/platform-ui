@@ -43,6 +43,20 @@
                             Polkadot.JS
                         </button>
                     </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                        <button
+                            id="wallet-connect-button__enjin-connect"
+                            :class="[
+                                active
+                                    ? 'bg-light-surface-background dark:bg-dark-surface-background text-light-content-strong dark:text-dark-content-strong'
+                                    : 'text-light-content dark:text-dark-content',
+                                'block px-4 py-2 text-sm w-full text-center transition-all',
+                            ]"
+                            @click="connectWallet('enjin-connect')"
+                        >
+                            MetaMask
+                        </button>
+                    </MenuItem>
                 </template>
                 <template v-else>
                     <MenuItem v-slot="{ active }">

@@ -27,6 +27,7 @@ export class ApiService {
         method = HttpMethods.POST,
         credentials = 'omit',
         mode,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         nest = true,
         auth = true,
     }: {
