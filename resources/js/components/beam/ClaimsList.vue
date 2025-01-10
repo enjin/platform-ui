@@ -53,6 +53,12 @@
                                 >
                                     Quantity
                                 </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-light-content-strong dark:text-dark-content-strong"
+                                >
+                                    Claim Status
+                                </th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
                             </tr>
                         </thead>
@@ -82,6 +88,11 @@
                                     class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
                                 >
                                     {{ beam.quantity }}
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-light-content dark:text-dark-content"
+                                >
+                                    {{ beam.claimStatus ?? '-' }}
                                 </td>
                                 <td
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
@@ -127,6 +138,7 @@ const claims: Ref<{
         id: number;
         code: string;
         quantity: number;
+        claimStatus: string;
     }[];
     cursor: string | null;
 }> = ref({
@@ -154,8 +166,8 @@ const searchInputs = ref([
     },
     {
         name: 'accounts',
-        label: 'Accounts',
-        placeholder: 'Search by account',
+        label: 'Addresses',
+        placeholder: 'Search by address',
         value: [],
         type: 'text',
     },
