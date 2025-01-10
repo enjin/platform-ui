@@ -61,16 +61,20 @@ export const useConnectionStore = defineStore('connection', {
             return new Web3Modal(walletConnectWeb3modalConfig);
         },
         async connectWallet(provider: string, endLoading: Function, notify = true) {
-            if (provider === 'wc') {
-                await this.connectWC(endLoading);
-            }
+            try {
+                if (provider === 'wc') {
+                    await this.connectWC(endLoading);
+                }
 
-            if (provider === 'polkadot.js') {
-                await this.connectPolkadotJS(notify);
-            }
+                if (provider === 'polkadot.js') {
+                    await this.connectPolkadotJS(notify);
+                }
 
-            if (provider === 'enjin-connect') {
-                await this.connectEnjinSnap();
+                if (provider === 'enjin-connect') {
+                    await this.connectEnjinSnap();
+                }
+            } catch (error: any) {
+                snackbar.error({ title: 'Error connecting wallet', text: error?.message });
             }
         },
         async initWalletClient() {
@@ -161,12 +165,10 @@ export const useConnectionStore = defineStore('connection', {
             );
         },
         async connectEnjinSnap() {
-            await this.initPolkadotSnap();
-
-            // enjin-connect should be injected in the window object
             const snap = new EnjinConnectSnap();
 
             if (snap.installed) {
+                await this.initPolkadotSnap();
                 await snap.enable('Platform');
                 this.wallet = true;
                 this.provider = snap.extensionName;
