@@ -2,7 +2,8 @@ import { defineStore } from 'pinia';
 import { ConnectionState } from '~/types/types.interface';
 import { wcRequiredNamespaces } from '~/util';
 import { getAppMetadata, getSdkError } from '@walletconnect/utils';
-import { PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
+import { BaseDotsamaWallet, PolkadotjsWallet, Wallet } from '@talismn/connect-wallets';
+import { hasMetaMask, initPolkadotSnap, isMetamaskSnapsSupported } from '@enjin-io/metamask-enjin-adapter';
 import SignClient from '@walletconnect/sign-client';
 import { HexString } from '@polkadot/util/types';
 import { wcNamespaces, wcProjectId } from '~/util/constants';
@@ -29,6 +30,19 @@ const walletConnectWeb3modalConfig: Web3ModalConfig = {
     },
 };
 
+class EnjinConnectSnap extends BaseDotsamaWallet {
+    override extensionName = 'enjin-connect';
+    override title = 'MetaMask';
+    override get installed(): boolean {
+        return hasMetaMask();
+    }
+    override installUrl = 'https://metamask.io/';
+    override logo = {
+        src: 'https://cdn.nft.io/images/wallet/metamask.svg',
+        alt: 'MetaMask',
+    };
+}
+
 export const useConnectionStore = defineStore('connection', {
     state: (): ConnectionState => ({
         provider: '',
@@ -47,12 +61,20 @@ export const useConnectionStore = defineStore('connection', {
             return new Web3Modal(walletConnectWeb3modalConfig);
         },
         async connectWallet(provider: string, endLoading: Function, notify = true) {
-            if (provider === 'wc') {
-                await this.connectWC(endLoading);
-            }
+            try {
+                if (provider === 'wc') {
+                    await this.connectWC(endLoading);
+                }
 
-            if (provider === 'polkadot.js') {
-                await this.connectPolkadotJS(notify);
+                if (provider === 'polkadot.js') {
+                    await this.connectPolkadotJS(notify);
+                }
+
+                if (provider === 'enjin-connect') {
+                    await this.connectEnjinSnap();
+                }
+            } catch (error: any) {
+                snackbar.error({ title: 'Error connecting wallet', text: error?.message });
             }
         },
         async initWalletClient() {
@@ -126,6 +148,36 @@ export const useConnectionStore = defineStore('connection', {
                 }
             }
         },
+        async initPolkadotSnap() {
+            if (!(await isMetamaskSnapsSupported())) {
+                snackbar.error({
+                    title: 'Your MetaMask version does not support the snaps feature. Please update your MetaMask.',
+                });
+            }
+            await initPolkadotSnap(
+                {
+                    snapOrigin: 'npm:@enjin-io/snap',
+                    config: {
+                        networkName: `${useAppStore().config.network}-matrixchain`,
+                    },
+                },
+                'enjin-connect'
+            );
+        },
+        async connectEnjinSnap() {
+            const snap = new EnjinConnectSnap();
+
+            if (snap.installed) {
+                await this.initPolkadotSnap();
+                await snap.enable('Platform');
+                this.wallet = true;
+                this.provider = snap.extensionName;
+                this.walletSession = snap;
+                snackbar.success({ title: 'Metamask snap connected', save: false });
+            } else {
+                snackbar.error({ title: 'Metamask extension is not installed' });
+            }
+        },
 
         async getSession(): Promise<any> {
             if (this.provider === 'wc') {
@@ -138,6 +190,14 @@ export const useConnectionStore = defineStore('connection', {
                 const pkjs = new PolkadotjsWallet();
                 this.walletSession = pkjs;
 
+                if (this.walletSession.installed) {
+                    await this.walletSession.enable('Platform');
+                    this.wallet = true;
+                }
+            } else if (this.provider === 'enjin-connect') {
+                await this.initPolkadotSnap();
+                const snap = new EnjinConnectSnap();
+                this.walletSession = snap;
                 if (this.walletSession.installed) {
                     await this.walletSession.enable('Platform');
                     this.wallet = true;
@@ -200,7 +260,7 @@ export const useConnectionStore = defineStore('connection', {
                         };
                     });
                 this.accounts = accounts;
-            } else if (this.provider === 'polkadot.js') {
+            } else if (['polkadot.js', 'enjin-connect'].includes(this.provider)) {
                 const accounts = await this.walletSession?.getAccounts();
                 this.accounts = accounts;
             }

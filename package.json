@@ -32,6 +32,7 @@
         "vite": "^4.1.5"
     },
     "dependencies": {
+        "@enjin-io/metamask-enjin-adapter": "^0.1.1",
         "@headlessui/vue": "^1.7.14",
         "@heroicons/vue": "^2.0.18",
         "@polkadot/api": "^12.2.1",
