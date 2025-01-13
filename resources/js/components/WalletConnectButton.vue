@@ -108,6 +108,8 @@ const walletName = computed(() => {
         return 'Enjin Wallet';
     } else if (connectionStore.provider === 'polkadot.js') {
         return 'Polkadot.JS';
+    } else if (connectionStore.provider === 'enjin-connect') {
+        return 'MetaMask';
     }
 
     return '';
