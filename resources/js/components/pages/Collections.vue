@@ -372,8 +372,8 @@ const setCollectionIds = () => {
 const getCollection = async () => {
     isLoading.value = true;
     try {
-        const res = await CollectionApi.getCollection(searchInput.value);
-        collections.value = DTOFactory.forCollection(res);
+        const res = await CollectionApi.getCollections([parseInt(searchInput.value)]);
+        collections.value = DTOFactory.forCollections(res);
         setTrackableCollections();
         setCollectionNames();
     } catch (e) {
@@ -447,7 +447,7 @@ const loadMoreCollectionsWithObserver = () => {
                 try {
                     if (!collections.value.cursor || isPaginationLoading.value) return;
                     isPaginationLoading.value = true;
-                    const res = await CollectionApi.getCollections(collections.value.cursor);
+                    const res = await CollectionApi.getCollections([], collections.value.cursor);
                     const data = DTOFactory.forCollections(res);
                     collections.value = { items: [...collections.value.items, ...data.items], cursor: data.cursor };
                     setTrackableCollections();

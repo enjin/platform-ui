@@ -1,5 +1,5 @@
-export default `query GetCollections($after: String, $first: Int) {
-    GetCollections(after: $after, first: $first) {
+export default `query GetCollections($collectionIds: [BigInt], $after: String, $first: Int) {
+    GetCollections(collectionIds: $collectionIds, after: $after, first: $first) {
         edges {
             node {
                 collectionId

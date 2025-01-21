@@ -3,10 +3,11 @@ import mutations from './mutations';
 import queries from './queries';
 
 export class CollectionApi {
-    static async getCollections(after: string | null = null) {
+    static async getCollections(ids: number[] | null = null, after: string | null = null) {
         const data = {
             query: queries.GetCollections,
             variables: {
+                collectionIds: ids,
                 after: after,
                 first: 20,
             },
