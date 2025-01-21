@@ -71,7 +71,9 @@
                                         Whitelisted Callers
                                     </label>
                                     <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                        The wallet accounts that are allowed to use the fuel tank.
+                                        Defines a list of accounts (as an array of strings) that are allowed to dispatch
+                                        transactions. Only accounts included in this whitelist can dispatch using this
+                                        rule set.
                                     </p>
                                 </div>
                                 <div class="w-5"></div>
@@ -91,7 +93,7 @@
 
                     <div v-if="checkSelectedDispatchRule(DispatchRules.RequireToken)" class="space-y-2 relative pt-3">
                         <div
-                            class="absolute -right-1 top-1 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
+                            class="absolute -right-1 top-2 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
                             @click="removeSelectedDispatch(DispatchRules.RequireToken)"
                         >
                             <XMarkIcon class="w-6 h-6 m-auto" />
@@ -103,7 +105,8 @@
                                 Require Token
                             </h3>
                             <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                The wallet account must have a specific token in their wallet to use the fuel tank.
+                                Specifies that only accounts holding a specific multiToken are eligible to dispatch
+                                transactions using this rule set.
                             </p>
                         </div>
                         <div :class="`grid grid-cols-${isModal ? '1' : '2'} gap-4`">
@@ -115,6 +118,52 @@
                                 placeholder="Collection ID"
                             />
                             <TokenIdInput class="col-span-1" v-model="tokenId" placeholder="Token ID" />
+                        </div>
+                    </div>
+
+                    <div
+                        v-if="checkSelectedDispatchRule(DispatchRules.RequireSignature)"
+                        class="space-y-2 relative pt-3"
+                    >
+                        <div
+                            class="absolute -right-1 top-2 cursor-pointer rounded-full p-2 hover:bg-light-surface-background dark:bg-dark-surface-background !bg-opacity-50 transition-all text-red-400"
+                            @click="removeSelectedDispatch(DispatchRules.RequireSignature)"
+                        >
+                            <XMarkIcon class="w-6 h-6 m-auto" />
+                        </div>
+                        <div>
+                            <h3
+                                class="text-sm font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+                            >
+                                Require Signature
+                            </h3>
+                            <p class="mt-1 text-sm text-light-content dark:text-dark-content">
+                                Requires each call to include a signature from the specified account. The account
+                                provided in this argument must sign the call for it to be accepted by the fuel tank.
+                                This rule is ideal for scenarios where the requireSignature is set to the daemon
+                                account, and dispatches are broadcasted from
+                                <a
+                                    href="https://docs.enjin.io/docs/using-managed-wallets"
+                                    target="_blank"
+                                    class="text-primary underline"
+                                    >managed wallets</a
+                                >. It enables a fuel tank to be restricted to managed wallets without explicitly storing
+                                each wallet address, saving storage fees and allowing dynamic whitelisting of dispatch
+                                accounts.
+                                <a
+                                    href="https://docs.enjin.io/docs/fuel-tank-pallet#require-signature"
+                                    target="_blank"
+                                    class="text-primary underline"
+                                    >Learn more.</a
+                                >
+                            </p>
+                        </div>
+                        <div :class="`grid grid-cols-${isModal ? '1' : '2'} gap-4`">
+                            <FormInput
+                                v-model="requireSignature"
+                                name="requireSignature"
+                                placeholder="Account Address"
+                            />
                         </div>
                     </div>
 
@@ -141,8 +190,8 @@
                                         Whitelisted Collections
                                     </label>
                                     <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                        The wallet account must have a specific token in their wallet to use the fuel
-                                        tank.
+                                        Requires the caller to hold any token from the specified collection. Only
+                                        accounts owning a token from the collection can dispatch using this rule set.
                                     </p>
                                 </div>
                                 <div class="w-5"></div>
@@ -174,7 +223,7 @@
                             v-model="maxFuelBurnPerTransaction"
                             name="maxFuelBurnPerTransaction"
                             label="Max Fuel Burn Per Transaction"
-                            description="The maximum amount of fuel can be used per transaction."
+                            description="Limits the maximum amount of fuel that can be consumed in a single transaction. Dispatches exceeding this limit will fail"
                             type="number"
                         />
                     </div>
@@ -223,7 +272,8 @@
                                 User Fuel Budget
                             </h3>
                             <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                The rule for fuel budget.
+                                Defines the total amount of fuel allocated to a specific tank user account. Dispatches
+                                from the user will fail once their fuel budget is exhausted.
                             </p>
                         </div>
                         <div class="grid grid-cols-2 space-x-4">
@@ -259,7 +309,8 @@
                                 Tank Fuel Budget
                             </h3>
                             <p class="mt-1 text-sm text-light-content dark:text-dark-content">
-                                The rule for fuel budget.
+                                Sets the total fuel allocated to the rule set. Once the tank's fuel budget is depleted,
+                                all dispatches using this rule set will fail.
                             </p>
                         </div>
                         <div class="grid grid-cols-2 space-x-4">
@@ -342,6 +393,7 @@ const tankFuelresetPeriod = ref(props.modelValue.tankFuelBudget?.resetPeriod ?? 
 const permittedExtrinsics = ref(props.modelValue.permittedExtrinsics ?? []);
 const permittedExtrinsicValue = ref('');
 const selectedDispatchRule = ref('');
+const requireSignature = ref('');
 const selectedDispatchRules: Ref<DispatchRules[]> = ref([]);
 
 const transactionMethods = Object.values(TransactionMethods);
@@ -364,6 +416,7 @@ const validation = yup.object({
             collection: numberNotRequiredSchema,
         })
     ),
+    requireSignature: stringNotRequiredSchema,
     maxFuelBurnPerTransaction: numberNotRequiredSchema.typeError('Max Fuel Burn Per Transaction must be a number'),
     userFuelAmount: numberNotRequiredSchema.typeError('User Fuel Amount must be a number'),
     userFuelresetPeriod: numberNotRequiredSchema.typeError('User Fuel Reset Period must be a number'),
@@ -445,6 +498,9 @@ const clearSelectedDispatchRule = (rule: DispatchRules) => {
             tankFuelAmount.value = null;
             tankFuelresetPeriod.value = null;
             break;
+        case DispatchRules.RequireSignature:
+            requireSignature.value = '';
+            break;
     }
 };
 
@@ -468,6 +524,7 @@ const hasChanged = computed(() =>
             resetPeriod: tankFuelresetPeriod.value,
         }),
         permittedExtrinsics: permittedExtrinsics.value,
+        requireSignature: requireSignature.value,
     })
 );
 

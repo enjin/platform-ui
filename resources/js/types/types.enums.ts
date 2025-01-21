@@ -102,6 +102,7 @@ export enum DispatchRules {
     TankFuelBudget = 'TankFuelBudget',
     RequireToken = 'RequireToken',
     PermittedExtrinsic = 'PermittedExtrinsic',
+    RequireSignature = 'RequireSignature',
 }
 
 export enum TransactionMethods {
