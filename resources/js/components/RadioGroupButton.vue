@@ -1,7 +1,7 @@
 <template>
     <RadioGroup v-model="localModelValue">
         <RadioGroupLabel
-            class="text-base font-semibold leading-6 text-light-content-strong dark:text-dark-content-strong"
+            class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
             v-if="label"
         >
             {{ label }}

@@ -5,7 +5,7 @@
         class="fixed bottom-4 right-6 text-white bg-light-surface-brand text-lg font-medium py-2 px-5 rounded-full flex items-center z-30"
     >
         <QuestionMarkCircleIcon
-            class="mr-1 w-5 h-5 cursor-pointer text-light-content dark:text-dark-content"
+            class="mr-1 w-5 h-5 cursor-pointer text-dark-content"
             stroke-width="36"
         />
         <span>Support</span>

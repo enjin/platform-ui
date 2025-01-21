@@ -33,12 +33,12 @@
                                 description="The fuel tank name."
                                 required
                             />
-                            <MultiCheckbox
-                                v-model="flags"
-                                name="flags"
-                                :options="depositFlags"
-                                label="Deposit option"
-                                cols-class="grid-cols-1 md:!grid-cols-2"
+                            <RadioInput
+                                v-model:value="coveragePolicy"
+                                name="coveragePolicy"
+                                label="Coverage Policy"
+                                description="Defines the coverage scope for the Fuel Tank"
+                                :items="coverageItems"
                             />
                             <Toggle
                                 v-model:toggle="accountManagement"
@@ -46,12 +46,25 @@
                                 label="Account Management"
                                 tooltip="When enabled, users can add or remove their own accounts from the fuel tank. If disabled, only the fuel tank owner can manage accounts."
                             />
-                            <MultiCheckbox
-                                v-if="accountManagement"
-                                v-model="flags"
-                                name="flags"
-                                :options="fuelFlags"
-                                cols-class="grid-cols-1 md:!grid-cols-2"
+                            <FormCheckbox
+                                v-model="reserveAccountCreationDeposit"
+                                name="reserveAccountCreationDeposit"
+                                label="Reserve Account Creation Deposit"
+                                tooltip="When enabled, the fuel tank will cover the storage deposit required for creating user accounts within this fuel tank. If disabled, users will need to provide their own deposit for account creation."
+                                :disabled="!accountManagement"
+                                hide-label
+                            />
+                            <FormCheckbox
+                                v-model="requireAccount"
+                                name="requireAccount"
+                                label="Require account"
+                                tooltip="Specifies if the caller must have a Tank User Account to dispatch transactions. If true, the caller must have an account, or the dispatch will fail. If false, the caller can dispatch without an account"
+                            />
+                            <FormInput
+                                v-model="signingAccount"
+                                name="signingAccount"
+                                label="Signing Account"
+                                description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
                             />
                             <FormInput
                                 v-if="useAppStore().advanced"
@@ -175,7 +188,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, Ref, watch } from 'vue';
+import { ref, computed, Ref } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import Btn from '~/components/Btn.vue';
@@ -193,16 +206,17 @@ import { XMarkIcon } from '@heroicons/vue/20/solid';
 import DispatchRuleForm from '~/components/fueltank/DispatchRuleForm.vue';
 import FormList from '~/components/FormList.vue';
 import { DispatchRulesValuesInterface } from '~/types/types.interface';
-import MultiCheckbox from '~/components/MultiCheckbox.vue';
 import Tooltip from '~/components/Tooltip.vue';
 import Toggle from '~/components/Toggle.vue';
+import RadioInput from '~/components/RadioInput.vue';
+import FormCheckbox from '~/components/FormCheckbox.vue';
 
 const router = useRouter();
 
 const formRef = ref();
 const isLoading = ref(false);
 const name = ref('');
-const whitelistedCallers = ref([{ caller: '' }]);
+const whitelistedCallers = ref<{ caller: string }[]>([]);
 const collectionId = ref('');
 const tokenId = ref({
     tokenId: '',
@@ -210,11 +224,19 @@ const tokenId = ref({
 });
 const idempotencyKey = ref('');
 const dispatchRules: Ref<{ valid: boolean; values: DispatchRulesValuesInterface }[]> = ref([]);
-const flags: Ref<string[]> = ref([]);
 const accountManagement = ref(false);
+const coveragePolicy = ref('FEES');
+const requireAccount = ref(false);
+const signingAccount = ref('');
+const reserveAccountCreationDeposit = ref(false);
 
 const validation = yup.object({
     name: yup.string().nullable().required(),
+    coveragePolicy: yup.string().nullable(),
+    accountManagement: yup.boolean().nullable(),
+    reserveAccountCreationDeposit: yup.boolean().nullable(),
+    requireAccount: yup.boolean().nullable(),
+    signingAccount: yup.string().nullable(),
 });
 
 const isAllValid = computed(() => {
@@ -225,21 +247,17 @@ const isAllValid = computed(() => {
     );
 });
 
-const depositFlags = ref([
+const coverageItems = ref([
     {
-        label: 'Provide Deposit',
-        value: 'provideDeposit',
-        tooltip:
-            'When enabled, the fuel tank will cover storage deposits for operations that require it. If disabled, users will need to provide their own deposits.',
+        label: 'Fees',
+        value: 'FEES',
+        description: 'The Fuel Tank subsidizes only transaction fees.',
     },
-]);
-
-const fuelFlags = ref([
     {
-        label: 'Reserve Account Creation Deposit',
-        value: 'reserveAccountCreationDeposit',
-        tooltip:
-            'When enabled, the fuel tank will cover the storage deposit required for creating user accounts within this fuel tank. If disabled, users will need to provide their own deposit for account creation.',
+        label: 'Fees and Deposit',
+        value: 'FEES_AND_DEPOSIT',
+        description:
+            'The Fuel Tank covers both transaction fees and any storage deposit required by the dispatched call.',
     },
 ]);
 
@@ -288,12 +306,12 @@ const createFueltank = async () => {
         const res = await FuelTankApi.createFuelTank(
             formatData({
                 name: name.value,
-                providesDeposit: flags.value.includes('provideDeposit'),
-                reservesAccountCreationDeposit: accountManagement.value
-                    ? flags.value.includes('reserveAccountCreationDeposit')
-                    : null,
+                reservesAccountCreationDeposit: accountManagement.value ? reserveAccountCreationDeposit.value : null,
+                coveragePolicy: coveragePolicy.value,
                 accountRules: {
-                    whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller),
+                    whitelistedCallers: whitelistedCallers.value.length
+                        ? whitelistedCallers.value.map((item: any) => item.caller)
+                        : null,
                     requireToken: collectionId.value
                         ? {
                               collectionId: collectionId.value,
@@ -301,8 +319,10 @@ const createFueltank = async () => {
                           }
                         : null,
                 },
-                idempotencyKey: idempotencyKey.value,
                 dispatchRules: dispatchRules.value.map((item: any) => item.values),
+                requireAccount: requireAccount.value,
+                signingAccount: signingAccount.value,
+                idempotencyKey: idempotencyKey.value,
             })
         );
 
@@ -326,13 +346,4 @@ const createFueltank = async () => {
         isLoading.value = false;
     }
 };
-
-watch(
-    () => flags.value,
-    () => {
-        if (flags.value.includes('reserveAccountCreationDeposit')) {
-            flags.value.push('accountManagement');
-        }
-    }
-);
 </script>
