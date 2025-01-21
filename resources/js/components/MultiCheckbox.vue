@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="w-full max-w-md">
         <label
             v-if="label"
             class="block text-sm font-medium leading-6 text-light-content-strong dark:text-dark-content-strong"
@@ -15,29 +15,47 @@
             type="checkbox"
             class="hidden"
         />
-        <div class="mt-4 grid grid-cols-3 gap-y-6 gap-x-4" :class="colsClass">
+        <div class="space-y-2 mt-4">
             <template v-for="option in options" :key="option.value">
                 <div
                     :class="[
-                        hasValue(option.value) ? 'ring-primary' : 'ring-light-stroke-strong',
-                        'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
+                        hasValue(option.value)
+                            ? 'bg-primary/90 text-white '
+                            : 'bg-light-surface-background dark:bg-dark-surface-background',
                     ]"
+                    class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md outline-none focus:outline-none transition-all"
                     @click="updateCheckbox(option.value)"
                 >
-                    <span class="flex flex-1">
-                        <span class="flex">
-                            <span
-                                class="block text-sm font-medium text-light-content-strong dark:text-dark-content-strong truncate"
-                            >
-                                {{ option.label }}
-                            </span>
-                            <Tooltip class="!flex items-center" v-if="option.tooltip" :text="option.tooltip">
-                                <QuestionMarkCircleIcon
-                                    class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                    <div class="flex w-full items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="text-sm">
+                                <label
+                                    :class="hasValue(option.value) ? 'text-white' : 'text-gray-900 dark:text-white'"
+                                    class="flex font-medium transition-all"
+                                >
+                                    {{ option.label }}
+                                    <Tooltip v-if="option.tooltip" class="!flex items-center" :text="option.tooltip">
+                                        <QuestionMarkCircleIcon
+                                            class="ml-1 w-4 h-4 cursor-pointer text-light-content dark:text-dark-content"
+                                            :class="hasValue(option.value) ? '!text-white' : ''"
+                                        />
+                                    </Tooltip>
+                                </label>
+                            </div>
+                        </div>
+                        <div v-show="hasValue(option.value)" class="shrink-0 text-white">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="12" fill="#fff" fill-opacity="0.2" />
+                                <path
+                                    d="M7 13l3 3 7-7"
+                                    stroke="#fff"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
                                 />
-                            </Tooltip>
-                        </span>
-                    </span>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </template>
         </div>
@@ -59,7 +77,6 @@ const props = withDefaults(
         required?: boolean;
         tooltip?: string;
         readmore?: string;
-        colsClass?: string;
     }>(),
     {
         required: false,

@@ -21,23 +21,32 @@
                             disabled
                             required
                         />
-                        <FormCheckbox
-                            v-model="providesDeposit"
-                            name="providesDeposit"
-                            label="Provides Deposit"
-                            description="The flag for deposit."
+                        <RadioInput
+                            v-model:value="coveragePolicy"
+                            name="coveragePolicy"
+                            label="Coverage Policy"
+                            description="Defines the coverage scope for the Fuel Tank"
+                            :items="coverageItems"
+                        />
+                        <Toggle
+                            v-model:toggle="accountManagement"
+                            class="mt-4"
+                            label="Account Management"
+                            tooltip="When enabled, users can add or remove their own accounts from the fuel tank. If disabled, only the fuel tank owner can manage accounts."
                         />
                         <FormCheckbox
-                            v-model="reservesExistentialDeposit"
-                            name="reservesExistentialDeposit"
-                            label="Reserves Existential Deposit"
-                            description="The flag for existential deposit."
+                            v-model="reserveAccountCreationDeposit"
+                            name="reserveAccountCreationDeposit"
+                            label="Reserve Account Creation Deposit"
+                            tooltip="When enabled, the fuel tank will cover the storage deposit required for creating user accounts within this fuel tank. If disabled, users will need to provide their own deposit for account creation."
+                            :disabled="!accountManagement"
+                            hide-label
                         />
-                        <FormCheckbox
-                            v-model="reservesAccountCreationDeposit"
-                            name="reservesAccountCreationDeposit"
-                            label="Reserves Account Creation Deposit"
-                            description="The flag for account creation deposit."
+                        <FormInput
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
                         />
                         <FormList
                             v-model="whitelistedCallers"
@@ -128,12 +137,9 @@ import { addressToPublicKey } from '~/util/address';
 import { TokenIdType } from '~/types/types.interface';
 import { useAppStore } from '~/store';
 import FormSelect from '~/components/FormSelect.vue';
-import {
-    booleanNotRequiredSchema,
-    booleanRequiredSchema,
-    stringNotRequiredSchema,
-    stringRequiredSchema,
-} from '~/util/schemas';
+import { stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
+import RadioInput from '~/components/RadioInput.vue';
+import Toggle from '~/components/Toggle.vue';
 
 const emit = defineEmits(['close']);
 
@@ -143,9 +149,10 @@ const props = withDefaults(
     defineProps<{
         item?: {
             tankId: string;
-            providesDeposit: boolean;
-            reservesExistentialDeposit: boolean;
             reservesAccountCreationDeposit: boolean;
+            coveragePolicy: string;
+            isFrozen: boolean;
+            signingAccount: string;
             whitelistedCallers: { caller: string }[];
             collectionId: string;
             tokenId: TokenIdType;
@@ -158,10 +165,7 @@ const props = withDefaults(
 
 const isLoading = ref(false);
 const tankId = ref(props.item?.tankId);
-const providesDeposit = ref(props.item?.providesDeposit ?? false);
-const reservesExistentialDeposit = ref(props.item?.reservesExistentialDeposit ?? false);
-const reservesAccountCreationDeposit = ref(props.item?.reservesAccountCreationDeposit ?? false);
-const whitelistedCallers = ref([{ caller: '' }]);
+const whitelistedCallers = ref<{ caller: string }[]>([]);
 const collectionId = ref('');
 const tokenId = ref({
     tokenId: '',
@@ -169,8 +173,26 @@ const tokenId = ref({
 });
 const idempotencyKey = ref('');
 const formRef = ref();
+const accountManagement = ref(props.item?.reservesAccountCreationDeposit ? true : false);
+const coveragePolicy = ref(props.item?.coveragePolicy ?? '');
+const signingAccount = ref(props.item?.signingAccount ?? '');
+const reserveAccountCreationDeposit = ref(props.item?.reservesAccountCreationDeposit ?? false);
 
 const collectionIds = computed(() => appStore.collections);
+
+const coverageItems = ref([
+    {
+        label: 'Fees',
+        value: 'FEES',
+        description: 'The Fuel Tank subsidizes only transaction fees.',
+    },
+    {
+        label: 'Fees and Deposit',
+        value: 'FEES_AND_DEPOSIT',
+        description:
+            'The Fuel Tank covers both transaction fees and any storage deposit required by the dispatched call.',
+    },
+]);
 
 const addCaller = () => {
     whitelistedCallers.value.push({ caller: '' });
@@ -182,9 +204,10 @@ const removeCaller = (index: number) => {
 
 const validation = yup.object({
     tankId: stringRequiredSchema,
-    providesDeposit: booleanRequiredSchema,
-    reservesExistentialDeposit: booleanNotRequiredSchema,
-    reservesAccountCreationDeposit: booleanNotRequiredSchema,
+    coveragePolicy: yup.string().nullable(),
+    accountManagement: yup.boolean().nullable(),
+    reserveAccountCreationDeposit: yup.boolean().nullable(),
+    signingAccount: yup.string().nullable(),
     whitelistedCallers: yup.array().of(
         yup.object({
             caller: stringRequiredSchema,
@@ -208,15 +231,25 @@ const mutateFuelTank = async () => {
         return;
     }
 
+    if (!props.item?.isFrozen) {
+        snackbar.error({
+            title: 'Fuel Tank mutation',
+            text: 'Fuel tank need to be frozen to mutate',
+        });
+
+        return;
+    }
+
     try {
         isLoading.value = true;
         const res = await FuelTankApi.mutateFuelTank(
             formatData({
                 tankId: addressToPublicKey(tankId.value!),
                 mutation: {
-                    providesDeposit: providesDeposit.value,
-                    reservesExistentialDeposit: reservesExistentialDeposit.value,
-                    reservesAccountCreationDeposit: reservesAccountCreationDeposit.value,
+                    reservesAccountCreationDeposit: accountManagement.value
+                        ? reserveAccountCreationDeposit.value
+                        : null,
+                    coveragePolicy: coveragePolicy.value,
                     accountRules: {
                         whitelistedCallers: formatData(whitelistedCallers.value.map((item: any) => item.caller)),
                         requireToken: collectionId.value
@@ -227,6 +260,7 @@ const mutateFuelTank = async () => {
                             : null,
                     },
                 },
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
             })
         );

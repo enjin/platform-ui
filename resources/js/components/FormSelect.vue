@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import {
     Combobox,
     ComboboxInput,
@@ -151,8 +151,4 @@ const openSelect = () => {
     }
     comboButtonRef.value.el.click();
 };
-
-onMounted(() => {
-    localModelValue.value = 'ALL';
-});
 </script>

@@ -6,6 +6,8 @@ export default `query GetFuelTanks($names: [String!], $tankIds: [String!], $afte
             publicKey
           }
           name
+          reservesAccountCreationDeposit
+          coveragePolicy
           isFrozen
           accountCount
           owner {
@@ -23,9 +25,6 @@ export default `query GetFuelTanks($names: [String!], $tankIds: [String!], $afte
             value
             isFrozen
           }
-          reservesExistentialDeposit
-          reservesAccountCreationDeposit
-          providesDeposit
         }
         cursor
       }

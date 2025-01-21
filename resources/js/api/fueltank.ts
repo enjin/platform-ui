@@ -103,10 +103,11 @@ export class FuelTankApi {
             query: mutations.CreateFuelTank,
             variables: {
                 name: createFuelTankData.name,
-                reservesExistentialDeposit: createFuelTankData.reservesExistentialDeposit,
                 reservesAccountCreationDeposit: createFuelTankData.reservesAccountCreationDeposit,
-                providesDeposit: createFuelTankData.providesDeposit,
+                coveragePolicy: createFuelTankData.coveragePolicy,
                 accountRules: createFuelTankData.accountRules,
+                requireAccount: createFuelTankData.requireAccount,
+                signingAccount: createFuelTankData.signingAccount,
                 dispatchRules: createFuelTankData.dispatchRules,
                 idempotencyKey: createFuelTankData.idempotencyKey,
             },
@@ -133,6 +134,7 @@ export class FuelTankApi {
             variables: {
                 tankId: mutateFuelTankData.tankId,
                 mutation: mutateFuelTankData.mutation,
+                signingAccount: mutateFuelTankData.signingAccount,
                 idempotencyKey: mutateFuelTankData.idempotencyKey,
             },
         };
