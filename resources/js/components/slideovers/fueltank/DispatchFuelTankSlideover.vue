@@ -108,6 +108,18 @@
                             description="creates an account for 'origin' if doesn't exist."
                         />
                         <FormInput
+                            v-model="dispatchSignature"
+                            name="dispatchSignature"
+                            label="Dispatch Signature"
+                            description="The expirable signature to use for this dispatch."
+                        />
+                        <FormInput
+                            v-model="dispatchExpiryBlock"
+                            name="dispatchExpiryBlock"
+                            label="Dispatch Signature Expiry Block"
+                            description="The expiry block for the dispatch signature."
+                        />
+                        <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
@@ -168,8 +180,10 @@ const variables = ref([{ key: '', value: '' }]);
 const touch = ref(false);
 const idempotencyKey = ref('');
 const formRef = ref();
+const dispatchSignature = ref('');
+const dispatchExpiryBlock = ref();
 
-const callOptions = ['MULTI_TOKENS', 'FUEL_TANKS'];
+const callOptions = ['MULTI_TOKENS', 'FUEL_TANKS', 'MARKETPLACE'];
 
 const validation = yup.object({
     tankId: stringRequiredSchema,
@@ -218,8 +232,11 @@ const dispatchFuelTank = async () => {
                     call: call.value,
                     query: query.value,
                     variables: formatVariables(variables.value),
+                    settings: {
+                        paysRemainingFee: paysRemainingFee.value,
+                        signature: { signature: dispatchSignature.value, expiryBlock: dispatchExpiryBlock.value },
+                    },
                 },
-                paysRemainingFee: paysRemainingFee.value,
                 idempotencyKey: idempotencyKey.value,
             }),
             touch.value
