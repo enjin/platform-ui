@@ -33,15 +33,6 @@
                         </dd>
                     </div>
 
-                    <div v-if="item.reservesExistentialDeposit" class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-light-content dark:text-dark-content">
-                            Reserves Existential Deposit
-                        </dt>
-                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
-                            {{ item.reservesExistentialDeposit }}
-                        </dd>
-                    </div>
-
                     <div v-if="item.reservesAccountCreationDeposit" class="space-y-2 pt-4 pb-3">
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">
                             Reserves Account Creation Deposit
@@ -51,12 +42,10 @@
                         </dd>
                     </div>
 
-                    <div v-if="item.providesDeposit" class="space-y-2 pt-4 pb-3">
-                        <dt class="text-base font-medium text-light-content dark:text-dark-content">
-                            Provides Deposit
-                        </dt>
+                    <div v-if="item.coveragePolicy" class="space-y-2 pt-4 pb-3">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Coverage Policy</dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
-                            {{ item.providesDeposit }}
+                            {{ item.coveragePolicy }}
                         </dd>
                     </div>
 
@@ -71,6 +60,13 @@
                         <dt class="text-base font-medium text-light-content dark:text-dark-content">Total Accounts</dt>
                         <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
                             {{ item.accountCount }}
+                        </dd>
+                    </div>
+
+                    <div v-if="item.signingAccount" class="space-y-2 pt-4 pb-3">
+                        <dt class="text-base font-medium text-light-content dark:text-dark-content">Signing Account</dt>
+                        <dd class="mt-1 text-sm text-light-content-strong dark:text-dark-content-strong">
+                            {{ item.signingAccount }}
                         </dd>
                     </div>
 
@@ -198,9 +194,9 @@ const props = defineProps<{
         tankId: string;
         name: string;
         owner: string;
-        reservesExistentialDeposit: string;
         reservesAccountCreationDeposit: string;
-        providesDeposit: string;
+        coveragePolicy: string;
+        signingAccount: string;
         isFrozen: boolean;
         accountCount: number;
         accountRules: {

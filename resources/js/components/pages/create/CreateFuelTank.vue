@@ -309,9 +309,7 @@ const createFueltank = async () => {
                 reservesAccountCreationDeposit: accountManagement.value ? reserveAccountCreationDeposit.value : null,
                 coveragePolicy: coveragePolicy.value,
                 accountRules: {
-                    whitelistedCallers: whitelistedCallers.value.length
-                        ? whitelistedCallers.value.map((item: any) => item.caller)
-                        : null,
+                    whitelistedCallers: formatData(whitelistedCallers.value.map((item: any) => item.caller)),
                     requireToken: collectionId.value
                         ? {
                               collectionId: collectionId.value,

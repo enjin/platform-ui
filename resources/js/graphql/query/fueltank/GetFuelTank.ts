@@ -4,6 +4,8 @@ export default `query GetFuelTank($name: String, $tankId: String) {
         publicKey
       }
       name
+      reservesAccountCreationDeposit
+      coveragePolicy
       isFrozen
       accountCount
       owner {
