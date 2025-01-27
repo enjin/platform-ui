@@ -26,6 +26,7 @@ import SnackbarGroup from '~/components/SnackbarGroup.vue';
 import UserNavbar from '~/components/UserNavbar.vue';
 import { computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useConnectionStore } from '~/store/connection';
 
 const appStore = useAppStore();
 const router = useRouter();
@@ -65,7 +66,12 @@ watch(
 watch(
     () => appStore.loggedIn,
     () => {
-        if (!appStore.loggedIn) router.push({ name: 'platform.auth.login' });
+        if (!appStore.loggedIn) {
+            router.push({ name: 'platform.auth.setup' });
+        } else {
+            useConnectionStore().getSession();
+            appStore.fetchCollectionIds();
+        }
     }
 );
 </script>

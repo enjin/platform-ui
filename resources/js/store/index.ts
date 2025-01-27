@@ -95,9 +95,6 @@ export const useAppStore = defineStore('app', {
                 if (this.hasMarketplacePackage) {
                     this.addMarketplaceNavigation();
                 }
-
-                await useConnectionStore().getSession();
-                await this.fetchCollectionIds();
             } catch (error: any) {
                 snackbar.error({ title: error });
                 if (this.config.tenant) {
