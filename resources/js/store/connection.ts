@@ -203,6 +203,13 @@ export const useConnectionStore = defineStore('connection', {
                     this.wallet = true;
                 }
             }
+
+            if (!this.wallet) {
+                this.provider = '';
+
+                return;
+            }
+
             return this.walletSession;
         },
         async disconnectWallet() {
