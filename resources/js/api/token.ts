@@ -62,6 +62,7 @@ export class TokenApi {
                     keepAlive: tokenData.keepAlive,
                     removeTokenStorage: tokenData.removeTokenStorage,
                 },
+                signingAccount: tokenData.signingAccount,
                 idempotencyKey: tokenData.idempotencyKey,
                 skipValidation: tokenData.skipValidation,
             },

@@ -50,6 +50,12 @@
                             description="If true, the token storage will be removed if no tokens are left. Defaults to False."
                         />
                         <FormInput
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
@@ -90,6 +96,7 @@ import { TokenIdSelectType } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import { useAppStore } from '~/store';
 import {
+    addressNotRequiredSchema,
     booleanNotRequiredSchema,
     collectionIdRequiredSchema,
     numberRequiredSchema,
@@ -122,6 +129,7 @@ const amount = ref();
 const keepAlive = ref(false);
 const removeTokenStorage = ref(false);
 const idempotencyKey = ref('');
+const signingAccount = ref();
 const skipValidation = ref(false);
 const formRef = ref();
 
@@ -131,6 +139,7 @@ const validation = yup.object({
     amount: numberRequiredSchema.min(1).typeError('Amount must be a number'),
     keepAlive: booleanNotRequiredSchema,
     removeTokenStorage: booleanNotRequiredSchema,
+    signingAccount: addressNotRequiredSchema,
     idempotencyKey: stringNotRequiredSchema,
     skipValidation: booleanNotRequiredSchema,
 });
@@ -157,6 +166,7 @@ const burnToken = async () => {
                 amount: amount.value,
                 keepAlive: keepAlive.value,
                 removeTokenStorage: removeTokenStorage.value,
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })
