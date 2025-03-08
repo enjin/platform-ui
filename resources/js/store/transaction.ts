@@ -56,6 +56,8 @@ export const useTransactionStore = defineStore('transaction', {
                 signedExtensions: api.registry.signedExtensions,
                 tip: '0x00',
                 version: 4,
+                metadataHash: transaction.signingPayloadJson.metadataHash,
+                mode: transaction.signingPayloadJson.mode,
             };
 
             const extrinsic = api.registry.createType(
