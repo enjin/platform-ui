@@ -9,7 +9,6 @@ import { SignerPayloadJSON } from '@polkadot/types/types';
 import { markRaw } from 'vue';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 import { useConnectionStore } from './connection';
-import { HexString } from '@polkadot/util/types';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
