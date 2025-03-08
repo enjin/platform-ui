@@ -31,6 +31,7 @@ export default `query GetTransactions($idempotencyKeys: [String], $ids: [BigInt!
           deposit
           transactionId
           encodedData
+          signingPayloadJson
           signedAtBlock
           events {
             edges {
