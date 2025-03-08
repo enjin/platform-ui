@@ -15,6 +15,7 @@ export default `query GetTransaction($id: BigInt!) {
         transactionId
         encodedData
         signedAtBlock
+        signingPayloadJson
         events {
           edges {
             node {
