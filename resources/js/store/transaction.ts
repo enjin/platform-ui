@@ -9,6 +9,7 @@ import { SignerPayloadJSON } from '@polkadot/types/types';
 import { markRaw } from 'vue';
 import { AccountInfoWithTripleRefCount } from '@polkadot/types/interfaces';
 import { useConnectionStore } from './connection';
+import { GenericExtrinsicEra } from '@polkadot/types';
 
 const RPC_URLS = {
     canary: 'wss://rpc.matrix.canary.enjin.io',
@@ -37,19 +38,21 @@ export const useTransactionStore = defineStore('transaction', {
                 <AccountInfoWithTripleRefCount>api.query.system.account(address),
             ]);
 
+            const blockNumber = currentBlock.block.header.number;
+            const blockHash = await api.rpc.chain.getBlockHash(blockNumber.toNumber());
+
             // This is the call that comes from the platform transactions 'encodedCall'
             const call = transaction.encodedData;
-            const era = transaction.signingPayloadJson.era; // 00 is for immortal transactions
             const genesis = genesisHash.toHex(); // The genesis block
-            const blockHash = genesisHash.toHex(); // For immortal transactions the blockhash needs to be the genesis
+            const mortalEra = new GenericExtrinsicEra(api.registry, { current: blockNumber.toNumber(), period: 64 });
 
             const payloadToSign: SignerPayloadJSON = {
                 specVersion: runtime.specVersion.toHex(),
                 transactionVersion: runtime.transactionVersion.toHex(),
                 address: address,
-                blockHash: blockHash,
-                blockNumber: '0x00',
-                era: era,
+                blockHash: blockHash.toHex(),
+                blockNumber: blockNumber.toHex(),
+                era: mortalEra.toHex(),
                 genesisHash: genesis,
                 method: call,
                 nonce: account.nonce.toHex(),
