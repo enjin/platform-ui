@@ -30,9 +30,9 @@
                         localModelValue
                             ? 'bg-primary/90 text-white border-transparent'
                             : 'bg-light-surface-background dark:bg-dark-surface-background',
-                            {
-                                '!bg-gray-200': props.disabled
-                            }
+                        {
+                            '!bg-gray-200': props.disabled,
+                        },
                     ]"
                     class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-sm border outline-none focus:outline-none transition-all"
                     @click="onChange"
