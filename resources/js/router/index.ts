@@ -104,6 +104,16 @@ const routes = [
                 component: () => import('../components/marketplace/ListingsList.vue'),
             },
             {
+                path: 'offers',
+                name: 'platform.marketplace.offers',
+                component: () => import('../components/marketplace/OffersList.vue'),
+            },
+            {
+                path: 'counter-offers',
+                name: 'platform.marketplace.counter-offers',
+                component: () => import('../components/marketplace/CounterOffersList.vue'),
+            },
+            {
                 path: 'sales',
                 name: 'platform.marketplace.sales',
                 component: () => import('../components/marketplace/SalesList.vue'),
@@ -150,6 +160,15 @@ const routes = [
         path: '/create/listing',
         name: 'platform.create.listing',
         component: () => import('../components/pages/create/CreateListing.vue'),
+        meta: {
+            requiresAuth: true,
+            requiresToken: true,
+        },
+    },
+    {
+        path: '/create/offer',
+        name: 'platform.create.offer',
+        component: () => import('../components/pages/create/CreateOffer.vue'),
         meta: {
             requiresAuth: true,
             requiresToken: true,
