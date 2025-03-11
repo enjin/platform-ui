@@ -112,12 +112,14 @@
                             name="dispatchSignature"
                             label="Dispatch Signature"
                             description="The expirable signature to use for this dispatch."
+                            required
                         />
                         <FormInput
                             v-model="dispatchExpiryBlock"
                             name="dispatchExpiryBlock"
                             label="Dispatch Signature Expiry Block"
                             description="The expiry block for the dispatch signature."
+                            type="number"
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
@@ -153,7 +155,7 @@ import FormSelect from '~/components/FormSelect.vue';
 import FormList from '~/components/FormList.vue';
 import { formatVariables } from '~/util';
 import { addressToPublicKey } from '~/util/address';
-import { stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
+import { numberNotRequiredSchema, stringNotRequiredSchema, stringRequiredSchema } from '~/util/schemas';
 import FormTextArea from '~/components/FormTextArea.vue';
 import { useAppStore } from '~/store';
 
@@ -196,6 +198,8 @@ const validation = yup.object({
             value: stringNotRequiredSchema,
         })
     ),
+    dispatchSignature: stringRequiredSchema,
+    dispatchExpiryBlock: numberNotRequiredSchema,
     paysRemainingFee: yup.boolean(),
     touch: yup.boolean(),
     idempotencyKey: stringNotRequiredSchema,
@@ -234,7 +238,10 @@ const dispatchFuelTank = async () => {
                     variables: formatVariables(variables.value),
                     settings: {
                         paysRemainingFee: paysRemainingFee.value,
-                        signature: { signature: dispatchSignature.value, expiryBlock: dispatchExpiryBlock.value },
+                        signature: {
+                            signature: dispatchSignature.value,
+                            expiryBlock: parseInt(dispatchExpiryBlock.value),
+                        },
                     },
                 },
                 idempotencyKey: idempotencyKey.value,
