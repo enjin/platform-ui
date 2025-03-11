@@ -20,10 +20,10 @@
                     <div
                         :class="[
                             checked
-                                ? 'bg-primary/90 text-white '
+                                ? 'bg-primary/90 text-white border-transparent'
                                 : ' bg-light-surface-background dark:bg-dark-surface-background',
                         ]"
-                        class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md outline-none focus:outline-none transition-all"
+                        class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-sm border outline-none focus:outline-none transition-all"
                     >
                         <div class="flex w-full items-center justify-between">
                             <div class="flex items-center">
