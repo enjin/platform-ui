@@ -135,7 +135,7 @@
                                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3 flex justify-end"
                                 >
                                     <Chip
-                                        v-if="collection.tracked"
+                                        v-if="collection.tracked && !collection.searched"
                                         text="Tracked"
                                         :closable="false"
                                         class="!bg-blue-400 !bg-opacity-80 !text-white"
@@ -208,6 +208,7 @@ const collections: Ref<{
         };
         frozen: boolean;
         tracked?: boolean;
+        searched?: boolean;
     }[];
     cursor: string | null;
 }> = ref({
@@ -277,6 +278,16 @@ const sortTable = (key) => {
 };
 
 const actions = (collection) => {
+    if (collection.searched && collection.tracked) {
+        return [
+            {
+                key: 'details',
+                name: 'Details',
+                component: 'DetailsCollectionSlideover',
+            },
+        ];
+    }
+
     if (collection.tracked) {
         return [
             {
@@ -374,7 +385,7 @@ const getCollection = async () => {
     try {
         const res = await CollectionApi.getCollections([parseInt(searchInput.value)]);
         collections.value = DTOFactory.forCollections(res);
-        setTrackableCollections();
+        setTrackableCollections(true);
         setCollectionNames();
     } catch (e) {
         collections.value.items = [];
@@ -545,11 +556,12 @@ const checkCollectionOwnership = (collection, accounts) => {
     return !accounts.find((account) => account === collection.owner);
 };
 
-const setTrackableCollections = async () => {
+const setTrackableCollections = async (searched = false) => {
     await connectionStore.getAccounts();
     const uniqueAccounts = connectionStore.getTrackableAccounts();
     collections.value.items.map((collection) => {
         collection.tracked = checkCollectionOwnership(collection, uniqueAccounts);
+        collection.searched = searched;
 
         return collection;
     });
