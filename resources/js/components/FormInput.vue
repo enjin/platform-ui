@@ -113,7 +113,7 @@ const localModelValue = computed({
         return props.modelValue ?? props.value;
     },
     set(value) {
-        if (value && localModelValue.value !== value) {
+        if (value !== null && value !== undefined && localModelValue.value !== value) {
             emit('update:modelValue', value);
         }
     },

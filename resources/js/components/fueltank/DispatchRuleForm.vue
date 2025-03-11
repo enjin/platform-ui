@@ -342,7 +342,7 @@ import { ref, computed, watch, Ref } from 'vue';
 import { Form } from 'vee-validate';
 import * as yup from 'yup';
 import FormInput from '~/components/FormInput.vue';
-import { currencySymbolByNetwork, formatData, formatPriceToENJ, parseFormatedTokenId } from '~/util';
+import { currencySymbolByNetwork, formatData, formatPriceToENJ, formatToken, parseFormatedTokenId } from '~/util';
 import { TokenIdSelectType, TransactionMethods, DispatchRules } from '~/types/types.enums';
 import TokenIdInput from '~/components/TokenIdInput.vue';
 import FormList from '../FormList.vue';
@@ -503,13 +503,12 @@ const clearSelectedDispatchRule = (rule: DispatchRules) => {
             break;
     }
 };
-
 const hasChanged = computed(() =>
     formatData({
         whitelistedCallers: whitelistedCallers.value.map((item: any) => item.caller).filter((item: string) => item),
         requireToken: formatData({
             collectionId: collectionId.value,
-            tokenId: tokenId.value.tokenId,
+            tokenId: formatToken(tokenId.value),
         }),
         whitelistedCollections: whitelistedCollections.value
             .map((item: any) => item.collection)
