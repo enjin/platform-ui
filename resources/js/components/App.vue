@@ -45,6 +45,10 @@ const initialTheme = () => {
     initialTheme();
     await appStore.init();
 
+    if (useConnectionStore().provider) {
+        useConnectionStore().getSession();
+    }
+
     if (window.bootstrap?.name) {
         return;
     }

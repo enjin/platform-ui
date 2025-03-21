@@ -14,8 +14,7 @@ const appStore = useAppStore();
 
 const isDarkTheme = computed(() => appStore.theme === 'dark');
 
-const isAppearanceTransition =
-    document.startViewTransition && !window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+const isAppearanceTransition = !window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
 
 const toggleTheme = (event?: MouseEvent) => {
     if (!isAppearanceTransition) {

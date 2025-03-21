@@ -32,10 +32,10 @@
                                     v-if="creationFlowToken"
                                     ref="copyIconRef"
                                     class="cursor-pointer inline-flex"
-                                    :text="creationFlowToken.substring(creationFlowToken?.indexOf('|') + 1 ?? 0)"
+                                    :text="creationFlowToken.substring(creationFlowToken?.indexOf('|') + 1)"
                                 >
                                     <span class="truncate text-light-content-brand dark:text-dark-content-brand">
-                                        {{ creationFlowToken?.substring(creationFlowToken?.indexOf('|') + 1 ?? 0) }}
+                                        {{ creationFlowToken?.substring(creationFlowToken?.indexOf('|') + 1) }}
                                     </span>
                                 </CopyTextIcon>
                             </div>
