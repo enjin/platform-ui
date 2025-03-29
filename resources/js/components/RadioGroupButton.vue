@@ -11,6 +11,8 @@
                 {
                     'md:grid-cols-2': cols === 2,
                     'md:grid-cols-3': cols === 3,
+                    'md:grid-cols-4': cols === 4,
+                    'md:grid-cols-5': cols === 5,
                 },
                 `mt-4 grid grid-cols-2 gap-y-6 gap-x-4`,
             ]"
@@ -26,7 +28,7 @@
                 <div
                     :class="[
                         active || checked ? 'ring-primary' : 'ring-light-stroke-strong dark:ring-dark-stroke-strong',
-                        'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 shadow-sm focus:outline-none transition-all',
+                        'relative flex cursor-pointer rounded-lg ring-2 bg-light-surface-primary dark:bg-dark-surface-primary p-4 outline-none transition-all',
                     ]"
                 >
                     <span class="flex flex-1 items-center break-words">
