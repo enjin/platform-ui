@@ -50,6 +50,7 @@
                             description="If true, the token storage will be removed if no tokens are left. Defaults to False."
                         />
                         <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="signingAccount"
                             name="signingAccount"
                             label="Signing account"

@@ -1,5 +1,5 @@
-export default `mutation CancelListing($listingId: String!, $idempotencyKey: String) {
-    CancelListing(listingId: $listingId, idempotencyKey: $idempotencyKey) {
+export default `mutation CancelListing($listingId: String!, $signingAccount: String, $idempotencyKey: String) {
+    CancelListing(listingId: $listingId, signingAccount: $signingAccount, idempotencyKey: $idempotencyKey) {
       id
     }
   }`;

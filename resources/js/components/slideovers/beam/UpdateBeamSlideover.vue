@@ -61,6 +61,13 @@
                             label="Flags"
                             description="The beam flags that should be enabled disabled."
                         />
+                        <FormInput
+                            v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
                     </div>
                 </div>
             </div>
@@ -85,6 +92,7 @@ import { BeamFlag } from '~/types/types.enums';
 import MultiCheckbox from '~/components/MultiCheckbox.vue';
 import FormDateInput from '~/components/FormDateInput.vue';
 import { stringRequiredSchema, dateRequiredSchema } from '~/util/schemas';
+import { useAppStore } from '~/store';
 
 const emit = defineEmits(['close']);
 
@@ -116,6 +124,7 @@ const start = ref(new Date(props.item?.start || new Date()));
 const end = ref(new Date(props.item?.end || new Date()));
 const flags = ref([]);
 const formRef = ref();
+const signingAccount = ref('');
 
 const beamFlags = Object.values(BeamFlag).map((flag) => ({
     label: flag.charAt(0) + flag.toLowerCase().replace('_', ' ').slice(1),
@@ -156,6 +165,7 @@ const checkChanges = () => {
                   })
                 : null,
         claimConditions: props.item?.claimConditions,
+        signingAccount: signingAccount.value,
     };
 };
 

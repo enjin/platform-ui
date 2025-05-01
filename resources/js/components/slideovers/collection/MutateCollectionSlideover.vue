@@ -100,6 +100,13 @@
                         </FormList>
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -182,6 +189,7 @@ const beneficiaryAddress = ref(Royalty.getRoyaltyBeneficiary(props.item));
 const beneficiaryPercentage = ref(Royalty.getRoyaltyPercentage(props.item) * 100);
 const skipValidation = ref(false);
 const formRef = ref();
+const signingAccount = ref('');
 
 const explicitRoyaltyCurrencies = ref([
     {
@@ -253,6 +261,7 @@ const mutateCollection = async () => {
                             tokenId: formatToken(a.tokenId),
                         })),
                 },
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })

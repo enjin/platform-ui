@@ -39,6 +39,13 @@
                             required
                         />
                         <FormInput
+                            v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
                             v-if="appStore.advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
@@ -128,6 +135,7 @@ const collectionId = ref('');
 const idempotencyKey = ref();
 const skipValidation = ref(false);
 const formRef = ref();
+const signingAccount = ref('');
 
 const validation = yup.object().shape({
     collectionId: yup.number().typeError('Collection ID must be a number').required(),
@@ -193,6 +201,7 @@ const createBatch = async () => {
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
                 recipients: mints.value.map((item: { valid: boolean; values: MintValuesInterface }) => item.values),
+                signingAccount: signingAccount.value,
             })
         );
 

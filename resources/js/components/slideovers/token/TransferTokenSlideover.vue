@@ -61,6 +61,7 @@
                             required
                         />
                         <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="signingAccount"
                             name="signingAccount"
                             label="Signing Account"

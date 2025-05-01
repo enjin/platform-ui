@@ -64,6 +64,13 @@
                         </template>
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -129,6 +136,7 @@ const dispatchRule: Ref<DispatchRulesValuesInterface> = ref({});
 const userId = ref('');
 const rule = ref('');
 const dispatchRuleError = ref(false);
+const signingAccount = ref('');
 
 const ruleOptions = Object.values(RuleType);
 
@@ -195,6 +203,7 @@ const insertRule = async () => {
                 ruleSetId: ruleSetId.value,
                 dispatchRules: dispatchRule.value,
                 idempotencyKey: idempotencyKey.value,
+                signingAccount: signingAccount.value,
             })
         );
 
@@ -233,6 +242,7 @@ const removeRule = async () => {
                 tankId: tankId.value,
                 ruleSetId: ruleSetId.value,
                 idempotencyKey: idempotencyKey.value,
+                signingAccount: signingAccount.value,
             })
         );
 
@@ -273,6 +283,7 @@ const removeUserRule = async () => {
                 ruleSetId: ruleSetId.value,
                 rule: rule.value,
                 idempotencyKey: idempotencyKey.value,
+                signingAccount: signingAccount.value,
             })
         );
 

@@ -296,6 +296,12 @@
                             </h3>
                         </div>
                         <FormInput
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -381,6 +387,7 @@ const beneficiaryAddress = ref('');
 const beneficiaryPercentage = ref(0);
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
+const signingAccount = ref('');
 
 const attributes = ref([
     {
@@ -518,6 +525,7 @@ const createCollection = async () => {
                         tokenId: formatToken(a.tokenId),
                     })),
                 attributes: [...simpleAttributes(), ...attributes.value.filter((a) => a.key !== '' && a.value !== '')],
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })

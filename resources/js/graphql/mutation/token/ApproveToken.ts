@@ -1,4 +1,4 @@
-export default `mutation ApproveToken($tokenId: EncodableTokenIdInput!, $collectionId: BigInt!, $operator: String!, $amount: BigInt!, $currentAmount: BigInt!, $expiration: Int = null, $idempotencyKey: String, $skipValidation: Boolean! = false) {
+export default `mutation ApproveToken($tokenId: EncodableTokenIdInput!, $collectionId: BigInt!, $operator: String!, $amount: BigInt!, $currentAmount: BigInt!, $expiration: Int = null, $signingAccount: String, $idempotencyKey: String, $skipValidation: Boolean! = false) {
     ApproveToken(
       tokenId: $tokenId
       collectionId: $collectionId
@@ -6,6 +6,7 @@ export default `mutation ApproveToken($tokenId: EncodableTokenIdInput!, $collect
       amount: $amount
       currentAmount: $currentAmount
       expiration: $expiration
+      signingAccount: $signingAccount
       idempotencyKey: $idempotencyKey
       skipValidation: $skipValidation
     ) {

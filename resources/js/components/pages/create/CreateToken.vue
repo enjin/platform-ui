@@ -284,6 +284,14 @@
                                     label="Decimal count"
                                     description="The number of decimal places for the token."
                                 />
+
+                                <FormInput
+                                    v-if="useAppStore().advanced"
+                                    v-model="signingAccount"
+                                    name="signingAccount"
+                                    label="Signing Account"
+                                    description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                                />
                                 <FormInput
                                     v-model="idempotencyKey"
                                     name="idempotencyKey"
@@ -386,6 +394,7 @@ const quantity = ref(1);
 const maximumToggle = ref(false);
 const maximum = ref(1);
 const remintToggle = ref(false);
+const signingAccount = ref('');
 
 const attributes = ref([
     {
@@ -545,6 +554,7 @@ const createToken = async () => {
                         decimalCount: decimalsCount.value,
                     },
                 },
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })

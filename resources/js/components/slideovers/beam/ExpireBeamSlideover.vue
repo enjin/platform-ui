@@ -28,6 +28,13 @@
                     </div>
                 </div>
             </div>
+            <FormInput
+                v-if="useAppStore().advanced"
+                v-model="signingAccount"
+                name="signingAccount"
+                label="Signing Account"
+                description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+            />
         </div>
         <div class="flex space-x-3 flex-shrink-0 justify-end px-4 py-4">
             <Btn @click="closeSlide">Cancel</Btn>
@@ -44,6 +51,7 @@ import { BeamApi } from '~/api/beam';
 import snackbar from '~/util/snackbar';
 import { formatData, snackbarErrors } from '~/util';
 import Chip from '~/components/Chip.vue';
+import { useAppStore } from '~/store';
 
 const emit = defineEmits(['close']);
 
@@ -59,6 +67,7 @@ const props = withDefaults(
 );
 
 const isLoading = ref(false);
+const signingAccount = ref('');
 
 const expireSingleUseCode = async () => {
     try {
@@ -66,6 +75,7 @@ const expireSingleUseCode = async () => {
         const res = await BeamApi.expireSingleUseCodes(
             formatData({
                 codes: props.item?.codes,
+                signingAccount: signingAccount.value,
             })
         );
 

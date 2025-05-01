@@ -40,10 +40,11 @@
                             required
                         />
                         <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="signingAccount"
                             name="signingAccount"
                             label="Signing Account"
-                            description="The signing wallet for this transaction. Defaults to wallet daemon."
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
                         />
                         <FormInput
                             v-if="useAppStore().advanced"

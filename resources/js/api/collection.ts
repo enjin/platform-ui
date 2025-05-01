@@ -47,6 +47,7 @@ export class CollectionApi {
                 marketPolicy: collectionData.marketPolicy ? { royalty: collectionData.marketPolicy } : null,
                 explicitRoyaltyCurrencies: collectionData.explicitRoyaltyCurrencies,
                 attributes: collectionData.attributes,
+                signingAccount: collectionData.signingAccount,
                 idempotencyKey: collectionData.idempotencyKey,
                 skipValidation: collectionData.skipValidation,
             },
@@ -62,6 +63,7 @@ export class CollectionApi {
                 collectionId: collectionData.collectionId,
                 operator: collectionData.operator,
                 expiration: collectionData.expiration,
+                signingAccount: collectionData.signingAccount,
                 idempotencyKey: collectionData.idempotencyKey,
                 skipValidation: collectionData.skipValidation,
             },
@@ -76,6 +78,7 @@ export class CollectionApi {
             variables: {
                 collectionId: collectionData.collectionId,
                 operator: collectionData.operator,
+                signingAccount: collectionData.signingAccount,
                 idempotencyKey: collectionData.idempotencyKey,
                 skipValidation: collectionData.skipValidation,
             },
@@ -89,6 +92,7 @@ export class CollectionApi {
             query: mutations.DestroyCollection,
             variables: {
                 collectionId: collectionData.collectionId,
+                signingAccount: collectionData.signingAccount,
                 idempotencyKey: collectionData.idempotencyKey,
                 skipValidation: collectionData.skipValidation,
             },
@@ -103,6 +107,7 @@ export class CollectionApi {
             variables: {
                 collectionId: collectionData.collectionId,
                 mutation: collectionData.mutation,
+                signingAccount: collectionData.signingAccount,
                 idempotencyKey: collectionData.idempotencyKey,
                 skipValidation: collectionData.skipValidation,
             },
@@ -118,6 +123,7 @@ export class CollectionApi {
                 collectionId: setCollectionAttributeData.collectionId,
                 key: setCollectionAttributeData.key,
                 value: setCollectionAttributeData.value,
+                signingAccount: setCollectionAttributeData.signingAccount,
                 idempotencyKey: setCollectionAttributeData.idempotencyKey,
                 skipValidation: setCollectionAttributeData.skipValidation,
             },
@@ -132,6 +138,7 @@ export class CollectionApi {
             variables: {
                 collectionId: removeCollectionAttributeData.collectionId,
                 key: removeCollectionAttributeData.key,
+                signingAccount: removeCollectionAttributeData.signingAccount,
                 idempotencyKey: removeCollectionAttributeData.idempotencyKey,
                 skipValidation: removeCollectionAttributeData.skipValidation,
             },
@@ -144,6 +151,7 @@ export class CollectionApi {
         const variables = {
             collectionId: removeAllAttributesData.collectionId,
             attributeCount: removeAllAttributesData.attributeCount,
+            signingAccount: removeAllAttributesData.signingAccount,
             idempotencyKey: removeAllAttributesData.idempotencyKey,
             skipValidation: removeAllAttributesData.skipValidation,
         };

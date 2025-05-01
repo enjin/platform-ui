@@ -53,6 +53,7 @@ export class FuelTankApi {
                 tankId: addAccountData.tankId,
                 userId: addAccountData.userId,
                 idempotencyKey: addAccountData.idempotencyKey,
+                signingAccount: addAccountData.signingAccount,
             },
         };
 
@@ -66,6 +67,7 @@ export class FuelTankApi {
                 tankId: removeAccountData.tankId,
                 userId: removeAccountData.userId,
                 idempotencyKey: removeAccountData.idempotencyKey,
+                signingAccount: removeAccountData.signingAccount,
             },
         };
 
@@ -79,6 +81,7 @@ export class FuelTankApi {
                 tankId: batchAddAccountData.tankId,
                 userIds: batchAddAccountData.userIds,
                 idempotencyKey: batchAddAccountData.idempotencyKey,
+                signingAccount: batchAddAccountData.signingAccount,
             },
         };
 
@@ -92,6 +95,7 @@ export class FuelTankApi {
                 tankId: batchRemoveAccountData.tankId,
                 userIds: batchRemoveAccountData.userIds,
                 idempotencyKey: batchRemoveAccountData.idempotencyKey,
+                signingAccount: batchRemoveAccountData.signingAccount,
             },
         };
 
@@ -122,6 +126,7 @@ export class FuelTankApi {
             variables: {
                 tankId: destroyFuelTankData.tankId,
                 idempotencyKey: destroyFuelTankData.idempotencyKey,
+                signingAccount: destroyFuelTankData.signingAccount,
             },
         };
 
@@ -151,6 +156,7 @@ export class FuelTankApi {
                 dispatch: dispatchData.dispatch,
                 paysRemainingFee: dispatchData.paysRemainingFee,
                 idempotencyKey: dispatchData.idempotencyKey,
+                signingAccount: dispatchData.signingAccount,
             },
         };
 
@@ -165,6 +171,7 @@ export class FuelTankApi {
                 ruleSetId: insertRuleSetData.ruleSetId,
                 dispatchRules: insertRuleSetData.dispatchRules,
                 idempotencyKey: insertRuleSetData.idempotencyKey,
+                signingAccount: insertRuleSetData.signingAccount,
             },
         };
 
@@ -178,6 +185,7 @@ export class FuelTankApi {
                 tankId: removeRuleSetData.tankId,
                 ruleSetId: removeRuleSetData.ruleSetId,
                 idempotencyKey: removeRuleSetData.idempotencyKey,
+                signingAccount: removeRuleSetData.signingAccount,
             },
         };
 
@@ -194,6 +202,7 @@ export class FuelTankApi {
                 totalConsumed: setConsumptionData.totalConsumed,
                 lastResetBlock: setConsumptionData.lastResetBlock,
                 idempotencyKey: setConsumptionData.idempotencyKey,
+                signingAccount: setConsumptionData.signingAccount,
             },
         };
 
@@ -208,6 +217,7 @@ export class FuelTankApi {
                 isFrozen: scheduleMutateFreezeStateData.isFrozen,
                 ruleSetId: scheduleMutateFreezeStateData.ruleSetId,
                 idempotencyKey: scheduleMutateFreezeStateData.idempotencyKey,
+                signingAccount: scheduleMutateFreezeStateData.signingAccount,
             },
         };
 
@@ -223,6 +233,7 @@ export class FuelTankApi {
                 ruleSetId: removeAccountRuleData.ruleSetId,
                 rule: removeAccountRuleData.rule,
                 idempotencyKey: removeAccountRuleData.idempotencyKey,
+                signingAccount: removeAccountRuleData.signingAccount,
             },
         };
 

@@ -52,6 +52,13 @@
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -109,6 +116,7 @@ const userId = ref('');
 const totalConsumed = ref();
 const lastResetBlock = ref();
 const formRef = ref();
+const signingAccount = ref('');
 
 const validation = yup.object({
     tankId: stringRequiredSchema,
@@ -142,6 +150,7 @@ const setConsumption = async () => {
                 totalConsumed: totalConsumed.value,
                 lastResetBlock: lastResetBlock.value,
                 idempotencyKey: idempotencyKey.value,
+                signingAccount: signingAccount.value,
             })
         );
 

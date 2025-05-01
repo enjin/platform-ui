@@ -56,6 +56,13 @@
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -127,6 +134,7 @@ const collectionAccount = ref('');
 const tokenAccount = ref('');
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
+const signingAccount = ref('');
 const formRef = ref();
 
 const validation = yup.object({
@@ -166,6 +174,7 @@ const thaw = async () => {
                 tokenId: formatToken(tokenId.value),
                 collectionAccount: collectionAccount.value,
                 tokenAccount: tokenAccount.value,
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })
