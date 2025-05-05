@@ -45,10 +45,6 @@ export const useTransactionStore = defineStore('transaction', {
             const call = transaction.encodedData;
             const genesis = genesisHash.toHex(); // The genesis block
             const mortalEra = new GenericExtrinsicEra(api.registry, { current: blockNumber.toNumber(), period: 64 });
-            const metadataHash =
-                transaction.signingPayloadJson.metadataHash === '00'
-                    ? '0x0000000000000000000000000000000000000000000000000000000000000000'
-                    : transaction.signingPayloadJson.metadataHash;
 
             const payloadToSign: SignerPayloadJSON = {
                 specVersion: runtime.specVersion.toHex(),
@@ -63,8 +59,6 @@ export const useTransactionStore = defineStore('transaction', {
                 signedExtensions: api.registry.signedExtensions,
                 tip: '0x00',
                 version: 4,
-                metadataHash: metadataHash,
-                mode: transaction.signingPayloadJson.mode,
             };
 
             const extrinsic = api.registry.createType(
