@@ -110,13 +110,6 @@
                                     label="Flags"
                                     description="The beam flags that should be enabled disabled."
                                 />
-                                <FormInput
-                                    v-if="useAppStore().advanced"
-                                    v-model="signingAccount"
-                                    name="signingAccount"
-                                    label="Signing Account"
-                                    description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
-                                />
                             </div>
                         </div>
                     </div>
@@ -173,7 +166,6 @@ const image = ref('');
 const start = ref(new Date());
 const end = ref(new Date());
 const claimLimit = ref(1);
-const signingAccount = ref('');
 
 const flags = ref([]);
 
@@ -281,7 +273,6 @@ const createBeam = async () => {
                     };
                 }),
                 tokens: tokens.value.map((t) => t.values),
-                signingAccount: signingAccount.value,
             })
         );
 

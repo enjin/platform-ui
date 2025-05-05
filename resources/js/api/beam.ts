@@ -75,7 +75,6 @@ export class BeamApi {
                 claimLimit: createBeamData.claimLimit,
                 collectionId: createBeamData.collectionId,
                 tokens: createBeamData.tokens,
-                signingAccount: createBeamData.signingAccount,
             },
         };
 
@@ -87,7 +86,6 @@ export class BeamApi {
             query: mutations.DeleteBeam,
             variables: {
                 code: deleteBeamData.code,
-                signingAccount: deleteBeamData.signingAccount,
             },
         };
 
@@ -99,7 +97,6 @@ export class BeamApi {
             query: mutations.ExpireSingleUseCodes,
             variables: {
                 codes: expireSingleUseCodesData.codes,
-                signingAccount: expireSingleUseCodesData.signingAccount,
             },
         };
 
@@ -118,7 +115,6 @@ export class BeamApi {
                 end: updateBeamData.end,
                 flags: updateBeamData.flags,
                 claimConditions: updateBeamData.claimConditions,
-                signingAccount: updateBeamData.signingAccount,
             },
         };
 

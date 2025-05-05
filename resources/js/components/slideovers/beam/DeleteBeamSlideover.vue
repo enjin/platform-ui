@@ -21,13 +21,6 @@
                             disabled
                             required
                         />
-                        <FormInput
-                            v-if="useAppStore().advanced"
-                            v-model="signingAccount"
-                            name="signingAccount"
-                            label="Signing Account"
-                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
-                        />
                     </div>
                 </div>
             </div>
@@ -49,7 +42,6 @@ import { BeamApi } from '~/api/beam';
 import snackbar from '~/util/snackbar';
 import { formatData, snackbarErrors } from '~/util';
 import { stringRequiredSchema } from '~/util/schemas';
-import { useAppStore } from '~/store';
 
 const emit = defineEmits(['close']);
 
@@ -71,7 +63,6 @@ const props = withDefaults(
 const isLoading = ref(false);
 const code = ref(props.item?.code);
 const formRef = ref();
-const signingAccount = ref('');
 
 const validation = yup.object({
     code: stringRequiredSchema,
@@ -95,7 +86,6 @@ const deleteBeam = async () => {
         const res = await BeamApi.deleteBeam(
             formatData({
                 code: props.item?.code,
-                signingAccount: signingAccount.value,
             })
         );
 
