@@ -167,6 +167,7 @@ export class ApiService {
                 freezeState: freezeData.freezeState,
                 collectionAccount: freezeData.collectionAccount,
                 tokenAccount: freezeData.tokenAccount,
+                signingAccount: freezeData.signingAccount,
                 idempotencyKey: freezeData.idempotencyKey,
                 skipValidation: freezeData.skipValidation,
             },
@@ -184,6 +185,7 @@ export class ApiService {
                 tokenId: thawData.tokenId,
                 collectionAccount: thawData.collectionAccount,
                 tokenAccount: thawData.tokenAccount,
+                signingAccount: thawData.signingAccount,
                 idempotencyKey: thawData.idempotencyKey,
                 skipValidation: thawData.skipValidation,
             },
@@ -201,6 +203,7 @@ export class ApiService {
                     delete recipient.mintType;
                     return recipient;
                 }),
+                signingAccount: batchMintData.signingAccount,
                 idempotencyKey: batchMintData.idempotencyKey,
                 skipValidation: batchMintData.skipValidation,
             },
@@ -235,6 +238,7 @@ export class ApiService {
                 skipValidation: batchSetAttributeData.skipValidation,
                 tokenId: batchSetAttributeData.tokenId,
                 attributes: batchSetAttributeData.attributes,
+                signingAccount: batchSetAttributeData.signingAccount,
             },
         };
 

@@ -64,6 +64,7 @@ export class MarketplaceApi {
                 price: createListingData.price,
                 salt: createListingData.salt,
                 auctionData: createListingData.auctionData,
+                signingAccount: createListingData.signingAccount,
                 idempotencyKey: createListingData.idempotencyKey,
             },
         };
@@ -77,6 +78,7 @@ export class MarketplaceApi {
             variables: {
                 listingId: cancelListingData.listingId,
                 idempotencyKey: cancelListingData.idempotencyKey,
+                signingAccount: cancelListingData.signingAccount,
             },
         };
 
@@ -90,6 +92,7 @@ export class MarketplaceApi {
                 listingId: fillListingData.listingId,
                 amount: fillListingData.amount,
                 idempotencyKey: fillListingData.idempotencyKey,
+                signingAccount: fillListingData.signingAccount,
             },
         };
 
@@ -102,6 +105,7 @@ export class MarketplaceApi {
             variables: {
                 listingId: finalizeAuctionData.listingId,
                 idempotencyKey: finalizeAuctionData.idempotencyKey,
+                signingAccount: finalizeAuctionData.signingAccount,
             },
         };
 
@@ -114,6 +118,7 @@ export class MarketplaceApi {
             variables: {
                 listingId: placeBidData.listingId,
                 price: placeBidData.price,
+                signingAccount: placeBidData.signingAccount,
                 idempotencyKey: placeBidData.idempotencyKey,
             },
         };

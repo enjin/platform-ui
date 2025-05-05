@@ -123,6 +123,13 @@
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -184,6 +191,7 @@ const idempotencyKey = ref('');
 const formRef = ref();
 const dispatchSignature = ref('');
 const dispatchExpiryBlock = ref();
+const signingAccount = ref('');
 
 const callOptions = ['MULTI_TOKENS', 'FUEL_TANKS', 'MARKETPLACE'];
 
@@ -244,6 +252,7 @@ const dispatchFuelTank = async () => {
                         },
                     },
                 },
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
             }),
             touch.value

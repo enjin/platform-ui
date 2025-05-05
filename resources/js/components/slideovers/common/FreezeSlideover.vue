@@ -65,6 +65,13 @@
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -139,6 +146,7 @@ const tokenAccount = ref('');
 const idempotencyKey = ref('');
 const skipValidation = ref(false);
 const formRef = ref();
+const signingAccount = ref('');
 
 const freezeStates = Object.values(FreezeStateType);
 
@@ -181,6 +189,7 @@ const freeze = async () => {
                 collectionAccount: collectionAccount.value,
                 freezeState: freezeType.value === FreezeType.TOKEN ? freezeState.value : undefined,
                 tokenAccount: tokenAccount.value,
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })

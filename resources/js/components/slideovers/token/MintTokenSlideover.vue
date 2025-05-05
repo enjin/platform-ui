@@ -45,7 +45,13 @@
                             type="number"
                             required
                         />
-
+                        <FormInput
+                            v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
                         <FormInput
                             v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
@@ -123,6 +129,7 @@ const tokenId: Ref<TokenIdType> = ref({
     tokenId: props.item?.tokenId!,
 });
 const formRef = ref();
+const signingAccount = ref('');
 
 const validation = yup.object({
     collectionId: collectionIdRequiredSchema,
@@ -157,6 +164,7 @@ const mintToken = async () => {
                     tokenId: formatToken(tokenId.value),
                     amount: amount.value,
                 },
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
                 skipValidation: skipValidation.value,
             })

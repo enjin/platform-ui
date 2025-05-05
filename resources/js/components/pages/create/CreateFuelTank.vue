@@ -61,6 +61,7 @@
                                 tooltip="Specifies if the caller must have a Tank User Account to dispatch transactions. If true, the caller must have an account, or the dispatch will fail. If false, the caller can dispatch without an account"
                             />
                             <FormInput
+                                v-if="useAppStore().advanced"
                                 v-model="signingAccount"
                                 name="signingAccount"
                                 label="Signing Account"

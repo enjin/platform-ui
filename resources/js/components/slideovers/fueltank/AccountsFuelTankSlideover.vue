@@ -67,6 +67,13 @@
                         </FormList>
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -217,6 +224,7 @@ const tankId = ref(props.item?.tankId!);
 const idempotencyKey = ref('');
 const formRef = ref();
 const paginatorRef = ref();
+const signingAccount = ref('');
 
 const validation = yup.object({});
 
@@ -262,6 +270,7 @@ const addAccounts = async () => {
                 userId: addressToPublicKey(usersInputs.value[0].userId),
                 userIds: usersInputs.value.map((u: any) => addressToPublicKey(u.userId)),
                 idempotencyKey: idempotencyKey.value,
+                signingAccount: signingAccount.value,
             })
         );
 

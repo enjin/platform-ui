@@ -32,6 +32,13 @@
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -83,6 +90,7 @@ const listingId = ref(props.item?.listingId);
 const price = ref(0);
 const idempotencyKey = ref('');
 const formRef = ref();
+const signingAccount = ref('');
 
 const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
 
@@ -111,6 +119,7 @@ const placeBid = async () => {
             formatData({
                 listingId: listingId.value,
                 price: price.value,
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
             })
         );

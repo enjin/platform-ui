@@ -129,6 +129,14 @@
                         />
 
                         <FormInput
+                            v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+
+                        <FormInput
                             v-if="appStore.advanced"
                             v-model="salt"
                             name="salt"
@@ -203,6 +211,7 @@ const makeTokenId = ref({
 });
 const idempotencyKey = ref('');
 const formRef = ref();
+const signingAccount = ref('');
 
 const currencySymbol = computed(() => currencySymbolByNetwork(appStore.config.network));
 const collectionIds = computed(() => appStore.collections);
@@ -287,6 +296,7 @@ const createListing = async () => {
                           endBlock: auctionDataEnd.value,
                       }
                     : null,
+                signingAccount: signingAccount.value,
                 idempotencyKey: idempotencyKey.value,
             })
         );

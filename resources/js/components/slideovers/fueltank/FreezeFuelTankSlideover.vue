@@ -30,6 +30,13 @@
                         />
                         <FormInput
                             v-if="useAppStore().advanced"
+                            v-model="signingAccount"
+                            name="signingAccount"
+                            label="Signing Account"
+                            description="The wallet used to sign and broadcast the transaction. By default, this is the wallet daemon."
+                        />
+                        <FormInput
+                            v-if="useAppStore().advanced"
                             v-model="idempotencyKey"
                             name="idempotencyKey"
                             label="Idempotency Key"
@@ -83,6 +90,7 @@ const isFrozen = ref(props.item?.isFrozen ?? false);
 const ruleSetId = ref();
 const idempotencyKey = ref('');
 const formRef = ref();
+const signingAccount = ref('');
 
 const validation = yup.object({
     tankId: stringRequiredSchema,
@@ -111,6 +119,7 @@ const freezeFuelTank = async () => {
                 isFrozen: !isFrozen.value,
                 ruleSetId: ruleSetId.value,
                 idempotencyKey: idempotencyKey.value,
+                signingAccount: signingAccount.value,
             })
         );
 
